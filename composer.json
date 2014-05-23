@@ -15,15 +15,15 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "filp/whoops": "1.2.*",
-        "pimple/pimple": "2.1.*",
-        "nesbot/carbon": "1.8.0",
+        "pimple/pimple": "v2.*",
+        "nesbot/carbon": "1.8.*",
         "patchwork/utf8": "1.1.*",
-        "monolog/monolog": "1.9.*",
+        "monolog/monolog": "1.9.1",
+        "filp/whoops": "1.2.*@dev",
         "guzzlehttp/streams": "1.*",
         "swiftmailer/swiftmailer": "5.2.*",
-        "jeremeamia/superclosure": "1.0.*",
-        "classpreloader/classpreloader": "1.0.*",
+        "jeremeamia/superclosure": "1.*",
+        "classpreloader/classpreloader": "1.*",
         "intahwebz/lowmemoryclassloader": "dev-master"
     },
     "require-dev": {
