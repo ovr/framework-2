@@ -2,7 +2,7 @@
     "name": "narrowspark/framework",
     "type": "library",
     "description": "The Brainwave Framework.",
-    "keywords": ["a", "a"],
+    "keywords": ["framework", "narrowspark"],
     "license": "MIT",
     "homepage": "http://github.com/narrowspark/framework",
     "authors": [
