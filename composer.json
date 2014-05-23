@@ -15,20 +15,20 @@
     ],
     "require": {
         "php": ">=5.4.0",
+        "filp/whoops": "1.2.*",
+        "pimple/pimple": "2.1.*",
         "nesbot/carbon": "1.8.0",
+        "patchwork/utf8": "1.1.*",
+        "monolog/monolog": "1.9.*",
         "guzzlehttp/streams": "1.*",
+        "swiftmailer/swiftmailer": "5.2.*",
         "jeremeamia/superclosure": "1.0.*",
-        "classpreloader/classpreloader": "1.0.*"
+        "classpreloader/classpreloader": "1.0.*",
+        "intahwebz/lowmemoryclassloader": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
-        "filp/whoops": "1.2.*@dev",
-        "pimple/pimple": "2.1.*@dev",
-        "monolog/monolog": "1.9.*@dev",
-        "patchwork/utf8": "dev-master",
-        "mockery/mockery": "dev-master@dev",
-        "swiftmailer/swiftmailer": "5.2.*@dev",
-        "intahwebz/lowmemoryclassloader": "dev-master"
+        "mockery/mockery": "dev-master@dev"
     },
     "suggest": {
         "league/plates": "Brainwave provides the integration with the plates templating engine",
