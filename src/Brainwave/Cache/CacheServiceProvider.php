@@ -1,0 +1,118 @@
+<?php namespace Brainwave\Cache;
+
+/*
+ * This file is part of Brainwave.
+ *
+ * (c) Daniel Bannert <d.bannert@anolilab.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+use \Brainwave\Cache\CacheManager;
+use \Brainwave\Workbench\Workbench;
+use \Brainwave\Support\Services\ServiceManager;
+use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
+
+class CacheServiceProvider implements ServiceProviderInterface
+{
+    public function register(Workbench $app)
+    {
+        $app['cache.default_options'] = array(
+            'driver' => 'array',
+        );
+
+        //All supported drivers
+        $app['cache.drivers'] = function () {
+            return array(
+                'apc'       => '\\Brainwave\\Cache\\Driver\\ApcCache',
+                'array'     => '\\Brainwave\\Cache\\Driver\\ArrayCache',
+                'file'      => '\\Brainwave\\Cache\\Driver\\FileCache',
+                'memcache'  => '\\Brainwave\\Cache\\Driver\\MemcacheCache',
+                'memcached' => '\\Brainwave\\Cache\\Driver\\MemcachedCache',
+                'xcache'    => '\\Brainwave\\Cache\\Driver\\XcacheCache',
+                'redis'     => '\\Brainwave\\Cache\\Driver\\RedisCache',
+                'wincache'  => '\\Brainwave\\Cache\\Driver\\WincacheCache',
+            );
+        };
+
+        $app['cache.factory'] = function ($app) {
+            return new CacheManager($app['cache.drivers'], array());
+        };
+
+        $app['caches.options.initializer'] = $app->protect(function () use ($app) {
+            static $initialized = false;
+
+            if ($initialized) {
+                return;
+            }
+
+            $initialized = true;
+
+            if (!isset($app['caches.options'])) {
+                $app['caches.options'] = array('default' => isset($app['cache.options']) ? $app['cache.options'] : array());
+            }
+
+            $tmp = $app['caches.options'];
+            foreach ($tmp as $name => &$options) {
+                $options = array_replace($app['cache.default_options'], $options);
+
+                if (!isset($app['caches.default'])) {
+                    $app['caches.default'] = $name;
+                }
+            }
+            $app['caches.options'] = $tmp;
+        });
+
+        $app['caches'] = function ($app) {
+            $app['caches.options.initializer']();
+
+            $caches = new \Pimple();
+            foreach ($app['caches.options'] as $name => $options) {
+                if ($app['caches.default'] === $name) {
+                    // we use shortcuts here in case the default has been overridden
+                    $config = $app['cache.config'];
+                } else {
+                    $config = $app['caches.config'][$name];
+                }
+
+                $factory = new CacheManager($app['cache.drivers'], $app['caches.options']);
+
+                $caches[$name] = function ($caches) use ($app, $options, $config) {
+                    return $app['cache.factory']->getCache($config['driver'], $config);
+                };
+            }
+
+            return $caches;
+        };
+
+        $app['caches.config'] = function ($app) {
+            $app['caches.options.initializer']();
+
+            $configs = new \Pimple();
+            foreach ($app['caches.options'] as $name => $options) {
+                $configs[$name] = $options;
+            }
+
+            return $configs;
+        };
+
+        // shortcuts for the "first" cache
+        $app['cache'] = function ($app) {
+            $caches = $app['caches'];
+
+            return $caches[$app['caches.default']];
+        };
+
+        $app['cache.config'] = function ($app) {
+            $caches = $app['caches.config'];
+
+            return $caches[$app['caches.default']];
+        };
+    }
+
+    public function boot(Workbench $app)
+    {
+
+    }
+}

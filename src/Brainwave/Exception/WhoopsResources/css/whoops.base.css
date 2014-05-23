@@ -1,0 +1,339 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300, 400);
+.cf:before, .cf:after {
+    content:" ";
+    display: table;
+}
+.cf:after {
+    clear: both;
+}
+.cf {
+    *zoom: 1;
+}
+body {
+    font: 12px/1.5"Open Sans", Helvetica, Arial, Verdana, sans-serif;
+    color: #2B2B2B;
+    background-color: #D4D4D4;
+    padding: 0;
+    margin: 0;
+    max-height: 100%;
+}
+a {
+    text-decoration: none;
+}
+.container {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+}
+.branding {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #777777;
+    font-size: 10px;
+    z-index: 100;
+}
+.branding a {
+    color: #CD3F3F;
+}
+header {
+    padding: 20px 20px;
+    color: #555;
+    background: #ddd;
+    box-sizing: border-box;
+    border-left: 5px solid #E94D4D;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.exc-title {
+    margin: 0;
+    color: #E94D4D;
+    font-weight: bolde;
+}
+.exc-title-primary {
+    color: #E94D4D;
+}
+.exc-message {
+    font-size: 16px;
+    margin: 5px 0;
+    word-wrap: break-word;
+    font-weight: bold;
+}
+.stack-container {
+    height: 100%;
+    position: relative;
+}
+.details-container {
+    height: 100%;
+    overflow: auto;
+    float: right;
+    width: 70%;
+    background: #fff;
+}
+.details {
+    padding: 10px 20px;
+    border-left: 5px solid rgba(0, 0, 0, .2);
+}
+.frames-container {
+    height: 100%;
+    overflow: auto;
+    float: left;
+    width: 30%;
+    background: #272727;
+}
+.frame {
+    padding: 14px;
+    color: #FFFFFF;
+    border-right: 1px solid rgba(0, 0, 0, .2);
+    cursor: pointer;
+}
+.frame:nth-child(even) {
+    color: #fff;
+    background: rgba(255, 255, 255, .04);
+}
+.frame.active {
+    background-color: #26ADE4;
+    color: #fff;
+}
+.frame:not(.active):hover {
+    background: #3a3a3a;
+}
+.frame-class, .frame-function, .frame-index {
+    font-weight: bold;
+}
+.frame.active .frame-index {
+    font-size: 11px;
+    color: #FFFFFF;
+}
+.frame-index {
+    font-size: 11px;
+    color: #A5A5A5;
+}
+.frame.active .frame-class {
+    color: #FFFFFF;
+}
+.frame-class {
+    color: #4DBCE9;
+}
+.active .frame-class {
+    color: #BEE9EA;
+}
+.frame-file {
+    font-family:'Source Code Pro', Monaco, Consolas, "Lucida Console", monospace;
+    word-wrap: break-word;
+}
+.frame-file .editor-link {
+    color: #333;
+}
+.frame-line {
+    font-weight: bold;
+    color: #A5A5A5;
+}
+.active .frame-line {
+    color: #BEE9EA;
+}
+.frame-line:before {
+    content:":";
+}
+.frame-code {
+    padding: 20px;
+    background: #f0f0f0;
+    display: none;
+    border-left: 5px solid #EDA31A;
+}
+.frame-code.active {
+    display: block;
+}
+.frame-code .frame-file {
+    background: #26ADE4;
+    color: #FFF;
+    font-size: 11px;
+    padding: 10px 10px 5px 10px;
+}
+.code-block {
+    padding: 10px;
+    margin: 0;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+}
+.linenums {
+    margin: 0;
+    margin-left: 10px;
+}
+.frame-comments {
+    border-top: none;
+    padding: 5px;
+    font-size: 12px;
+    background: #404040;
+}
+.frame-comments.empty {
+    padding: 8px 15px;
+}
+.frame-comments.empty:before {
+    content:"No comments for this stack frame.";
+    font-style: italic;
+    color: #828282;
+}
+.frame-comment {
+    padding: 10px;
+    color: #D2D2D2;
+}
+.frame-comment a {
+    color: #BEE9EA;
+    font-weight: bold;
+    text-decoration: none;
+}
+.frame-comment a:hover {
+    color: #4bb1b1;
+}
+.frame-comment:not(:last-child) {
+    border-bottom: 1px dotted rgba(0, 0, 0, .3);
+}
+.frame-comment-context {
+    font-size: 10px;
+    font-weight: bold;
+    color: #86D2B6;
+}
+.data-table-container label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #26ADE4;
+    margin: 10px 0;
+    padding: 10px 0;
+    display: block;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+.data-table {
+    width: 100%;
+    margin: 10px 0;
+}
+.data-table tbody {
+    font: 12px/1.5'Source Code Pro', Monaco, Consolas, "Lucida Console", monospace;
+}
+.data-table thead {
+    display: none;
+}
+.data-table tr {
+    padding: 5px 0;
+}
+.data-table td:first-child {
+    width: 20%;
+    min-width: 130px;
+    overflow: hidden;
+    font-weight: bold;
+    color: #463C54;
+    padding-right: 5px;
+}
+.data-table td:last-child {
+    width: 80%;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+.data-table .empty {
+    color: #999;
+    font-style: italic;
+}
+.handler {
+    padding: 10px;
+    font: 12px/1.5'Source Code Pro', Monaco, Consolas, "Lucida Console", monospace;
+}
+.handler.active:nth-child(even) {
+    color: #fff;
+    background: #292927;
+}
+.handler.active:nth-child(odd) {
+    color: #fff;
+    background: #373837;
+}
+/* prettify code style
+Uses the Doxy theme as a base */
+ pre .str, code .str {
+    color: #D1E751;
+}
+/* string */
+ pre .kwd, code .kwd {
+    color: #4DBCE9;
+    font-weight: bold;
+}
+/* keyword */
+ pre .com, code .com {
+    color: #555;
+    font-weight: bold;
+}
+/* comment */
+ pre .typ, code .typ {
+    color: #fff;
+}
+/* type */
+ pre .lit, code .lit {
+    color: #E94D4D;
+}
+/* literal */
+ pre .pun, code .pun {
+    color: #93a1a1;
+    font-weight: bold;
+}
+/* punctuation */
+ pre .pln, code .pln {
+    color: #ccc;
+}
+/* plaintext */
+ pre .tag, code .tag {
+    color: #DB613B;
+}
+/* html/xml tag */
+ pre .htm, code .htm {
+    color: #dda0dd;
+}
+/* html tag */
+ pre .xsl, code .xsl {
+    color: #d0a0d0;
+}
+/* xslt tag */
+ pre .atn, code .atn {
+    color: #fff;
+    font-weight: normal;
+}
+/* html/xml attribute name */
+ pre .atv, code .atv {
+    color: #E3B446;
+}
+/* html/xml attribute value */
+ pre .dec, code .dec {
+    color: #fff;
+}
+/* decimal */
+ pre.prettyprint, code.prettyprint {
+    font-weight: normal;
+    font-family:'Source Code Pro', Monaco, Consolas, "Lucida Console", monospace;
+    background: #272727;
+    color: #929292;
+    font-size: 11px;
+    line-height: 1.5em;
+}
+pre.prettyprint {
+    white-space: pre-wrap;
+}
+pre.prettyprint a, code.prettyprint a {
+    text-decoration: none;
+}
+.linenums li {
+    color: #A5A5A5;
+}
+.linenums li.current {
+    background: rgba(255, 255, 255, .05);
+    padding-top: 4px;
+    padding-left: 1px;
+}
+.linenums li.current.active {
+    background: rgba(255, 255, 255, .1);
+}
