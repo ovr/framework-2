@@ -10,4 +10,4 @@ Documentation for the entire framework can be found on the [Narrowspark website]
 
 ### License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+The Narrowspark framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
