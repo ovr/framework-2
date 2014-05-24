@@ -15,8 +15,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "pimple/pimple": "v2.*",
-        "nesbot/carbon": "1.8.*",
+        "pimple/pimple": "2.*",
+        "nesbot/carbon": "1.9.*",
         "patchwork/utf8": "1.1.*",
         "monolog/monolog": "1.9.1",
         "filp/whoops": "1.2.*@dev",
@@ -27,17 +27,23 @@
         "intahwebz/lowmemoryclassloader": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "mockery/mockery": "dev-master@dev"
-    },
-    "suggest": {
-        "league/plates": "Brainwave provides the integration with the plates templating engine",
-        "ext-mcrypt": "Required for HTTP cookie encryption"
+        "phpunit/phpunit": "~4.0",
+        "mockery/mockery": "~0.9",
+        "codeception/codeception": "*",
     },
     "autoload": {
         "psr-0": {
             "Brainwave": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.1-dev"
+        }
+    },
+    "suggest": {
+        "league/plates": "Brainwave provides the integration with the plates templating engine",
+        "ext-mcrypt": "Required for HTTP cookie encryption"
     },
     "minimum-stability": "dev"
 }
