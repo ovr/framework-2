@@ -83,7 +83,6 @@ class Facades extends FacadeManager
         $aliases = array(
             'App'           => '\Brainwave\Support\Facades\App',
             'Log'           => '\Brainwave\Support\Facades\Log',
-            'Auth'          => '\Brainwave\Support\Facades\Auth',
             'Mail'          => '\Brainwave\Support\Facades\Mail',
             'View'          => '\Brainwave\Support\Facades\View',
             'Event'         => '\Brainwave\Support\Facades\Event',
