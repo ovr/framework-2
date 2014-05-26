@@ -1,18 +1,35 @@
-<?php namespace Brainwave\Cache;
+<?php
+namespace Brainwave\Cache;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Cache\Driver\AbstractCache;
 use \Brainwave\Cache\Interfaces\CacheInterface;
 use \Brainwave\Exception\CacheException\CacheException;
 
+/**
+ * CacheManager
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class CacheManager
 {
     private $drivers;
@@ -20,7 +37,6 @@ class CacheManager
 
     /**
      * Constructor.
-     *
      * @param array $drivers The list of available drivers, key=driver name, value=driver class
      * @param array $options Options to pass to the driver
      */
@@ -32,7 +48,6 @@ class CacheManager
 
     /**
      * Builder.
-     *
      * @param string $driver The cache driver to use
      * @param array $options Options to pass to the driver
      * @return AbstractCache
@@ -62,7 +77,6 @@ class CacheManager
 
     /**
      * Check if the given driver is supported
-     *
      * @param string $driver
      * @return bool
      */

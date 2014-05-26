@@ -1,56 +1,33 @@
-<?php namespace Brainwave\Flash;
+<?php
+namespace Brainwave\Flash;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use \Brainwave\Flash\Interfaces\FlashInterface;
 use \Brainwave\Session\Interfaces\SessionInterface;
 
 /**
- * Slim - a micro PHP 5 framework
- *
- * @author      Josh Lockhart <info@slimframework.com>
- * @copyright   2011 Josh Lockhart
- * @link        http://www.slimframework.com
- * @license     http://www.slimframework.com/license
- * @version     2.3.5
- * @package     Slim
- *
- * MIT LICENSE
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  * Flash
  *
- * This class enables temporary messages to persist across HTTP requests. This
- * is useful to display informational or error messages to end-users after
- * a form is submitted and processed (e.g. "Item saved successfully" or
- * "There are errors with your submission").
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  *
- * Flash messages may be set to display for the current HTTP request
- * or for the next HTTP request. Flash messages will not persist beyond the
- * subsequent HTTP request unless you explicitly pass them forward with
- * the `keep` method.
- *
- * Flash messages are stored in the PHP session in the `slimflash` namespace.
- *
- * @package Slim
- * @author  Josh Lockhart
- * @since   3.0.0
  */
 class Flash implements FlashInterface
 {

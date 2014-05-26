@@ -1,8 +1,27 @@
-<?php namespace Brainwave\Workbench;
+<?php
+namespace Brainwave\Workbench;
 
 //
 PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/");
 
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
+
+use \Pimple\Container;
 use \Brainwave\Crypt\Crypt;
 use \Brainwave\Flash\Flash;
 use \Brainwave\Http\Headers;
@@ -41,47 +60,18 @@ use \Brainwave\Exception\HttpException\NotFoundHttpException;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
 
 /**
- * Slim - a micro PHP 5 framework
+ * CacheManager
  *
- * @author      Josh Lockhart <info@slimframework.com>
- * @copyright   2011 Josh Lockhart
- * @link        http://www.slimframework.com
- * @license     http://www.slimframework.com/license
- * @version     3.0.0
- * @package     Slim
- *
- * MIT LICENSE
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * App
- * @package  Brainwave
- * @author   Daniel Bannert
- * @since    1.0.06e
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  *
  * @property Environment    $environment
  * @property Response       $response
  * @property Request        $request
  * @property Router         $router
  */
-class Workbench extends \Pimple
+class Workbench extends Container
 {
     /**
      * @const string
@@ -93,7 +83,7 @@ class Workbench extends \Pimple
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.1.2-dev';
+    const BRAINWAVE_VERSION = '0.8.0-dev';
 
     /**
      * Has the app response been sent to the client?
@@ -345,7 +335,6 @@ class Workbench extends \Pimple
                 }
 
                 $value = $this['settings'][$name];
-
                 return is_callable($value) ? call_user_func($value) : $value;
             }
         } else {
@@ -475,7 +464,7 @@ class Workbench extends \Pimple
      * This method will immediately invoke the callable if
      * the specified mode matches the current application mode.
      * Otherwise, the callable is ignored. This should be called
-     * only _after_ you initialize your Slim app.
+     * only _after_ you initialize your Brainwave app.
      *
      * @param  string $mode
      * @param  mixed  $callable
@@ -760,7 +749,7 @@ class Workbench extends \Pimple
      *
      * 2. When invoking the handler:
      *
-     * If the $callable parameter is null, Slim assumes you want
+     * If the $callable parameter is null, Brainwave assumes you want
      * to invoke an already-registered handler. If the handler has been
      * registered and is callable, it is invoked and sends a 404 HTTP Response
      * whose body is the output of the Not Found handler.
@@ -846,7 +835,7 @@ class Workbench extends \Pimple
     {
         // Ensure type is correct
         if (!in_array($type, array('strong', 'weak'))) {
-            throw new \InvalidArgumentException('Invalid Slim::etag type. Expected "strong" or "weak".');
+            throw new \InvalidArgumentException('Invalid Brainwave::etag type. Expected "strong" or "weak".');
         }
 
         // Set etag value
@@ -953,7 +942,7 @@ class Workbench extends \Pimple
      * with a new, empty, auto-expiring Cookie. This method's arguments must match
      * the original Cookie's respective arguments for the original Cookie to be
      * removed. If any of this method's arguments are omitted or set to NULL, the
-     * default Cookie setting values (set during Slim::init) will be used instead.
+     * default Cookie setting values (set during Brainwave::init) will be used instead.
      *
      * @param  string $name     The cookie name
      * @param  string $path     The path on the server in which the cookie will be available on
@@ -975,7 +964,7 @@ class Workbench extends \Pimple
     }
 
     /**
-     * Get the absolute path to this Slim application's root directory
+     * Get the absolute path to this Brainwave application's root directory
      *
      * This method returns the absolute path to the filesystem directory in which
      * the Brainwave app is instantiated. The return value WILL NOT have a trailing slash.
@@ -1184,7 +1173,7 @@ class Workbench extends \Pimple
      * This method streams a local or remote file to the client
      *
      * @param  string $file        The URI of the file, can be local or remote
-     * @param  string $contentType Optional content type of the stream, if not specified Slim will attempt to get this
+     * @param  string $contentType Optional content type of the stream, if not specified Brainwave will attempt to get this
      * @api
      */
     public function sendFile($file, $contentType = false)
@@ -1264,7 +1253,7 @@ class Workbench extends \Pimple
      * Add middleware
      *
      * This method prepends new middleware to the application middleware stack.
-     * The argument must be an instance that subclasses Slim Middleware.
+     * The argument must be an instance that subclasses Brainwave Middleware.
      *
      * @param  Middleware
      * @api
@@ -1292,7 +1281,7 @@ class Workbench extends \Pimple
     /**
      * Run
      *
-     * This method invokes the middleware stack, including the core Slim application;
+     * This method invokes the middleware stack, including the core Brainwave application;
      * the result is an array of HTTP status, header, and body. These three items
      * are returned to the HTTP client.
      *

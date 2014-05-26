@@ -1,26 +1,49 @@
-<?php namespace Brainwave\View\Engines;
+<?php
+namespace Brainwave\View\Engines;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use Brainwave\View\Compilers\Interfaces\CompilerInterface;
 
+/**
+ * CompilerEngine
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class CompilerEngine extends PhpEngine {
 
     /**
-     * The Blade compiler instance.
-     *
+     * Compiler instance.
      * @var \Brainwave\View\Compilers\CompilerInterface
      */
     protected $compiler;
 
     /**
      * A stack of the last compiled templates.
-     *
      * @var array
      */
     protected $lastCompiled = array();
 
     /**
-     * Create a new Blade view engine instance.
-     *
+     * Create a view engine instance.
      * @param  \Brainwave\View\Compilers\CompilerInterface  $compiler
      * @return void
      */
@@ -31,7 +54,6 @@ class CompilerEngine extends PhpEngine {
 
     /**
      * Get the evaluated contents of the view.
-     *
      * @param  string  $path
      * @param  array   $data
      * @return string
@@ -62,22 +84,18 @@ class CompilerEngine extends PhpEngine {
 
     /**
      * Handle a view exception.
-     *
      * @param  \Exception  $e
      * @return void
-     *
      * @throws $e
      */
     protected function handleViewException($e)
     {
         $e = new \ErrorException($this->getMessage($e), 0, 1, $e->getFile(), $e->getLine(), $e);
-
         ob_get_clean(); throw $e;
     }
 
     /**
      * Get the exception message for an exception.
-     *
      * @param  \Exception  $e
      * @return string
      */
@@ -88,12 +106,10 @@ class CompilerEngine extends PhpEngine {
 
     /**
      * Get the compiler implementation.
-     *
      * @return \Brainwave\View\Compilers\CompilerInterface
      */
     public function getCompiler()
     {
         return $this->compiler;
     }
-
 }

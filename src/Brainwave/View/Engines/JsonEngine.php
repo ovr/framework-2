@@ -1,22 +1,60 @@
-<?php namespace Brainwave\View\Engines;
+<?php
+namespace Brainwave\View\Engines;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
+/**
+ * JsonEngine
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class JsonEngine implements EnginesInterface
 {
     /**
      * Set Path
-     *
      * @var string
      */
     protected $status;
 
+    /**
+     * [$app description]
+     * @var [type]
+     */
     protected $app;
 
+    /**
+     * [$collection description]
+     * @var [type]
+     */
     protected $collection;
 
+    /**
+     * [__construct description]
+     * @param [type] $app        [description]
+     * @param [type] $collection [description]
+     */
     public function __construct($app, $collection)
     {
         $this->app = $app;
@@ -25,18 +63,20 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view.
-     *
      * @param  array   $data
      * @return string
      */
     public function get(array $data = array())
     {
-        return $this->evaluateStatus($this->status, $data, $this->app['settings']['json.option']);
+        return $this->evaluateStatus(
+            $this->status,
+            $data,
+            $this->app['settings']['json.option']
+        );
     }
 
     /**
      * Set path
-     *
      * @param string $path
      * @return $this \Brainwave\View\Engines
      */
@@ -48,7 +88,6 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given status.
-     *
      * @param  string  $status
      * @param  array   $data
      * @return string
@@ -86,7 +125,15 @@ class JsonEngine implements EnginesInterface
             }
         }
 
-        $data = array_merge($data, array('method' => $app['request']->getMethod(), 'name' => $app['request']->get('name'), 'headers' => $app['request']->getHeaders(), 'params' => $app['request']->params()));
+        $data = array_merge(
+            $data,
+            array(
+                'method' => $app['request']->getMethod(),
+                'name' => $app['request']->get('name'),
+                'headers' => $app['request']->getHeaders(),
+                'params' => $app['request']->params()
+            )
+        );
 
         $app['response']->setStatus($status);
         $app['response']->addHeaders(array('Content-Type', 'application/json'));
@@ -104,10 +151,8 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
-     *
      * @param  \Exception  $e
      * @return void
-     *
      * @throws $e
      */
     protected function handleViewException($e)

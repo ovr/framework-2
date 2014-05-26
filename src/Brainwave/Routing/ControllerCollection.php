@@ -1,12 +1,21 @@
-<?php namespace Brainwave\Routing;
+<?php
+namespace Brainwave\Routing;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Http\Request;
@@ -14,11 +23,17 @@ use \Brainwave\Routing\Route;
 use \Brainwave\Routing\Router;
 
 /**
+ * ControllerCollection
+ *
  * Builds Brainwave controllers.
  *
  * It acts as a staging area for routes. You are able to set the route name
  * until flush() is called, at which point all controllers are frozen and
  * converted to a RouteCollection.
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  *
  */
 class ControllerCollection

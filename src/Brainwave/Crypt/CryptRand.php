@@ -1,12 +1,21 @@
-<?php namespace Brainwave\Crypt;
+<?php
+namespace Brainwave\Crypt;
 
 /**
- * This file is part of Brainwave.
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 // Ensure mcrypt constants are defined even if mcrypt extension is not loaded
@@ -16,7 +25,12 @@ if (!extension_loaded('mcrypt')) {
 }
 
 /**
- * 
+ * CryptRand
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
  */
 class CryptRand
 {
@@ -79,8 +93,8 @@ class CryptRand
 
     /**
     * Generate a random string.
-    * @param  integer 	$len
-    * @param  string 	$charset
+    * @param  integer    $len
+    * @param  string    $charset
     * @return string
     */
     public function str($len, $charset = null)
@@ -110,9 +124,9 @@ class CryptRand
 
     /**
     * Return one or more random random keys from an array.
-    * @param  array $array 		Input array.
-    * @param  integer $num 		Number of keys to pick.
-    * @return mixed 			String with the key, or array containing multiple keys.
+    * @param  array $array        Input array.
+    * @param  integer $num        Number of keys to pick.
+    * @return mixed               String with the key, or array containing multiple keys.
     */
     public function arrayRand($array, $num = 1)
     {

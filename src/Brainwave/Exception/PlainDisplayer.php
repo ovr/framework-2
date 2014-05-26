@@ -1,20 +1,34 @@
-<?php namespace Brainwave\Exception;
+<?php
+namespace Brainwave\Exception;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\Exception\ExceptionDisplayerInterface;
 
 /**
-* Display plain exception
-*/
+ * PlainDisplayer
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class PlainDisplayer implements ExceptionDisplayerInterface
 {
     /**
@@ -24,11 +38,15 @@ class PlainDisplayer implements ExceptionDisplayerInterface
     protected $app;
 
     /**
-     * [$charset description]
-     * @var [type]
+     * Displayer language
+     * @var string
      */
     private $charset;
 
+    /**
+     * @param Workbench $app Brainwave\Workbench\Workbench
+     * @param string    $charset language
+     */
     public function __construct(Workbench $app, $charset)
     {
         $this->app = $app;
@@ -170,8 +188,8 @@ EOF;
     }
 
    /**
-    * [getStylesheet description]
-    * @return [type] [description]
+    * Stylesheet
+    * @return string $mode type
     */
     public function getStylesheet($mode = 'exception')
     {

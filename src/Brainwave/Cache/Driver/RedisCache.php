@@ -1,31 +1,47 @@
-<?php namespace Brainwave\Cache\Driver;
+<?php
+namespace Brainwave\Cache\Driver;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Cache\Driver\AbstractCache;
-use \Redis;
 
+/**
+ * RedisCache
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class RedisCache extends AbstractCache
 {
     /**
      * @var Redis
      */
-    private $_redis;
+    private $redis;
 
     /**
      * {@inheritdoc}
      */
     public function __construct(array $options = array())
     {
-        if (!isset($options['redis']) || !$options['redis'] instanceof Redis) {
-            $options['redis'] = new Redis;
+        if (!isset($options['redis']) || !$options['redis'] instanceof \Redis) {
+            $options['redis'] = new \Redis;
             $options['redis']->connect('127.0.0.1');
         }
 
@@ -37,10 +53,10 @@ class RedisCache extends AbstractCache
      *
      * @param Redis $redis
      */
-    public function setRedis(Redis $redis)
+    public function setRedis(\Redis $redis)
     {
-        $redis->setOption(Redis::OPT_SERIALIZER, $this->getSerializerValue());
-        $this->_redis = $redis;
+        $redis->setOption(\Redis::OPT_SERIALIZER, $this->getSerializerValue());
+        $this->redis = $redis;
     }
 
     /**
@@ -50,7 +66,7 @@ class RedisCache extends AbstractCache
      */
     public function getRedis()
     {
-        return $this->_redis;
+        return $this->redis;
     }
 
     /**
@@ -66,7 +82,7 @@ class RedisCache extends AbstractCache
      */
     public function clear()
     {
-        return $this->_redis->flushDB();
+        return $this->redis->flushDB();
     }
 
     /**
@@ -74,7 +90,7 @@ class RedisCache extends AbstractCache
      */
     public function delete($key)
     {
-        return $this->_redis->delete($key);
+        return $this->redis->delete($key);
     }
 
     /**
@@ -82,7 +98,7 @@ class RedisCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->_redis->exists($key);
+        return !!$this->redis->exists($key);
     }
 
     /**
@@ -90,7 +106,7 @@ class RedisCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return $this->_redis->get($key);
+        return $this->redis->get($key);
     }
 
     /**
@@ -114,6 +130,6 @@ class RedisCache extends AbstractCache
      */
     protected function getSerializerValue()
     {
-        return defined('Redis::SERIALIZER_IGBINARY') ? Redis::SERIALIZER_IGBINARY : Redis::SERIALIZER_PHP;
+        return defined('Redis::SERIALIZER_IGBINARY') ? \Redis::SERIALIZER_IGBINARY : \Redis::SERIALIZER_PHP;
     }
 }

@@ -1,12 +1,21 @@
-<?php namespace Brainwave\View;
+<?php
+namespace Brainwave\View;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Workbench\Workbench;
@@ -19,13 +28,17 @@ use \Brainwave\View\Interfaces\ArrayableInterface;
 use \Brainwave\View\Interfaces\ViewFactoryInterface;
 
 /**
-*
-*/
+ * ViewFactory
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterface
 {
      /**
      * App
-     *
      * @var \Brainwave\Workbanch\Workbanch
      */
     protected $app;
@@ -38,7 +51,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * viewFactoryResolver
-     *
      * @var \Closure
      */
     protected $viewFactoryResolver;
@@ -51,7 +63,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register a view extension.
-     *
      * @var array
      */
     protected $extensions;
@@ -104,7 +115,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get registered extensions.
-     *
      * @return array
      */
     protected function getExtensions()
@@ -129,7 +139,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the engine resolver instance.
-     *
      * @return void
      */
     protected function registerEngineResolver()
@@ -158,7 +167,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the PHP engine implementation.
-     *
      * @param  \Brainwave\View\Engines\EngineResolver  $resolver
      * @return void
      */
@@ -169,7 +177,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the Json engine implementation.
-     *
      * @param  \Brainwave\View\Engines\EngineResolver  $resolver
      * @return void
      */
@@ -193,9 +200,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Display template
-     *
      * This method echoes the rendered template to the current output buffer
-     *
      * @param  string $template Pathname of template file relative to templates directory
      * @api
      */
@@ -209,7 +214,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      *
      * This method returns the rendered template. This is useful if you need to capture
      * a rendered template into a variable for futher processing.
-     *
      * @var    string $template Pathname of template file relative to templates directory
      * @return string           The rendered template
      * @api
@@ -221,7 +225,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get the evaluated contents of the view.
-     *
      * @var    string $template Pathname of template file relative to templates directory
      * @return string
      */
@@ -257,7 +260,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Add a piece of data to the view.
-     *
      * @param  string|array  $key
      * @param  mixed   $value
      * @return \Brainwave\View\ViewFactory
@@ -277,7 +279,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get a piece of data from the view.
-     *
      * @return mixed
      */
     public function &__get($key)
@@ -287,7 +288,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Set a piece of data on the view.
-     *
      * @param  string  $key
      * @param  mixed   $value
      * @return void
@@ -299,7 +299,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Check if a piece of data is bound to the view.
-     *
      * @param  string  $key
      * @return bool
      */
@@ -310,7 +309,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Remove a piece of bound data from the view.
-     *
      * @param  string  $key
      * @return bool
      */
@@ -321,11 +319,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Dynamically bind parameters to the view.
-     *
      * @param  string  $method
      * @param  array   $parameters
      * @return \Brainwave\View\ViewFactory
-     *
      * @throws \BadMethodCallException
      */
     public function __call($method, $parameters)
@@ -357,10 +353,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Assign a variable to the template.
-     *
      * @param mixed $name
      * @param mixed $data the data
-     *
      * @return self
      */
     public function setData($name, $data = null)

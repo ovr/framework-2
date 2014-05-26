@@ -1,25 +1,38 @@
-<?php namespace Brainwave\Exception;
+<?php
+namespace Brainwave\Exception;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * https://github.com/illuminate/exception
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Whoops\Run;
 use \Brainwave\Routing\Route;
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\Exception\PlainDisplayer;
-use \Brainwave\Exception\SlimException\Stop;
+use \Brainwave\Exception\BrainwaveException\Stop;
 use \Brainwave\Exception\FatalErrorException as FatalError;
 
 /**
-*
-*/
+ * ExceptionHandler
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class ExceptionHandler
 {
     /**
@@ -195,7 +208,7 @@ EOF;
      *
      * 2. When invoking the handler:
      *
-     * If the $argument parameter is not callable, Slim assumes you want
+     * If the $argument parameter is not callable, Brainwave assumes you want
      * to invoke an already-registered handler. If the handler has been
      * registered and is callable, it is invoked and passed the caught Exception
      * as its one and only argument. The error handler's output is captured

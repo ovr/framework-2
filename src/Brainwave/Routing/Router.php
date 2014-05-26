@@ -1,50 +1,34 @@
-<?php namespace Brainwave\Routing;
+<?php
+namespace Brainwave\Routing;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use \Brainwave\Routing\Route;
 use \Brainwave\Routing\Interfaces\RouterInterface;
 use \Brainwave\Routing\Interfaces\RouteInterface;
 
 /**
- * Slim - a micro PHP 5 framework
- *
- * @author      Josh Lockhart <info@slimframework.com>
- * @copyright   2011 Josh Lockhart
- * @link        http://www.slimframework.com
- * @license     http://www.slimframework.com/license
- * @version     2.3.5
- * @package     Slim
- *
- * MIT LICENSE
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  * Router
  *
- * This class organizes Slim application route objects. It is responsible
- * for registering route objects, assigning names to route objects,
- * finding Routing that match the current HTTP request, and creating
- * URLs for a named route.
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  *
- * @package Slim
- * @author  Josh Lockhart
- * @since   1.0.0
  */
 class Router implements RouterInterface
 {
@@ -119,15 +103,15 @@ class Router implements RouterInterface
     /**
      * Get route objects that match a given HTTP method and URI
      *
-     * This method is responsible for finding and returning all \Slim\Interfaces\RouteInterface
-     * objects that match a given HTTP method and URI. Slim uses this method to
-     * determine which \Slim\Interfaces\RouteInterface objects are candidates to be
+     * This method is responsible for finding and returning all \Brainwave\Interfaces\RouteInterface
+     * objects that match a given HTTP method and URI. Brainwave uses this method to
+     * determine which \Brainwave\Interfaces\RouteInterface objects are candidates to be
      * dispatched for the current HTTP request.
      *
      * @param  string             $httpMethod  The HTTP request method
      * @param  string             $resourceUri The resource URI
      * @param  bool               $reload      Should matching routes be re-parsed?
-     * @return array[\Slim\Interfaces\RouteInterface]
+     * @return array[\Brainwave\Interfaces\RouteInterface]
      * @api
      */
     public function getMatchedRoutes($httpMethod, $resourceUri, $save = true)

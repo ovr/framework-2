@@ -1,28 +1,43 @@
-<?php namespace Brainwave\View\Engines;
+<?php
+namespace Brainwave\View\Engines;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
+/**
+ * PhpEngine
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class PhpEngine implements EnginesInterface
 {
     /**
      * Set Path
-     *
      * @var string
      */
     protected $path;
 
     /**
      * Get the evaluated contents of the view.
-     *
      * @param  array   $data
      * @return string
      */
@@ -33,7 +48,6 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Set path
-     *
      * @param string $path
      * @return $this \Brainwave\View\Engines
      */
@@ -45,16 +59,17 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given path.
-     *
      * @param  string  $path
      * @param  array   $data
      * @return string
      */
     protected function evaluatePath($path, array $data)
     {
-
         if (!is_file($path)) {
-            throw new \RuntimeException("Cannot render template `$path` because the template does not exist. Make sure your view's template directory is correct.");
+            throw new \RuntimeException(
+                "Cannot render template `$path` because the template does not exist.
+                Make sure your view's template directory is correct.
+            ");
         }
 
         extract($data, EXTR_PREFIX_SAME, "brain");
@@ -77,10 +92,8 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
-     *
      * @param  \Exception  $e
      * @return void
-     *
      * @throws $e
      */
     protected function handleViewException($e)

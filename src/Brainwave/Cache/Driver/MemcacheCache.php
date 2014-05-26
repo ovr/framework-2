@@ -1,23 +1,39 @@
-<?php namespace Brainwave\Cache\Driver;
+<?php
+namespace Brainwave\Cache\Driver;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Cache\Driver\AbstractCache;
-use \Memcache;
 
+/**
+ * MemcacheCache
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class MemcacheCache extends AbstractCache
 {
     /**
      * @var Memcache
      */
-    private $_memcache;
+    private $memcache;
 
     /**
      * {@inheritdoc}
@@ -25,7 +41,7 @@ class MemcacheCache extends AbstractCache
     public function __construct(array $options = array())
     {
         if (!isset($options['memcache']) || !$options['memcache'] instanceof Memcache) {
-            $options['memcache'] = new Memcache;
+            $options['memcache'] = new \Memcache;
             $options['memcache']->connect('localhost', 11211);
         }
 
@@ -37,9 +53,9 @@ class MemcacheCache extends AbstractCache
      *
      * @param Memcache $memcache
      */
-    public function setMemcache(Memcache $memcache)
+    public function setMemcache(\Memcache $memcache)
     {
-        $this->_memcache = $memcache;
+        $this->memcache = $memcache;
     }
 
     /**
@@ -49,7 +65,7 @@ class MemcacheCache extends AbstractCache
      */
     public function getMemcache()
     {
-        return $this->_memcache;
+        return $this->memcache;
     }
 
     /**
@@ -65,7 +81,7 @@ class MemcacheCache extends AbstractCache
      */
     public function clear()
     {
-        return $this->_memcache->flush();
+        return $this->memcache->flush();
     }
 
     /**
@@ -73,7 +89,7 @@ class MemcacheCache extends AbstractCache
      */
     public function delete($key)
     {
-        return $this->_memcache->delete($key);
+        return $this->memcache->delete($key);
     }
 
     /**
@@ -81,7 +97,7 @@ class MemcacheCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->_memcache->get($key);
+        return !!$this->memcache->get($key);
     }
 
     /**
@@ -89,7 +105,7 @@ class MemcacheCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return $this->_memcache->get($key);
+        return $this->memcache->get($key);
     }
 
     /**
@@ -97,6 +113,6 @@ class MemcacheCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return $this->_memcache->set($key, $var, 0, (int) $ttl);
+        return $this->memcache->set($key, $var, 0, (int) $ttl);
     }
 }

@@ -16,6 +16,7 @@
     "require": {
         "php": ">=5.4.0",
         "pimple/pimple": "2.*",
+        "league/plates": "2.*",
         "nesbot/carbon": "1.9.*",
         "patchwork/utf8": "1.1.*",
         "monolog/monolog": "1.9.1",
@@ -38,7 +39,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0.1-dev"
+            "dev-master": "0.8.0-dev"
         }
     },
     "suggest": {

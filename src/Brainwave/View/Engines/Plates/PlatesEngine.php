@@ -1,12 +1,21 @@
-<?php namespace Brainwave\View\Engines\Plates;
+<?php
+namespace Brainwave\View\Engines\Plates;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \League\Plates\Engine;
@@ -16,7 +25,13 @@ use \League\Plates\Extension\Asset;
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
+
 /**
+ * PlatesEngine
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  *
  */
 class PlatesEngine implements EnginesInterface
@@ -88,7 +103,6 @@ class PlatesEngine implements EnginesInterface
 
     /**
     * Get the evaluated contents of the view.
-    *
     * @param  array   $data
     * @return string
     */
@@ -99,7 +113,6 @@ class PlatesEngine implements EnginesInterface
 
    /**
     * Set path
-    *
     * @param string $path
     * @return $this \Brainwave\View\Engines
     */
@@ -111,7 +124,6 @@ class PlatesEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given path.
-     *
      * @param  string  $path
      * @param  array   $data
      * @return string
@@ -153,10 +165,8 @@ class PlatesEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
-     *
      * @param  \Exception  $e
      * @return void
-     *
      * @throws $e
      */
     protected function handleViewException($e)

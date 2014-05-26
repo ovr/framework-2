@@ -1,23 +1,39 @@
-<?php namespace Brainwave\Cache\Driver;
+<?php
+namespace Brainwave\Cache\Driver;
 
-/*
- * This file is part of Brainwave.
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Daniel Bannert <d.bannert@anolilab.de>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
 
 use \Brainwave\Cache\Driver\AbstractCache;
-use \Memcached;
 
+/**
+ * MemcachedCache
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
+ */
 class MemcachedCache extends AbstractCache
 {
     /**
      * @var Memcached
      */
-    private $_memcached;
+    private $memcached;
 
     /**
      * {@inheritdoc}
@@ -25,8 +41,8 @@ class MemcachedCache extends AbstractCache
     public function __construct(array $options = array())
     {
         if (!isset($options['memcached']) || !$options['memcached'] instanceof Memcached) {
-            $options['memcached'] = new Memcached(uniqid());
-            $options['memcached']->setOption(Memcached::OPT_COMPRESSION, false);
+            $options['memcached'] = new \Memcached(uniqid());
+            $options['memcached']->setOption(\Memcached::OPT_COMPRESSION, false);
             $options['memcached']->addServer('127.0.0.1', 11211);
         }
 
@@ -38,9 +54,9 @@ class MemcachedCache extends AbstractCache
      *
      * @param Memcached $memcached
      */
-    public function setMemcached(Memcached $memcached)
+    public function setMemcached(\Memcached $memcached)
     {
-        $this->_memcached = $memcached;
+        $this->memcached = $memcached;
     }
 
     /**
@@ -50,7 +66,7 @@ class MemcachedCache extends AbstractCache
      */
     public function getMemcached()
     {
-        return $this->_memcached;
+        return $this->memcached;
     }
 
     /**
@@ -66,7 +82,7 @@ class MemcachedCache extends AbstractCache
      */
     public function clear()
     {
-        return $this->_memcached->flush();
+        return $this->memcached->flush();
     }
 
     /**
@@ -74,7 +90,7 @@ class MemcachedCache extends AbstractCache
      */
     public function delete($key)
     {
-        return $this->_memcached->delete($key);
+        return $this->memcached->delete($key);
     }
 
     /**
@@ -82,7 +98,7 @@ class MemcachedCache extends AbstractCache
      */
     public function exists($key)
     {
-        return !!$this->_memcached->get($key);
+        return !!$this->memcached->get($key);
     }
 
     /**
@@ -90,7 +106,7 @@ class MemcachedCache extends AbstractCache
      */
     public function fetch($key)
     {
-        return $this->_memcached->get($key);
+        return $this->memcached->get($key);
     }
 
     /**
@@ -98,6 +114,6 @@ class MemcachedCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        return $this->_memcached->set($key, $var, (int) $ttl);
+        return $this->memcached->set($key, $var, (int) $ttl);
     }
 }

@@ -1,47 +1,33 @@
-<?php namespace Brainwave\Config;
+<?php
+namespace Brainwave\Config;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use \Brainwave\Config\Interfaces\ConfigurationInterface;
 use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
 
 /**
- * Slim - a micro PHP 5 framework
- *
- * @author      Josh Lockhart <info@slimframework.com>
- * @copyright   2011 Josh Lockhart
- * @link        http://www.slimframework.com
- * @license     http://www.slimframework.com/license
- * @version     2.3.0
- * @package     Slim
- *
- * MIT LICENSE
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-/**
  * Configuration
  * Uses a ConfigurationHandler class to parse configuration data, accessed as an array.
  *
- * @package    Slim
- * @author     John Porter
- * @since      3.0.0
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
  */
 class Configuration implements ConfigurationInterface, \IteratorAggregate
 {
@@ -113,20 +99,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'view.cache' => '',
         'view.asset' => '',
         'view.extensions' => '.html',
-        // Twig
-        'twig.assets' => '',
-        'twig.assetic.cache' => '',
-        'twig.environment' => array(
-            'debug' => true,
-            'charset' => 'utf-8',
-            'auto_reload' => false,
-            'strict_variables' => false,
-            'autoescape' => true
-        ),
-        'twig.extensions' => array(),
-        'twig.available_extensions' => array(),
-        'twig.extensions_enable_only' => array(),
-        'twig.assetic.filter' => array(),
         // Json
         'json.option' => '0',
         // Database setting
@@ -150,7 +122,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     }
 
     /**
-     * Set Slim's defaults using the handler
+     * Set Brainwave's defaults using the handler
      */
     public function setArray(array $values)
     {
@@ -158,7 +130,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     }
 
     /**
-     * Set Slim's defaults using the handler
+     * Set Brainwave's defaults using the handler
      */
     public function setDefaults()
     {

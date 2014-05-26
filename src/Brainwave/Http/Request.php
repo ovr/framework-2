@@ -1,4 +1,22 @@
-<?php namespace Brainwave\Http;
+<?php
+namespace Brainwave\Http;
+
+/**
+ * Narrowspark - a PHP 5 framework
+ *
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.8.0-dev
+ * @package     Narrowspark/framework
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
+ */
 
 use \GuzzleHttp\Stream\Stream;
 use \GuzzleHttp\Stream\StreamInterface;
@@ -8,39 +26,9 @@ use \Brainwave\Http\Interfaces\RequestInterface;
 use \Brainwave\Environment\Interfaces\EnvironmentInterface;
 
 /**
- * Slim - a micro PHP 5 framework
+ * HTTP Request
  *
- * @author      Josh Lockhart <info@slimframework.com>
- * @copyright   2011 Josh Lockhart
- * @link        http://www.slimframework.com
- * @license     http://www.slimframework.com/license
- * @version     2.3.5
- * @package     Slim
- *
- * MIT LICENSE
- *
- * Permission is hereby granted, free of charge, to any person obtaining
- * a copy of this software and associated documentation files (the
- * "Software"), to deal in the Software without restriction, including
- * without limitation the rights to use, copy, modify, merge, publish,
- * distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to
- * the following conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
- * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * Slim HTTP Request
- *
- * This class provides a simple interface around the Slim application environment
+ * This class provides a simple interface around the Brainwave application environment
  * and raw HTTP request. Use this class to inspect the current HTTP request, including:
  *
  * - The request method
@@ -51,9 +39,10 @@ use \Brainwave\Environment\Interfaces\EnvironmentInterface;
  *
  * This class also contains many other helper methods to inspect the current HTTP request.
  *
- * @package Slim
- * @author  Josh Lockhart
- * @since   1.0.0
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
  */
 class Request implements RequestInterface
 {
@@ -516,7 +505,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Is this an XHR request? (alias of \Slim\Http\Request::isAjax)
+     * Is this an XHR request? (alias of \Brainwave\Http\Request::isAjax)
      *
      * @return bool
      * @api
@@ -656,7 +645,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Fetch PUT data (alias for \Slim\Http\Request::post)
+     * Fetch PUT data (alias for \Brainwave\Http\Request::post)
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
@@ -669,7 +658,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Fetch PATCH data (alias for \Slim\Http\Request::post)
+     * Fetch PATCH data (alias for \Brainwave\Http\Request::post)
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
@@ -682,7 +671,7 @@ class Request implements RequestInterface
     }
 
     /**
-     * Fetch DELETE data (alias for \Slim\Http\Request::post)
+     * Fetch DELETE data (alias for \Brainwave\Http\Request::post)
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
