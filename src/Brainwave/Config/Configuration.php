@@ -53,7 +53,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'app.footer' => 'cresk',
         'app.default.configs' => array(
             'mail',
-            'mode',
             'cache',
             'provides',
             'template'
