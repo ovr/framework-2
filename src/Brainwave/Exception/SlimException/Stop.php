@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\BrainwaveException;
+namespace Brainwave\Exception\SlimException;
 
 /**
  * Narrowspark - a PHP 5 framework
