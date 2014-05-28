@@ -22,6 +22,7 @@ PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/"
  */
 
 use \Pimple\Container;
+use \Brainwave\Support\Arr;
 use \Brainwave\Crypt\Crypt;
 use \Brainwave\Flash\Flash;
 use \Brainwave\Http\Headers;
@@ -31,7 +32,6 @@ use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Routing\Router;
-use \Brainwave\Support\Helper;
 use \Brainwave\Support\Facades;
 use \Brainwave\Security\Acl\Acl;
 use \Brainwave\View\ViewFactory;
@@ -355,7 +355,7 @@ class Workbench extends Container
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
         // so that they have the consistent naming convention inside the container.
-        foreach (Helper::arrayExcept($paths, array('app')) as $key => $value) {
+        foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
             $this["path.{$key}"] = realpath($value);
         }
     }
@@ -455,7 +455,7 @@ class Workbench extends Container
      */
     public function detectEnvironment($envs)
     {
-        return $this['env'] = Helper::with(new EnvironmentDetector())->detect($envs);
+        return $this['env'] = Arr::with(new EnvironmentDetector())->detect($envs);
     }
 
     /**

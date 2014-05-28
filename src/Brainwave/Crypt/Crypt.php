@@ -18,7 +18,7 @@ namespace Brainwave\Crypt;
  *
  */
 
-use \Brainwave\Support\Helper;
+use \Brainwave\Support\Arr;
 use \Brainwave\Crypt\CryptRand;
 use \Brainwave\Crypt\CryptHash;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
@@ -200,7 +200,7 @@ class Crypt implements CryptInterface
           'mac'   => true,
         );
 
-        if ($data === null || Helper::arrayCheck($data, $dataStructure, false) !== true) {
+        if ($data === null || Arr::arrayCheck($data, $dataStructure, false) !== true) {
             throw new \RuntimeException('Invalid data passed to decrypt()');
             return false;
         }

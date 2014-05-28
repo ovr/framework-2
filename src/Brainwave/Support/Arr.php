@@ -19,14 +19,14 @@ namespace Brainwave\Support;
  */
 
 /**
- * Helper
+ * Arr
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class Helper
+class Arr
 {
     /**
      * Add an element to an array if it doesn't exist.

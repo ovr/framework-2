@@ -19,7 +19,7 @@ namespace Brainwave\Crypt;
  */
 
 use \Brainwave\Crypt\Crypt;
-use \Brainwave\Support\Helper;
+use \Brainwave\Support\Arr;
 use \Brainwave\Crypt\CryptRand;
 
 /**
@@ -182,7 +182,7 @@ class CryptHash
                 list( , , $params, $hash, $salt) = explode('$', $hash);
                 parse_str($params, $param);
 
-                return Helper::timingSafe(
+                return Arr::timingSafe(
                     $this->crypt->pbkdf2(
                         $str,
                         base64_decode($salt),
@@ -206,7 +206,7 @@ class CryptHash
             case self::BCRYPT_BC:
             case self::SHA256:
             case self::SHA512:
-                return Helper::timingSafe(crypt($str, $hash), $hash);
+                return Arr::timingSafe(crypt($str, $hash), $hash);
                 break;
 
             default:
@@ -228,7 +228,7 @@ class CryptHash
                     default:
                         return false;
                 }
-                return Helper::timingSafe(hash($mode, $str), $hash);
+                return Arr::timingSafe(hash($mode, $str), $hash);
                 break;
         }
     }
