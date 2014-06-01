@@ -26,7 +26,7 @@ namespace Brainwave\Support\Autoloader;
  * @since   0.8.0-dev
  *
  */
-class ClassLoader {
+class Autoloader {
 
     /**
      * The registered directories.
@@ -81,7 +81,7 @@ class ClassLoader {
     public static function register()
     {
         if (!static::$registered) {
-            static::$registered = spl_autoload_register(array('\Brainwave\Support\Autoloader\ClassLoader', 'load'));
+            static::$registered = spl_autoload_register(array('\Brainwave\Support\Autoloader\Autoloader', 'load'));
         }
     }
 

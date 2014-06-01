@@ -19,7 +19,7 @@ namespace Brainwave\Support\Autoloader;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Support\Autoloader\ClassLoader;
+use \Brainwave\Support\Autoloader\Autoloader;
 use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
 
 /**
@@ -39,7 +39,7 @@ class AutoloaderServiceProvider implements ServiceProviderInterface
     public function register(Workbench $app)
     {
         $app['autoloader'] = function ($app) {
-            $classLoader = new ClassLoader();
+            $classLoader = new Autoloader();
             return $classLoader;
         };
     }
