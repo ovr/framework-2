@@ -66,7 +66,8 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
             '\Brainwave\Flash\FlashServiceProvider' => array(),
             '\Brainwave\Support\Translator\TranslatorServiceProvider' => array(),
             '\Brainwave\Event\EventServiceProvider' => array(),
-            '\Brainwave\Cache\CacheServiceProvider' => array()
+            '\Brainwave\Cache\CacheServiceProvider' => array(),
+            '\Brainwave\Support\Autoloader\AutoloaderServiceProvider' => array()
         ),
         // Cookies
         'cookies.encrypt' => false,

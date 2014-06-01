@@ -136,8 +136,8 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer, $css = '', $js = '')
     {
-        $footer = $this->app->config('app.footer');
-        if (!empty($footer)) {
+        $foot = $this->app->config('app.footer');
+        if (!empty($foot)) {
             $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app->config('app.footer');
         }
 

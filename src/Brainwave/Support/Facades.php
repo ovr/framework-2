@@ -91,6 +91,7 @@ class Facades extends FacadeManager
             'Request'       => '\Brainwave\Support\Facades\Request',
             'Response'      => '\Brainwave\Support\Facades\Response',
             'Services'      => '\Brainwave\Support\Facades\Services',
+            'Autoloader'    => '\Brainwave\Support\Facades\Autoloader',
         );
 
         // If user pass some new facades from registerAliases function
