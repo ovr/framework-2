@@ -129,7 +129,6 @@ class Workbench extends Container
         $this['mode']               = 'development';
         $this['facade']             = true;
         $this['https']              = false;
-        $this['translator.locale']  = 'en';
         //
         $this['error']              = null;
         // Not Found
@@ -249,7 +248,9 @@ class Workbench extends Container
         // Facade
         $this['facades'] = function ($c) {
             Facades::clearResolvedInstances();
-            return new Facades($c);
+            $facades = new Facades($c);
+            $facades->registerFacade($c['settings']['app.aliases']);
+            return $facades;
         };
 
         //Check if facade is active
@@ -294,10 +295,9 @@ class Workbench extends Container
      */
     public function configFiles()
     {
-        foreach ($this->config('app.default.configs') as $configName) {
-            $this->bindConfig('php', $this['path.app'] . '/config/'.$configName.'.config.php');
+        foreach ($this->config('app.configs') as $configName) {
+            $this->bindConfig('php', $this['path.app'] . '/config/'.$configName.'.php');
         }
-
         return $this;
     }
 
@@ -506,9 +506,7 @@ class Workbench extends Container
     public function setLocale($locale)
     {
         $this->config('app.locale', $locale);
-
-        //translator
-        $this['translator.locale'] = $locale;
+        return $this;
     }
 
     /**

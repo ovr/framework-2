@@ -40,7 +40,7 @@ class TranslatorServiceProvider implements ServiceProviderInterface
     {
         $app['translator'] = function ($app) {
             $translator = new TranslatorManager();
-            $translator->setLocale($app['translator.locale']);
+            $translator->setLocale($app->config('app.locale');
             return $translator;
         };
     }

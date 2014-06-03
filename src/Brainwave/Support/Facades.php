@@ -80,20 +80,6 @@ class Facades extends FacadeManager
      */
     protected function registerAliases()
     {
-        $aliases = array(
-            'App'           => '\Brainwave\Support\Facades\App',
-            'Log'           => '\Brainwave\Support\Facades\Log',
-            'Mail'          => '\Brainwave\Support\Facades\Mail',
-            'View'          => '\Brainwave\Support\Facades\View',
-            'Event'         => '\Brainwave\Support\Facades\Event',
-            'Route'         => '\Brainwave\Support\Facades\Route',
-            'Config'        => '\Brainwave\Support\Facades\Config',
-            'Request'       => '\Brainwave\Support\Facades\Request',
-            'Response'      => '\Brainwave\Support\Facades\Response',
-            'Services'      => '\Brainwave\Support\Facades\Services',
-            'Autoloader'    => '\Brainwave\Support\Facades\Autoloader',
-        );
-
         // If user pass some new facades from registerAliases function
         if (!empty($this->facadeAlias)) {
             foreach ($this->getFacadeAlias() as $alias => $class) {

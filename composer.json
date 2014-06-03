@@ -1,7 +1,7 @@
 {
     "name": "narrowspark/framework",
     "type": "library",
-    "description": "The Brainwave Framework.",
+    "description": "Brainwave Framework for Creative People.",
     "keywords": ["framework", "narrowspark"],
     "license": "MIT",
     "homepage": "http://github.com/narrowspark/framework",
@@ -44,7 +44,8 @@
     },
     "suggest": {
         "league/plates": "Brainwave provides the integration with the plates templating engine",
-        "ext-mcrypt": "Required for HTTP cookie encryption"
+        "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
+        "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
     },
     "minimum-stability": "dev"
 }

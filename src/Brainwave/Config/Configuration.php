@@ -48,26 +48,14 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     protected $defaults = array(
         // Application
-        'app.locale' => 'en',
-        'app.charset' => 'UTF-8',
-        'app.footer' => 'cresk',
-        'app.default.configs' => array(
+        'app.footer' => 'narrowspark',
+        'app.configs' => array(
+            'app',
             'mail',
             'cache',
-            'provides',
-            'template'
-        ),
-        // Provider
-        'app.provides' => array(),
-        'app.defaultProviders' => array(
-            //'\Brainwave\Log\LoggerServiceProvider' => array(),
-            '\Brainwave\Crypt\CryptServiceProvider' => array(),
-            '\Brainwave\Session\SessionServiceProvider' => array(),
-            '\Brainwave\Flash\FlashServiceProvider' => array(),
-            '\Brainwave\Support\Translator\TranslatorServiceProvider' => array(),
-            '\Brainwave\Event\EventServiceProvider' => array(),
-            '\Brainwave\Cache\CacheServiceProvider' => array(),
-            '\Brainwave\Support\Autoloader\AutoloaderServiceProvider' => array()
+            'services',
+            'template',
+            'autoload',
         ),
         // Cookies
         'cookies.encrypt' => false,
@@ -77,8 +65,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'cookies.secure' => false,
         'cookies.httponly' => false,
         // Encryption
-        'crypt.key' => 'A9s_lWeIn7cML8M]S6Xg4aR^GwovA&UN',
-        'crypt.cipher' => MCRYPT_RIJNDAEL_256,
         'crypt.mode' => 'ctr',
         // Session
         'session.handler' => null,
@@ -92,13 +78,8 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'routes.context' => null,
         'routes.route_class' => '\Brainwave\Routing\Route',
         // View
-        'view.engine' => array('plates' => '\Brainwave\View\Engines\Plates\PlatesEngine'),
-        'view.default.template.path' => '',
         'view.template.paths' => array(),
         'view.items' => array(),
-        'view.cache' => '',
-        'view.asset' => '',
-        'view.extensions' => '.html',
         // Json
         'json.option' => '0',
         // Database setting
