@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Translator;
+namespace Brainwave\Translator;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,7 +19,7 @@ namespace Brainwave\Support\Translator;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Support\Translator\Interfaces\TranslatorInterface;
+use \Brainwave\Translator\Interfaces\TranslatorInterface;
 
 /**
  * TranslatorManager

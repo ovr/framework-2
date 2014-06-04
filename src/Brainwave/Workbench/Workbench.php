@@ -35,8 +35,10 @@ use \Brainwave\Routing\Router;
 use \Brainwave\Support\Facades;
 use \Brainwave\Security\Acl\Acl;
 use \Brainwave\View\ViewFactory;
+use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
 use \Brainwave\Routing\RouteFactory;
+use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
 use \Brainwave\Environment\Environment;
 use \Brainwave\Config\Driver\PhpLoader;
@@ -54,7 +56,6 @@ use \Brainwave\Resolvers\DependencyResolver;
 use \Brainwave\View\Interfaces\ViewInterface;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Environment\EnvironmentDetector;
-use \Brainwave\Support\Services\ServiceManager;
 use \Brainwave\Exception\HttpException\HttpException;
 use \Brainwave\Exception\HttpException\NotFoundHttpException;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
@@ -103,6 +104,18 @@ class Workbench extends Container
     protected $inject;
 
     /**
+     * All provicers
+     * @var array
+     */
+    protected $providers = array();
+
+    /**
+     * Boots all providers.
+     * @var boolean
+     */
+    protected $booted = false;
+
+    /**
      * Application hooks
      * @var array
      */
@@ -138,11 +151,20 @@ class Workbench extends Container
 
         // Settings
         $this['settings'] = function ($c) {
-            return new Configuration(new ConfigurationHandler);
+            $config = new Configuration(new ConfigurationHandler, new FileLoader($c['path.app']));
+            return $config;
         };
 
         //
         $this->setDispatchContext($this['settings']['routes.context']);
+
+        // Exception handler
+        $this['exception'] = function ($c) {
+            return new ExceptionHandler($this, $c['settings']['app.charset']);
+        };
+
+        // Register Exception
+        $this['exception']->register();
 
         // Environment
         $this['environment'] = function ($c) {
@@ -169,19 +191,6 @@ class Workbench extends Container
             $response->setProtocolVersion('HTTP/' . $c['settings']['http.version']);
 
             return $response;
-        };
-
-        // Exception handler
-        $this['exception'] = function ($c) {
-            return new ExceptionHandler($this, $c['settings']['app.charset']);
-        };
-
-        // Register Exception
-        $this['exception']->register();
-
-        // Service manager
-        $this['services'] = function ($c) {
-            return new ServiceManager($this);
         };
 
         // Route
@@ -231,74 +240,66 @@ class Workbench extends Container
             return new ControllerCollection($c['route'], $c['router']);
         };
 
-        // View
-        $this['view'] = function ($c) {
-            return new ViewFactory($c);
-        };
-
-        // Register all framework provider
-        $allProviders = array_merge($this['settings']['app.defaultProviders'], $this['settings']['app.provides']);
-        foreach ($allProviders as $provider => $values) {
-            $this['services']->register(new $provider(), $values);
-        }
-
         // Middleware stack
         $this['middleware'] = array($this);
-
-        // Facade
-        $this['facades'] = function ($c) {
-            Facades::clearResolvedInstances();
-            $facades = new Facades($c);
-            $facades->registerFacade($c['settings']['app.aliases']);
-            return $facades;
-        };
-
-        //Check if facade is active
-        if ($this['facade']) {
-            return $this['facades'];
-        }
     }
 
     /**
-     * Load config files
-     * @param  string $parser choose config parser
-     * @param  string $file path to config file
+     * Bind the installation paths to the application.
+     *
+     * @param  array  $paths
      * @return void
      */
-    public function bindConfig($parser, $file)
+    public function bindInstallPaths(array $paths)
     {
-        $file = preg_replace('/\//', DS, $file);
+        $this['path.app'] = realpath($paths['app']);
 
-        if ($parser == 'php') {
-            $configDriver = new PhpLoader();
-        } elseif ($parser == 'json') {
-            $configDriver = new JsonLoader();
-        } elseif ($parser == 'ini') {
-            $configDriver = new IniLoader();
-        } elseif ($parser == 'xml') {
-            $configDriver = new XmlLoader();
-        } else {
-            throw new \Exception('Set a correct parser for config');
-        }
-
-        $configDriver->load($file);
-
-        //Load file config to application settings
-        foreach ($configDriver->getData() as $configName => $configValue) {
-            $this->config($configName, $configValue);
+        // Here we will bind the install paths into the container as strings that can be
+        // accessed from any point in the system. Each path key is prefixed with path
+        // so that they have the consistent naming convention inside the container.
+        foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
+            $this["path.{$key}"] = realpath($value);
         }
     }
 
-    /**
-     * Default settings for Brainwave
-     * @return void
+     /**
+     * Registers a service provider.
+     *
+     * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
+     * @param array                    $values   An array of values that customizes the provider
+     *
+     * @return Application
      */
-    public function configFiles()
+    public function register(ServiceProviderInterface $provider, array $values = array())
     {
-        foreach ($this->config('app.configs') as $configName) {
-            $this->bindConfig('php', $this['path.app'] . '/config/'.$configName.'.php');
+        $this->providers[] = $provider;
+
+        $provider->register($this);
+
+        foreach ($values as $key => $value) {
+            $this[$key] = $value;
         }
+
         return $this;
+    }
+
+    /**
+     * Boots all service providers.
+     *
+     * This method is automatically called by finalize(), but you can use it
+     * to boot all service providers when not handling a request.
+     */
+    public function boot()
+    {
+        if (!$this->booted) {
+            $this->booted = true;
+
+            foreach ($this->providers as $provider) {
+                if ($provider instanceof BootableProviderInterface) {
+                    $provider->boot($this);
+                }
+            }
+        }
     }
 
     /**
@@ -339,24 +340,6 @@ class Workbench extends Container
             }
         } else {
             $this['settings'][$name] = $value;
-        }
-    }
-
-    /**
-     * Bind the installation paths to the application.
-     *
-     * @param  array  $paths
-     * @return void
-     */
-    public function bindInstallPaths(array $paths)
-    {
-        $this['path.app'] = realpath($paths['app']);
-
-        // Here we will bind the install paths into the container as strings that can be
-        // accessed from any point in the system. Each path key is prefixed with path
-        // so that they have the consistent naming convention inside the container.
-        foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
-            $this["path.{$key}"] = realpath($value);
         }
     }
 
@@ -1429,6 +1412,10 @@ class Workbench extends Container
      */
     protected function finalize()
     {
+        if (!$this->booted) {
+            $this->boot();
+        }
+
         if (!$this->responded) {
             $this->responded = true;
 

@@ -28,45 +28,33 @@
 interface LoaderInterface
 {
     /**
-     * [load description]
-     * @param  [type] $file [description]
-     * @return [type]       [description]
+     * Load the given configuration group.
+     * @param  string  $file
+     * @param  string  $namespace
+     * @param  string  $environment
+     * @param  string  $group
+     * @return array
      */
-    public function load($file);
+    public function load($file, $namespace = null, $environment = null, $group = null);
 
     /**
-     * [getData description]
-     * @return [type] [description]
+     * Determine if the given file exists.
+     * @param  string  $file
+     * @param  string  $namespace
+     * @param  string  $environment
+     * @param  string  $group
+     * @return bool
      */
-    public function getData();
+    public function exists($file, $namespace = null, $environment = null, $group = null);
 
     /**
-     * [setData description]
-     * @return [type] [description]
+     * Apply any cascades to an array of package options.
+     *
+     * @param  string  $env
+     * @param  string  $package
+     * @param  string  $group
+     * @param  array   $items
+     * @return array
      */
-    public function setData(array $data);
-
-    /**
-     * [getString description]
-     * @return [type] [description]
-     */
-    public function getString();
-
-    /**
-     * [setString description]
-     * @param array $string [description]
-     */
-    public function setString(array $string);
-
-    /**
-     * [getValues description]
-     * @return [type] [description]
-     */
-    public function getValues();
-
-    /**
-     * [setValues description]
-     * @param array $values [description]
-     */
-    public function setValues(array $values);
+    public function cascadePackage($file, $env, $package, $group, $items);
 }

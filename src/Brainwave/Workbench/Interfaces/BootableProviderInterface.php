@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Services\Interfaces;
+namespace Brainwave\Workbench;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,28 +19,17 @@ namespace Brainwave\Support\Services\Interfaces;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Support\Services\ServiceManager;
 
 /**
- * ServiceProviderInterface
+ * View Interface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-interface ServiceProviderInterface
+interface BootableProviderInterface
 {
-    /**
-     * Registers services on the given app.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     *
-     * @param Application $app An Application instance
-     */
-    public function register(Workbench $app);
-
     /**
      * Bootstraps the application.
      *

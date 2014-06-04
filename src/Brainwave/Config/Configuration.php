@@ -18,6 +18,7 @@ namespace Brainwave\Config;
  *
  */
 
+use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Interfaces\ConfigurationInterface;
 use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
 
@@ -36,6 +37,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      * @var mixed
      */
     protected $handler;
+
     /**
      * Storage array of values
      * @var array
@@ -50,12 +52,42 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         // Application
         'app.footer' => 'narrowspark',
         'app.configs' => array(
-            'app',
-            'mail',
-            'cache',
-            'services',
-            'template',
-            'autoload',
+            'app' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
+            'mail' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
+            'cache' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
+            'services' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
+            'template' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
+            'autoload' => array(
+                'ext' => 'php',
+                'namespace' => 'config',
+                'env' => '',
+                'group' => ''
+            ),
         ),
         // Cookies
         'cookies.encrypt' => false,
@@ -78,7 +110,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'routes.context' => null,
         'routes.route_class' => '\Brainwave\Routing\Route',
         // View
-        'view.template.paths' => array(),
         'view.items' => array(),
         // Json
         'json.option' => '0',
@@ -97,9 +128,15 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      * Constructor
      * @param mixed $handler
      */
-    public function __construct(ConfigurationHandlerInterface $handler)
+    public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
     {
         $this->setHandler($handler);
+        $this->setLoader($loader);
+
+        //Load config files
+        foreach ($this->defaults['app.configs'] as $file => $setting) {
+            $this->bind($file.'.'.$setting['ext'], $setting['namespace'], $setting['env'], $setting['group']);
+        }
     }
 
     /**
@@ -144,6 +181,78 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function getHandler()
     {
         return $this->handler;
+    }
+
+    /**
+     * Set the configuration loader
+     * @return \Brainwave\Config\FileLoader
+     */
+    public function setLoader(FileLoader $loader)
+    {
+        $this->loader = $loader;
+        return $this;
+    }
+
+    /**
+     * Get the configuration loader
+     * @return \Brainwave\Config\FileLoader
+     */
+    public function getLoader()
+    {
+        return $this->loader;
+    }
+
+    /**
+     * Load the given configuration group.
+     * @param  string  $file
+     * @param  string  $namespace
+     * @param  string  $environment
+     * @param  string  $group
+     * @return void
+     */
+    public function bind($file, $namespace = null, $environment = null, $group = null)
+    {
+        $this->getLoader()->load($file, $namespace, $environment, $group);
+        return $this;
+    }
+
+    /**
+     * Apply any cascades to an array of package options.
+     *
+     * @param  string  $package
+     * @param  string  $group
+     * @param  string  $env
+     * @param  array   $items
+     * @return array
+     */
+    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
+    {
+        $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
+        return $this;
+    }
+
+    /**
+     * Get a value
+     * @param  string $key
+     * @return mixed
+     */
+    public function get($key, $default)
+    {
+        if (isset($this->handler[$key])) {
+            return $default;
+        } else {
+            return $this->handler[$key];
+        }
+    }
+
+    /**
+     * Set a value
+     * @param  string $key
+     * @param  mixed $value
+     */
+    public function set($key, $value)
+    {
+        $this->handler[$key] = $value;
     }
 
     /**

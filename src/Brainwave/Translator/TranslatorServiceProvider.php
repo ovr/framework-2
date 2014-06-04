@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Translator;
+namespace Brainwave\Translator;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,9 +18,9 @@ namespace Brainwave\Support\Translator;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Support\Translator\TranslatorManager;
-use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\Translator\TranslatorManager;
 
 /**
  * TranslatorServiceProvider
@@ -36,20 +36,12 @@ class TranslatorServiceProvider implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['translator'] = function ($app) {
             $translator = new TranslatorManager();
-            $translator->setLocale($app->config('app.locale');
+            $translator->setLocale($app->config('app.locale'));
             return $translator;
         };
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function boot(Workbench $app)
-    {
-
     }
 }
