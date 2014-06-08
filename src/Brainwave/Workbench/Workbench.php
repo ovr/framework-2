@@ -33,7 +33,6 @@ use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Routing\Router;
 use \Brainwave\Support\Facades;
-use \Brainwave\Security\Acl\Acl;
 use \Brainwave\View\ViewFactory;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
@@ -41,23 +40,19 @@ use \Brainwave\Routing\RouteFactory;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
 use \Brainwave\Environment\Environment;
-use \Brainwave\Config\Driver\PhpLoader;
-use \Brainwave\Config\Driver\IniLoader;
-use \Brainwave\Config\Driver\XmlLoader;
-use \Brainwave\Config\Driver\JsonLoader;
+use \Brainwave\Workbench\Exception\Stop;
+use \Brainwave\Workbench\Exception\Pass;
 use \Brainwave\Resolvers\CallableResolver;
 use \Brainwave\Exception\ExceptionHandler;
 use \Brainwave\Resolvers\ContainerResolver;
 use \Brainwave\Config\ConfigurationHandler;
-use \Brainwave\Exception\SlimException\Stop;
-use \Brainwave\Exception\SlimException\Pass;
 use \Brainwave\Routing\ControllerCollection;
 use \Brainwave\Resolvers\DependencyResolver;
+use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\View\Interfaces\ViewInterface;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Environment\EnvironmentDetector;
-use \Brainwave\Exception\HttpException\HttpException;
-use \Brainwave\Exception\HttpException\NotFoundHttpException;
+use \Brainwave\Http\Exception\NotFoundHttpException;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
 
 /**
@@ -129,6 +124,12 @@ class Workbench extends Container
     );
 
     /**
+     * Workbench paths
+     * @var array
+     */
+    protected static $paths;
+
+    /**
      * Constructor
      * @api
      */
@@ -138,10 +139,8 @@ class Workbench extends Container
 
         // App setting
         $this['debug']              = true;
-        $this['env']                = '';
-        $this['mode']               = 'development';
-        $this['facade']             = true;
         $this['https']              = false;
+        $this['env']                = null;
         //
         $this['error']              = null;
         // Not Found
@@ -151,20 +150,16 @@ class Workbench extends Container
 
         // Settings
         $this['settings'] = function ($c) {
-            $config = new Configuration(new ConfigurationHandler, new FileLoader($c['path.app']));
+            $config = new Configuration(new ConfigurationHandler, new FileLoader());
+            $config->setPath(static::$paths['path.app']);
+
+             //Load config files
+            foreach ($config->get('app.configs', null) as $file => $setting) {
+                $config->bind($file.'.'.$setting['ext'], $setting['namespace'], $setting['env'], $setting['group']);
+            }
+
             return $config;
         };
-
-        //
-        $this->setDispatchContext($this['settings']['routes.context']);
-
-        // Exception handler
-        $this['exception'] = function ($c) {
-            return new ExceptionHandler($this, $c['settings']['app.charset']);
-        };
-
-        // Register Exception
-        $this['exception']->register();
 
         // Environment
         $this['environment'] = function ($c) {
@@ -176,7 +171,7 @@ class Workbench extends Container
             $environment = $c['environment'];
             $headers = new Headers($environment);
             $cookies = new Cookies($headers);
-            if ($c['settings']['cookies.encrypt'] ===  true) {
+            if ($c['settings']->get('cookies.encrypt', false) ===  true) {
                 $cookies->decrypt($c['crypt']);
             }
 
@@ -188,9 +183,15 @@ class Workbench extends Container
             $headers = new Headers();
             $cookies = new Cookies();
             $response = new Response($headers, $cookies);
-            $response->setProtocolVersion('HTTP/' . $c['settings']['http.version']);
+            $response->setProtocolVersion('HTTP/' . $c['settings']->get('http.version', '1.1'));
 
             return $response;
+        };
+
+        // Exception handler
+        $this['exception'] = function ($c) {
+            $exception = new ExceptionHandler($this, $c['settings']->get('app.charset', 'en'));
+            return $exception;
         };
 
         // Route
@@ -201,8 +202,8 @@ class Workbench extends Container
         // Route factory resolver
         $this['routes.resolver'] = function ($c) {
             $options = array(
-                'route_class'    => $c['settings']['routes.route_class'],
-                'case_sensitive' => $c['settings']['routes.case_sensitive'],
+                'route_class'    => $c['settings']->get('routes.route_class', null),
+                'case_sensitive' => $c['settings']->get('routes.case_sensitive', true),
             );
 
             return function ($pattern, $callable) use ($options) {
@@ -217,11 +218,14 @@ class Workbench extends Container
 
         // Route Callable Resolver
         $this['resolver'] = function($c) {
-            if ($c['settings']['callable.resolver'] == 'DependencyResolver') {
+
+            $resolverCofig = $c['settings']->get('callable.resolver', 'CallableResolver');
+
+            if ($resolverCofig == 'DependencyResolver') {
                 $resolver = new DependencyResolver($c);
-            } elseif ($c['settings']['callable.resolver'] == 'ContainerResolver') {
+            } elseif ($resolverCofig == 'ContainerResolver') {
                 $resolver = new ContainerResolver($c);
-            } elseif ($c['settings']['callable.resolver'] == 'CallableResolver') {
+            } elseif ($resolverCofig == 'CallableResolver') {
                 $resolver = new CallableResolver();
             } else {
                 throw new \Exception("Set a Callable Resolver");
@@ -232,7 +236,7 @@ class Workbench extends Container
 
         // Route
         $this['route'] = function ($c) {
-            return new Route($pattern = null, $callable = null, $c['settings']['routes.case_sensitive']);
+            return new Route(null, null, $c['settings']->get('routes.case_sensitive', true));
         };
 
         // Controllers factory
@@ -240,8 +244,21 @@ class Workbench extends Container
             return new ControllerCollection($c['route'], $c['router']);
         };
 
+        // Register providers
+        foreach ($this['settings']->get('app.providers', array()) as $provider => $arr) {
+            //throw new \Exception($provider);
+
+            $this->register(new $provider, $arr);
+        }
+
         // Middleware stack
         $this['middleware'] = array($this);
+
+        // Facade
+        $this['facades'] = function ($c) {
+            $facades = new Facades($c);
+            return $facades;
+        };
     }
 
     /**
@@ -250,8 +267,9 @@ class Workbench extends Container
      * @param  array  $paths
      * @return void
      */
-    public function bindInstallPaths(array $paths)
+    public static function bindInstallPaths(array $paths)
     {
+        static::$paths['path.app'] = realpath($paths['app']);
         $this['path.app'] = realpath($paths['app']);
 
         // Here we will bind the install paths into the container as strings that can be
@@ -259,10 +277,11 @@ class Workbench extends Container
         // so that they have the consistent naming convention inside the container.
         foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
             $this["path.{$key}"] = realpath($value);
+            static::$paths["path.{$key}"] = realpath($value);
         }
     }
 
-     /**
+    /**
      * Registers a service provider.
      *
      * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
@@ -299,47 +318,6 @@ class Workbench extends Container
                     $provider->boot($this);
                 }
             }
-        }
-    }
-
-    /**
-     * Configure App Settings
-     *
-     * This method defines application settings and acts as a setter and a getter.
-     *
-     * If only one argument is specified and that argument is a string, the value
-     * of the setting identified by the first argument will be returned, or NULL if
-     * that setting does not exist.
-     *
-     * If only one argument is specified and that argument is an associative array,
-     * the array will be merged into the existing application settings.
-     *
-     * If two arguments are provided, the first argument is the name of the setting
-     * to be created or updated, and the second argument is the setting value.
-     *
-     * @param  string|array $name   If a string, the name of the setting to set or retrieve.
-     *                              Else an associated array of setting names and values
-     * @param  mixed        $value  If name is a string, the value of the setting identified by $name
-     * @return mixed                The value of a setting if only one argument is a string
-     * @api
-     */
-    public function config($name, $value = null)
-    {
-        if (func_num_args() === 1) {
-            if (is_array($name)) {
-                foreach ($name as $key => $value) {
-                    $this['settings'][$key] = $value;
-                }
-            } else {
-                if (!isset($this['settings'][$name])) {
-                    return null;
-                }
-
-                $value = $this['settings'][$name];
-                return is_callable($value) ? call_user_func($value) : $value;
-            }
-        } else {
-            $this['settings'][$name] = $value;
         }
     }
 
@@ -390,8 +368,8 @@ class Workbench extends Container
      * @param  array   $headers
      * @return void
      *
-     * @throws \Brainwave\Exception\HttpException\HttpException
-     * @throws \Brainwave\Exception\HttpException\NotFoundHttpException
+     * @throws \Brainwave\Http\Exception\HttpException
+     * @throws \Brainwave\Http\Exception\NotFoundHttpException
      */
     public function abort($code, $message = '', array $headers = array())
     {
@@ -442,25 +420,6 @@ class Workbench extends Container
     }
 
     /**
-     * Configure App for a given mode
-     *
-     * This method will immediately invoke the callable if
-     * the specified mode matches the current application mode.
-     * Otherwise, the callable is ignored. This should be called
-     * only _after_ you initialize your Brainwave app.
-     *
-     * @param  string $mode
-     * @param  mixed  $callable
-     * @api
-     */
-    public function setMode($mode, $callable)
-    {
-        if ($mode == $this['mode'] && is_callable($callable)) {
-            call_user_func($callable);
-        }
-    }
-
-    /**
      * Determine if application is in local environment.
      *
      * @return bool
@@ -477,7 +436,7 @@ class Workbench extends Container
      */
     public function getLocale()
     {
-        return $this->config('app.locale');
+        return $this['settings']->get('app.locale', 'en');
     }
 
     /**
@@ -488,7 +447,7 @@ class Workbench extends Container
      */
     public function setLocale($locale)
     {
-        $this->config('app.locale', $locale);
+        $this['settings']->set('app.locale', $locale);
         return $this;
     }
 
@@ -876,11 +835,11 @@ class Workbench extends Container
     {
         $settings = array(
             'value' => $value,
-            'expires' => is_null($time) ? $this->config('cookies.lifetime') : $time,
-            'path' => is_null($path) ? $this->config('cookies.path') : $path,
-            'domain' => is_null($domain) ? $this->config('cookies.domain') : $domain,
-            'secure' => is_null($secure) ? $this->config('cookies.secure') : $secure,
-            'httponly' => is_null($httponly) ? $this->config('cookies.httponly') : $httponly
+            'expires' => is_null($time) ? $this['settings']->get('cookies.lifetime', '20minutes') : $time,
+            'path' => is_null($path) ? $this['settings']->get('cookies.path', '/') : $path,
+            'domain' => is_null($domain) ? $this['settings']->get('cookies.domain', null) : $domain,
+            'secure' => is_null($secure) ? $this['settings']->get('cookies.secure', false) : $secure,
+            'httponly' => is_null($httponly) ? $this['settings']->get('cookies.httponly', false) : $httponly
         );
         $this['response']->setCookie($name, $settings);
     }
@@ -936,10 +895,10 @@ class Workbench extends Container
     public function deleteCookie($name, $path = null, $domain = null, $secure = null, $httponly = null)
     {
         $settings = array(
-            'domain' => is_null($domain) ? $this->config('cookies.domain') : $domain,
-            'path' => is_null($path) ? $this->config('cookies.path') : $path,
-            'secure' => is_null($secure) ? $this->config('cookies.secure') : $secure,
-            'httponly' => is_null($httponly) ? $this->config('cookies.httponly') : $httponly
+            'domain' => is_null($domain) ? $this['settings']->get('cookies.domain', null) : $domain,
+            'path' => is_null($path) ? $this['settings']->get('cookies.path', '/') : $path,
+            'secure' => is_null($secure) ? $this['settings']->get('cookies.secure', false) : $secure,
+            'httponly' => is_null($httponly) ? $this['settings']->get('cookies.httponly', flase) : $httponly
         );
         $this['response']->removeCookie($name, $settings);
     }
@@ -1425,7 +1384,7 @@ class Workbench extends Container
                 $this['flash']->save();
 
                 // Encrypt, save, close session
-                if ($this->config('session.encrypt') === true) {
+                if ($this['settings']->get('session.encrypt', false) === true) {
                     $this['session']->encrypt($this['crypt']);
                 }
                 $this['session']->save();
@@ -1439,6 +1398,29 @@ class Workbench extends Container
             // Send response
             $this['response']->finalize($this['request'])->send();
         }
+    }
+
+    /**
+     * Register the core class aliases in the container.
+     *
+     * @return void
+     */
+    public function registerCoreContainerAliases()
+    {
+        return array(
+            'App'           => '\Brainwave\Support\Facades\App',
+            'Log'           => '\Brainwave\Support\Facades\Log',
+            'Mail'          => '\Brainwave\Support\Facades\Mail',
+            'View'          => '\Brainwave\Support\Facades\View',
+            'Event'         => '\Brainwave\Support\Facades\Event',
+            'Route'         => '\Brainwave\Support\Facades\Route',
+            'Config'        => '\Brainwave\Support\Facades\Config',
+            'Request'       => '\Brainwave\Support\Facades\Request',
+            'Resource'      => '\Brainwave\Support\Facades\Resource',
+            'Response'      => '\Brainwave\Support\Facades\Response',
+            'Services'      => '\Brainwave\Support\Facades\Services',
+            'Autoloader'    => '\Brainwave\Support\Facades\Autoloader',
+        );
     }
 
     /**

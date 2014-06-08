@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Event;
+namespace Brainwave\Workbench\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,25 +18,19 @@ namespace Brainwave\Event;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Event\EventManager;
-use \Pimple\ServiceProviderInterface;
-
 /**
- * EventServiceProvider
+ * Stop
+ *
+ * This Exception will cause the Router::dispatch method
+ * to skip the current matching route and continue to the next
+ * matching route. If no subsequent Routing are found, a
+ * HTTP 404 Not Found response will be sent to the client.
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class EventServiceProvider implements ServiceProviderInterface
+class Pass extends \Exception
 {
-    public function register(Container $app)
-    {
-        $app['event'] = function ($app) {
-            $event = new EventManager();
-            return $event;
-        };
-    }
 }

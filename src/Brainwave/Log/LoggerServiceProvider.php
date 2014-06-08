@@ -18,10 +18,10 @@ namespace Brainwave\Log;
  *
  */
 
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
-use Brainwave\Workbench\Workbench;
-use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
+use \Monolog\Logger;
+use \Pimple\Container;
+use \Monolog\Handler\StreamHandler;
+use \Pimple\ServiceProviderInterface;
 
 /**
  * LoggerServiceProvider
@@ -33,19 +33,13 @@ use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
  */
 class LoggerServiceProvider implements ServiceProviderInterface
 {
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['logger'] = function () use ($app) {
             return $app['monolog'];
         };
 
-        if ($bridge = class_exists('Symfony\Bridge\Monolog\Logger')) {
-            $app['monolog.handler.debug'] = function () use ($app) {
-                return new DebugHandler($app['monolog.level']);
-            };
-        }
-
-        $app['monolog.logger.class'] = $bridge ? 'Symfony\Bridge\Monolog\Logger' : 'Monolog\Logger';
+        $app['monolog.logger.class'] = 'Monolog\Logger';
 
         $app['monolog'] = $app->share(function ($app) {
             $log = new $app['monolog.logger.class']($app['monolog.name']);
@@ -70,7 +64,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
         $app['monolog.name'] = 'myapp';
     }
 
-    public function boot(Application $app)
+    public function boot(Container $app)
     {
         $app->before(function (Request $request) use ($app) {
             $app['monolog']->addInfo('> '.$request->getMethod().' '.$request->getRequestUri());

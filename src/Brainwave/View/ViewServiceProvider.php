@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\HttpException;
+namespace Brainwave\View;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,27 +18,28 @@ namespace Brainwave\Exception\HttpException;
  *
  */
 
-use \Brainwave\Exception\HttpException\HttpException;
+use \Pimple\Container;
+use \Brainwave\View\ViewFactory;
+use \Pimple\ServiceProviderInterface;
 
 /**
- * NotFoundHttpException
+ * ViewServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class NotFoundHttpException extends HttpException
+class ViewServiceProvider implements ServiceProviderInterface
 {
+
     /**
-     * Constructor.
-     *
-     * @param string     $message  The internal exception message
-     * @param Exception $previous The previous exception
-     * @param integer    $code     The internal exception code
+     * Register view
      */
-    public function __construct($message = null, \Exception $previous = null, $code = 0)
+    public function register(Container $app)
     {
-        parent::__construct(404, $message, $previous, array(), $code);
+        $app['view'] = function ($app) {
+             return new ViewFactory($app);
+        };
     }
 }

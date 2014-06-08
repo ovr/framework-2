@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\RouteException;
+namespace Brainwave\Http\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,13 +18,27 @@ namespace Brainwave\Exception\RouteException;
  *
  */
 
+use \Brainwave\Http\Exception\HttpException;
+
 /**
- * CacheException
+ * NotFoundHttpException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class RouteException extends \LogicException {
+class NotFoundHttpException extends HttpException
+{
+    /**
+     * Constructor.
+     *
+     * @param string     $message  The internal exception message
+     * @param Exception $previous The previous exception
+     * @param integer    $code     The internal exception code
+     */
+    public function __construct($message = null, \Exception $previous = null, $code = 0)
+    {
+        parent::__construct(404, $message, $previous, array(), $code);
+    }
 }

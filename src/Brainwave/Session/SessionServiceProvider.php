@@ -18,9 +18,9 @@ namespace Brainwave\Session;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
 use \Brainwave\Session\SessionFactory;
-use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
 
 /**
  * SessionServiceProvider
@@ -32,7 +32,7 @@ use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
  */
 class SessionServiceProvider implements ServiceProviderInterface
 {
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['session'] = function ($app) {
             $session = new SessionFactory();
@@ -44,9 +44,5 @@ class SessionServiceProvider implements ServiceProviderInterface
 
             return $session;
         };
-    }
-
-    public function boot(Workbench $app)
-    {
     }
 }

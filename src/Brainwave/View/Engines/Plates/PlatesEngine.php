@@ -69,13 +69,8 @@ class PlatesEngine implements EnginesInterface
     {
         $this->app = $app;
 
-        // Check all needed plates settings
-        // if (is_null($this->app->config('plates.extensions'))) {
-        //     throw new \InvalidArgumentException('Set needed setting for plates. "plates.extensions"');
-        // }
-
-        if (!is_null($this->app->config('plates.extensions'))) {
-            $this->availableExtensions = $this->app->config('plates.extensions');
+        if ($extensions = !is_null($this->app['settings']->get('plates.extensions', null))) {
+            $this->availableExtensions = $extensions;
         }
 
         //Engine
@@ -87,10 +82,10 @@ class PlatesEngine implements EnginesInterface
      */
     protected function loader()
     {
-        $engine = new Engine($this->app->config('view.default.template.path'));
+        $engine = new Engine($this->app['settings']->get('view.default.template.path', null));
 
-        if (!is_null($this->app->config('view.template.paths'))) {
-            foreach ($this->app->config('view.template.paths') as $name => $addPaths) {
+        if (!is_null($this->app['settings']->get('view.template.paths', null))) {
+            foreach ($this->app['settings']->get('view.template.paths', null) as $name => $addPaths) {
                 $engine->addFolder($name, $addPaths);
             }
         }
@@ -136,10 +131,10 @@ class PlatesEngine implements EnginesInterface
         $engine->loadExtension(new URI($this->app['request']->getPathInfo()));
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->app->config('view.asset')));
+        $engine->loadExtension(new Asset($this->app['settings']->get('view.asset', null)));
 
         // Get all extensions
-        if (!is_null($this->app->config('plates.extensions'))) {
+        if (!is_null($this->app['settings']->get('plates.extensions', null))) {
             foreach ($this->availableExtensions as $ext) {
                 $this->engine->loadedExtensions($ext);
             }

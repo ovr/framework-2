@@ -34,7 +34,7 @@ class TranslatorServiceProvider implements ServiceProviderInterface
 {
 
     /**
-     * {@inheritdoc}
+     * Register translator
      */
     public function register(Container $app)
     {

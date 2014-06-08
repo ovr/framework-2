@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Workbench;
+namespace Brainwave\Workbench\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,7 +18,7 @@ namespace Brainwave\Workbench;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
 
 /**
  * View Interface
@@ -37,5 +37,5 @@ interface BootableProviderInterface
      * and should be used for "dynamic" configuration (whenever
      * a service must be requested).
      */
-    public function boot(Workbench $app);
+    public function boot(Container $app);
 }

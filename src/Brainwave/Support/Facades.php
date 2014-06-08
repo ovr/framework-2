@@ -50,7 +50,6 @@ class Facades extends FacadeManager
     public function __construct(Workbench $app)
     {
         static::setFacadeApplication($app);
-        $this->registerAliases();
     }
 
     /**
@@ -68,7 +67,7 @@ class Facades extends FacadeManager
      * Description
      * @return type
      */
-    protected function getFacadeAlias()
+    public function getFacadeAlias()
     {
         return $this->facadeAlias;
     }
@@ -78,16 +77,9 @@ class Facades extends FacadeManager
      * @param type $aliases
      * @return type
      */
-    protected function registerAliases()
+    public function registerAliases()
     {
-        // If user pass some new facades from registerAliases function
-        if (!empty($this->facadeAlias)) {
-            foreach ($this->getFacadeAlias() as $alias => $class) {
-                $aliases[$alias] = $class;
-            }
-        }
-
-        foreach ($aliases as $alias => $class) {
+        foreach ($this->getFacadeAlias() as $alias => $class) {
             if (class_exists($class)) {
                 class_alias($class, $alias);
             } else {

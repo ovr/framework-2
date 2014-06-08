@@ -18,7 +18,12 @@ namespace Brainwave\Config;
  *
  */
 
-use Symfony\Component\Yaml\Parser;
+use \Brainwave\Config\Driver\PhpDriver;
+use \Brainwave\Config\Driver\IniDriver;
+use \Brainwave\Config\Driver\XmlDriver;
+use \Brainwave\Config\Driver\JsonDriver;
+use \Brainwave\Config\Driver\YamlDriver;
+use \Brainwave\Config\Driver\TomlDriver;
 use \Brainwave\Config\Interfaces\LoaderInterface;
 
 /**
@@ -55,9 +60,9 @@ class FileLoader implements LoaderInterface
      * @param  string  $defaultPath
      * @return void
      */
-    public function __construct($defaultPath)
+    public function setDefaultPath($path)
     {
-        $this->defaultPath = $defaultPath;
+        $this->defaultPath = $path;
     }
 
     /**
@@ -70,72 +75,20 @@ class FileLoader implements LoaderInterface
      */
     public function load($file, $namespace = null, $environment = null, $group = null)
     {
-        // File extension to get the right loader
+        // File extension to get the right driver
         $ext = pathinfo($file, PATHINFO_EXTENSION);
 
-        //Determine if the given file exists.
+        // Determine if the given file exists.
         $this->exists($file, $namespace, $environment, $group);
 
-        if ($ext == 'php') {
-            try {
-                foreach ($this->exists as $key => $file) {
-                    return new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator(file_get_contents($file)),
-                        \RecursiveIteratorIterator::SELF_FIRST
-                    );
-                }
-            } catch (\Exception $e) {
-                printf("Unable to parse the PHP string: %s", $e->getMessage());
-            }
-        } elseif ($ext == 'json') {
-            try {
-                foreach ($this->exists as $key => $file) {
-                    return new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator(
-                            json_decode(file_get_contents($file), true)
-                        ),
-                        \RecursiveIteratorIterator::SELF_FIRST
-                    );
-                }
-            } catch (\Exception $e) {
-                printf("Unable to parse the JSON string: %s", $e->getMessage());
-            }
-        } elseif ($ext == 'ini') {
-            try {
-                foreach ($this->exists as $key => $file) {
-                    return new \RecursiveIteratorIterator(
-                        new \RecursiveArrayIterator(
-                            parse_ini_string(file_get_contents($file), true)
-                        ),
-                        \RecursiveIteratorIterator::SELF_FIRST
-                    );
-                }
-            } catch (\Exception $e) {
-                printf("Unable to parse the INI string: %s", $e->getMessage());
-            }
-        } elseif ($ext == 'xml') {
-            try {
-                foreach ($this->exists as $key => $file) {
-                    return new \RecursiveIteratorIterator(
-                        new \SimpleXmlIterator(file_get_contents($file))
-                    );
-                }
-            } catch (\Exception $e) {
-                printf("Unable to parse the XML string: %s", $e->getMessage());
-            }
-        } elseif ($ext == 'yaml') {
-            if (!class_exists('Symfony\Component\Yaml\Parser')) {
-                throw new \Exception("Install it via Composer (symfony/yaml on Packagist)");
-            }
+        // Get checked config file
+        $configFile = $this->exists[preg_replace('[/]', '', $environment.$namespace.$group.$file)];
 
-            try {
-                foreach ($this->exists as $key => $file) {
-                    return $yaml->parse(file_get_contents(file_get_contents($file)));
-                }
-            } catch (ParseException $e) {
-                printf("Unable to parse the YAML string: %s", $e->getMessage());
-            }
-        }
+        // Set the right driver for config
+        $driver = $this->driver($ext, $configFile);
+
+        // return config array
+        return $driver->load($configFile);
     }
 
     /**
@@ -149,6 +102,7 @@ class FileLoader implements LoaderInterface
     public function exists($file, $namespace = null, $environment = null, $group = null)
     {
         $key = $environment.$namespace.$group.$file;
+        $key = preg_replace('[/]', '', $key);
 
         // We'll first check to see if we have determined if this namespace and
         // group combination have been checked before. If they have, we will
@@ -161,10 +115,16 @@ class FileLoader implements LoaderInterface
         // the value in an array so we don't have to go through this process
         // again on subsequent checks for the existing of the config file.
 
-        $file = $this->defaultPath."{$environment}/{$namespace}/{$group}/{$file}";
+        $filePath = "{$environment}/{$namespace}/{$group}/{$file}";
+
+        $file = $this->defaultPath.preg_replace('[//]', '/', $filePath);
 
         if (file_exists($file)) {
             return $this->exists[$key] = $file;
+        } else {
+            throw new \InvalidArgumentException(
+                sprintf("The config file '%s' does not exist.", $file)
+            );
         }
     }
 
@@ -177,16 +137,13 @@ class FileLoader implements LoaderInterface
      * @param  array   $items
      * @return array
      */
-    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
+    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null, $namespace = "config/packages")
     {
         // First we will look for a configuration file in the packages configuration
         // folder. If it exists, we will load it and merge it with these original
         // options so that we will easily 'cascade' a package's configurations.
-        $file = "packages/{$package}/{$group}/{$file}";
-
-        if ($this->exists($path = $this->defaultPath.'/'.$file))
-        {
-            $requireFile = file_get_contents($path);
+        if ($this->exists($file, $namespace.'/'.$packages.'/'.$env, null, $group )) {
+            $requireFile = file_get_contents($this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]);
             $items = array_merge($items, $requireFile);
         }
 
@@ -195,8 +152,7 @@ class FileLoader implements LoaderInterface
         // the contents and merge them on top of this array of options we have.
         $path = $this->getPackagePath($env, $package, $group);
 
-        if ($this->exists($path))
-        {
+        if ($this->exists($path)) {
             $requireFile = file_get_contents($path);
             $items = array_merge($items, $requireFile);
         }
@@ -206,7 +162,6 @@ class FileLoader implements LoaderInterface
 
     /**
      * Get the package path for an environment and group.
-     *
      * @param  string  $env
      * @param  string  $package
      * @param  string  $group
@@ -215,7 +170,65 @@ class FileLoader implements LoaderInterface
     protected function getPackagePath($env, $package, $group, $file)
     {
         $file = "packages/{$package}/{$env}/{$group}/{$file}";
+        $file = preg_replace('[//]', '/', $file);
 
-        return $this->defaultPath.'/'.$file;
+        return $this->defaultPath.$file;
+    }
+
+    /**
+     * Get the right driver for config file
+     * @param  string $ext  file extension
+     * @param  string $path file path
+     * @return array
+     */
+    protected function driver($ext, $path)
+    {
+        if ($ext == 'php') {
+            $driver = new PhpDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } elseif ($ext == 'json') {
+            $driver = new JsonDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } elseif ($ext == 'ini') {
+            $driver = new IniDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } elseif ($ext == 'xml') {
+            $driver = new XmlDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } elseif ($ext == 'yaml') {
+            $driver = new YamlDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } elseif ($ext == 'toml') {
+            $driver = new TomlDriver();
+            $driver->load($path);
+
+            if ($driver->supports($path)) {
+                return $driver;
+            }
+        } else {
+            throw new \RuntimeException(
+                sprintf("Unable to find the right driver for '%s'", $ext)
+            );
+        }
     }
 }

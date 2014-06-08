@@ -45,6 +45,12 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     protected $values = array();
 
     /**
+     * Caches the configuration data
+     * @var array
+     */
+    protected $cache = array();
+
+    /**
      * Default values
      * @var array
      */
@@ -76,7 +82,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
                 'env' => '',
                 'group' => ''
             ),
-            'template' => array(
+            'view' => array(
                 'ext' => 'php',
                 'namespace' => 'config',
                 'env' => '',
@@ -113,18 +119,17 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         'view.items' => array(),
         // Json
         'json.option' => '0',
-        // Database setting
-        'db.options' => array(
-            'dsn'      => '',
-            'username' => '',
-            'password' => '',
-            'frozen'   => false
-        ),
         //Callable Resolver
         'callable.resolver' => 'CallableResolver'
     );
 
-     /**
+    /**
+     * Config folder path
+     * @var string
+     */
+    protected $path;
+
+    /**
      * Constructor
      * @param mixed $handler
      */
@@ -132,15 +137,11 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     {
         $this->setHandler($handler);
         $this->setLoader($loader);
-
-        //Load config files
-        foreach ($this->defaults['app.configs'] as $file => $setting) {
-            $this->bind($file.'.'.$setting['ext'], $setting['namespace'], $setting['env'], $setting['group']);
-        }
     }
 
     /**
      * Set Brainwave's defaults using the handler
+     * @param array $values
      */
     public function setArray(array $values)
     {
@@ -212,8 +213,8 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function bind($file, $namespace = null, $environment = null, $group = null)
     {
-        $this->getLoader()->load($file, $namespace, $environment, $group);
-        return $this;
+        $config = $this->getLoader()->load($file, $namespace, $environment, $group);
+        return $this->setArray($config);
     }
 
     /**
@@ -227,21 +228,20 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
     {
-        $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
-        return $this;
+        return $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
     }
 
     /**
      * Get a value
      * @param  string $key
-     * @return mixed
+     * @return mixed       The value of a setting
      */
     public function get($key, $default)
     {
-        if (isset($this->handler[$key])) {
+        if (is_null($this->handler[$key])) {
             return $default;
         } else {
-            return $this->handler[$key];
+            return is_callable($this->handler[$key]) ? call_user_func($this->handler[$key]) : $this->handler[$key];
         }
     }
 
@@ -253,6 +253,26 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function set($key, $value)
     {
         $this->handler[$key] = $value;
+    }
+
+    /**
+     * Set path to config folder
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+        $this->getLoader()->setDefaultPath($path);
+        return $this;
+    }
+
+    /**
+     * Get config folder path
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**

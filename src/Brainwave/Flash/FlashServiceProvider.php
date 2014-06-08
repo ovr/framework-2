@@ -18,8 +18,10 @@ namespace Brainwave\Flash;
  *
  */
 
-use Brainwave\Workbench\Workbench;
-use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
+use \Pimple\Container;
+use \Brainwave\Flash\Flash;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\View\Interfaces\ViewInterface;
 
 /**
  * FlashServiceProvider
@@ -31,19 +33,15 @@ use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
  */
 class FlashServiceProvider implements ServiceProviderInterface
 {
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['flash'] = function ($app) {
-            $flash = new Flash($app['session'], $app['settings']['session.flash_key']);
-            if ($app['settings']['view'] instanceof ViewInterface) {
+            $flash = new Flash($app['session'], $app['settings']->get('session.flash_key', 'flash'));
+            if ($app['settings']->get('view', 'plates') instanceof ViewInterface) {
                 $app['view']->set('flash', $flash->getMessages());
             }
 
             return $flash;
         };
-    }
-
-    public function boot(Workbench $app)
-    {
     }
 }

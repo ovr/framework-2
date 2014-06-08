@@ -64,14 +64,14 @@ class PlainDisplayer implements ExceptionDisplayerInterface
         $this->app['response']->setStatus(500);
         $title = 'Brainwave Application Error';
         $header = 'The application could not run because of the following error:';
-        $footer = 'Copyright &copy; ' . date('Y') . ' Brainwave';
+        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app.footer', 'narrowspark');
 
         if ($exception instanceof \Exception) {
             $code = $exception->getCode();
             $message = $exception->getMessage();
             $file = $exception->getFile();
             $line = $exception->getLine();
-            $trace = str_replace(array('#', '\n'), array('<div>#', '</div>'), $exception->getTraceAsString());
+            $trace = $exception->getTraceAsString();
             $class = get_class($exception);
 
             $content = <<<EOF
@@ -136,10 +136,7 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer, $css = '', $js = '')
     {
-        $foot = $this->app->config('app.footer');
-        if (!empty($foot)) {
-            $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app->config('app.footer');
-        }
+        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app['settings']->get('app.footer', 'narrowspark');
 
         print <<<EOF
 <!DOCTYPE html>
@@ -235,7 +232,6 @@ body {
             $css
             overflow-x: visible;
             margin: auto;
-            position: absolute;
             top: 0;
             left: 0;
             bottom: 0;

@@ -36,20 +36,19 @@ use \Brainwave\Exception\FatalErrorException as FatalError;
 class ExceptionHandler
 {
     /**
-     * [$app description]
-     * @var [type]
+     * Brainwave
+     * @var void
      */
     private $app;
 
     /**
-     * [$whoopsEditor description]
-     * @var [type]
+     * Set the editor
+     * @var string
      */
     protected $whoopsEditor = 'sublime';
 
     /**
      * All of the register exception handlers.
-     *
      * @var array
      */
     protected $handlers = array();
@@ -59,6 +58,7 @@ class ExceptionHandler
         $this->app = $app;
 
         $this->plainDisplayer(new PlainDisplayer($app, strtolower($charset)));
+
         if (class_exists('\Whoops\Run')) {
             $this->whoopsDisplayer(new WhoopsDisplayer($app, strtolower($charset)));
         }
@@ -76,7 +76,7 @@ class ExceptionHandler
 
         $this->registerExceptionHandler();
 
-        if ($this->app['mode'] != 'testing') {
+        if ($this->app['env'] != 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -103,7 +103,6 @@ class ExceptionHandler
 
     /**
      * Register the PHP shutdown handler.
-     *
      * @return void
      */
     protected function registerShutdownHandler()
@@ -112,8 +111,8 @@ class ExceptionHandler
     }
 
     /**
-     * [unregister description]
-     * @return [type] [description]
+     * Unregister the PHP error handler.
+     * @return void
      */
     public function unregister()
     {
@@ -122,7 +121,6 @@ class ExceptionHandler
 
     /**
      * Handle the PHP shutdown event.
-     *
      * @return void
      */
     public function handleShutdown()
@@ -139,7 +137,7 @@ class ExceptionHandler
                 return;
             }
 
-            $this->handleException(new FatalError($message, $type, 0, $file, $line))->send();
+            $this->handleException(new FatalError($message, $type, 0, $file, $line));
         }
     }
 
@@ -188,7 +186,7 @@ class ExceptionHandler
     <i class="fa fa-circle-o"></i><a href="$link/">Visit the Home Page</a>
 </div>
 EOF;
-        $footer = 'Copyright &copy; ' . date('Y') . ' Brainwave';
+        $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app.footer', 'narrowspark');
 
         return $this->app['displayer.plain']->decorate($title, $header, $content, $footer, $this->app['displayer.plain']->getStylesheet('pageNotFound'));
     }
@@ -290,7 +288,7 @@ EOF;
     public function handleException($argument = null)
     {
         ob_start();
-        //TODO finish exception handler
+
         if (is_array($this->app['error'])) {
             call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
         } elseif (is_callable($this->app['error'])) {
@@ -310,13 +308,13 @@ EOF;
      */
     protected function displayException($exception)
     {
-        if ($this->app['mode'] == 'development' && $this->app['debug'] == true || $this->app['mode'] == 'testing' && $this->app['debug'] == true) {
-            //Set handler
-            $displayer = class_exists('\Whoops\Run') ? $this->app['displayer.whoops']->display($exception) : $this->app['displayer.plain']->display($exception);
-            return $displayer;
+        $settings = $this->app['settings'];
+
+        if ($settings->get('app.mode', 'production') == 'development' && $settings->get('debug', false) == true ||
+            $settings->get('app.mode', 'production') == 'testing' && $settings->get('debug', false) == true) {
+            return class_exists('\Whoops\Run') ? $this->app['displayer.whoops']->display($exception) : $this->app['displayer.plain']->display($exception);
         } else {
-            $displayer = $this->noException($exception);
-            return $displayer;
+            return $this->noException($exception);
         }
     }
 
@@ -350,7 +348,7 @@ EOF;
     </span>
 </div>
 EOF;
-        $footer = 'Copyright &copy; ' . date('Y') . ' Brainwave';
+        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app.footer', 'narrowspark');
 
         return $this->app['displayer.plain']->decorate($title, $header, $content, $footer, $this->app['displayer.plain']->getStylesheet('pageNotFound'));
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Autoloader;
+namespace Brainwave\Config\Driver;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,30 +18,36 @@ namespace Brainwave\Support\Autoloader;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Support\Autoloader\Autoloader;
+use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
- * AutoloaderServiceProvider
+ * Ini Driver
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class AutoloaderServiceProvider implements ServiceProviderInterface
+class IniDriver implements DriverInterface
 {
+    /**
+     * Loads a INI file and gets its' contents as an array
+     * @param  string $filename
+     * @return array            config data
+     */
+    public function load($filename)
+    {
+        $config = @parse_ini_file($filename, true);
+        return $config ?: array();
+    }
 
     /**
-     * Register Classloader
-     * @return  \Brainwave\Support\Autoloader\Autoloader
+     * Checking if file ist supported
+     * @param  string $filename
+     * @return mixed
      */
-    public function register(Container $app)
+    public function supports($filename)
     {
-        $app['autoloader'] = function ($app) {
-            $classLoader = new Autoloader();
-            return $classLoader;
-        };
+        return (bool) preg_match('#\.ini(\.dist)?$#', $filename);
     }
 }

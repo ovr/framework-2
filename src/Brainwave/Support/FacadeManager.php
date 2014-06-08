@@ -225,8 +225,7 @@ abstract class FacadeManager
     {
         $instance = static::resolveFacadeInstance(static::getFacadeAccessor());
 
-        switch (count($args))
-        {
+        switch (count($args)) {
             case 0:
                 return $instance->$method();
 

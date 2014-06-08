@@ -96,15 +96,17 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         $this->app = $app;
 
         //
-        if (!is_null($this->app->config('view.engine'))) {
-            $this->customeEngines = $this->app->config('view.engine');
+        if (!is_null($this->app['settings']->get('view.engine', 'plates'))) {
+            $this->customeEngines = $this->app['settings']->get('view.engine', 'plates');
         }
 
         //
         $this->engine = $this->engineResolver(new EngineResolver());
 
         //Set extension
-        $this->extensions = (!is_null($this->app->config('view.extensions'))) ? $this->app->config('view.extensions') : '.php';
+        $this->extensions = (
+            !is_null($this->app['settings']->get('view.extensions', null))) ?
+            $this->app['settings']->get('view.extensions', null) : '.php';
 
         //
         $this->registerEngineResolver();
@@ -128,8 +130,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     protected function registerItems()
     {
-        if (!is_null($this->app->config('view.items'))) {
-            $data = array_merge($this->app->config('view.items'), $this->getData());
+        if (!is_null($this->app['settings']->get('view.items', null))) {
+            $data = array_merge($this->app['settings']->get('view.items', null), $this->getData());
         } else {
             $data = $this->getData();
         }
@@ -153,10 +155,14 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         foreach ($engines as $engineName => $engineClass) {
             if ($engineName === 'php' || $engineName === 'json') {
                 $this->{'register'.ucfirst($engineClass).'Engine'}($resolver);
-            } elseif (!is_null($this->app->config('view.compiler'))) {
-                foreach ($this->app->config('view.compiler') as $compilerName => $compilerClass) {
+            } elseif (!is_null($this->app['settings']->get('view.compiler', null))) {
+                foreach ($this->app['settings']->get('view.compiler', null) as $compilerName => $compilerClass) {
                     if ($engineName === $compilerClass) {
-                        $this->registerCustomeEngine($engineName, $engineClass($compilerClass($this->app->config('view.cache'))), $resolver);
+                        $this->registerCustomeEngine(
+                            $engineName,
+                            $engineClass($compilerClass($this->app['settings']->get('view.cache', null))),
+                            $resolver
+                        );
                     }
                 }
             } else {
@@ -235,14 +241,14 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             $explodeTemplate = explode('|', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app->config('view.template.paths') as $pathName => $path) {
+                foreach ($this->app['settings']->get('view.template.paths', null) as $pathName => $path) {
                     if (trim($explodeTemplate[0]) == $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
                 $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath) . trim($explodeTemplate[1]) . $this->getExtensions();
             } else {
-                $path = $this->app->config('view.default.template.path') . $template . $this->getExtensions();
+                $path = $this->app['settings']->get('view.default.template.path', null) . $template . $this->getExtensions();
             }
         } elseif ($engine == 'json') {
             $path = $template;

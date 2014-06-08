@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\SlimException;
+namespace Brainwave\Config\Driver\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,16 +19,26 @@ namespace Brainwave\Exception\SlimException;
  */
 
 /**
- * Stop
- *
- * This Exception is thrown when the Brainwave application needs to abort
- * processing and return control flow to the outer PHP script.
+ * Driver Interface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class Stop extends \Exception
+interface DriverInterface
 {
+    /**
+     * Loads a file and gets its' contents as an array
+     * @param  string $filename
+     * @return array            config data
+     */
+    function load($filename);
+
+    /**
+     * Checking if file ist supported
+     * @param  string $filename
+     * @return mixed
+     */
+    function supports($filename);
 }

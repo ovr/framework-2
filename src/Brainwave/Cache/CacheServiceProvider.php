@@ -18,10 +18,10 @@ namespace Brainwave\Cache;
  *
  */
 
+use \Pimple\Container;
 use \Brainwave\Cache\CacheManager;
-use \Brainwave\Workbench\Workbench;
+use \Pimple\ServiceProviderInterface;
 use \Brainwave\Support\Services\ServiceManager;
-use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
 
 /**
  * CacheServiceProvider
@@ -33,7 +33,7 @@ use \Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
  */
 class CacheServiceProvider implements ServiceProviderInterface
 {
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['cache.default_options'] = array(
             'driver' => 'array',
@@ -84,7 +84,7 @@ class CacheServiceProvider implements ServiceProviderInterface
         $app['caches'] = function ($app) {
             $app['caches.options.initializer']();
 
-            $caches = new \Pimple();
+            $caches = new Container();
             foreach ($app['caches.options'] as $name => $options) {
                 if ($app['caches.default'] === $name) {
                     // we use shortcuts here in case the default has been overridden
@@ -106,7 +106,7 @@ class CacheServiceProvider implements ServiceProviderInterface
         $app['caches.config'] = function ($app) {
             $app['caches.options.initializer']();
 
-            $configs = new \Pimple();
+            $configs = new Container();
             foreach ($app['caches.options'] as $name => $options) {
                 $configs[$name] = $options;
             }
@@ -126,10 +126,5 @@ class CacheServiceProvider implements ServiceProviderInterface
 
             return $caches[$app['caches.default']];
         };
-    }
-
-    public function boot(Workbench $app)
-    {
-
     }
 }

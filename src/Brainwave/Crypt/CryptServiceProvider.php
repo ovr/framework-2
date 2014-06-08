@@ -18,8 +18,9 @@ namespace Brainwave\Crypt;
  *
  */
 
-use Brainwave\Workbench\Workbench;
-use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
+use \Pimple\Container;
+use \Brainwave\Crypt\Crypt;
+use \Pimple\ServiceProviderInterface;
 
 /**
  * CryptServiceProvider
@@ -31,18 +32,14 @@ use Brainwave\Support\Services\Interfaces\ServiceProviderInterface;
  */
 class CryptServiceProvider implements ServiceProviderInterface
 {
-    public function register(Workbench $app)
+    public function register(Container $app)
     {
         $app['crypt'] = function ($app) {
             return new Crypt(
-                $app['settings']['crypt.key'],
-                $app['settings']['crypt.cipher'],
-                $app['settings']['crypt.mode']
+                $app['settings']->get('crypt.key', '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'),
+                $app['settings']->get('crypt.cipher', MCRYPT_RIJNDAEL_256),
+                $app['settings']->get('crypt.mode', 'ctr')
             );
         };
-    }
-
-    public function boot(Workbench $app)
-    {
     }
 }

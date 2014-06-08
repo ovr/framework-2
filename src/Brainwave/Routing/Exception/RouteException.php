@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Event;
+namespace Brainwave\Routing\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,25 +18,13 @@ namespace Brainwave\Event;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Event\EventManager;
-use \Pimple\ServiceProviderInterface;
-
 /**
- * EventServiceProvider
+ * CacheException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class EventServiceProvider implements ServiceProviderInterface
-{
-    public function register(Container $app)
-    {
-        $app['event'] = function ($app) {
-            $event = new EventManager();
-            return $event;
-        };
-    }
+class RouteException extends \LogicException {
 }
