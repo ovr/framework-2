@@ -47,7 +47,7 @@
         "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML config",
-        "symfony/yaml" : "Narrowspark has support for YML config",
+        "symfony/yaml" : "Narrowspark has support for YML config"
     },
     "minimum-stability": "dev"
 }
