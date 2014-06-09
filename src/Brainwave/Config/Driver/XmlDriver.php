@@ -51,4 +51,40 @@ class XmlDriver implements DriverInterface
     {
         return (bool) preg_match('#\.php(\.dist)?$#', $filename);
     }
+
+    /**
+     * Format a config file for saving. [NOT IMPLEMENTED]
+     * @param  array     $data config data
+     * @return string data export
+     */
+    public function format(array $data)
+    {
+        // creating object of SimpleXMLElement
+        $xml = new \SimpleXMLElement("<?xml version=\"1.0\"?><config></config>");
+
+        // function call to convert array to xml
+        $this->array_to_xml($data, $xml);
+
+        return $xml->asXML();
+    }
+
+    /**
+     * Defination to convert array to xml
+     * @param  array $data  config data
+     * @param  void $xml    \SimpleXMLElement
+     * @return string       data
+     */
+    protected function array_to_xml($data, &$xml)
+    {
+        foreach($data as $key => $value) {
+            if (is_array($value)) {
+                $key = is_numeric($key) ? "item$key" : $key;
+                $subnode = $xml->addChild("$key");
+                array_to_xml($value, $subnode);
+            } else {
+                $key = is_numeric($key) ? "item$key" : $key;
+                $xml->addChild("$key","$value");
+            }
+        }
+    }
 }

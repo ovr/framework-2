@@ -50,4 +50,41 @@ class IniDriver implements DriverInterface
     {
         return (bool) preg_match('#\.ini(\.dist)?$#', $filename);
     }
+
+    /**
+     * Format a config file for saving.
+     * @param  array     $data config data
+     */
+    public function format(array $data)
+    {
+        $this->iniFormat((array) $data);
+    }
+
+    /**
+     * Format a ini config file.
+     * @param  array  $data   config data
+     * @param  array  $parent data
+     * @return string data export
+     */
+    protected function iniFormat(array $data, array $parent = array())
+    {
+        $out = '';
+
+        foreach ($a as $k => $v) {
+            if (is_array($v)) {
+                //subsection case
+                //merge all the sections into one array...
+                $sec = array_merge((array) $parent, (array) $k);
+                //add section information to the output
+                $out .= '[' . join('.', $sec) . ']' . PHP_EOL;
+                //recursively traverse deeper
+                $out .= $this->iniFormat($v, $sec);
+            } else {
+                //plain key->value case
+                $out .= "$k=$v" . PHP_EOL;
+            }
+        }
+
+        return $out;
+    }
 }

@@ -34,7 +34,7 @@ class EventServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['event'] = function ($app) {
+        $app['events'] = function ($app) {
             $event = new EventManager();
             return $event;
         };

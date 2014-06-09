@@ -51,4 +51,28 @@ class PhpDriver implements DriverInterface
     {
         return (bool) preg_match('#\.php(\.dist)?$#', $filename);
     }
+
+    /**
+     * Format a config file for saving.
+     * @param  array  $data config data
+     * @return string data export
+     */
+    public function format(array $data)
+    {
+        $data = var_export($data, true);
+
+        $formatted = str_replace(
+            array('  ', 'array ('),
+            array("\t", 'array('),
+            $data
+        );
+
+        $output = <<<CONF
+<?php
+
+return {$formatted};
+CONF;
+
+        return $output;
+    }
 }

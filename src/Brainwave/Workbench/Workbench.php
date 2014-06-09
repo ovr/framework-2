@@ -79,7 +79,7 @@ class Workbench extends Container
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.8.0-dev';
+    const BRAINWAVE_VERSION = '0.9.1-dev';
 
     /**
      * Has the app response been sent to the client?
@@ -111,6 +111,67 @@ class Workbench extends Container
     protected $booted = false;
 
     /**
+     * Narrowspark config files
+     * @var array
+     */
+    protected $config = array(
+        'app' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'mail' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'cache' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'services' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'session' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'cookies' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'view' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'autoload' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+        'database' => array(
+            'ext' => 'php',
+            'namespace' => 'config',
+            'env' => '',
+            'group' => ''
+        ),
+    );
+
+    /**
      * Application hooks
      * @var array
      */
@@ -138,8 +199,6 @@ class Workbench extends Container
         parent::__construct();
 
         // App setting
-        $this['debug']              = true;
-        $this['https']              = false;
         $this['env']                = null;
         //
         $this['error']              = null;
@@ -150,11 +209,11 @@ class Workbench extends Container
 
         // Settings
         $this['settings'] = function ($c) {
-            $config = new Configuration(new ConfigurationHandler, new FileLoader());
-            $config->setPath(static::$paths['path.app']);
+            $config = new Configuration(new ConfigurationHandler, new FileLoader);
+            $config->addPath(static::$paths['path.app']);
 
              //Load config files
-            foreach ($config->get('app.configs', null) as $file => $setting) {
+            foreach ($this->config as $file => $setting) {
                 $config->bind($file.'.'.$setting['ext'], $setting['namespace'], $setting['env'], $setting['group']);
             }
 
@@ -195,15 +254,15 @@ class Workbench extends Container
         };
 
         // Route
-        $this['routes.factory'] = function ($c) {
-            return new RouteFactory($c, $c['routes.resolver']);
+        $this['route.factory'] = function ($c) {
+            return new RouteFactory($c, $c['route.resolver']);
         };
 
         // Route factory resolver
-        $this['routes.resolver'] = function ($c) {
+        $this['route.resolver'] = function ($c) {
             $options = array(
-                'route_class'    => $c['settings']->get('routes.route_class', null),
-                'case_sensitive' => $c['settings']->get('routes.case_sensitive', true),
+                'route_class'    => $c['settings']->get('route.class', null),
+                'case_sensitive' => $c['settings']->get('route.case_sensitive', true),
             );
 
             return function ($pattern, $callable) use ($options) {
@@ -236,7 +295,7 @@ class Workbench extends Container
 
         // Route
         $this['route'] = function ($c) {
-            return new Route(null, null, $c['settings']->get('routes.case_sensitive', true));
+            return new Route(null, null, $c['settings']->get('route.case_sensitive', true));
         };
 
         // Controllers factory
@@ -246,8 +305,6 @@ class Workbench extends Container
 
         // Register providers
         foreach ($this['settings']->get('app.providers', array()) as $provider => $arr) {
-            //throw new \Exception($provider);
-
             $this->register(new $provider, $arr);
         }
 
@@ -334,6 +391,17 @@ class Workbench extends Container
     public function escape($text, $flags = ENT_COMPAT, $charset = null, $doubleEncode = true)
     {
         return htmlspecialchars($text, $flags, $charset ?: $this['charset'], $doubleEncode);
+    }
+
+    /**
+     * Register a maintenance mode event listener.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function down(Closure $callback)
+    {
+        $this['events']->hook('brainwave.app.down', $callback);
     }
 
     /**
@@ -486,7 +554,7 @@ class Workbench extends Container
         $pattern = array_shift($args);
         $callable = $this['resolver']->build(array_pop($args));
 
-        $route = $this['routes.factory']->make($pattern, $callable);
+        $route = $this['route.factory']->make($pattern, $callable);
         $this['router']->map($route);
         if (count($args) > 0) {
             $route->setMiddleware($args);
@@ -612,24 +680,23 @@ class Workbench extends Container
     }
 
     /**
-     * Get controllers routes
+     * Get controllers route
      * @return Route
      * @api
      */
     public function getControllersRoutes()
     {
-        $routes = array();
+        $route = array();
         $controllers = $this->controller_factory->getControllers();
         foreach ($controllers as $controller) {
-            $routes[] = $controller->getRouteName();
+            $route[] = $controller->getRouteName();
         }
 
-        return $routes;
+        return $route;
     }
 
     /**
      * Set the object context ($this) for dispatch callables
-     *
      * @param object $context The object context ($this) in which
      */
     public function setDispatchContext($context)
@@ -655,10 +722,10 @@ class Workbench extends Container
      */
     public function inject($route, array $inject)
     {
-        //Add params to routes
+        //Add params to route
         if (is_array($route)) {
 
-            //Counting Routes
+            //Counting route
             $count = count($route);
 
             foreach ($route as $url) {

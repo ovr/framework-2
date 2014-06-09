@@ -41,4 +41,11 @@ interface DriverInterface
      * @return mixed
      */
     function supports($filename);
+
+    /**
+     * Format a config file for saving.
+     * @param  array     $data config data
+     * @return string data export
+     */
+    public function format(array $data);
 }

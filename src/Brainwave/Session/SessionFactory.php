@@ -89,11 +89,11 @@ class SessionFactory extends Collection implements SessionInterface
      */
     public function __construct(Crypt $crypt, array $cookies = array())
     {
-        $this->csrfSegment = $this->newSegment('_csrf');
-        $this->sessionSegment = $this->newSegment('_session');
-        $this->csrfTokenFactory = $this->csrfTokenFactory(new CsrfTokenFactory($this->csrfSegment, $crypt));
-        $this->cookies            = $cookies;
-        $this->cookie_params      = session_get_cookie_params();
+        $this->csrfSegment          = $this->newSegment('_csrf');
+        $this->sessionSegment       = $this->newSegment('_session');
+        $this->csrfTokenFactory     = $this->csrfTokenFactory(new CsrfTokenFactory($this->csrfSegment, $crypt));
+        $this->cookies              = $cookies;
+        $this->cookie_params        = session_get_cookie_params();
     }
 
     /**

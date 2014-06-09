@@ -60,7 +60,7 @@ class FileLoader implements LoaderInterface
      * @param  string  $defaultPath
      * @return void
      */
-    public function setDefaultPath($path)
+    public function addDefaultPath($path)
     {
         $this->defaultPath = $path;
     }

@@ -45,85 +45,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     protected $values = array();
 
     /**
-     * Caches the configuration data
-     * @var array
-     */
-    protected $cache = array();
-
-    /**
-     * Default values
-     * @var array
-     */
-    protected $defaults = array(
-        // Application
-        'app.footer' => 'narrowspark',
-        'app.configs' => array(
-            'app' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-            'mail' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-            'cache' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-            'services' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-            'view' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-            'autoload' => array(
-                'ext' => 'php',
-                'namespace' => 'config',
-                'env' => '',
-                'group' => ''
-            ),
-        ),
-        // Cookies
-        'cookies.encrypt' => false,
-        'cookies.lifetime' => '20 minutes',
-        'cookies.path' => '/',
-        'cookies.domain' => null,
-        'cookies.secure' => false,
-        'cookies.httponly' => false,
-        // Encryption
-        'crypt.mode' => 'ctr',
-        // Session
-        'session.handler' => null,
-        'session.cookies' => array(),
-        'session.flash_key' => 'app.flash',
-        'session.encrypt' => false,
-        // HTTP
-        'http.version' => '1.1',
-        // Routing
-        'routes.case_sensitive' => true,
-        'routes.context' => null,
-        'routes.route_class' => '\Brainwave\Routing\Route',
-        // View
-        'view.items' => array(),
-        // Json
-        'json.option' => '0',
-        //Callable Resolver
-        'callable.resolver' => 'CallableResolver'
-    );
-
-    /**
      * Config folder path
      * @var string
      */
@@ -148,13 +69,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         $this->handler->setArray($values);
     }
 
-    /**
-     * Set Brainwave's defaults using the handler
-     */
-    public function setDefaults()
-    {
-        $this->handler->setArray($this->defaults);
-    }
 
     /**
      * Get the default settings
@@ -172,7 +86,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function setHandler(ConfigurationHandlerInterface $handler)
     {
         $this->handler = $handler;
-        $this->setDefaults();
     }
 
     /**
@@ -259,10 +172,10 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      * Set path to config folder
      * @param string $path
      */
-    public function setPath($path)
+    public function addPath($path)
     {
         $this->path = $path;
-        $this->getLoader()->setDefaultPath($path);
+        $this->getLoader()->addDefaultPath($path);
         return $this;
     }
 

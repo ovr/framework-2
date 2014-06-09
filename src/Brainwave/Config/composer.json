@@ -1,0 +1,35 @@
+{
+    "name": "brainwave/conifg",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "config", "configuration"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/config",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Brainwave\\Config": ""
+        }
+    },
+    "target-dir": "Brainwave/Config",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.1-dev"
+        }
+    },
+    "suggest": {
+        "yosymfony/toml": "Narrowspark has support for TOML config",
+        "symfony/yaml" : "Narrowspark has support for YML config"
+    },
+    "minimum-stability": "dev"
+}

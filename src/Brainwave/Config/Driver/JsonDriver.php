@@ -86,4 +86,14 @@ class JsonDriver implements DriverInterface
 
         return isset($errorMessages[$code]) ? $errorMessages[$code] : 'Unknown';
     }
+
+    /**
+     * Format a config file for saving.
+     * @param  array  $data config data
+     * @return string data export
+     */
+    public function format(array $data)
+    {
+        return json_encode($data);
+    }
 }

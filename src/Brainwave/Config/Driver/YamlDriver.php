@@ -18,6 +18,7 @@ namespace Brainwave\Config\Driver;
  *
  */
 
+use Symfony\Component\Yaml\Yaml;
 use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
@@ -52,5 +53,16 @@ class YamlDriver implements DriverInterface
     public function supports($filename)
     {
         return (bool) preg_match('#\.ya?ml(\.dist)?$#', $filename);
+    }
+
+    /**
+     * Format a config file for saving.
+     *
+     * @param  array  $data config data
+     * @return string data export
+     */
+    public function format(array $data)
+    {
+        return Yaml::dump($data);
     }
 }

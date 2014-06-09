@@ -18,6 +18,7 @@ namespace Brainwave\Config\Driver;
  *
  */
 
+use Yosymfony\Toml\Toml;
 use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
@@ -37,11 +38,11 @@ class TomlDriver implements DriverInterface
      */
     public function load($filename)
     {
-        if (!class_exists('Toml\\Parser')) {
+        if (!class_exists('Yosymfony\\Toml\\Toml;')) {
             throw new \RuntimeException('Unable to read toml as the Toml Parser is not installed.');
         }
 
-        $config = Parser::fromFile($filename);
+        $config = Toml::Parse($filename);
         return $config ?: array();
     }
 
@@ -53,5 +54,15 @@ class TomlDriver implements DriverInterface
     public function supports($filename)
     {
         return (bool) preg_match('#\.toml(\.dist)?$#', $filename);
+    }
+
+    /**
+     * Format a config file for saving. [NOT IMPLEMENTED]
+     * @param  array     $data config data
+     * @return string data export
+     */
+    public function format(array $data)
+    {
+        throw new Exception('Toml export is not available');
     }
 }

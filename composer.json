@@ -27,6 +27,9 @@
         "classpreloader/classpreloader": "1.*",
         "intahwebz/lowmemoryclassloader": "dev-master"
     },
+    "replace": {
+        "brainwave/conifg": "self.version"
+    },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
@@ -39,7 +42,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.8.0-dev"
+            "dev-master": "0.9.1-dev"
         }
     },
     "suggest": {
@@ -47,7 +50,8 @@
         "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML config",
-        "symfony/yaml" : "Narrowspark has support for YML config"
+        "symfony/yaml" : "Narrowspark has support for YML config",
+        "classpreloader/classpreloader": "If opcache_is_script_cached exists, classpreloader will speed up your application."
     },
     "minimum-stability": "dev"
 }
