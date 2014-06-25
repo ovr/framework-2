@@ -188,7 +188,7 @@ class Workbench extends Container
      * Workbench paths
      * @var array
      */
-    protected static $paths;
+    public static $paths;
 
     /**
      * Constructor
