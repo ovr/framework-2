@@ -19,6 +19,7 @@ namespace Brainwave\Session;
  */
 
 use \Pimple\Container;
+use \Brainwave\Crypt\Crypt;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Session\SessionFactory;
 
@@ -35,7 +36,7 @@ class SessionServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app['session'] = function ($app) {
-            $session = new SessionFactory();
+            $session = new SessionFactory($app['crypt']);
             $session->setSessionHandler($app['settings']['session.handler']);
             $session->start();
             if ($app['settings']['session.encrypt'] === true) {
