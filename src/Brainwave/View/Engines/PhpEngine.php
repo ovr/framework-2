@@ -68,8 +68,8 @@ class PhpEngine implements EnginesInterface
         if (!is_file($path)) {
             throw new \RuntimeException(
                 "Cannot render template `$path` because the template does not exist.
-                Make sure your view's template directory is correct.
-            ");
+                Make sure your view's template directory is correct."
+            );
         }
 
         extract($data, EXTR_PREFIX_SAME, "brain");
@@ -78,11 +78,13 @@ class PhpEngine implements EnginesInterface
         // flush out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
         ob_start();
+
+
         try {
             require_once $path;
             // Return temporary output buffer content, destroy output buffer
             return ltrim(ob_get_clean());
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             // Return temporary output buffer content, destroy output buffer
             $this->handleViewException($e);
         }

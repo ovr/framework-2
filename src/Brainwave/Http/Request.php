@@ -21,8 +21,8 @@ namespace Brainwave\Http;
 use \GuzzleHttp\Stream\Stream;
 use \GuzzleHttp\Stream\StreamInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Http\Interfaces\CookiesInterface;
 use \Brainwave\Http\Interfaces\RequestInterface;
+use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
 use \Brainwave\Environment\Interfaces\EnvironmentInterface;
 
 /**
@@ -80,7 +80,7 @@ class Request implements RequestInterface
 
     /**
      * Request cookies
-     * @var \Brainwave\Http\Interfaces\CookiesInterface
+     * @var \Brainwave\Http\Interfaces\CookiesJarInterface
      */
     protected $cookies;
 
@@ -107,11 +107,16 @@ class Request implements RequestInterface
      *
      * @param \Brainwave\Environment\Interfaces\EnvironmentInterface  $env
      * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param \Brainwave\Http\Interfaces\CookiesInterface $cookies
+     * @param \Brainwave\Http\Interfaces\CookiesJarInterface $cookies
      * @param string                                 $body
      * @api
      */
-    public function __construct(EnvironmentInterface $env, HeadersInterface $headers, CookiesInterface $cookies, $body = null)
+    public function __construct(
+        EnvironmentInterface $env,
+        HeadersInterface $headers,
+        CookiesJarInterface $cookies,
+        $body = null
+    )
     {
         $this->env = $env;
         $this->headers = $headers;
@@ -125,6 +130,17 @@ class Request implements RequestInterface
         }
 
         $this->bodyRaw->seek(0);
+    }
+
+    /**
+     * Retrieving Values From $_SERVER
+     *
+     * @param  string $key   Retrieve a server variable from the request.
+     * @return string
+     */
+    public function server(string $key = null)
+    {
+        return $this->env->get($server);
     }
 
     /*******************************************************************************
@@ -198,7 +214,10 @@ class Request implements RequestInterface
     public function getUrl()
     {
         $url = $this->getScheme() . '://' . $this->getHost();
-        if (($this->getScheme() === 'https' && $this->getPort() !== 443) || ($this->getScheme() === 'http' && $this->getPort() !== 80)) {
+        if (
+            ($this->getScheme() === 'https' && $this->getPort() !== 443) ||
+            ($this->getScheme() === 'http' && $this->getPort() !== 80)
+        ) {
             $url .= sprintf(':%s', $this->getPort());
         }
 
@@ -491,7 +510,8 @@ class Request implements RequestInterface
      */
     public function isAjax()
     {
-        return $this->params('isajax') == true || $this->headers->get('HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest'; // <-- Loose equality is on purpose
+        return $this->params('isajax') == true ||
+        $this->headers->get('HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest'; // <-- Loose equality is on purpose
     }
 
     /**
@@ -691,7 +711,9 @@ class Request implements RequestInterface
      */
     public function isFormData()
     {
-        return (is_null($this->getContentType()) && $this->getOriginalMethod() === static::METHOD_POST) || in_array($this->getMediaType(), self::$formDataMediaTypes);
+        return
+            (is_null($this->getContentType()) && $this->getOriginalMethod() === static::METHOD_POST) ||
+            in_array($this->getMediaType(), self::$formDataMediaTypes);
     }
 
     /**

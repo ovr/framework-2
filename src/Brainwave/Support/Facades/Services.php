@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Support\Facades;
+use Brainwave\Workbench\StaticalProxy;
 
 /**
  * Services
@@ -28,7 +28,10 @@ use Brainwave\Support\Facades;
  * @since   0.8.0-dev
  *
  */
-class Services extends Facades
+class Services extends StaticalProxy
 {
-	protected static function getFacadeAccessor() { return 'services'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'services';
+    }
 }

@@ -32,7 +32,6 @@ use \Pimple\ServiceProviderInterface;
  */
 class ViewServiceProvider implements ServiceProviderInterface
 {
-
     /**
      * Register view
      */

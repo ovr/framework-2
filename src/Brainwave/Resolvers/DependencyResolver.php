@@ -32,14 +32,14 @@ use \Brainwave\Resolvers\Interfaces\CallableResolverInterface;
 class DependencyResolver implements CallableResolverInterface
 {
     /**
-     * [$app description]
-     * @var [type]
+     * Application Brainwave\Workbench\Workbench
+     * @var bool
      */
     private $app;
 
     /**
-     * [__construct description]
-     * @param Pimple $container [description]
+     * Set Application
+     * @param $app Brainwave\Workbench\Workbench
      */
     public function __construct(Workbench $app)
     {

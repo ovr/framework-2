@@ -22,9 +22,9 @@ use \GuzzleHttp\Stream\Stream;
 use \GuzzleHttp\Stream\StreamInterface;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Http\Interfaces\CookiesInterface;
 use \Brainwave\Http\Interfaces\RequestInterface;
 use \Brainwave\Http\Interfaces\ResponseInterface;
+use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
 
 /** Response
  *
@@ -148,12 +148,16 @@ class Response implements ResponseInterface
      *
      * @param \Brainwave\Interfaces\Http\HeadersInterface $headers The HTTP response headers
      * @param \Brainwave\Interfaces\Http\CookiesInterface $cookies The HTTP response cookies
-     * @param string                                 $body    The HTTP response body
-     * @param int                                    $status  The HTTP response status
+     * @param string                                      $body    The HTTP response body
+     * @param int                                         $status  The HTTP response status
      * @api
      */
-    public function __construct(HeadersInterface $headers, CookiesInterface $cookies, $body = '', $status = 200)
-    {
+    public function __construct(
+        HeadersInterface $headers,
+        CookiesJarInterface $cookies,
+        $body = '',
+        $status = 200
+    ) {
         $this->headers = $headers;
         if ($this->headers->has('Content-Type') === false) {
             $this->headers->set('Content-Type', 'text/html');
@@ -379,7 +383,7 @@ class Response implements ResponseInterface
     /**
      * Encrypt cookies
      *
-     * @param \Brainwave\Interfaces\CryptInterface $crypt
+     * @param \Brainwave\Crypt\Interfaces\CryptInterface $crypt
      * @api
      */
     public function encryptCookies(CryptInterface $crypt)

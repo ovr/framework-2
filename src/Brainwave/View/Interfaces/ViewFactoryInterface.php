@@ -77,7 +77,7 @@ interface ViewFactoryInterface
      * Gets a variable.
      * @return array
      */
-    public function getData();
+    public function gatherData();
 
     /**
      * Assign a variable to the template.
@@ -85,5 +85,5 @@ interface ViewFactoryInterface
      * @param mixed $data the data
      * @return self
      */
-    public function setData($name, $data = null);
+    public function share($name, $data = null);
 }

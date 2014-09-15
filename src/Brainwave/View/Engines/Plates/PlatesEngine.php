@@ -25,7 +25,6 @@ use \League\Plates\Extension\Asset;
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
-
 /**
  * PlatesEngine
  *

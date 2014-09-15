@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Support\Facades;
+use Brainwave\Workbench\StaticalProxy;
 
 /**
  * App
@@ -28,9 +28,12 @@ use Brainwave\Support\Facades;
  * @since   0.8.0-dev
  *
  */
-class App extends Facades
+class App extends StaticalProxy
 {
-    protected static function getFacadeAccessor() { return self::$brainwave; }
+    protected static function getFacadeAccessor()
+    {
+        return self::$brainwave;
+    }
 
     public static function make($key)
     {

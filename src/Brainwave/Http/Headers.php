@@ -80,7 +80,11 @@ class Headers extends Collection implements HeadersInterface
         foreach ($environment as $key => $value) {
             $key = strtoupper($key);
 
-            if (strpos($key, 'HTTP_') === 0 || in_array($key, $this->special)) {
+            if (
+                strpos($key, 'HTTP_') === 0 ||
+                strpos($key, 'REDIRECT_') === 0 ||
+                in_array($key, $this->special)
+            ) {
                 if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
                     continue;
                 }

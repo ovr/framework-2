@@ -18,7 +18,6 @@ namespace Brainwave\Exception;
  *
  */
 
-use \Whoops\Run;
 use \Brainwave\Routing\Route;
 use \Brainwave\Workbench\Workbench;
 use \Brainwave\Exception\PlainDisplayer;
@@ -188,7 +187,13 @@ class ExceptionHandler
 EOF;
         $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app.footer', 'narrowspark');
 
-        return $this->app['displayer.plain']->decorate($title, $header, $content, $footer, $this->app['displayer.plain']->getStylesheet('pageNotFound'));
+        return $this->app['displayer.plain']->decorate(
+            $title,
+            $header,
+            $content,
+            $footer,
+            $this->app['displayer.plain']->getStylesheet('pageNotFound')
+        );
     }
 
     /**
@@ -263,7 +268,7 @@ EOF;
             // at least some errors, and avoid errors with no data or not log writes.
             try {
                 $response = $handler($exception, $code, $fromConsole);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $response = $this->displayException($e);
             }
 
@@ -292,9 +297,9 @@ EOF;
         if (is_array($this->app['error'])) {
             call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
         } elseif (is_callable($this->app['error'])) {
-            call_user_func_array($this->app['error'], array($argument));
+            call_user_func($this->app['error'], array($argument));
         } else {
-            call_user_func_array(array($this, 'displayException'), array($argument));
+            $this->displayException($argument);
         }
 
         return ob_get_clean();
@@ -312,7 +317,9 @@ EOF;
 
         if ($settings->get('app.mode', 'production') == 'development' && $settings->get('debug', false) == true ||
             $settings->get('app.mode', 'production') == 'testing' && $settings->get('debug', false) == true) {
-            return class_exists('\Whoops\Run') ? $this->app['displayer.whoops']->display($exception) : $this->app['displayer.plain']->display($exception);
+            return class_exists('\Whoops\Run') ?
+                $this->app['displayer.whoops']->display($exception) :
+                $this->app['displayer.plain']->display($exception);
         } else {
             return $this->noException($exception);
         }
@@ -350,7 +357,13 @@ EOF;
 EOF;
         $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app.footer', 'narrowspark');
 
-        return $this->app['displayer.plain']->decorate($title, $header, $content, $footer, $this->app['displayer.plain']->getStylesheet('pageNotFound'));
+        return $this->app['displayer.plain']->decorate(
+            $title,
+            $header,
+            $content,
+            $footer,
+            $this->app['displayer.plain']->getStylesheet('pageNotFound')
+        );
     }
 
     /**

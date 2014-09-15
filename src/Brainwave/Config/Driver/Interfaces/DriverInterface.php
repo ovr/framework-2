@@ -33,14 +33,14 @@ interface DriverInterface
      * @param  string $filename
      * @return array            config data
      */
-    function load($filename);
+    public function load($filename);
 
     /**
      * Checking if file ist supported
      * @param  string $filename
      * @return mixed
      */
-    function supports($filename);
+    public function supports($filename);
 
     /**
      * Format a config file for saving.

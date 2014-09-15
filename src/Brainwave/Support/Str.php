@@ -26,8 +26,8 @@ namespace Brainwave\Support;
  * @since   0.8.0-dev
  *
  */
-class Str {
-
+class Str
+{
     /**
      * The registered string macros.
      *
@@ -66,9 +66,10 @@ class Str {
      */
     public static function contains($haystack, $needles)
     {
-        foreach ((array) $needles as $needle)
-        {
-            if ($needle != '' && strpos($haystack, $needle) !== false) return true;
+        foreach ((array) $needles as $needle) {
+            if ($needle != '' && strpos($haystack, $needle) !== false) {
+                return true;
+            }
         }
 
         return false;
@@ -83,9 +84,10 @@ class Str {
      */
     public static function endsWith($haystack, $needles)
     {
-        foreach ((array) $needles as $needle)
-        {
-            if ($needle == substr($haystack, -strlen($needle))) return true;
+        foreach ((array) $needles as $needle) {
+            if ($needle == substr($haystack, -strlen($needle))) {
+                return true;
+            }
         }
 
         return false;
@@ -114,7 +116,9 @@ class Str {
      */
     public static function is($pattern, $value)
     {
-        if ($pattern == $value) return true;
+        if ($pattern == $value) {
+            return true;
+        }
 
         $pattern = preg_quote($pattern, '#');
 
@@ -147,7 +151,9 @@ class Str {
      */
     public static function limit($value, $limit = 100, $end = '...')
     {
-        if (mb_strlen($value) <= $limit) return $value;
+        if (mb_strlen($value) <= $limit) {
+            return $value;
+        }
 
         return rtrim(mb_substr($value, 0, $limit, 'UTF-8')).$end;
     }
@@ -175,9 +181,13 @@ class Str {
     {
         preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
 
-        if ( ! isset($matches[0])) return $value;
+        if (!isset($matches[0])) {
+            return $value;
+        }
 
-        if (strlen($value) == strlen($matches[0])) return $value;
+        if (strlen($value) == strlen($matches[0])) {
+            return $value;
+        }
 
         return rtrim($matches[0]).$end;
     }
@@ -195,18 +205,6 @@ class Str {
     }
 
     /**
-     * Get the plural form of an English word.
-     *
-     * @param  string  $value
-     * @param  int  $count
-     * @return string
-     */
-    public static function plural($value, $count = 2)
-    {
-        return Pluralizer::plural($value, $count);
-    }
-
-    /**
      * Generate a more truly "random" alpha-numeric string.
      *
      * @param  int     $length
@@ -216,12 +214,10 @@ class Str {
      */
     public static function random($length = 16)
     {
-        if (function_exists('openssl_random_pseudo_bytes'))
-        {
+        if (function_exists('openssl_random_pseudo_bytes')) {
             $bytes = openssl_random_pseudo_bytes($length * 2);
 
-            if ($bytes === false)
-            {
+            if ($bytes === false) {
                 throw new \RuntimeException('Unable to generate random string.');
             }
 
@@ -229,21 +225,6 @@ class Str {
         }
 
         return static::quickRandom($length);
-    }
-
-    /**
-     * Generate a "random" alpha-numeric string.
-     *
-     * Should not be considered sufficient for cryptography, etc.
-     *
-     * @param  int     $length
-     * @return string
-     */
-    public static function quickRandom($length = 16)
-    {
-        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 
     /**
@@ -266,17 +247,6 @@ class Str {
     public static function title($value)
     {
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
-    }
-
-    /**
-     * Get the singular form of an English word.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public static function singular($value)
-    {
-        return Pluralizer::singular($value);
     }
 
     /**
@@ -327,9 +297,10 @@ class Str {
      */
     public static function startsWith($haystack, $needles)
     {
-        foreach ((array) $needles as $needle)
-        {
-            if ($needle != '' && strpos($haystack, $needle) === 0) return true;
+        foreach ((array) $needles as $needle) {
+            if ($needle != '' && strpos($haystack, $needle) === 0) {
+                return true;
+            }
         }
 
         return false;
@@ -361,6 +332,18 @@ class Str {
     }
 
     /**
+     * Magic call to intercept any function pass to it.
+     *
+     * @param string $func The function to call.
+     * @param array $args Arguments passed to the function.
+     * @return mixed The result of the function call.
+     */
+    public function __call($func, $args)
+    {
+        return call_user_func_array($func, $args);
+    }
+
+    /**
      * Dynamically handle calls to the string class.
      *
      * @param  string  $method
@@ -371,12 +354,10 @@ class Str {
      */
     public static function __callStatic($method, $parameters)
     {
-        if (isset(static::$macros[$method]))
-        {
+        if (isset(static::$macros[$method])) {
             return call_user_func_array(static::$macros[$method], $parameters);
         }
 
         throw new \BadMethodCallException("Method {$method} does not exist.");
     }
-
 }

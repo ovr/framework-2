@@ -45,6 +45,8 @@ use \Monolog\Formatter\ChromePHPFormatter;
 use \Monolog\Formatter\GelfFormatter;
 use \Monolog\Formatter\LogstashFormatter;
 use \Monolog\Formatter\ElasticaFormatter;
+use Brainwave\Support\ContractsInterfaces\JsonableInterface;
+use Brainwave\Support\ContractsInterfaces\ArrayableInterface;
 
 /**
  * MonologWriter
@@ -215,6 +217,24 @@ class MonologWriter
 
         $monolog = $this->monolog;
         $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
+
+        if (!empty($formatter)) {
+            $monolog->setFormatter($this->parseFormatter($formatter));
+        }
+    }
+
+    /**
+     * Register an error_log handler.
+     *
+     * @param  string  $level
+     * @param  integer $messageType
+     * @return void
+     */
+    public function useErrorLog($level = 'debug', $messageType = ErrorLogHandler::OPERATING_SYSTEM, $formatter = 'Html')
+    {
+        $level = $this->parseLevel($level);
+
+        $this->monolog->pushHandler($handler = new ErrorLogHandler($messageType, $level));
 
         if (!empty($formatter)) {
             $monolog->setFormatter($this->parseFormatter($formatter));
@@ -433,6 +453,19 @@ class MonologWriter
     }
 
     /**
+     * Dynamically pass log calls into the writer.
+     *
+     * @param  dynamic (level, param, param)
+     * @return mixed
+     */
+    public function write()
+    {
+        $level = head(func_get_args());
+
+        return call_user_func_array(array($this, $level), array_slice(func_get_args(), 1));
+    }
+
+    /**
      * Dynamically handle error additions.
      *
      * @param  string  $method
@@ -444,6 +477,9 @@ class MonologWriter
     public function __call($method, $parameters)
     {
         if (in_array($method, $this->levels)) {
+
+            $this->formatParameters($parameters);
+
             call_user_func_array(array($this, 'fireLogEvent'), array_merge(array($method), $parameters));
 
             $method = 'add'.ucfirst($method);
@@ -452,5 +488,24 @@ class MonologWriter
         }
 
         throw new BadMethodCallException("Method [$method] does not exist.");
+    }
+
+    /**
+     * Format the parameters for the logger.
+     *
+     * @param  mixed  $parameters
+     * @return void
+     */
+    protected function formatParameters(&$parameters)
+    {
+        if (isset($parameters[0])) {
+            if (is_array($parameters[0])) {
+                $parameters[0] = var_export($parameters[0], true);
+            } elseif ($parameters[0] instanceof JsonableInterface) {
+                $parameters[0] = $parameters[0]->toJson();
+            } elseif ($parameters[0] instanceof ArrayableInterface) {
+                $parameters[0] = var_export($parameters[0]->toArray(), true);
+            }
+        }
     }
 }

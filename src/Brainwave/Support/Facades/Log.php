@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Support\Facades;
+use Brainwave\Workbench\StaticalProxy;
 
 /**
  * Log
@@ -28,7 +28,10 @@ use Brainwave\Support\Facades;
  * @since   0.8.0-dev
  *
  */
-class Log extends Facades
+class Log extends StaticalProxy
 {
-	protected static function getFacadeAccessor() { return 'monologwriter'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'monologwriter';
+    }
 }

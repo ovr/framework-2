@@ -8,7 +8,7 @@ namespace Brainwave\Translator;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Translator;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Brainwave\Config\FileLoader;
 use \Brainwave\Translator\Interfaces\TranslatorInterface;
 
 /**
@@ -34,6 +34,13 @@ use \Brainwave\Translator\Interfaces\TranslatorInterface;
 class TranslatorManager implements TranslatorInterface
 {
     /**
+     * Lang folder path
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
      * An array containing all of the translation information.
      *
      * @var array
@@ -41,7 +48,15 @@ class TranslatorManager implements TranslatorInterface
     protected $translations = array();
 
     /**
+     * [$loader description]
+     *
+     * @var \Brainwave\Config\FileLoader
+     */
+    protected $loader;
+
+    /**
      * [$validLangs description]
+     *
      * @var array
      */
     protected $validLangs = array(
@@ -88,6 +103,34 @@ class TranslatorManager implements TranslatorInterface
      * @var String
      */
     protected $defaultLang = 'en';
+
+    /**
+     * All added replacements
+     *
+     * @var array
+     */
+    protected $replacements;
+
+    /**
+     * [setLoader description]
+     *
+     * @param bool $loader \Brainwave\Config\Fileloader
+     */
+    public function setLoader(FileLoader $loader)
+    {
+        $this->loader = $loader;
+        return $this;
+    }
+
+    /**
+     * [getLoader description]
+     *
+     * @return [type] [description]
+     */
+    public function getLoader()
+    {
+        return $this->loader;
+    }
 
     /**
      * Provide an array of information to use as translation data
@@ -148,6 +191,8 @@ class TranslatorManager implements TranslatorInterface
         }
 
         $this->translations[$language][$orig] = $translation;
+
+        return $this;
     }
 
     /**
@@ -158,7 +203,7 @@ class TranslatorManager implements TranslatorInterface
      *
      * @return String The translated string.
      */
-    public function getTranslation($orig, $language = false)
+    public function getTranslation($orig, $language = false, $replacements = null)
     {
         if (!$language) {
             $language = $this->defaultLang;
@@ -170,38 +215,42 @@ class TranslatorManager implements TranslatorInterface
         if (isset($this->translations[$language][$orig])) {
             return $this->translations[$language][$orig];
         }
+
         return false;
     }
 
     /**
      * Description
+     *
      * @param type $str
-     * @param type $n
+     * @param type $count
      * @param type $lang_id
+     *
      * @return type
      */
-    protected function plurals($str, $n = null, $lang_id = null) {
+    protected function plurals($str, $count = null, $language = null)
+    {
 
         $lang  = explode("|", $str);
 
-        if (null === $n) {
+        if (null === $count) {
             return '';
         }
 
-        switch ($lang_id) {
+        switch ($language) {
             case 'af': //afrikaans, nplurals=2
-                    $s = ( ($n==1) ? 0 :  2);
+                    $s = ( ($count==1) ? 0 :  2);
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'ar': //arabic, nplurals=6
-                    $s = ( ($n== 0) ? 0 : ( ($n==1) ? 1 : ( ($n==2) ? 2 : ( ( ($n % 100 >= 3) && ($n % 100 <= 10) ) ? 3 : ( ( ($n % 100 >= 11) && ($n % 100 <= 99) ) ? 4 : 5 ) ) ) ) );
+                    $s = ( ($count== 0) ? 0 : ( ($count==1) ? 1 : ( ($count==2) ? 2 : ( ( ($count % 100 >= 3) && ($count % 100 <= 10) ) ? 3 : ( ( ($count % 100 >= 11) && ($count % 100 <= 99) ) ? 4 : 5 ) ) ) ) );
                     $localized = $lang[ $s ];
-            break;
+                break;
 
             case 'cz': //czech, nplurals=3
-                    $s = ( ($n==1) ? '0' : ($n>=2 && $n<=4) ? 1 : 1 );
+                    $s = ( ($count==1) ? '0' : ($count>=2 && $count<=4) ? 1 : 1 );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'de': //german
             case 'bg': //bulgarian
             case 'gr': //greek
@@ -215,21 +264,21 @@ class TranslatorManager implements TranslatorInterface
             case 'sq': //albainian
             case 'my': //malay
                        // nplurals=2;
-                    $s = ( ($n != 1) ? '0' : 1 );
+                    $s = ( ($count != 1) ? '0' : 1 );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'pl': //polskiy, nplurals=3
-                    $s = (($n == 1) ? 0 : (( ($n%10>=2) && ($n%10<=4) && ($n%100<10 || $n%100>=20) ) ? 1 : 2 ));
+                    $s = (($count == 1) ? 0 : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20) ) ? 1 : 2 ));
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'ru': //russian, nplurals=3
-                    $s = ( (($n%10==1) && ($n%100!=11)) ? '0' : (( ($n%10>=2) && ($n%10<=4) && ($n%100<10 || $n%100>=20)) ? 1 : 2 ) );
+                    $s = ( (($count%10==1) && ($count%100!=11)) ? '0' : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20)) ? 1 : 2 ) );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'sk': //slovak, nplurals=3
-                    $s = ( ($n==1) ? 1 : ( ($n>=2 && $n<=4) ? 1 : '0' ) );
+                    $s = ( ($count==1) ? 1 : ( ($count>=2 && $count<=4) ? 1 : '0' ) );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'fa': //farsi
             case 'ja': //japan
             case 'tr': //turkish
@@ -240,44 +289,136 @@ class TranslatorManager implements TranslatorInterface
                        //nplurals=1
                     $s = '0';
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'ua': //ukrainian, nplurals=3
-                    $s = ( ($n%10==1 && $n%100!=11) ? '0' : ( $n%10>=2 && $n%10<=4 && ($n%100<10 || $n%100>=20) ) ? 1 : 1 );
+                    $s = ( ($count%10==1 && $count%100!=11) ? '0' : ( $count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20) ) ? 1 : 1 );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'lt': //lithuanian, nplurals=3
-                    $s = ( ($n%10==1 && $n%100!=11) ? '0' : ( $n%10>=2 && ($n%100<10 || $n%100>=20) ) ? 1 : 1 );
+                    $s = ( ($count%10==1 && $count%100!=11) ? '0' : ( $count%10>=2 && ($count%100<10 || $count%100>=20) ) ? 1 : 1 );
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'fr': //french, nplurals=2
-                    $s = ( $n > 1 ? '0' : 1 );
+                    $s = ( $count > 1 ? '0' : 1 );
                     $localized = $lang[ $key.$s ];
-            break;
+                break;
             case 'ie': //irish, nplurals=5;
-                    $s = (($n==1)? 0 : (($n==2) ? 1 : (($n<7) ? 2 : (($n<11) ? 3 : 4))));
+                    $s = (($count==1)? 0 : (($count==2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'is': //icelandic, nplurals=2;
             case 'hr': //croatian, nplurals=3;
-                    $s = ($n%10!=1 || $n%100==11) ? 0 : 1;
+                    $s = ($count%10!=1 || $count%100==11) ? 0 : 1;
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'lv': //latvian
-                    $s = ( ($n%10==1 && $n%100!=11) ? 0 : (($n != 0) ? 1 : 2));
+                    $s = ( ($count%10==1 && $count%100!=11) ? 0 : (($count != 0) ? 1 : 2));
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'cy': //welsh, nplurals=4
-                    $s =  (($n==1) ? 0 : (($n==2) ? 1 : (($n != 8 && $n != 11) ? 2 : 3)));
+                    $s =  (($count==1) ? 0 : (($count==2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
                     $localized = $lang[ $s ];
-            break;
+                break;
             case 'be': //belarusian, nplurals=3
             case 'bs': //bosnian, nplurals=3
-                    $s =  (($n%10==1 && $n%100!=11) ? 0 : (($n%10>=2 && $n%10<=4 && ($n%100<10 || $n%100>=20)) ? 1 : 2));
+                    $s =  (($count%10==1 && $count%100!=11) ? 0 : (($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 2));
                     $localized = $lang[ $s ];
-            break;
+                break;
         }
 
         return $localized;
+    }
+
+    /**
+     * Load the given lang group.
+     *
+     * @param  string  $file
+     * @param  string  $namespace
+     * @param  string  $environment
+     * @param  string  $group
+     *
+     * @return void
+     */
+    public function bind($file, $namespace = null, $environment = null, $group = null)
+    {
+        $validLangs = $this->validLangs;
+
+        foreach ($validLangs as $validLang) {
+            if (strpos($group, $validLang) !== false) {
+                $language = $group;
+            }
+        }
+
+        $lang = $this->getLoader()->load($file, $namespace, $environment, $group);
+        return $this->setTranslations($lang, $language, true);
+    }
+
+    /**
+     * Description
+     *
+     * @param string $search
+     * @param string $replacement
+     *
+     * @return \Brainwave\Translator\TranslatorManager
+     */
+    public function addReplacement($search, $replacement)
+    {
+        $this->replacements[$search] = $replacement;
+        return $this;
+    }
+
+    /**
+     * Description
+     *
+     * @param string $search
+     *
+     * @return \Brainwave\Translator\TranslatorManager
+     *
+     * @throws \Exception
+     */
+    public function removeReplacement($search)
+    {
+        if (!isset($this->replacements[$search])) {
+            throw new \Exception("Replacement '$search' was not found.");
+        }
+
+        unset($this->replacements[$search]);
+        return $this;
+    }
+
+    /**
+     * Description
+     *
+     * @param string $message
+     * @param array $args
+     *
+     * @return string
+     */
+    private function applyReplacements($message, array $args = array())
+    {
+        $replacements = $this->replacements;
+
+        foreach ($args as $countame => $value) {
+            $replacements[$countame] = $value;
+        }
+
+        foreach ($replacements as $countame => $value) {
+            if ($value !== false) {
+                $message = preg_replace('~%'. $countame. '%~', $value, $message);
+            }
+        }
+
+        return $message;
+    }
+
+    /**
+     * Description
+     *
+     * @return array
+     */
+    public function getReplacements()
+    {
+        return $this->replacements;
     }
 
     /**
@@ -303,13 +444,16 @@ class TranslatorManager implements TranslatorInterface
             $this->checkLang($defaultLang);
 
             $this->defaultLang = $defaultLang;
-            return $this;
         }
+
+        return $this;
     }
 
     /**
      * Check if lang is valid
+     *
      * @param string $lang
+     *
      * @return true or InvalidArgumentException
      */
     protected function checkLang($checkLang)
@@ -325,7 +469,29 @@ class TranslatorManager implements TranslatorInterface
         }
 
         if ($exception) {
-                throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
+            throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
         }
+    }
+
+    /**
+     * Set path to lang folder
+     *
+     * @param string $path
+     */
+    public function addPath($path)
+    {
+        $this->path = $path;
+        $this->getLoader()->addDefaultPath($path);
+        return $this;
+    }
+
+    /**
+     * Get lang folder path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
     }
 }

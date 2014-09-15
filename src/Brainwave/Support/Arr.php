@@ -52,7 +52,7 @@ class Arr
      * @param  \Closure  $callback
      * @return array
      */
-    public static function arrayBuild($array, Closure $callback)
+    public static function arrayBuild($array, \Closure $callback)
     {
         $results = array();
 
@@ -337,7 +337,7 @@ class Arr
      * @param  \Closure  $callback
      * @return array
      */
-    public static function arrayWhere($array, Closure $callback)
+    public static function arrayWhere($array, \Closure $callback)
     {
         $filtered = array();
 
@@ -351,31 +351,31 @@ class Arr
     }
 
     /**
-   * Check structure of an array.
-   * This method checks the structure of an array (only the first layer of it) against
-   * a defined set of rules.
-   *
-   * @param array $array
-   *   Array to check.
-   *
-   * @param array $structure
-   *   Expected array structure. Defined for example like this:
-   *   array(
-   *     'string' => array(
-   *       'callback' => 'strlen',
-   *       'params'   => array('%val'),
-   *       'match'    => 3,
-   *     ),
-   *     'not allowed' = false, // Only makes sense with $strict = false
-   *     'needed'      = true,
-   *   ),
-   *
-   * @param bool $strict
-   *   If strict is set to false we will allow keys that's not defined in the structure.
-   *
-   * @return bool
-   *   Returns true on match, and false on mismatch.
-   */
+     * Check structure of an array.
+     * This method checks the structure of an array (only the first layer of it) against
+     * a defined set of rules.
+     *
+     * @param array $array
+     *   Array to check.
+     *
+     * @param array $structure
+     *   Expected array structure. Defined for example like this:
+     *   array(
+     *     'string' => array(
+     *       'callback' => 'strlen',
+     *       'params'   => array('%val'),
+     *       'match'    => 3,
+     *     ),
+     *     'not allowed' = false, // Only makes sense with $strict = false
+     *     'needed'      = true,
+     *   ),
+     *
+     * @param bool $strict
+     *   If strict is set to false we will allow keys that's not defined in the structure.
+     *
+     * @return bool
+     *   Returns true on match, and false on mismatch.
+     */
     public static function arrayCheck($array, $structure, $strict = true)
     {
         $success = true;
@@ -476,6 +476,25 @@ class Arr
     }
 
     /**
+     * Transform old key to readable key name
+     * @param  array $array    to transform array
+     * @param  string $old_key old key name
+     * @param  string $new_key new humen readable key name
+     * @return array           returns a new array with the new key
+     */
+    public static function changeKey($array, $old_key, $new_key)
+    {
+        if (!array_key_exists($old_key, $array)) {
+            return $array;
+        }
+
+        $keys = array_keys($array);
+        $keys[array_search($old_key, $keys)] = $new_key;
+
+        return array_combine($keys, $array);
+    }
+
+    /**
      * Escape HTML entities in a string.
      *
      * @param  string  $value
@@ -486,7 +505,7 @@ class Arr
         return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
-     /**
+    /**
      * Get the first element of an array. Useful for method chaining.
      *
      * @param  array  $array
@@ -497,7 +516,7 @@ class Arr
         return reset($array);
     }
 
-     /**
+    /**
      * Get the last element from an array.
      *
      * @param  array  $array

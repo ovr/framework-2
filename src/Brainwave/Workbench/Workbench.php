@@ -11,7 +11,7 @@ PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/"
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,22 +23,19 @@ PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/"
 
 use \Pimple\Container;
 use \Brainwave\Support\Arr;
-use \Brainwave\Crypt\Crypt;
-use \Brainwave\Flash\Flash;
 use \Brainwave\Http\Headers;
-use \Brainwave\Http\Cookies;
 use \Brainwave\Http\Request;
 use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Routing\Router;
-use \Brainwave\Support\Facades;
-use \Brainwave\View\ViewFactory;
+use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
 use \Brainwave\Routing\RouteFactory;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
+use \Brainwave\Workbench\StaticalProxy;
 use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
@@ -46,17 +43,17 @@ use \Brainwave\Resolvers\CallableResolver;
 use \Brainwave\Exception\ExceptionHandler;
 use \Brainwave\Resolvers\ContainerResolver;
 use \Brainwave\Config\ConfigurationHandler;
-use \Brainwave\Routing\ControllerCollection;
 use \Brainwave\Resolvers\DependencyResolver;
 use \Brainwave\Http\Exception\HttpException;
-use \Brainwave\View\Interfaces\ViewInterface;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Environment\EnvironmentDetector;
 use \Brainwave\Http\Exception\NotFoundHttpException;
+use \Brainwave\Routing\Controller\ControllerCollection;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
+use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
 
 /**
- * CacheManager
+ * Workbench
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -93,12 +90,6 @@ class Workbench extends Container
     protected $dispatchContext;
 
     /**
-     * Array of Controller Constructor Parameters
-     * @var array
-     */
-    protected $inject;
-
-    /**
      * All provicers
      * @var array
      */
@@ -109,6 +100,20 @@ class Workbench extends Container
      * @var boolean
      */
     protected $booted = false;
+
+    /**
+     * The array of booting callbacks.
+     *
+     * @var array
+     */
+    protected $bootingCallbacks = array();
+
+    /**
+     * The array of booted callbacks.
+     *
+     * @var array
+     */
+    protected $bootedCallbacks = array();
 
     /**
      * Narrowspark config files
@@ -172,17 +177,9 @@ class Workbench extends Container
     );
 
     /**
-     * Application hooks
-     * @var array
+     * @var integer Counts the number of available routes.
      */
-    protected $hooks = array(
-        'before' => array(array()),
-        'before.router' => array(array()),
-        'before.dispatch' => array(array()),
-        'after.dispatch' => array(array()),
-        'after.router' => array(array()),
-        'after' => array(array())
-    );
+    private $routeCount = 0;
 
     /**
      * Workbench paths
@@ -212,9 +209,14 @@ class Workbench extends Container
             $config = new Configuration(new ConfigurationHandler, new FileLoader);
             $config->addPath(static::$paths['path.app']);
 
-             //Load config files
+            //Load config files
             foreach ($this->config as $file => $setting) {
-                $config->bind($file.'.'.$setting['ext'], $setting['namespace'], $setting['env'], $setting['group']);
+                $config->bind(
+                    $file.'.'.$setting['ext'],
+                    $setting['namespace'],
+                    $setting['env'],
+                    $setting['group']
+                );
             }
 
             return $config;
@@ -229,19 +231,19 @@ class Workbench extends Container
         $this['request'] = function ($c) {
             $environment = $c['environment'];
             $headers = new Headers($environment);
-            $cookies = new Cookies($headers);
-            if ($c['settings']->get('cookies.encrypt', false) ===  true) {
-                $cookies->decrypt($c['crypt']);
+            $CookieJar = new CookieJar($headers);
+            if ($c['settings']->get('CookieJar.encrypt', false) ===  true) {
+                $CookieJar->decrypt($c['crypt']);
             }
 
-            return new Request($environment, $headers, $cookies);
+            return new Request($environment, $headers, $CookieJar);
         };
 
         // Response
         $this['response'] = function ($c) {
             $headers = new Headers();
-            $cookies = new Cookies();
-            $response = new Response($headers, $cookies);
+            $CookieJar = new CookieJar();
+            $response = new Response($headers, $CookieJar);
             $response->setProtocolVersion('HTTP/' . $c['settings']->get('http.version', '1.1'));
 
             return $response;
@@ -270,13 +272,8 @@ class Workbench extends Container
             };
         };
 
-        // Router
-        $this['router'] = function ($c) {
-            return new Router();
-        };
-
         // Route Callable Resolver
-        $this['resolver'] = function($c) {
+        $this['resolver'] = function ($c) {
 
             $resolverCofig = $c['settings']->get('callable.resolver', 'CallableResolver');
 
@@ -295,7 +292,12 @@ class Workbench extends Container
 
         // Route
         $this['route'] = function ($c) {
-            return new Route(null, null, $c['settings']->get('route.case_sensitive', true));
+            return new Route(
+                null,
+                null,
+                $c['settings']->get('route.case_sensitive', true),
+                $c['settings']->get('route.escape ', false)
+            );
         };
 
         // Controllers factory
@@ -304,16 +306,31 @@ class Workbench extends Container
         };
 
         // Register providers
-        foreach ($this['settings']->get('app.providers', array()) as $provider => $arr) {
+        foreach ($this['settings']->get('services.providers', array()) as $provider => $arr) {
             $this->register(new $provider, $arr);
+        }
+
+        // Set Loader an Path
+        $this['translator']->setLoader(new FileLoader)->addPath(static::$paths['path.app']);
+
+        // Load lang files
+        if (!is_null($this['settings']->get('app.language.files', null))) {
+            foreach ($this['settings']->get('app.language.files', array()) as $file => $lang) {
+                $this['translator']->bind(
+                    $file.'.'.$lang['ext'],
+                    $lang['namespace'],
+                    $lang['env'],
+                    $lang['group']
+                );
+            }
         }
 
         // Middleware stack
         $this['middleware'] = array($this);
 
         // Facade
-        $this['facades'] = function ($c) {
-            $facades = new Facades($c);
+        $this['statical'] = function ($c) {
+            $facades = new StaticalProxy($c);
             return $facades;
         };
     }
@@ -376,6 +393,64 @@ class Workbench extends Container
                 }
             }
         }
+
+        $this->bootApplication();
+    }
+
+    /**
+     * Boot the application and fire app callbacks.
+     *
+     * @return void
+     */
+    protected function bootApplication()
+    {
+        // Once the application has booted we will also fire some "booted" callbacks
+        // for any listeners that need to do work after this initial booting gets
+        // finished. This is useful when ordering the boot-up processes we run.
+        $this->fireAppCallbacks($this->bootingCallbacks);
+
+        $this->booted = true;
+
+        $this->fireAppCallbacks($this->bootedCallbacks);
+    }
+
+    /**
+     * Register a new boot listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booting($callback)
+    {
+        $this->bootingCallbacks[] = $callback;
+    }
+
+    /**
+     * Register a new "booted" listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booted($callback)
+    {
+        $this->bootedCallbacks[] = $callback;
+
+        if ($this->isBooted()) {
+            $this->fireAppCallbacks(array($callback));
+        }
+    }
+
+    /**
+     * Call the booting callbacks for the application.
+     *
+     * @param  array  $callbacks
+     * @return void
+     */
+    protected function fireAppCallbacks(array $callbacks)
+    {
+        foreach ($callbacks as $callback) {
+            call_user_func($callback, $this);
+        }
     }
 
     /**
@@ -399,7 +474,7 @@ class Workbench extends Container
      * @param  \Closure  $callback
      * @return void
      */
-    public function down(Closure $callback)
+    public function down(\Closure $callback)
     {
         $this['events']->hook('brainwave.app.down', $callback);
     }
@@ -555,6 +630,10 @@ class Workbench extends Container
         $callable = $this['resolver']->build(array_pop($args));
 
         $route = $this['route.factory']->make($pattern, $callable);
+
+        $this->routeCount++;
+        $route->setName((string)$this->routeCount);
+
         $this['router']->map($route);
         if (count($args) > 0) {
             $route->setMiddleware($args);
@@ -704,44 +783,6 @@ class Workbench extends Container
         $this->dispatchContext = $context;
     }
 
-    //TODO finish Inject
-    /**
-     * Description
-     * @return arry inject
-     */
-    public function getInject()
-    {
-        return $this->inject;
-    }
-
-    /**
-     * Description
-     * @param type array $route or type string $route
-     * @param type array $inject
-     * @return type array
-     */
-    public function inject($route, array $inject)
-    {
-        //Add params to route
-        if (is_array($route)) {
-
-            //Counting route
-            $count = count($route);
-
-            foreach ($route as $url) {
-                foreach ($n as $params) {
-                    $i[$params % $count];
-                    $routeInject[$url] = $i;
-                }
-            }
-        } else {
-            $routeInject[$route] = $inject;
-        }
-
-        $this->inject = $routeInject;
-        return $this;
-    }
-
     /**
      * Not Found Handler
      *
@@ -884,93 +925,6 @@ class Workbench extends Container
     }
 
     /**
-     * Set HTTP cookie to be sent with the HTTP response
-     *
-     * @param  string     $name     The cookie name
-     * @param  string     $value    The cookie value
-     * @param  int|string $time     The duration of the cookie;
-     *                                  If integer, should be UNIX timestamp;
-     *                                  If string, converted to UNIX timestamp with `strtotime`;
-     * @param  string     $path     The path on the server in which the cookie will be available on
-     * @param  string     $domain   The domain that the cookie is available to
-     * @param  bool       $secure   Indicates that the cookie should only be transmitted over a secure
-     *                              HTTPS connection to/from the client
-     * @param  bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
-     * @api
-     */
-    public function setCookie($name, $value, $time = null, $path = null, $domain = null, $secure = null, $httponly = null)
-    {
-        $settings = array(
-            'value' => $value,
-            'expires' => is_null($time) ? $this['settings']->get('cookies.lifetime', '20minutes') : $time,
-            'path' => is_null($path) ? $this['settings']->get('cookies.path', '/') : $path,
-            'domain' => is_null($domain) ? $this['settings']->get('cookies.domain', null) : $domain,
-            'secure' => is_null($secure) ? $this['settings']->get('cookies.secure', false) : $secure,
-            'httponly' => is_null($httponly) ? $this['settings']->get('cookies.httponly', false) : $httponly
-        );
-        $this['response']->setCookie($name, $settings);
-    }
-
-    /**
-     * Create a cookie that lasts "forever" (five years).
-     *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  string  $path
-     * @param  string  $domain
-     * @param  bool    $secure
-     * @param  bool    $httpOnly
-     */
-    public function setCookieForever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
-    {
-        return $this->setCookie($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
-    }
-
-    /**
-     * Get value of HTTP cookie from the current HTTP request
-     *
-     * Return the value of a cookie from the current HTTP request,
-     * or return NULL if cookie does not exist. Cookies created during
-     * the current request will not be available until the next request.
-     *
-     * @param  string      $name    The cookie name
-     * @return string|null
-     * @api
-     */
-    public function getCookie($name)
-    {
-        return $this['request']->getCookie($name);
-    }
-
-    /**
-     * Delete HTTP cookie (encrypted or unencrypted)
-     *
-     * Remove a Cookie from the client. This method will overwrite an existing Cookie
-     * with a new, empty, auto-expiring Cookie. This method's arguments must match
-     * the original Cookie's respective arguments for the original Cookie to be
-     * removed. If any of this method's arguments are omitted or set to NULL, the
-     * default Cookie setting values (set during Brainwave::init) will be used instead.
-     *
-     * @param  string $name     The cookie name
-     * @param  string $path     The path on the server in which the cookie will be available on
-     * @param  string $domain   The domain that the cookie is available to
-     * @param  bool   $secure   Indicates that the cookie should only be transmitted over a secure
-     *                          HTTPS connection from the client
-     * @param  bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
-     * @api
-     */
-    public function deleteCookie($name, $path = null, $domain = null, $secure = null, $httponly = null)
-    {
-        $settings = array(
-            'domain' => is_null($domain) ? $this['settings']->get('cookies.domain', null) : $domain,
-            'path' => is_null($path) ? $this['settings']->get('cookies.path', '/') : $path,
-            'secure' => is_null($secure) ? $this['settings']->get('cookies.secure', false) : $secure,
-            'httponly' => is_null($httponly) ? $this['settings']->get('cookies.httponly', flase) : $httponly
-        );
-        $this['response']->removeCookie($name, $settings);
-    }
-
-    /**
      * Get the absolute path to this Brainwave application's root directory
      *
      * This method returns the absolute path to the filesystem directory in which
@@ -984,7 +938,8 @@ class Workbench extends Container
     {
         if ($this['environment']->has('SCRIPT_FILENAME') === false) {
             throw new \RuntimeException(
-                'The "`"SCRIPT_FILENAME" server variable could not be found. It is required by "Workbench::root()".'
+                'The "`"SCRIPT_FILENAME" server variable could not be found.
+                 It is required by "Workbench::root()".'
             );
         }
 
@@ -1058,129 +1013,13 @@ class Workbench extends Container
     }
 
     /**
-     * Get the URL for a named route
-     * @param  string            $name   The route name
-     * @param  array             $params Associative array of URL parameters and replacement values
-     * @throws \RuntimeException         If named route does not exist
-     * @return string
-     * @api
-     */
-    public function urlFor($name, $params = array())
-    {
-        return $this['request']->getScriptName() . $this['router']->urlFor($name, $params);
-    }
-
-    /**
-     * Redirect
-     *
-     * This method immediately redirects to a new URL. By default,
-     * this issues a 302 Found response; this is considered the default
-     * generic redirect response. You may also specify another valid
-     * 3xx status code if you want. This method will automatically set the
-     * HTTP Location header for you using the URL parameter.
-     *
-     * @param  string $url    The destination URL
-     * @param  int    $status The HTTP redirect status code (optional)
-     * @api
-     */
-    public function redirect($url, $status = 302)
-    {
-        $this['response']->redirect($url, $status);
-        $this->halt($status);
-    }
-
-    /**
-     * Assign hook
-     * @param  string $name     The hook name
-     * @param  mixed  $callable A callable object
-     * @param  int    $priority The hook priority; 0 = high, 10 = low
-     * @api
-     */
-    public function hook($name, $callable, $priority = 10)
-    {
-        if (!isset($this->hooks[$name])) {
-            $this->hooks[$name] = array(array());
-        }
-        if (is_callable($callable)) {
-            $this->hooks[$name][(int) $priority][] = $callable;
-        }
-    }
-
-    /**
-     * Invoke hook
-     * @param  string $name    The hook name
-     * @param  mixed  $hookArg (Optional) Argument for hooked functions
-     * @api
-     */
-    public function applyHook($name, $hookArg = null)
-    {
-        if (!isset($this->hooks[$name])) {
-            $this->hooks[$name] = array(array());
-        }
-        if (!empty($this->hooks[$name])) {
-            // Sort by priority, low to high, if there's more than one priority
-            if (count($this->hooks[$name]) > 1) {
-                ksort($this->hooks[$name]);
-            }
-            foreach ($this->hooks[$name] as $priority) {
-                if (!empty($priority)) {
-                    foreach ($priority as $callable) {
-                        call_user_func($callable, $hookArg);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Get hook listeners
-     *
-     * Return an array of registered hooks. If `$name` is a valid
-     * hook name, only the listeners attached to that hook are returned.
-     * Else, all listeners are returned as an associative array whose
-     * keys are hook names and whose values are arrays of listeners.
-     *
-     * @param  string     $name A hook name (Optional)
-     * @return array|null
-     * @api
-     */
-    public function getHooks($name = null)
-    {
-        if (!is_null($name)) {
-            return isset($this->hooks[(string) $name]) ? $this->hooks[(string) $name] : null;
-        } else {
-            return $this->hooks;
-        }
-    }
-
-    /**
-     * Clear hook listeners
-     *
-     * Clear all listeners for all hooks. If `$name` is
-     * a valid hook name, only the listeners attached
-     * to that hook will be cleared.
-     *
-     * @param  string $name A hook name (Optional)
-     * @api
-     */
-    public function clearHooks($name = null)
-    {
-        if (!is_null($name) && isset($this->hooks[(string) $name])) {
-            $this->hooks[(string) $name] = array(array());
-        } else {
-            foreach ($this->hooks as $key => $value) {
-                $this->hooks[$key] = array(array());
-            }
-        }
-    }
-
-    /**
      * Send a File
      *
      * This method streams a local or remote file to the client
      *
      * @param  string $file        The URI of the file, can be local or remote
-     * @param  string $contentType Optional content type of the stream, if not specified Brainwave will attempt to get this
+     * @param  string $contentType Optional content type of the stream,
+     *         if not specified Brainwave will attempt to get this
      * @api
      */
     public function sendFile($file, $contentType = false)
@@ -1268,7 +1107,7 @@ class Workbench extends Container
     public function add(Middleware $newMiddleware)
     {
         $middleware = $this['middleware'];
-        if (in_array($newMiddleware, $middleware)) {
+        if (in_array($newMiddleware, $middleware, true)) {
             $middleware_class = get_class($newMiddleware);
             throw new \RuntimeException(
                 "Circular Middleware setup detected.
@@ -1296,7 +1135,7 @@ class Workbench extends Container
      */
     public function run()
     {
-        $this->applyHook('before');
+        $this['events']->applyHook('before');
 
         if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
             ob_start("ob_gzhandler");
@@ -1314,7 +1153,7 @@ class Workbench extends Container
         // Finalize and send response
         $this->finalize();
 
-        $this->applyHook('after');
+        $this['events']->applyHook('after');
     }
 
     /**
@@ -1345,14 +1184,14 @@ class Workbench extends Container
     {
         try {
             ob_start();
-            $this->applyHook('before.router');
+            $this['events']->applyHook('before.router');
             $dispatched = false;
-            $matchedRouting = $this['router']->getMatchedRoutes($request->getMethod(), $request->getPathInfo(), false);
+            $matchedRouting = $this['router']->getMatchedRoutes($request->getMethod(), $request->getPathInfo(), true);
             foreach ($matchedRouting as $route) {
                 try {
-                    $this->applyHook('before.dispatch');
+                    $this['events']->applyHook('before.dispatch');
                     $dispatched = $route->dispatch($this->dispatchContext);
-                    $this->applyHook('after.dispatch');
+                    $this['events']->applyHook('after.dispatch');
                     if ($dispatched) {
                         break;
                     }
@@ -1363,7 +1202,7 @@ class Workbench extends Container
             if (!$dispatched) {
                 $this->notFound();
             }
-            $this->applyHook('after.router');
+            $this['events']->applyHook('after.router');
         } catch (Stop $e) {
 
         }
@@ -1376,19 +1215,25 @@ class Workbench extends Container
      * This method allows you to prepare and initiate a sub-request, run within
      * the context of the current request. This WILL NOT issue a remote HTTP
      * request. Instead, it will route the provided URL, method, headers,
-     * cookies, body, and server variables against the set of registered
+     * CookieJar, body, and server variables against the set of registered
      * application Routing. The result response object is returned.
      *
      * @param  string $url             The request URL
      * @param  string $method          The request method
      * @param  array  $headers         Associative array of request headers
-     * @param  array  $cookies         Associative array of request cookies
+     * @param  array  $CookieJar         Associative array of request CookieJar
      * @param  string $body            The request body
      * @param  array  $serverVariables Custom $_SERVER variables
      * @return Response
      */
-    public function subRequest($url, $method = 'GET', array $headers = array(), array $cookies = array(), $body = '', array $serverVariables = array())
-    {
+    public function subRequest(
+        $url,
+        $method = 'GET',
+        array $headers = array(),
+        array $CookieJar = array(),
+        $body = '',
+        array $serverVariables = array()
+    ) {
         // Build sub-request and sub-response
         $environment = new Environment(array_merge(array(
             'REQUEST_METHOD' => $method,
@@ -1398,10 +1243,10 @@ class Workbench extends Container
 
         $headers = new Headers($environment);
 
-        $cookies = new Cookies($headers);
+        $CookieJar = new CookieJar($headers);
 
-        $subRequest = new Request($environment, $headers, $cookies, $body);
-        $subResponse = new Response(new Headers(), new Cookies());
+        $subRequest = new Request($environment, $headers, $CookieJar, $body);
+        $subResponse = new Response(new Headers(), new CookieJar());
 
         // Cache original request and response
         $oldRequest = $this['request'];
@@ -1445,49 +1290,14 @@ class Workbench extends Container
         if (!$this->responded) {
             $this->responded = true;
 
-            // Finalise session if it has been used
-            if (isset($_SESSION)) {
-                // Save flash messages to session
-                $this['flash']->save();
-
-                // Encrypt, save, close session
-                if ($this['settings']->get('session.encrypt', false) === true) {
-                    $this['session']->encrypt($this['crypt']);
-                }
-                $this['session']->save();
-            }
-
-            // Encrypt cookies
-            if ($this['settings']['cookies.encrypt']) {
-                $this['response']->encryptCookies($this['crypt']);
+            // Encrypt CookieJar
+            if ($this['settings']['CookieJar.encrypt']) {
+                $this['response']->encryptCookieJar($this['crypt']);
             }
 
             // Send response
             $this['response']->finalize($this['request'])->send();
         }
-    }
-
-    /**
-     * Register the core class aliases in the container.
-     *
-     * @return void
-     */
-    public function registerCoreContainerAliases()
-    {
-        return array(
-            'App'           => '\Brainwave\Support\Facades\App',
-            'Log'           => '\Brainwave\Support\Facades\Log',
-            'Mail'          => '\Brainwave\Support\Facades\Mail',
-            'View'          => '\Brainwave\Support\Facades\View',
-            'Event'         => '\Brainwave\Support\Facades\Event',
-            'Route'         => '\Brainwave\Support\Facades\Route',
-            'Config'        => '\Brainwave\Support\Facades\Config',
-            'Request'       => '\Brainwave\Support\Facades\Request',
-            'Resource'      => '\Brainwave\Support\Facades\Resource',
-            'Response'      => '\Brainwave\Support\Facades\Response',
-            'Services'      => '\Brainwave\Support\Facades\Services',
-            'Autoloader'    => '\Brainwave\Support\Facades\Autoloader',
-        );
     }
 
     /**

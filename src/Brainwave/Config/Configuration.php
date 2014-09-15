@@ -34,24 +34,28 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 {
     /**
      * Handler for Configuration values
+     *
      * @var mixed
      */
     protected $handler;
 
     /**
      * Storage array of values
+     *
      * @var array
      */
     protected $values = array();
 
     /**
      * Config folder path
+     *
      * @var string
      */
     protected $path;
 
     /**
      * Constructor
+     *
      * @param mixed $handler
      */
     public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
@@ -62,6 +66,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set Brainwave's defaults using the handler
+     *
      * @param array $values
      */
     public function setArray(array $values)
@@ -72,6 +77,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get the default settings
+     *
      * @return array
      */
     public function getDefaults()
@@ -81,6 +87,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set a configuration handler and provide it some defaults
+     *
      * @param \Brainwave\Config\Interfaces\ConfigurationHandlerInterface $handler
      */
     public function setHandler(ConfigurationHandlerInterface $handler)
@@ -90,6 +97,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get the configuration handler for access
+     *
      * @return \Brainwave\Config\Interfaces\ConfigurationHandlerInterface
      */
     public function getHandler()
@@ -99,6 +107,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set the configuration loader
+     *
      * @return \Brainwave\Config\FileLoader
      */
     public function setLoader(FileLoader $loader)
@@ -109,6 +118,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get the configuration loader
+     *
      * @return \Brainwave\Config\FileLoader
      */
     public function getLoader()
@@ -118,10 +128,12 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Load the given configuration group.
+     *
      * @param  string  $file
      * @param  string  $namespace
      * @param  string  $environment
      * @param  string  $group
+     *
      * @return void
      */
     public function bind($file, $namespace = null, $environment = null, $group = null)
@@ -137,6 +149,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      * @param  string  $group
      * @param  string  $env
      * @param  array   $items
+     *
      * @return array
      */
     public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
@@ -146,7 +159,9 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get a value
+     *
      * @param  string $key
+     *
      * @return mixed       The value of a setting
      */
     public function get($key, $default)
@@ -160,6 +175,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set a value
+     *
      * @param  string $key
      * @param  mixed $value
      */
@@ -170,6 +186,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set path to config folder
+     *
      * @param string $path
      */
     public function addPath($path)
@@ -181,6 +198,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get config folder path
+     *
      * @return string
      */
     public function getPath()
@@ -190,6 +208,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Get a value
+     *
      * @param  string $key
      * @return mixed
      */
@@ -200,6 +219,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Set a value
+     *
      * @param  string $key
      * @param  mixed $value
      */
@@ -210,7 +230,9 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Check a value exists
+     *
      * @param  string $key
+     *
      * @return boolean
      */
     public function offsetExists($key)
@@ -220,6 +242,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
 
     /**
      * Remove a value
+     *
      * @param  string $key
      */
     public function offsetUnset($key)

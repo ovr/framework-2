@@ -28,7 +28,8 @@ use Brainwave\View\Compilers\Interfaces\CompilerInterface;
  * @since   0.8.0-dev
  *
  */
-class CompilerEngine extends PhpEngine {
+class CompilerEngine extends PhpEngine
+{
 
     /**
      * Compiler instance.
@@ -65,8 +66,7 @@ class CompilerEngine extends PhpEngine {
         // If this given view has expired, which means it has simply been edited since
         // it was last compiled, we will re-compile the views so we can evaluate a
         // fresh copy of the view. We'll pass the compiler the path of the view.
-        if ($this->compiler->isExpired($path))
-        {
+        if ($this->compiler->isExpired($path)) {
             $this->compiler->compile($path);
         }
 
@@ -91,7 +91,8 @@ class CompilerEngine extends PhpEngine {
     protected function handleViewException($e)
     {
         $e = new \ErrorException($this->getMessage($e), 0, 1, $e->getFile(), $e->getLine(), $e);
-        ob_get_clean(); throw $e;
+        ob_get_clean();
+        throw $e;
     }
 
     /**

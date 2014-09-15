@@ -18,7 +18,6 @@ namespace Brainwave\Environment;
  *
  */
 
-use \Brainwave\Http\Headers;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Environment\Interfaces\EnvironmentInterface;
 
@@ -42,6 +41,7 @@ class Environment extends Collection implements EnvironmentInterface
         'SCRIPT_NAME'          => '',
         'REQUEST_URI'          => '',
         'QUERY_STRING'         => '',
+        'CONTEXT_PREFIX'       => '',
         'SERVER_NAME'          => 'localhost',
         'SERVER_PORT'          => 80,
         'HTTP_HOST'            => 'localhost',

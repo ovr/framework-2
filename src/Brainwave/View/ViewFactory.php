@@ -8,7 +8,7 @@ namespace Brainwave\View;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -37,15 +37,15 @@ use \Brainwave\View\Interfaces\ViewFactoryInterface;
  */
 class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterface
 {
-     /**
-     * App
+    /**
+     * Workbanch
      * @var \Brainwave\Workbanch\Workbanch
      */
     protected $app;
 
     /**
-     * [$engine description]
-     * @var [type]
+     * The engine implementation.
+     * @var \Brainwave\View\Engines\EngineInterface
      */
     protected $engine;
 
@@ -56,8 +56,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     protected $viewFactoryResolver;
 
     /**
-     * [$debug description]
-     * @var [type]
+     * Debug
+     * @var string
      */
     protected $debug;
 
@@ -68,22 +68,22 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     protected $extensions;
 
     /**
-     * [$items description]
+     * All registered custom engines
      * @var array
      */
-    protected $data = array();
+    protected $customEngines = array();
 
     /**
-     * [$customeEngines description]
-     * @var array
-     */
-    protected $customeEngines = array();
-
-    /**
-     * [$engineResolver description]
-     * @var [type]
+     * Resolve the engine instance
+     * @var \Brainwave\View\Engines\EngineResolver
      */
     protected $engineResolver;
+
+    /**
+     * View data
+     * @var array
+     */
+    protected $viewData = array();
 
     /**
      * Constructor
@@ -97,7 +97,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
         //
         if (!is_null($this->app['settings']->get('view.engine', 'plates'))) {
-            $this->customeEngines = $this->app['settings']->get('view.engine', 'plates');
+            $this->customEngines = $this->app['settings']->get('view.engine', 'plates');
         }
 
         //
@@ -131,9 +131,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     protected function registerItems()
     {
         if (!is_null($this->app['settings']->get('view.items', null))) {
-            $data = array_merge($this->app['settings']->get('view.items', null), $this->getData());
+            $data = array_merge($this->app['settings']->get('view.items', null), $this->gatherData());
         } else {
-            $data = $this->getData();
+            $data = $this->gatherData();
         }
 
         return $data instanceof ArrayableInterface ? $data->toArray() : $data;
@@ -150,7 +150,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         // Next we will register the various engines with the resolver so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
-        $engines = array_merge(array('php' => 'php', 'json' => 'json'), $this->customeEngines);
+        $engines = array_merge(array('php' => 'php', 'json' => 'json'), $this->customEngines);
 
         foreach ($engines as $engineName => $engineClass) {
             if ($engineName === 'php' || $engineName === 'json') {
@@ -158,7 +158,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             } elseif (!is_null($this->app['settings']->get('view.compiler', null))) {
                 foreach ($this->app['settings']->get('view.compiler', null) as $compilerName => $compilerClass) {
                     if ($engineName === $compilerClass) {
-                        $this->registerCustomeEngine(
+                        $this->registercustomEngine(
                             $engineName,
                             $engineClass($compilerClass($this->app['settings']->get('view.cache', null))),
                             $resolver
@@ -166,7 +166,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                     }
                 }
             } else {
-                $this->registerCustomeEngine($engineName, $engineClass, $resolver);
+                $this->registercustomEngine($engineName, $engineClass, $resolver);
             }
         }
     }
@@ -178,7 +178,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     protected function registerPhpEngine($resolver)
     {
-        $resolver->register('php', function () { return new PhpEngine(); });
+        $resolver->register('php', function () {
+            return new PhpEngine();
+        });
     }
 
     /**
@@ -188,20 +190,24 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     protected function registerJsonEngine($resolver)
     {
-        $resolver->register('json', function () { return new JsonEngine($this->app, $this); });
+        $resolver->register('json', function () {
+            return new JsonEngine($this->app, $this);
+        });
     }
 
     /**
-     * Register custome engine implementation.
+     * Register custom engine implementation.
      * @param $engineName
      * @param $engineClass
      * @param \Brainwave\View\Engines\EngineResolver $resolver
      * @return void
      */
-    protected function registerCustomeEngine($engineName, $engineClass, $resolver)
+    protected function registercustomEngine($engineName, $engineClass, $resolver)
     {
         $eClass = new $engineClass($this->app);
-        $resolver->register($engineName, function () use ($eClass) { return $eClass; });
+        $resolver->register($engineName, function () use ($eClass) {
+            return $eClass;
+        });
     }
 
     /**
@@ -210,9 +216,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @param  string $template Pathname of template file relative to templates directory
      * @api
      */
-    public function make($engine = 'php', $template = null)
+    public function make($engine = 'php', $template = null, array $data = array())
     {
-        echo $this->fetch($engine, $template);
+        echo $this->fetch($engine, $template, $data);
     }
 
     /**
@@ -224,9 +230,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @return string           The rendered template
      * @api
      */
-    public function fetch($engine = 'php', $template = null)
+    public function fetch($engine = 'php', $template = null, array $data = array())
     {
-        return $this->render($engine, $template);
+        return $this->render($engine, $template, $data);
     }
 
     /**
@@ -234,11 +240,13 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @var    string $template Pathname of template file relative to templates directory
      * @return string
      */
-    protected function render($engine = 'php', $template = null)
+    protected function render($engine = 'php', $template = null, array $data = array())
     {
+        $this->with($data);
+
         if (is_string($template) && $engine == 'php' && $engine != 'json') {
 
-            $explodeTemplate = explode('|', $template, 2);
+            $explodeTemplate = explode('::', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
                 foreach ($this->app['settings']->get('view.template.paths', null) as $pathName => $path) {
@@ -246,9 +254,13 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
-                $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath) . trim($explodeTemplate[1]) . $this->getExtensions();
+                $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
+                        trim($explodeTemplate[1]).
+                        $this->getExtensions();
             } else {
-                $path = $this->app['settings']->get('view.default.template.path', null) . $template . $this->getExtensions();
+                $path = $this->app['settings']->get('view.default.template.path', null).
+                        $template.
+                        $this->getExtensions();
             }
         } elseif ($engine == 'json') {
             $path = $template;
@@ -257,7 +269,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         }
 
         //Replace data
-        $this->replace($this->getData());
+        $this->replace($this->gatherData());
 
         $engineR = $this->engine->resolve($engine);
 
@@ -274,13 +286,117 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     {
         if (is_array($key)) {
             foreach ($key as $k => $v) {
-                $this->data[$k] = $v;
+                $this->viewData[$k] = $v;
             }
         } else {
-            $this->data[$key] = $value;
+            $this->viewData[$key] = $value;
         }
 
         return $this;
+    }
+
+    /**
+     * Add a view instance to the view data.
+     *
+     * @param  string  $key
+     * @param  string  $view
+     * @param  array   $data
+     * @return $this
+     */
+    public function nest($factory, $key, $view, array $data = array())
+    {
+        return $this->with($key, $this->make($factory, $view, $data));
+    }
+
+    /**
+     * Determine if a given view exists.
+     *
+     * @param  string  $view
+     * @return bool
+     */
+    public function exists($view)
+    {
+        try {
+            $explodeTemplate = explode('::', $view, 2);
+
+            if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
+                foreach ($this->app['settings']->get('view.template.paths', null) as $pathName => $path) {
+                    if (trim($explodeTemplate[0]) == $pathName) {
+                        $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
+                    }
+                }
+                $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
+                        trim($explodeTemplate[1]).
+                        $this->getExtensions();
+            } else {
+                $path = $this->app['settings']->get('view.default.template.path', null).
+                        $template.
+                        $this->getExtensions();
+            }
+            if (!is_file($path)) {
+                throw new \InvalidArgumentException(
+                    "Cannot render template `$path` because the template does not exist.
+                    Make sure your view's template directory is correct."
+                );
+            }
+        } catch (\InvalidArgumentException $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * EngineResolver
+     * @param EngineResolver $resolver new instance of EngineResolver
+     */
+    protected function engineResolver(EngineResolver $resolver)
+    {
+        return $resolver;
+    }
+
+    /**
+     * Gets a variable.
+     * @return array
+     */
+    public function gatherData()
+    {
+        return array_merge($this->data, $this->viewData);
+    }
+
+    /**
+     * Share a piece of data across all views.
+     * @param mixed $name
+     * @param mixed $data the data
+     * @return self
+     */
+    public function share($name, $data = null)
+    {
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->data[$k] = $v;
+            }
+        } else {
+            $this->data[$name] = $data;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Dynamically bind parameters to the view.
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return \Brainwave\View\ViewFactory
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $parameters)
+    {
+        if (starts_with($method, 'with')) {
+            return $this->with(snake_case(substr($method, 4)), $parameters[0]);
+        }
+
+        throw new \BadMethodCallException("Method [$method] does not exist on view.");
     }
 
     /**
@@ -289,7 +405,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     public function &__get($key)
     {
-        return $this->data[$key];
+        return $this->viewData[$key];
     }
 
     /**
@@ -310,7 +426,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     public function __isset($key)
     {
-        return isset($this->data[$key]);
+        return isset($this->viewData[$key]);
     }
 
     /**
@@ -320,59 +436,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     public function __unset($key)
     {
-        unset($this->data[$key]);
-    }
-
-    /**
-     * Dynamically bind parameters to the view.
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return \Brainwave\View\ViewFactory
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $parameters)
-    {
-        if (starts_with($method, 'with')) {
-            return $this->with(snake_case(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new \BadMethodCallException("Method [$method] does not exist on view.");
-    }
-
-    /**
-     * EngineResolver
-     * @param EngineResolver $resolver new instance of EngineResolver
-     */
-    protected function engineResolver(EngineResolver $resolver)
-    {
-        return $resolver;
-    }
-
-    /**
-     * Gets a variable.
-     * @return array
-     */
-    public function getData()
-    {
-        return $this->data;
-    }
-
-    /**
-     * Assign a variable to the template.
-     * @param mixed $name
-     * @param mixed $data the data
-     * @return self
-     */
-    public function setData($name, $data = null)
-    {
-        if (is_array($name)) {
-            foreach ($name as $k => $v) {
-                $this->data[$k] = $v;
-            }
-        } else {
-            $this->data[$name] = $data;
-        }
-
-        return $this;
+        unset($this->viewData[$key]);
     }
 }

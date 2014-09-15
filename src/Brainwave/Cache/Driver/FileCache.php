@@ -31,9 +31,9 @@ use \Brainwave\Cache\Driver\AbstractCache;
 class FileCache extends AbstractCache
 {
     /**
-     * @var array $_cacheDir
+     * @var array $cacheDir
      */
-    private $_cacheDir;
+    private $cacheDir;
 
     /**
      * {@inheritdoc}
@@ -50,9 +50,9 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    static function isSupported()
+    public static function isSupported()
     {
-        return function_exists('file_put_contents');;
+        return function_exists('file_put_contents');
     }
 
     /**
@@ -75,7 +75,7 @@ class FileCache extends AbstractCache
             $cacheDir = substr($cacheDir, 0, -1);
         }
 
-        $this->_cacheDir = $cacheDir;
+        $this->cacheDir = $cacheDir;
     }
 
     /**
@@ -85,7 +85,7 @@ class FileCache extends AbstractCache
      */
     public function getCacheDir()
     {
-        return $this->_cacheDir;
+        return $this->cacheDir;
     }
 
     /**
@@ -95,7 +95,7 @@ class FileCache extends AbstractCache
      */
     protected function getFileName($key)
     {
-        return $this->_cacheDir . DIRECTORY_SEPARATOR . md5($key);
+        return $this->cacheDir . DIRECTORY_SEPARATOR . md5($key);
     }
 
     /**
@@ -103,7 +103,7 @@ class FileCache extends AbstractCache
      */
     public function clear()
     {
-        foreach (glob($this->_cacheDir . "/*") as $filename) {
+        foreach (glob($this->cacheDir . "/*") as $filename) {
             unlink($filename);
         }
 
@@ -147,8 +147,7 @@ class FileCache extends AbstractCache
 
         if ($this->isContentAlive($content, $filename)) {
             return $content['data'];
-        }
-        else {
+        } else {
             $this->delete($key);
         }
 

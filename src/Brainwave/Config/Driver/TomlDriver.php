@@ -63,6 +63,6 @@ class TomlDriver implements DriverInterface
      */
     public function format(array $data)
     {
-        throw new Exception('Toml export is not available');
+        throw new \Exception('Toml export is not available');
     }
 }

@@ -19,7 +19,6 @@ namespace Brainwave\View\Engines;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
 /**
@@ -39,23 +38,23 @@ class JsonEngine implements EnginesInterface
     protected $status;
 
     /**
-     * [$app description]
-     * @var [type]
+     * App
+     * @var \Brainwave\Workbanch\Workbanch
      */
     protected $app;
 
     /**
-     * [$collection description]
-     * @var [type]
+     * Json data
+     * @var array
      */
     protected $collection;
 
     /**
-     * [__construct description]
-     * @param [type] $app        [description]
-     * @param [type] $collection [description]
+     *
+     * @param void $app        \Brainwave\Workbench\Workbench
+     * @param array $collection
      */
-    public function __construct($app, $collection)
+    public function __construct(Workbench $app, $collection)
     {
         $this->app = $app;
         $this->collection = $collection;
@@ -68,10 +67,16 @@ class JsonEngine implements EnginesInterface
      */
     public function get(array $data = array())
     {
+        if ($data['options'] === $this->app['settings']['json.option']) {
+            $options = $this->app['settings']['json.option'];
+        } else {
+            $options = $data['options'];
+        }
+        
         return $this->evaluateStatus(
             $this->status,
             $data,
-            $this->app['settings']['json.option']
+            $options
         );
     }
 
@@ -136,7 +141,12 @@ class JsonEngine implements EnginesInterface
         );
 
         $app['response']->setStatus($status);
-        $app['response']->addHeaders(array('Content-Type', 'application/json'));
+        $app['response']->addHeaders(
+            array_merge(
+                array('Content-Type', 'application/json'),
+                $data['j.headers']
+            )
+        );
 
         $jsonp_callback = $app->request->get('callback', null);
 

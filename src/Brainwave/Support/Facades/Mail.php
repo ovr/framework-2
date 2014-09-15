@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Support\Facades;
+use Brainwave\Workbench\StaticalProxy;
 
 /**
  * Mail
@@ -28,7 +28,10 @@ use Brainwave\Support\Facades;
  * @since   0.8.0-dev
  *
  */
-class Mail extends Facades
+class Mail extends StaticalProxy
 {
-	protected static function getFacadeAccessor() { return 'mailer'; }
+    protected static function getFacadeAccessor()
+    {
+        return 'mailer';
+    }
 }

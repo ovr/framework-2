@@ -114,9 +114,9 @@ class CryptHash
     /**
     * Creates a salted hash from a string.
     *
-    *   @param string $str 		String to hash.
+    *   @param string $str		String to hash.
     *
-    *   @return string 			Returns hashed string, or false on error.
+    *   @return string			Returns hashed string, or false on error.
     */
     public function create($str)
     {
@@ -166,11 +166,11 @@ class CryptHash
     /**
     * Check a string against a hash.
     *
-    * @param string $str 		String to check.
+    * @param string $str		String to check.
     *
-    * @param string $hash 		The hash to check the string against.
+    * @param string $hash		The hash to check the string against.
     *
-    * @return bool 				Returns true on match.
+    * @return bool				Returns true on match.
     */
     public function check($str, $hash)
     {
@@ -236,9 +236,9 @@ class CryptHash
     /**
     * Returns settings used to generate a hash.
     *
-    * @param string $hash 		Hash to get settings for.
+    * @param string $hash	Hash to get settings for.
     *
-    * @return array 			Returns an array with settings used to create $hash.
+    * @return array			Returns an array with settings used to create $hash.
     */
     public function getInfo($hash)
     {

@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -65,6 +65,12 @@ class Router implements RouterInterface
      * @var array Current stack of middleware
      */
     protected $currentMiddleware;
+
+    /**
+     * Cached urls: store and reuse already generated urls
+     * @var array
+     */
+    protected $cachedUrls;
 
     /**
      * Constructor
@@ -199,17 +205,37 @@ class Router implements RouterInterface
      */
     public function urlFor($name, $params = array())
     {
+        $cacheKey = md5($name . serialize($params));
+
+        if (isset($this->cachedUrls[$key])) {
+            return $this->cachedUrls[$key];
+        }
+
         if (!$this->hasNamedRoute($name)) {
             throw new \RuntimeException('Named route not found for name: ' . $name);
         }
-        $search = array();
+
+        $url = $this->getNamedRoute($name)->getPattern();
+
         foreach ($params as $key => $value) {
-            $search[] = '#:' . preg_quote($key, '#') . '\+?(?!\w)#';
+            $search = '#:' . preg_quote($key, '#') . '\?(?!\w)#';
+            if (preg_match($search, $url)) {
+                $url = preg_replace($search, $value, $url);
+                unset($params[$key]);
+            }
         }
-        $pattern = preg_replace($search, $params, $this->getNamedRoute($name)->getPattern());
 
         //Remove remnants of unpopulated, trailing optional pattern segments, escaped special characters
-        return preg_replace('#\(/?:[^)]+\)+|\(|\)#', '', $pattern);
+        $url = preg_replace('#\(/?:.\)|\(|\)|\\\\#', '', $url);
+
+        // Leftovers are added as url query string
+        if ($params) {
+            $url .= '?' . http_build_query($params);
+        }
+
+        $this->cachedUrls[$key] = $url;
+
+        return $url;
     }
 
     /**

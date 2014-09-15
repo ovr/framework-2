@@ -8,7 +8,7 @@ namespace Brainwave\Log;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,8 @@ namespace Brainwave\Log;
 
 use \Monolog\Logger;
 use \Pimple\Container;
-use \Monolog\Handler\StreamHandler;
+use \Brainwave\Log\MonologWriter;
+use \Brainwave\Workbench\Workbench;
 use \Pimple\ServiceProviderInterface;
 
 /**
@@ -33,62 +34,17 @@ use \Pimple\ServiceProviderInterface;
  */
 class LoggerServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register(Container $app)
     {
-        $app['logger'] = function () use ($app) {
-            return $app['monolog'];
+        $app['logger'] = function ($app) {
+            return $logger = new MonologWriter(
+                new Logger($app['env'])
+            );
         };
-
-        $app['monolog.logger.class'] = 'Monolog\Logger';
-
-        $app['monolog'] = $app->share(function ($app) {
-            $log = new $app['monolog.logger.class']($app['monolog.name']);
-
-            $log->pushHandler($app['monolog.handler']);
-
-            if ($app['debug'] && isset($app['monolog.handler.debug'])) {
-                $log->pushHandler($app['monolog.handler.debug']);
-            }
-
-            return $log;
-        });
-
-        $app['monolog.handler'] = function () use ($app) {
-            return new StreamHandler($app['monolog.logfile'], $app['monolog.level']);
-        };
-
-        $app['monolog.level'] = function () {
-            return Logger::DEBUG;
-        };
-
-        $app['monolog.name'] = 'myapp';
-    }
-
-    public function boot(Container $app)
-    {
-        $app->before(function (Request $request) use ($app) {
-            $app['monolog']->addInfo('> '.$request->getMethod().' '.$request->getRequestUri());
-        });
-
-        /*
-         * Priority -4 is used to come after those from SecurityServiceProvider (0)
-         * but before the error handlers added with Silex\Application::error (defaults to -8)
-         */
-        $app->error(function (\Exception $e) use ($app) {
-            $message = sprintf('%s: %s (uncaught exception) at %s line %s', get_class($e), $e->getMessage(), $e->getFile(), $e->getLine());
-            if ($e instanceof HttpExceptionInterface && $e->getStatusCode() < 500) {
-                $app['monolog']->addError($message, array('exception' => $e));
-            } else {
-                $app['monolog']->addCritical($message, array('exception' => $e));
-            }
-        }, -4);
-
-        $app->after(function (Request $request, Response $response) use ($app) {
-            if ($response instanceof RedirectResponse) {
-                $app['monolog']->addInfo('< '.$response->getStatusCode().' '.$response->getTargetUrl());
-            } else {
-                $app['monolog']->addInfo('< '.$response->getStatusCode());
-            }
-        });
     }
 }

@@ -67,7 +67,9 @@ class CacheServiceProvider implements ServiceProviderInterface
             $initialized = true;
 
             if (!isset($app['caches.options'])) {
-                $app['caches.options'] = array('default' => isset($app['cache.options']) ? $app['cache.options'] : array());
+                $app['caches.options'] = array(
+                    'default' => isset($app['cache.options']) ? $app['cache.options'] : array()
+                );
             }
 
             $tmp = $app['caches.options'];

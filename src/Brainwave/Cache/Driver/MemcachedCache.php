@@ -40,7 +40,7 @@ class MemcachedCache extends AbstractCache
      */
     public function __construct(array $options = array())
     {
-        if (!isset($options['memcached']) || !$options['memcached'] instanceof Memcached) {
+        if (!isset($options['memcached']) || !$options['memcached'] instanceof \Memcached) {
             $options['memcached'] = new \Memcached(uniqid());
             $options['memcached']->setOption(\Memcached::OPT_COMPRESSION, false);
             $options['memcached']->addServer('127.0.0.1', 11211);
@@ -72,7 +72,7 @@ class MemcachedCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    static function isSupported()
+    public static function isSupported()
     {
         return extension_loaded('Memcached');
     }

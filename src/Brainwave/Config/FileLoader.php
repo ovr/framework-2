@@ -123,7 +123,7 @@ class FileLoader implements LoaderInterface
             return $this->exists[$key] = $file;
         } else {
             throw new \InvalidArgumentException(
-                sprintf("The config file '%s' does not exist.", $file)
+                sprintf("The file '%s' does not exist.", $file)
             );
         }
     }
@@ -142,7 +142,7 @@ class FileLoader implements LoaderInterface
         // First we will look for a configuration file in the packages configuration
         // folder. If it exists, we will load it and merge it with these original
         // options so that we will easily 'cascade' a package's configurations.
-        if ($this->exists($file, $namespace.'/'.$packages.'/'.$env, null, $group )) {
+        if ($this->exists($file, $namespace.'/'.$packages.'/'.$env, null, $group)) {
             $requireFile = file_get_contents($this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]);
             $items = array_merge($items, $requireFile);
         }

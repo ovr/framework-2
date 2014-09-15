@@ -19,7 +19,7 @@ namespace Brainwave\Session\CsrfToken;
  */
 
 use \Brainwave\Crypt\Crypt;
-use \Brainwave\Session\Interfaces\SegmentFactoryInterface;
+use \Brainwave\Session\Interfaces\SegmentHandlerInterface;
 
 /**
  * CsrfTokenFactory
@@ -52,7 +52,7 @@ class CsrfTokenFactory
      * @param RandvalInterface $randval A cryptographically-secure random
      * value generator.
      */
-    public function __construct(SegmentFactoryInterface $segment, Crypt $randval)
+    public function __construct(SegmentHandlerInterface $segment, Crypt $randval)
     {
         $this->segment = $segment;
         $this->randval = $randval;

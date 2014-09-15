@@ -30,7 +30,8 @@ use \Swift_Attachment;
  * @since   0.8.0-dev
  *
  */
-class Message {
+class Message
+{
 
     /**
      * The Swift Message instance.
@@ -303,5 +304,4 @@ class Message {
         $callable = array($this->swift, $method);
         return call_user_func_array($callable, $parameters);
     }
-
 }

@@ -4,7 +4,7 @@
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["framework", "narrowspark", "slim", "router", "brainwave"],
     "license": "MIT",
-    "homepage": "http://github.com/narrowspark/framework",
+    "homepage": "https://github.com/narrowspark/framework",
     "authors": [
         {
           "name": "Daniel Bannert",
@@ -18,13 +18,14 @@
         "pimple/pimple": "2.*",
         "league/plates": "2.*",
         "nesbot/carbon": "1.9.*",
+        "nategood/commando": "*",
         "patchwork/utf8": "1.1.*",
         "monolog/monolog": "1.9.1",
         "filp/whoops": "1.2.*@dev",
         "guzzlehttp/streams": "1.*",
-        "swiftmailer/swiftmailer": "5.2.*",
         "jeremeamia/superclosure": "1.*",
-        "classpreloader/classpreloader": "1.*",
+        "swiftmailer/swiftmailer": "5.2.*",
+        "classpreloader/classpreloader": "1.1.*",
         "intahwebz/lowmemoryclassloader": "dev-master"
     },
     "replace": {
@@ -49,8 +50,8 @@
         "league/plates": "Narrowspark provides the integration with the plates templating engine",
         "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
-        "jamesmoss/toml": "Narrowspark has support for TOML config",
-        "symfony/yaml" : "Narrowspark has support for YML config",
+        "jamesmoss/toml": "Narrowspark has support for TOML files",
+        "symfony/yaml" : "Narrowspark has support for YML files",
         "classpreloader/classpreloader": "If opcache_is_script_cached exists, classpreloader will speed up your application."
     },
     "minimum-stability": "dev"

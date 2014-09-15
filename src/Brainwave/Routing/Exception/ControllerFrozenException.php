@@ -28,4 +28,5 @@ namespace Brainwave\Routing\Exception;
  */
 class ControllerFrozenException extends \RuntimeException
 {
+	
 }

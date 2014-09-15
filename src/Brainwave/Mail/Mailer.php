@@ -20,8 +20,12 @@ namespace Brainwave\Mail;
 
 use \Swift_Mailer;
 use \Swift_Message;
+use \Swift_MailTransport;
+use \Swift_SmtpTransport;
 use \Brainwave\Log\Writer;
-use \Brainwave\View\Environment;
+use \Swift_SendmailTransport;
+use \Swift_Plugins_AntiFloodPlugin;
+use \Brainwave\View\Interfaces\ViewInterface;
 
 /**
  * Mailer
@@ -65,10 +69,10 @@ class Mailer
      * Description
      * @param type Swift_Mailer $swift
      * @param type Swift_Message $message
-     * @param type Environment $view
+     * @param type ViewInterface $view
      * @return type
      */
-    function __construct(Swift_Mailer $swift, Swift_Message $message, Environment $view)
+    public function __construct(Swift_Mailer $swift, Swift_Message $message, ViewInterface $view)
     {
         $this->swift = $swift;
         $this->message = $message;
@@ -103,7 +107,7 @@ class Mailer
                       ->setEncryption('tls')
                       ->setUsername($this->app->getSettings('smtp_username'))
                       ->setPassword($this->app->getSettings('smtp_password'));
-            } elseif($this->app->getSettings() == 0) {
+            } elseif ($this->app->getSettings() == 0) {
                 $this->swift_transport = Swift_SmtpTransport::newInstance();
             } else {
                 throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
@@ -174,7 +178,7 @@ class Mailer
      */
     protected function sendSwiftMessage($message)
     {
-        if ( ! $this->pretending) {
+        if (!$this->pretending) {
                 return $this->swift->send($message, $this->failedRecipients);
         } elseif (isset($this->logger)) {
                 $this->logMessage($message);
@@ -207,8 +211,7 @@ class Mailer
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
         // they create a new message. We will just go ahead and push the address.
-        if (isset($this->from['address']))
-        {
+        if (isset($this->from['address'])) {
                 $message->from($this->from['address'], $this->from['name']);
         }
 
@@ -274,7 +277,7 @@ class Mailer
      * @param  string  $queue
      * @return void
      */
-    public function queue($limit  = '110', $time = '30')
+    public function queue($limit = '110', $time = '30')
     {
         $callback = $this->swift($this->mailer->registerSwiftTransport($this->swift_transport));
 
@@ -282,7 +285,12 @@ class Mailer
         $callback->registerPlugin(new Swift_Plugins_AntiFloodPlugin($this->app->getSettings('email_limit')));
 
         // And specify a time in seconds to pause for (30 secs)
-        $callback->registerPlugin(new Swift_Plugins_AntiFloodPlugin($this->app->getSettings('limit'), $this->app->getSettings('email_pausing')));
+        $callback->registerPlugin(
+            new Swift_Plugins_AntiFloodPlugin(
+                $this->app->getSettings('limit'),
+                $this->app->getSettings('email_pausing')
+            )
+        );
 
         return $callback;
     }

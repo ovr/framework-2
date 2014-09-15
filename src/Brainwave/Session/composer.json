@@ -1,0 +1,33 @@
+{
+    "name": "brainwave/conifg",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "config", "configuration"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/session",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "brainwave/crypt": "0.9.*",
+        "brainwave/support": "0.9.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Brainwave\\Session": ""
+        }
+    },
+    "target-dir": "Brainwave/Session",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.1-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

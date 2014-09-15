@@ -218,4 +218,49 @@ class Collection implements CollectionInterface
     {
         return new \ArrayIterator($this->data);
     }
+
+    /**
+     * Get a piece of data from the view.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function &__get($key)
+    {
+        return $this->data[$key];
+    }
+
+    /**
+     * Set a piece of data on the view.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function __set($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * Check if a piece of data is bound to the view.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function __isset($key)
+    {
+        return isset($this->data[$key]);
+    }
+
+    /**
+     * Remove a piece of bound data from the view.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function __unset($key)
+    {
+        unset($this->data[$key]);
+    }
 }

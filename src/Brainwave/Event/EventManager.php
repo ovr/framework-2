@@ -18,7 +18,8 @@ namespace Brainwave\Event;
  *
  */
 
-use \Brainwave\Event\EventManagerInterface;
+use \Brainwave\Workbench\Workbench;
+use \Brainwave\Event\Interfaces\EventManagerInterface;
 
 /**
  * EventManager
@@ -37,6 +38,19 @@ class EventManager implements EventManagerInterface
     protected $app;
 
     /**
+     * Application hooks
+     * @var array
+     */
+    protected $hooks = array(
+        'before' => array(array()),
+        'before.router' => array(array()),
+        'before.dispatch' => array(array()),
+        'after.dispatch' => array(array()),
+        'after.router' => array(array()),
+        'after' => array(array())
+    );
+
+    /**
      * @param var Workbench $app
      */
     public function __construct(Workbench $app)
@@ -45,15 +59,20 @@ class EventManager implements EventManagerInterface
     }
 
     /**
-     * Hock an event
-     *
-     * @param  string   $event    Event/Hook name
-     * @param  callable $callback EventManager
-     * @param  integer  $priority 0 = high, 10 = low
+     * Assign hook
+     * @param  string $name     The hook name
+     * @param  mixed  $callable A callable object
+     * @param  int    $priority The hook priority; 0 = high, 10 = low
+     * @api
      */
-    public function hook($event, callable $callback, $priority = 10)
+    public function hook($event, callable $callable, $priority = 10)
     {
-        $this->app->hook($event, $callback, $priority);
+        if (!isset($this->hooks[$name])) {
+            $this->hooks[$name] = array(array());
+        }
+        if (is_callable($callable)) {
+            $this->hooks[$name][(int) $priority][] = $callable;
+        }
     }
 
     /**
@@ -69,13 +88,29 @@ class EventManager implements EventManagerInterface
     }
 
     /**
-     * Trigger a hook
-     * @param string $name
-     * @param mixed $hookArg
+     * Invoke hook
+     * @param  string $name    The hook name
+     * @param  mixed  $hookArg (Optional) Argument for hooked functions
+     * @api
      */
     public function applyHook($name, $hookArg = null)
     {
-        $this->applyHook($event, $hookArg);
+        if (!isset($this->hooks[$name])) {
+            $this->hooks[$name] = array(array());
+        }
+        if (!empty($this->hooks[$name])) {
+            // Sort by priority, low to high, if there's more than one priority
+            if (count($this->hooks[$name]) > 1) {
+                ksort($this->hooks[$name]);
+            }
+            foreach ($this->hooks[$name] as $priority) {
+                if (!empty($priority)) {
+                    foreach ($priority as $callable) {
+                        call_user_func($callable, $hookArg);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -125,5 +160,47 @@ class EventManager implements EventManagerInterface
     public function triggerChain($event, array $args = array())
     {
         $this->applyChain($event, $args);
+    }
+
+    /**
+     * Get hook listeners
+     *
+     * Return an array of registered hooks. If `$name` is a valid
+     * hook name, only the listeners attached to that hook are returned.
+     * Else, all listeners are returned as an associative array whose
+     * keys are hook names and whose values are arrays of listeners.
+     *
+     * @param  string     $name A hook name (Optional)
+     * @return array|null
+     * @api
+     */
+    public function getHooks($name = null)
+    {
+        if (!is_null($name)) {
+            return isset($this->hooks[(string) $name]) ? $this->hooks[(string) $name] : null;
+        } else {
+            return $this->hooks;
+        }
+    }
+
+    /**
+     * Clear hook listeners
+     *
+     * Clear all listeners for all hooks. If `$name` is
+     * a valid hook name, only the listeners attached
+     * to that hook will be cleared.
+     *
+     * @param  string $name A hook name (Optional)
+     * @api
+     */
+    public function clearHooks($name = null)
+    {
+        if (!is_null($name) && isset($this->hooks[(string) $name])) {
+            $this->hooks[(string) $name] = array(array());
+        } else {
+            foreach ($this->hooks as $key => $value) {
+                $this->hooks[$key] = array(array());
+            }
+        }
     }
 }

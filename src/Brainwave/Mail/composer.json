@@ -1,0 +1,34 @@
+{
+    "name": "narrowspark/framework",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["framework", "narrowspark", "slim", "router", "brainwave"],
+    "license": "MIT",
+    "homepage": "http://github.com/narrowspark/framework",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "brainwave/log": "0.9.*",
+        "brainwave/view": "0.9.*",
+        "swiftmailer/swiftmailer": "~5.1"
+    },
+    "autoload": {
+        "psr-0": {
+            "Brainwave\\Mail": ""
+        }
+    },
+    "target-dir": "Brainwave/Mail",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.1-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

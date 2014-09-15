@@ -125,7 +125,8 @@ class RouteFactory
         }
 
         throw new \InvalidArgumentException(
-            "The specified '$service' route handler is an undefined service or the controller could not be instantiated."
+            "The specified '$service' route handler is an undefined service or 
+            the controller could not be instantiated."
         );
     }
 }

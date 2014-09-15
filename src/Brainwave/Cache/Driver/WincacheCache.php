@@ -16,7 +16,7 @@ class WincacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    static function isSupported()
+    public static function isSupported()
     {
         return extension_loaded('wincache');
     }

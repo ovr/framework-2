@@ -26,5 +26,7 @@ namespace Brainwave\Routing\Exception;
  * @since   0.8.0-dev
  *
  */
-class RouteException extends \LogicException {
+class RouteException extends \LogicException
+{
+
 }

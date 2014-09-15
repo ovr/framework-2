@@ -73,5 +73,5 @@ interface CacheInterface
      *
      * @return bool Returns TRUE if supported or FALSE if not.
      **/
-    static function isSupported();
+    public static function isSupported();
 }
