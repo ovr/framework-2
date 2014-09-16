@@ -34,7 +34,12 @@ class StaticalProxyResolver
         # code...
     }
 
-    public function generateArtisanOutput($facade)
+    /**
+     * [generateOutput description]
+     * @param  [type] $facade [description]
+     * @return [type]         [description]
+     */
+    public function generateOutput($facade)
     {
         if ($this->isFacade($facade)) {
             $rootClass = get_class($facade::getFacadeRoot());

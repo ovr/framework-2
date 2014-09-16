@@ -39,6 +39,13 @@ use \Brainwave\View\Interfaces\ViewInterface;
 class Mailer
 {
     /**
+     * The view factory instance.
+     *
+     * @var \Brainwave\View\ViewFactory
+     */
+    protected $views;
+
+    /**
      * The Swift Mailer instance.
      *
      * @var \Swift_Mailer
@@ -90,34 +97,37 @@ class Mailer
      */
     protected function registerSwiftTransport()
     {
-        if ($this->app->getSettings() == 'smtp') {
+        if ($this->app['settings']->get('transporter', '') == 'smtp') {
             /**
              *  switch between ssl, tls and normal
              */
-            if ($this->app->getSettings('entcryption') == 'ssl') {
+            if ($this->app['settings']->get('entcryption', '') == 'ssl') {
                 $this->swift_transport = Swift_SmtpTransport::newInstance()
-                    ->setHost($this->app->getSettings('host'))
-                      ->setPort($this->app->getSettings('port'))
+                    ->setHost($this->app['settings']->get('host', ''))
+                      ->setPort($this->app['settings']->get('port', ''))
                       ->setEncryption('ssl')
-                      ->setUsername($this->app->getSettings('smtp_username'))
-                      ->setPassword($this->app->getSettings('smtp_password'));
-            } elseif ($this->app->getSettings() == 'tls') {
+                      ->setUsername($this->app['settings']->get('smtp_username', ''))
+                      ->setPassword($this->app['settings']->get('smtp_password', ''));
+            } elseif ($this->app['settings']->get('entcryption', '') == 'tls') {
                 $this->swift_transport = Swift_SmtpTransport::newInstance()
-                    ->setHost($this->app->getSettings('host'))
-                      ->setPort($this->app->getSettings('port'))
+                    ->setHost($this->app['settings']->get('host', ''))
+                      ->setPort($this->app['settings']->get('port', ''))
                       ->setEncryption('tls')
-                      ->setUsername($this->app->getSettings('smtp_username'))
-                      ->setPassword($this->app->getSettings('smtp_password'));
-            } elseif ($this->app->getSettings() == 0) {
+                      ->setUsername($this->app['settings']->get('smtp_username', ''))
+                      ->setPassword($this->app['settings']->get('smtp_password', ''));
+            } elseif ($this->app['settings']->get('entcryption', '') == 0) {
                 $this->swift_transport = Swift_SmtpTransport::newInstance();
             } else {
                 throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
             }
-        } elseif ($this->app->getSettings() == 'sendmail') {
-            (!empty($this->app->getSettings('sendmail'))) ? $transport = Swift_SendmailTransport::newInstance($this->app->getSettings('sendmail')) : $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+        } elseif ($this->app['settings']->get('transporter', '') == 'sendmail') {
+            (!empty($this->app['settings']->get('sendmail'))) ?
+            $transport = Swift_SendmailTransport::newInstance(
+                $this->app['settings']->get('sendmail')
+            ) : $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
             return $transport;
-        } elseif ($this->app->getSettings() == 'mail') {
-            return $swift_transport = Swift_MailTransport::newInstance();
+        } elseif ($this->app['settings']->get('transporter', '') == 'mail') {
+            return Swift_MailTransport::newInstance();
         } else {
             throw new \InvalidArgumentException('Invalid mail driver.');
         }
@@ -132,8 +142,8 @@ class Mailer
      */
     public function alwaysFrom($address, $name = null)
     {
-        $email_address = (empty($address)) ? $this->app->getSettings('always_from') : $address;
-        $email_name = (isset($name)) ? $this->app->getSettings('email_name') : $name;
+        $email_address = (empty($address)) ? $this->app['settings']->get('always_from', '') : $address;
+        $email_name = (isset($name)) ? $this->app['settings']->get('email_name', '') : $name;
 
         $this->from = compact($email_address, $email_name);
     }
@@ -160,14 +170,14 @@ class Mailer
      * @param  array   $data
      * @return void
      */
-    protected function addContent(Message $message, $view, $plain, $data)
+    protected function addContent(Message $message, $engine, $view, $plain, $data)
     {
         if (isset($view)) {
-                $message->setBody($this->getView($view, $data), 'text/html');
+            $message->setBody($this->getView($engine, $view, $data), 'text/html');
         }
 
         if (isset($plain)) {
-                $message->addPart($this->getView($plain, $data), 'text/plain');
+            $message->addPart($this->getView($engine, $plain, $data), 'text/plain');
         }
     }
 
@@ -180,10 +190,10 @@ class Mailer
     protected function sendSwiftMessage($message)
     {
         if (!$this->pretending) {
-                return $this->swift->send($message, $this->failedRecipients);
+            return $this->swift->send($message, $this->failedRecipients);
         } elseif (isset($this->logger)) {
-                $this->logMessage($message);
-                return 1;
+            $this->logMessage($message);
+            return 1;
         }
     }
 
@@ -225,9 +235,9 @@ class Mailer
      * @param  array   $data
      * @return \Brainwave\View\View
      */
-    protected function getView($view, $data)
+    protected function getView($engine, $view, $data)
     {
-        return $this->views->make($view, $data)->render();
+        return $this->views->make($engine, $view, $data);
     }
 
     /**
@@ -258,6 +268,8 @@ class Mailer
 
         $data['message'] = $message = $this->createMessage();
 
+        $this->callMessageBuilder($callback, $message);
+
         // Once we have retrieved the view content for the e-mail we will set the body
         // of this message using the HTML type, which will provide a simple wrapper
         // to creating view based emails that are able to receive arrays of data.
@@ -270,30 +282,44 @@ class Mailer
     }
 
     /**
-     * Queue a new e-mail message for sending.
+     * Parse the given view name or array.
      *
      * @param  string|array  $view
-     * @param  array   $data
-     * @param  Closure|string  $callback
-     * @param  string  $queue
-     * @return void
+     * @return array
+     *
+     * @throws \InvalidArgumentException
      */
-    public function queue($limit = '110', $time = '30')
+    protected function parseView($view)
     {
-        $callback = $this->swift($this->mailer->registerSwiftTransport($this->swift_transport));
+        if (is_string($view)) {
+            return array($view, null);
+        }
 
-        // Use AntiFlood to re-connect after 100 emails
-        $callback->registerPlugin(new Swift_Plugins_AntiFloodPlugin($this->app->getSettings('email_limit')));
+        // If the given view is an array with numeric keys, we will just assume that
+        // both a "pretty" and "plain" view were provided, so we will return this
+        // array as is, since must should contain both views with numeric keys.
+        if (is_array($view) && isset($view[0])) {
+            return $view;
+            // If the view is an array, but doesn't contain numeric keys, we will assume
+            // the the views are being explicitly specified and will extract them via
+            // named keys instead, allowing the developers to use one or the other.
+        } elseif (is_array($view)) {
+            return array(
+                array_get($view, 'html'), array_get($view, 'text')
+            );
+        }
 
-        // And specify a time in seconds to pause for (30 secs)
-        $callback->registerPlugin(
-            new Swift_Plugins_AntiFloodPlugin(
-                $this->app->getSettings('limit'),
-                $this->app->getSettings('email_pausing')
-            )
-        );
+        throw new \InvalidArgumentException("Invalid view.");
+    }
 
-        return $callback;
+    /**
+     * Check if the mailer is pretending to send messages.
+     *
+     * @return bool
+     */
+    public function isPretending()
+    {
+        return $this->pretending;
     }
 
     /**

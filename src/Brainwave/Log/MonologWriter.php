@@ -22,7 +22,6 @@ use \BadMethodCallException;
 use \Monolog\Logger as MonologLogger;
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\RotatingFileHandler;
-use \Monolog\Handler\SyslogHandler;
 use \Monolog\Handler\ErrorLogHandler;
 use \Monolog\Handler\FirePHPHandler;
 use \Monolog\Handler\ChromePHPHandler;
@@ -173,7 +172,7 @@ class MonologWriter
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath;
 
         $monolog = $this->monolog;
-        $monolog->pushHandler(new StreamHandler($path, $level));
+        $monolog->pushHandler(new StreamHandler($pathFolder, $level));
 
         if (!empty($formatter)) {
             $monolog->setFormatter($this->parseFormatter($formatter));
@@ -234,7 +233,7 @@ class MonologWriter
     {
         $level = $this->parseLevel($level);
 
-        $this->monolog->pushHandler($handler = new ErrorLogHandler($messageType, $level));
+        $this->monolog->pushHandler(new ErrorLogHandler($messageType, $level));
 
         if (!empty($formatter)) {
             $monolog->setFormatter($this->parseFormatter($formatter));
@@ -405,7 +404,11 @@ class MonologWriter
                 return $this->monolog->pushHandler(new SyslogUdpHandler($path, $level));
 
             default:
-                throw new \InvalidArgumentException("Invalid formatter.");
+                if (is_object($handler)) {
+                    return $this->monolog->pushHandler($handler);
+                } else {
+                    throw new \InvalidArgumentException("Invalid formatter.");
+                }
         }
     }
 

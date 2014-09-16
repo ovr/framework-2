@@ -207,8 +207,8 @@ class Router implements RouterInterface
     {
         $cacheKey = md5($name . serialize($params));
 
-        if (isset($this->cachedUrls[$key])) {
-            return $this->cachedUrls[$key];
+        if (isset($this->cachedUrls[$cacheKey])) {
+            return $this->cachedUrls[$cacheKey];
         }
 
         if (!$this->hasNamedRoute($name)) {
@@ -233,7 +233,7 @@ class Router implements RouterInterface
             $url .= '?' . http_build_query($params);
         }
 
-        $this->cachedUrls[$key] = $url;
+        $this->cachedUrls[$cacheKey] = $url;
 
         return $url;
     }

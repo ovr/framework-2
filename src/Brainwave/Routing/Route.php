@@ -121,7 +121,7 @@ class Route implements RouteInterface
 
     /**
      * Constructor
-     * 
+     *
      * @param string $pattern       The URL pattern
      * @param mixed  $callable      Anything that returns `true` for `is_callable()`
      * @param bool   $caseSensitive Whether or not this route should be matched in a case-sensitive manner
@@ -143,7 +143,7 @@ class Route implements RouteInterface
         }
 
         $this->setEscapePattern($escapePattern);
-        $this->setConditions(self::getDefaultConditions());
+        $this->setConditions(static::getDefaultConditions());
         $this->caseSensitive = $caseSensitive;
     }
 
@@ -154,7 +154,7 @@ class Route implements RouteInterface
      */
     public static function setDefaultConditions(array $defaultConditions)
     {
-        self::$defaultConditions = $defaultConditions;
+        static::$defaultConditions = $defaultConditions;
         return self;
     }
 
@@ -165,7 +165,7 @@ class Route implements RouteInterface
      */
     public static function getDefaultConditions()
     {
-        return self::$defaultConditions;
+        return static::$defaultConditions;
     }
 
     /**
@@ -318,7 +318,7 @@ class Route implements RouteInterface
      *
      * @param mixed $context the context
      *
-     * @return self
+     * @return static
      */
     public function setContext($context)
     {

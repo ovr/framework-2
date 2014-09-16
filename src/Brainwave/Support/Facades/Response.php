@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Workbench\StaticalProxy;
+use \Brainwave\Workbench\StaticalProxy;
 
 /**
  * Response
@@ -46,7 +46,7 @@ class Response extends StaticalProxy
      */
     public static function json($data = array(), $status = 200, array $headers = array(), $options = 0)
     {
-        $app = Facade::getFacadeApplication();
+        $app = StaticalProxy::getFacadeApp();
 
         $jsonData = array_merge(
             $data,

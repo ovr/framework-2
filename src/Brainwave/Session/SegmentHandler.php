@@ -102,7 +102,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function setFlash($key, $val)
     {
         $this->resumeOrStartSession();
-        $_SESSION[Session::FLASH_NEXT][$this->name][$key] = $val;
+        $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key] = $val;
     }
 
     /**
@@ -115,8 +115,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function getFlash($key, $alt = null)
     {
         $this->resumeSession();
-        return isset($_SESSION[Session::FLASH_NOW][$this->name][$key])
-            ? $_SESSION[Session::FLASH_NOW][$this->name][$key]
+        return isset($_SESSION[SessionManager::FLASH_NOW][$this->name][$key])
+            ? $_SESSION[SessionManager::FLASH_NOW][$this->name][$key]
             : $alt;
     }
 
@@ -128,7 +128,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlash()
     {
         if ($this->resumeSession()) {
-            $_SESSION[Session::FLASH_NEXT][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
         }
     }
 
@@ -142,8 +142,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function getFlashNext($key, $alt = null)
     {
         $this->resumeSession();
-        return isset($_SESSION[Session::FLASH_NEXT][$this->name][$key])
-            ? $_SESSION[Session::FLASH_NEXT][$this->name][$key]
+        return isset($_SESSION[SessionManager::FLASH_NEXT][$this->name][$key])
+            ? $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key]
             : $alt;
     }
 
@@ -157,8 +157,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function setFlashNow($key, $val)
     {
         $this->resumeOrStartSession();
-        $_SESSION[Session::FLASH_NOW][$this->name][$key] = $val;
-        $_SESSION[Session::FLASH_NEXT][$this->name][$key] = $val;
+        $_SESSION[SessionManager::FLASH_NOW][$this->name][$key] = $val;
+        $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key] = $val;
     }
 
     /**
@@ -169,8 +169,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlashNow()
     {
         if ($this->resumeSession()) {
-            $_SESSION[Session::FLASH_NOW][$this->name] = array();
-            $_SESSION[Session::FLASH_NEXT][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NOW][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
         }
     }
 
@@ -183,9 +183,9 @@ class SegmentHandler implements SegmentHandlerInterface
     public function keepFlash()
     {
         if ($this->resumeSession()) {
-            $_SESSION[Session::FLASH_NEXT][$this->name] = array_merge(
-                $_SESSION[Session::FLASH_NEXT][$this->name],
-                $_SESSION[Session::FLASH_NOW][$this->name]
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array_merge(
+                $_SESSION[SessionManager::FLASH_NEXT][$this->name],
+                $_SESSION[SessionManager::FLASH_NOW][$this->name]
             );
         }
     }
@@ -231,12 +231,12 @@ class SegmentHandler implements SegmentHandlerInterface
             $_SESSION[$this->name] = array();
         }
 
-        if (!isset($_SESSION[Session::FLASH_NOW][$this->name])) {
-            $_SESSION[Session::FLASH_NOW][$this->name] = array();
+        if (!isset($_SESSION[SessionManager::FLASH_NOW][$this->name])) {
+            $_SESSION[SessionManager::FLASH_NOW][$this->name] = array();
         }
 
-        if (!isset($_SESSION[Session::FLASH_NEXT][$this->name])) {
-            $_SESSION[Session::FLASH_NEXT][$this->name] = array();
+        if (!isset($_SESSION[SessionManager::FLASH_NEXT][$this->name])) {
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
         }
     }
 

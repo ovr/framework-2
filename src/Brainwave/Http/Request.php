@@ -116,8 +116,7 @@ class Request implements RequestInterface
         HeadersInterface $headers,
         CookiesJarInterface $cookies,
         $body = null
-    )
-    {
+    ) {
         $this->env = $env;
         $this->headers = $headers;
         $this->cookies = $cookies;
@@ -138,7 +137,7 @@ class Request implements RequestInterface
      * @param  string $key   Retrieve a server variable from the request.
      * @return string
      */
-    public function server(string $key = null)
+    public function server($key = null)
     {
         return $this->env->get($server);
     }

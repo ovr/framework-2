@@ -94,9 +94,7 @@ class CacheServiceProvider implements ServiceProviderInterface
                     $config = $app['caches.config'][$name];
                 }
 
-                $factory = new CacheManager($app['cache.drivers'], $app['caches.options']);
-
-                $caches[$name] = function ($caches) use ($app, $options, $config) {
+                $caches[$name] = function ($caches) use ($app, $config) {
                     return $app['cache.factory']->getCache($config['driver'], $config);
                 };
             }

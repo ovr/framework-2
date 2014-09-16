@@ -344,7 +344,7 @@ class Crypt implements CryptInterface
      */
     public function stripPadding($block, $data)
     {
-        $pad = ord($data[($len = strlen($data)) - 1]);
+        $pad = ord($data[(strlen($data)) - 1]);
 
         // Check that what we have at the end of the string really is padding, and if it is remove it.
         if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $data)) {
