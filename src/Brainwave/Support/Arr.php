@@ -287,7 +287,7 @@ class Arr
      */
     public static function arrayPull(&$array, $key)
     {
-        $value = array_get($array, $key);
+        $value = arrayGet($array, $key);
 
         array_forget($array, $key);
 
@@ -381,7 +381,7 @@ class Arr
         $success = true;
         /* First compare the size of the two arrays. Return error if strict is enabled. */
         if (sizeof($array) != sizeof($structure) && $strict === true) {
-            //self::error('Array does not match defined structure');
+            //Array does not match defined structure
             return false;
         }
 
@@ -396,22 +396,29 @@ class Arr
                     /* Replace %val with the acutal value of the key. */
                     $callbackArray['params'] = str_replace('%val', $array[$key], $callbackArray['params']);
 
-                    if (call_user_func_array($callbackArray['callback'], $callbackArray['params']) !== $callbackArray['match']) {
-                        /* Call the *duh* callback. If this returns false throw error, or an axe. */
-                        //self::error('Array does not match defined structure.
-                        //The '.$key.' key did not pass the '.$callbackArray['callback'].' callback');
+                    if (
+                        call_user_func_array(
+                            $callbackArray['callback'],
+                            $callbackArray['params']
+                        ) !== $callbackArray['match']) {
+                        /**
+                         * Call the *duh* callback. If this returns false throw error,
+                         * or an axe.
+                         */
+                        // Array does not match defined structure
+                        // The '.$key.' key did not pass the '.$callbackArray['callback'].' callback');
                         $success = false;
                     }
                 } elseif ($callbackArray === false) {
-                    /* We don't have a callback, but we have found a disallowed key. */
-                    //self::error('Array does not match defined structure. '.$key.' is not allowed');
+                    // We don't have a callback, but we have found a disallowed key.
+                    // Array does not match defined structure. '.$key.' is not allowed
                     $success = false;
                 }
             } else {
-                /* The key don't exist in the array we are checking. */
+                // The key don't exist in the array we are checking.
                 if ($callbackArray !== false) {
-                    /* As long as this is not a disallowed key, sound the general alarm. */
-                    //self::error('Array does not match defined structure. '.$key.' not defined');
+                    // As long as this is not a disallowed key, sound the general alarm.
+                    // Array does not match defined structure. '.$key.' not defined
                     $success = false;
                 }
             }
@@ -430,7 +437,7 @@ class Arr
     public static function dataGet($target, $key, $default = null)
     {
         if (is_array($target)) {
-            return array_get($target, $key, $default);
+            return arrayGet($target, $key, $default);
         } elseif (is_object($target)) {
             return object_get($target, $key, $default);
         } else {

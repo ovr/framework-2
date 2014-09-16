@@ -334,7 +334,7 @@ EOF;
     {
         //Log error
         if (class_exists('\Monolog\Logger')) {
-            //$this->app['logger']->addRecord('error', $exception);
+            $this->app['logger']->addRecord('error', $exception);
         }
 
         //Set error status

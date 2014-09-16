@@ -262,7 +262,7 @@ class Message
      * @param  array  $options
      * @return \Brainwave\Mail\Message
      */
-    protected function prepAttachment($attachment, $options = array())
+    protected function prepAttachment(\Swift_Attachment $attachment, $options = array())
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be

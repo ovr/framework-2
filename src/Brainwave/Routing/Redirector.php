@@ -19,6 +19,7 @@ namespace Brainwave\Routing;
  */
 
 use \Brainwave\Workbench\Workbench;
+use \Brainwave\Routing\UrlGenerator;
 
 /**
  * Route
@@ -30,6 +31,13 @@ use \Brainwave\Workbench\Workbench;
  */
 class Redirector
 {
+    /**
+     * Application instance
+     *
+     * @var \Brainwave\Workbench\Workbench $app
+     */
+    protected $app;
+
     /**
      * The URL generator instance.
      *
@@ -43,9 +51,10 @@ class Redirector
      * @param  \Brainwave\Routing\UrlGenerator  $generator
      * @return void
      */
-    public function __construct(UrlGenerator $generator)
+    public function __construct(UrlGenerator $generator, Workbench $app)
     {
         $this->generator = $generator;
+        $this->app = $app;
     }
 
     /**

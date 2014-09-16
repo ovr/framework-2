@@ -19,6 +19,7 @@ namespace Brainwave\Routing;
  */
 
 use \Pimple\Container;
+use \Brainwave\Routing\Router;
 use \Brainwave\Routing\Redirector;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;

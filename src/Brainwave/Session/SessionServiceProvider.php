@@ -19,8 +19,11 @@ namespace Brainwave\Session;
  */
 
 use \Pimple\Container;
+use \Brainwave\Support\Str;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Session\SessionFactory;
+use \Brainwave\Session\SessionManager;
+use \Brainwave\Session\SegmentFactory;
+use \Brainwave\Session\CsrfTokenFactory;
 
 /**
  * SessionServiceProvider

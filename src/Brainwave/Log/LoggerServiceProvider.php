@@ -21,7 +21,6 @@ namespace Brainwave\Log;
 use \Monolog\Logger;
 use \Pimple\Container;
 use \Brainwave\Log\MonologWriter;
-use \Brainwave\Workbench\Workbench;
 use \Pimple\ServiceProviderInterface;
 
 /**

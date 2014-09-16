@@ -19,7 +19,6 @@ namespace Brainwave\Session;
  */
 
 use \Brainwave\Support\Str;
-use \Brainwave\Crypt\Crypt;
 use \SessionHandlerInterface;
 use \Brainwave\Session\segmentHandler;
 use \Brainwave\Session\CsrfToken\CsrfTokenFactory;

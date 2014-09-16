@@ -23,6 +23,7 @@ use \Swift_Message;
 use \Swift_MailTransport;
 use \Swift_SmtpTransport;
 use \Brainwave\Log\Writer;
+use \Brainwave\Mail\Message;
 use \Swift_SendmailTransport;
 use \Swift_Plugins_AntiFloodPlugin;
 use \Brainwave\View\Interfaces\ViewInterface;
@@ -159,7 +160,7 @@ class Mailer
      * @param  array   $data
      * @return void
      */
-    protected function addContent($message, $view, $plain, $data)
+    protected function addContent(Message $message, $view, $plain, $data)
     {
         if (isset($view)) {
                 $message->setBody($this->getView($view, $data), 'text/html');
@@ -192,7 +193,7 @@ class Mailer
      * @param  \Swift_Message  $message
      * @return void
      */
-    protected function logMessage($message)
+    protected function logMessage(\Swift_Message $message)
     {
             $emails = implode(', ', array_keys((array) $message->getTo()));
 

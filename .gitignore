@@ -4,16 +4,13 @@ composer.phar
 composer.lock
 .env.*.php
 .env.php
-.DS_Store
 Thumbs.db
 ftpsync.settings
 sftp-config.json
 .environment
 sync.ffs_db
-nbproject
 tmp/
 build/
-.idea
 .project
 .settings/
 .*.sw*

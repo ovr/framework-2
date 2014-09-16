@@ -32,7 +32,6 @@ use \Brainwave\Translator\TranslatorManager;
  */
 class TranslatorServiceProvider implements ServiceProviderInterface
 {
-
     /**
      * Register translator
      */

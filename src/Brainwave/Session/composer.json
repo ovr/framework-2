@@ -2,7 +2,7 @@
     "name": "brainwave/conifg",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "config", "configuration"],
+    "keywords": ["narrowspark", "brainwave", "session", "slim"],
     "license": "MIT",
     "homepage": "http://github.com/n-brainwave/session",
     "authors": [

@@ -8,7 +8,7 @@ namespace Brainwave\Support\Autoloader;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.1-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,8 +26,8 @@ namespace Brainwave\Support\Autoloader;
  * @since   0.8.0-dev
  *
  */
-class Autoloader {
-
+class Autoloader
+{
     /**
      * The registered directories.
      *
@@ -68,7 +68,9 @@ class Autoloader {
      */
     public static function normalizeClass($class)
     {
-        if ($class[0] == '\\') $class = substr($class, 1);
+        if ($class[0] == '\\') {
+            $class = substr($class, 1);
+        }
 
         return str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $class).'.php';
     }
@@ -81,7 +83,9 @@ class Autoloader {
     public static function register()
     {
         if (!static::$registered) {
-            static::$registered = spl_autoload_register(array('\Brainwave\Support\Autoloader\Autoloader', 'load'));
+            static::$registered = spl_autoload_register(
+                array('\Brainwave\Support\Autoloader\Autoloader', 'load')
+            );
         }
     }
 
@@ -111,9 +115,12 @@ class Autoloader {
         } else {
             $directories = (array) $directories;
 
-            static::$directories = array_filter(static::$directories, function($directory) use ($directories) {
-                return ( ! in_array($directory, $directories));
-            });
+            static::$directories = array_filter(
+                static::$directories,
+                function ($directory) use ($directories) {
+                    return (!in_array($directory, $directories));
+                }
+            );
         }
     }
 
@@ -126,5 +133,4 @@ class Autoloader {
     {
         return static::$directories;
     }
-
 }

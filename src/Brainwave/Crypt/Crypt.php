@@ -135,7 +135,6 @@ class Crypt implements CryptInterface
         $isBlockMode   = mcrypt_module_is_block_algorithm_mode($this->_mode);
         if ($isBlockCipher !== $isBlockMode) {
             throw new \RuntimeException('You can not mix block and non-block ciphers and modes');
-            return false;
         }
 
         $module = mcrypt_module_open($this->_algo, '', $this->_mode, '');
@@ -208,7 +207,6 @@ class Crypt implements CryptInterface
 
         if ($data === null || Arr::arrayCheck($data, $dataStructure, false) !== true) {
             throw new \RuntimeException('Invalid data passed to decrypt()');
-            return false;
         }
         // Everything looks good so far. Let's continue.
         $module = mcrypt_module_open($data['algo'], '', $data['mode'], '');
@@ -221,7 +219,6 @@ class Crypt implements CryptInterface
         // Check MAC.
         if (base64_decode($data['mac']) != $this->pbkdf2($data['cdata'], $key, 1000, 32)) {
             throw new \InvalidArgumentException('Message authentication code invalid');
-            return false;
         }
 
         // Init mcrypt.
@@ -303,7 +300,6 @@ class Crypt implements CryptInterface
         // Step 1. Check dkLen.
         if ($dkLen > (2^32-1) * $hLen) {
             throw new \InvalidArgumentException('Derived key too long');
-            return false;
         }
 
         for ($block = 1; $block<=$length; $block ++) {

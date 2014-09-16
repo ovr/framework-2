@@ -63,7 +63,7 @@ class XmlDriver implements DriverInterface
         $xml = new \SimpleXMLElement("<?xml version=\"1.0\"?><config></config>");
 
         // function call to convert array to xml
-        $this->array_to_xml($data, $xml);
+        $this->arrayToXml($data, $xml);
 
         return $xml->asXML();
     }
@@ -74,16 +74,16 @@ class XmlDriver implements DriverInterface
      * @param  void $xml    \SimpleXMLElement
      * @return string       data
      */
-    protected function array_to_xml($data, &$xml)
+    protected function arrayToXml($data, &$xml)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $key = is_numeric($key) ? "item$key" : $key;
                 $subnode = $xml->addChild("$key");
                 array_to_xml($value, $subnode);
             } else {
                 $key = is_numeric($key) ? "item$key" : $key;
-                $xml->addChild("$key","$value");
+                $xml->addChild("$key", "$value");
             }
         }
     }

@@ -232,7 +232,7 @@ class RouteCollection implements Countable, IteratorAggregate
      * @param  bool  $includingMethod
      * @return \Brainwave\Routing\Route|null
      */
-    protected function check(array $routes, $request, $includingMethod = true)
+    protected function check(array $routes, Request $request, $includingMethod = true)
     {
         return array_first($routes, function ($key, $value) use ($request, $includingMethod) {
             return $value->matches($request, $includingMethod);

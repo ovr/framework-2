@@ -28,7 +28,6 @@ use \Brainwave\Http\Request;
 use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
-use \Brainwave\Routing\Router;
 use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
