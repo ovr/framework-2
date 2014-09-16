@@ -45,6 +45,7 @@ use \Brainwave\Config\ConfigurationHandler;
 use \Brainwave\Resolvers\DependencyResolver;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
+use \Brainwave\Workbench\StaticalProxyResolver;
 use \Brainwave\Environment\EnvironmentDetector;
 use \Brainwave\Http\Exception\NotFoundHttpException;
 use \Brainwave\Routing\Controller\ControllerCollection;
@@ -327,10 +328,12 @@ class Workbench extends Container
         // Middleware stack
         $this['middleware'] = array($this);
 
-        // Facade
+        // StaticalProxy
+        $this['statical.resolver'] = function ($c) {
+            return new StaticalProxyResolver();
+        };
         $this['statical'] = function ($c) {
-            $facades = new StaticalProxy($c);
-            return $facades;
+            return new StaticalProxy($c);
         };
     }
 

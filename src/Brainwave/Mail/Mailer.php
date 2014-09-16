@@ -25,7 +25,6 @@ use \Swift_SmtpTransport;
 use \Brainwave\Log\Writer;
 use \Brainwave\Mail\Message;
 use \Swift_SendmailTransport;
-use \Swift_Plugins_AntiFloodPlugin;
 use \Brainwave\View\Interfaces\ViewInterface;
 
 /**
@@ -85,52 +84,6 @@ class Mailer
         $this->swift = $swift;
         $this->message = $message;
         $this->view = $view;
-    }
-
-    /**
-     * Register the Swift Transport instance.
-     *
-     * @param  array  $getSettings
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function registerSwiftTransport()
-    {
-        if ($this->app['settings']->get('transporter', '') == 'smtp') {
-            /**
-             *  switch between ssl, tls and normal
-             */
-            if ($this->app['settings']->get('entcryption', '') == 'ssl') {
-                $this->swift_transport = Swift_SmtpTransport::newInstance()
-                    ->setHost($this->app['settings']->get('host', ''))
-                      ->setPort($this->app['settings']->get('port', ''))
-                      ->setEncryption('ssl')
-                      ->setUsername($this->app['settings']->get('smtp_username', ''))
-                      ->setPassword($this->app['settings']->get('smtp_password', ''));
-            } elseif ($this->app['settings']->get('entcryption', '') == 'tls') {
-                $this->swift_transport = Swift_SmtpTransport::newInstance()
-                    ->setHost($this->app['settings']->get('host', ''))
-                      ->setPort($this->app['settings']->get('port', ''))
-                      ->setEncryption('tls')
-                      ->setUsername($this->app['settings']->get('smtp_username', ''))
-                      ->setPassword($this->app['settings']->get('smtp_password', ''));
-            } elseif ($this->app['settings']->get('entcryption', '') == 0) {
-                $this->swift_transport = Swift_SmtpTransport::newInstance();
-            } else {
-                throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
-            }
-        } elseif ($this->app['settings']->get('transporter', '') == 'sendmail') {
-            (!empty($this->app['settings']->get('sendmail'))) ?
-            $transport = Swift_SendmailTransport::newInstance(
-                $this->app['settings']->get('sendmail')
-            ) : $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
-            return $transport;
-        } elseif ($this->app['settings']->get('transporter', '') == 'mail') {
-            return Swift_MailTransport::newInstance();
-        } else {
-            throw new \InvalidArgumentException('Invalid mail driver.');
-        }
     }
 
     /**
