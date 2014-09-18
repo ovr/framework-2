@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.1-dev
+ * @version     0.9.2-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -198,7 +198,8 @@ class Router implements RouterInterface
     /**
      * Get URL for named route
      * @param  string            $name   The name of the route
-     * @param  array             $params Associative array of URL parameter names and replacement values
+     * @param  array             $params Associative array of URL parameter names and replacement values.
+     *                                   Unmatched parameters will be used to build the query string.
      * @return string                    The URL for the given route populated with provided replacement values
      * @throws \RuntimeException         If named route not found
      * @api

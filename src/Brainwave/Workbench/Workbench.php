@@ -11,7 +11,7 @@ PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/"
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.1-dev
+ * @version     0.9.2-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -80,6 +80,7 @@ class Workbench extends Container
 
     /**
      * Has the app response been sent to the client?
+     *
      * @var bool
      */
     protected $responded = false;
@@ -91,12 +92,14 @@ class Workbench extends Container
 
     /**
      * All provicers
+     *
      * @var array
      */
     protected $providers = array();
 
     /**
      * Boots all providers.
+     *
      * @var boolean
      */
     protected $booted = false;
@@ -183,6 +186,7 @@ class Workbench extends Container
 
     /**
      * Workbench paths
+     *
      * @var array
      */
     public static $paths;
@@ -201,8 +205,6 @@ class Workbench extends Container
         $this['error']              = null;
         // Not Found
         $this['notFound']           = null;
-        // Logger
-        $this['log']                = null;
 
         // Settings
         $this['settings'] = function ($c) {
@@ -221,6 +223,13 @@ class Workbench extends Container
 
             return $config;
         };
+
+        // Here we will bind the install paths into the container as strings that can be
+        // accessed from any point in the system. Each path key is prefixed with path
+        // so that they have the consistent naming convention inside the container.
+        foreach (static::$paths as $key => $value) {
+            $this[$key] = $value;
+        }
 
         // Environment
         $this['environment'] = function ($c) {
@@ -346,13 +355,10 @@ class Workbench extends Container
     public static function bindInstallPaths(array $paths)
     {
         static::$paths['path.app'] = realpath($paths['app']);
-        $this['path.app'] = realpath($paths['app']);
 
-        // Here we will bind the install paths into the container as strings that can be
-        // accessed from any point in the system. Each path key is prefixed with path
-        // so that they have the consistent naming convention inside the container.
+        // Each path key is prefixed with path
+        // so that they have the consistent naming convention.
         foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
-            $this["path.{$key}"] = realpath($value);
             static::$paths["path.{$key}"] = realpath($value);
         }
     }
@@ -375,84 +381,14 @@ class Workbench extends Container
             $this[$key] = $value;
         }
 
-        return $this;
-    }
-
-    /**
-     * Boots all service providers.
-     *
-     * This method is automatically called by finalize(), but you can use it
-     * to boot all service providers when not handling a request.
-     */
-    public function boot()
-    {
-        if (!$this->booted) {
-            $this->booted = true;
-
-            foreach ($this->providers as $provider) {
-                if ($provider instanceof BootableProviderInterface) {
-                    $provider->boot($this);
-                }
-            }
+        // If the application has already booted, we will call this boot method on
+        // the provider class so it has an opportunity to do its boot logic and
+        // will be ready for any usage by the developer's application logics.
+        if ($this->booted) {
+            $provider->boot();
         }
 
-        $this->bootApplication();
-    }
-
-    /**
-     * Boot the application and fire app callbacks.
-     *
-     * @return void
-     */
-    protected function bootApplication()
-    {
-        // Once the application has booted we will also fire some "booted" callbacks
-        // for any listeners that need to do work after this initial booting gets
-        // finished. This is useful when ordering the boot-up processes we run.
-        $this->fireAppCallbacks($this->bootingCallbacks);
-
-        $this->booted = true;
-
-        $this->fireAppCallbacks($this->bootedCallbacks);
-    }
-
-    /**
-     * Register a new boot listener.
-     *
-     * @param  mixed  $callback
-     * @return void
-     */
-    public function booting($callback)
-    {
-        $this->bootingCallbacks[] = $callback;
-    }
-
-    /**
-     * Register a new "booted" listener.
-     *
-     * @param  mixed  $callback
-     * @return void
-     */
-    public function booted($callback)
-    {
-        $this->bootedCallbacks[] = $callback;
-
-        if ($this->isBooted()) {
-            $this->fireAppCallbacks(array($callback));
-        }
-    }
-
-    /**
-     * Call the booting callbacks for the application.
-     *
-     * @param  array  $callbacks
-     * @return void
-     */
-    protected function fireAppCallbacks(array $callbacks)
-    {
-        foreach ($callbacks as $callback) {
-            call_user_func($callback, $this);
-        }
+        return $provider;
     }
 
     /**
@@ -572,6 +508,16 @@ class Workbench extends Container
     public function isLocal()
     {
         return $this['env'] == 'local';
+    }
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function runningUnitTests()
+    {
+        return $this['env'] == 'testing';
     }
 
     /**
@@ -1122,9 +1068,92 @@ class Workbench extends Container
         $this['middleware'] = $middleware;
     }
 
-    /********************************************************************************
-    * Runner
-    *******************************************************************************/
+    /**
+     * Boots all service providers.
+     *
+     * This method is automatically called by finalize(), but you can use it
+     * to boot all service providers when not handling a request.
+     */
+    public function boot()
+    {
+        if (!$this->booted) {
+            $this->booted = true;
+
+            foreach ($this->providers as $provider) {
+                if ($provider instanceof BootableProviderInterface) {
+                    $provider->boot($this);
+                }
+            }
+        }
+
+        $this->bootApplication();
+    }
+
+    /**
+     * Boot the application and fire app callbacks.
+     *
+     * @return void
+     */
+    protected function bootApplication()
+    {
+        // Once the application has booted we will also fire some "booted" callbacks
+        // for any listeners that need to do work after this initial booting gets
+        // finished. This is useful when ordering the boot-up processes we run.
+        $this->fireAppCallbacks($this->bootingCallbacks);
+
+        $this->booted = true;
+
+        $this->fireAppCallbacks($this->bootedCallbacks);
+    }
+
+    /**
+     * Determine if the application has booted.
+     *
+     * @return bool
+     */
+    public function isBooted()
+    {
+        return $this->booted;
+    }
+
+    /**
+     * Register a new boot listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booting($callback)
+    {
+        $this->bootingCallbacks[] = $callback;
+    }
+
+    /**
+     * Register a new "booted" listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booted($callback)
+    {
+        $this->bootedCallbacks[] = $callback;
+
+        if ($this->isBooted()) {
+            $this->fireAppCallbacks(array($callback));
+        }
+    }
+
+    /**
+     * Call the booting callbacks for the application.
+     *
+     * @param  array  $callbacks
+     * @return void
+     */
+    protected function fireAppCallbacks(array $callbacks)
+    {
+        foreach ($callbacks as $callback) {
+            call_user_func($callback, $this);
+        }
+    }
 
     /**
      * Run
@@ -1144,6 +1173,8 @@ class Workbench extends Container
         } else {
             ob_start('mb_output_handler');
         }
+
+        $this->boot();
 
         // Invoke middleware and application stack
         try {

@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.8.0-dev
+ * @version     0.9.2-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -137,13 +137,21 @@ class FileLoader implements LoaderInterface
      * @param  array   $items
      * @return array
      */
-    public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null, $namespace = "config/packages")
-    {
+    public function cascadePackage(
+        $file,
+        $package = null,
+        $group = null,
+        $env = null,
+        $items = null,
+        $namespace = "config/packages"
+    ) {
         // First we will look for a configuration file in the packages configuration
         // folder. If it exists, we will load it and merge it with these original
         // options so that we will easily 'cascade' a package's configurations.
         if ($this->exists($file, $namespace.'/'.$packages.'/'.$env, null, $group)) {
-            $requireFile = file_get_contents($this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]);
+            $requireFile = file_get_contents(
+                $this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]
+            );
             $items = array_merge($items, $requireFile);
         }
 
@@ -183,52 +191,45 @@ class FileLoader implements LoaderInterface
      */
     protected function driver($ext, $path)
     {
-        if ($ext == 'php') {
-            $driver = new PhpDriver();
-            $driver->load($path);
+        switch ($ext) {
+            case 'php':
+                $driver = new PhpDriver();
+                $driver->load($path);
+                break;
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } elseif ($ext == 'json') {
-            $driver = new JsonDriver();
-            $driver->load($path);
+            case 'json':
+                $driver = new JsonDriver();
+                $driver->load($path);
+                break;
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } elseif ($ext == 'ini') {
-            $driver = new IniDriver();
-            $driver->load($path);
+            case 'ini':
+                $driver = new IniDriver();
+                $driver->load($path);
+                break;
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } elseif ($ext == 'xml') {
-            $driver = new XmlDriver();
-            $driver->load($path);
+            case 'xml':
+                $driver = new XmlDriver();
+                $driver->load($path);
+                break;
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } elseif ($ext == 'yaml') {
-            $driver = new YamlDriver();
-            $driver->load($path);
+            case 'yaml':
+                $driver = new YamlDriver();
+                $driver->load($path);
+                break;
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } elseif ($ext == 'toml') {
-            $driver = new TomlDriver();
-            $driver->load($path);
+            case 'toml':
+                $driver = new TomlDriver();
+                $driver->load($path);
+                break;
+            default:
+                throw new \RuntimeException(
+                    sprintf("Unable to find the right driver for '%s'", $ext)
+                );
+                break;
+        }
 
-            if ($driver->supports($path)) {
-                return $driver;
-            }
-        } else {
-            throw new \RuntimeException(
-                sprintf("Unable to find the right driver for '%s'", $ext)
-            );
+        if ($driver->supports($path)) {
+            return $driver;
         }
     }
 }

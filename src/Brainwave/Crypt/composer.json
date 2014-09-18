@@ -28,7 +28,8 @@
         }
     },
     "suggest": {
-        "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers"
+        "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers",
+        "ext-mcrypt": "Required for HTTP cookie encryption"
     },
     "minimum-stability": "dev"
 }

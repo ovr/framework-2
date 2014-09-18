@@ -1,6 +1,6 @@
 {
     "name": "narrowspark/framework",
-    "type": "library",
+    "type": "framework",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["framework", "narrowspark", "slim", "router", "brainwave"],
     "license": "MIT",
@@ -43,11 +43,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.1-dev"
+            "dev-master": "0.9.2-dev"
         }
     },
     "suggest": {
         "league/plates": "Narrowspark provides the integration with the plates templating engine",
+        "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers",
         "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML files",
