@@ -106,13 +106,13 @@ class Crypt implements CryptInterface
     /**
      * Encrypt data returning a JSON encoded array safe for storage in a database
      * or file. The array has the following structure before it is encoded:
-     * array(
+     * [
      *   'cdata' => 'Encrypted data, Base 64 encoded',
      *   'iv'    => 'Base64 encoded IV',
      *   'algo'  => 'Algorythm used',
      *   'mode'  => 'Mode used',
      *   'mac'   => 'Message Authentication Code'
-     * )
+     * ]
      *
      * @param mixed $data
      *   Data to encrypt.
@@ -197,13 +197,13 @@ class Crypt implements CryptInterface
         // Decode the JSON string
         $data = json_decode($data, true);
 
-        $dataStructure = array(
+        $dataStructure = [
           'algo'  => true,
           'mode'  => true,
           'iv'    => true,
           'cdata' => true,
           'mac'   => true,
-        );
+        ];
 
         if ($data === null || Arr::arrayCheck($data, $dataStructure, false) !== true) {
             throw new \RuntimeException('Invalid data passed to decrypt()');

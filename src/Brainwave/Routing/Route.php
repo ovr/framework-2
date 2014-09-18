@@ -52,13 +52,13 @@ class Route implements RouteInterface
      * Conditions for this route's URL parameters
      * @var array
      */
-    protected $conditions = array();
+    protected $conditions = [];
 
     /**
      * Default conditions applied to all route instances
      * @var array
      */
-    protected static $defaultConditions = array();
+    protected static $defaultConditions = [];
 
     /**
      * The name of this route (optional)
@@ -70,31 +70,31 @@ class Route implements RouteInterface
      * Array of URL parameters
      * @var array
      */
-    protected $params = array();
+    protected $params = [];
 
     /**
      * Array of URL parameter names
      * @var array
      */
-    protected $paramNames = array();
+    protected $paramNames = [];
 
     /**
      * Array of URL parameter names with at the end
      * @var array
      */
-    protected $paramNamesPath = array();
+    protected $paramNamesPath = [];
 
     /**
      * HTTP methods supported by this route
      * @var array
      */
-    protected $methods = array();
+    protected $methods = [];
 
     /**
      * Middleware to be invoked before immediately before this route is dispatched
      * @var array[Callable]
      */
-    protected $middleware = array();
+    protected $middleware = [];
 
     /**
      * @var bool Whether or not this route should be matched in a case-sensitive manner
@@ -105,13 +105,13 @@ class Route implements RouteInterface
      * Controller constructor dependencies
      * @var array
      */
-    protected $controllerDependencies = array();
+    protected $controllerDependencies = [];
 
     /**
      * Array of Controller Constructor Parameters
      * @var array
      */
-    protected $constructorParams = array();
+    protected $constructorParams = [];
 
     /**
      * Determine is the route pattern should be escaped or not
@@ -216,9 +216,9 @@ class Route implements RouteInterface
      */
     public static function stringToCallable($callable)
     {
-        $matches = array();
+        $matches = [];
         if (preg_match('!^([^\:])\:([[:alnum:]])$!', $callable, $matches)) {
-            $callable = array($matches[1], $matches[2]);
+            $callable = [$matches[1], $matches[2]];
         } else {
             $callable = false;
         }
@@ -264,7 +264,7 @@ class Route implements RouteInterface
                 $instance = new $this->callable[0];
             }
 
-            $this->callable = array($instance, $this->callable[1]);
+            $this->callable = [$instance, $this->callable[1]];
         }
 
         return $this->callable;
@@ -548,9 +548,9 @@ class Route implements RouteInterface
         //determines a wildcard parameter
 
         if ($this->getEscapePattern()) {
-            $charsToEscape = array(
+            $charsToEscape =[
                 "!", "*", "'", "$", ",", "/", "?", "#", "[ ", "]", "."
-            );
+            ];
 
             foreach ($charsToEscape as $toEscape) {
                 $pattern = str_replace($toEscape, "\\$toEscape", $pattern);
@@ -560,7 +560,7 @@ class Route implements RouteInterface
         //Convert URL params into regex patterns, construct a regex for this route, init params
         $patternAsRegex = preg_replace_callback(
             '#:([\w])\?#',
-            array($this, 'matchesCallback'),
+            [$this, 'matchesCallback'],
             str_replace(')', ')?', $pattern)
         );
 

@@ -126,7 +126,7 @@ class Controller
         }
 
         $routeName = $pattern;
-        $routeName = str_replace(array('|', '-'), '/', $routeName);
+        $routeName = str_replace(['|', '-'], '/', $routeName);
         $routeName = preg_replace('/[^a-z0-9A-Z_()+:\/.]+/', '', $routeName);
 
         return $routeName;

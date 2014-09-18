@@ -54,7 +54,7 @@ class Arr
      */
     public static function arrayBuild($array, \Closure $callback)
     {
-        $results = array();
+        $results = [];
 
         foreach ($array as $key => $value) {
             list($innerKey, $innerValue) = call_user_func($callback, $key, $value);
@@ -85,7 +85,7 @@ class Arr
      */
     public static function arrayDot($array, $prepend = '')
     {
-        $results = array();
+        $results = [];
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -120,7 +120,7 @@ class Arr
     public static function arrayFetch($array, $key)
     {
         foreach (explode('.', $key) as $segment) {
-            $results = array();
+            $results = [];
 
             foreach ($array as $value) {
                 $value = (array) $value;
@@ -174,7 +174,7 @@ class Arr
      */
     public static function arrayFlatten($array)
     {
-        $return = array();
+        $return = [];
 
         array_walk_recursive($array, function ($x) use (&$return) {
             $return[] = $x;
@@ -258,7 +258,7 @@ class Arr
      */
     public static function arrayPluck($array, $value, $key = null)
     {
-        $results = array();
+        $results = [];
 
         foreach ($array as $item) {
             $itemValue = is_object($item) ? $item->{$value} : $item[$value];
@@ -319,7 +319,7 @@ class Arr
             // to hold the next value, allowing us to create the arrays to hold final
             // values at the correct depth. Then we'll keep digging into the array.
             if (!isset($array[$key]) || !is_array($array[$key])) {
-                $array[$key] = array();
+                $array[$key] = [];
             }
 
             $array =& $array[$key];
@@ -339,7 +339,7 @@ class Arr
      */
     public static function arrayWhere($array, \Closure $callback)
     {
-        $filtered = array();
+        $filtered = [];
 
         foreach ($array as $key => $value) {
             if (call_user_func($callback, $key, $value)) {
@@ -443,6 +443,28 @@ class Arr
         } else {
             throw new \InvalidArgumentException("Array or object must be passed to data_get.");
         }
+    }
+
+    /**
+     * Flatten a nested array to a separated key
+     *
+     * @param  array  $array
+     * @param  string $separator
+     * @return array
+     */
+    public static function flattenArray(array $array, $separator)
+    {
+        $flattened = [];
+
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $flattened = array_merge($flattened, static::flattenArray($value, $key.$separator));
+            } else {
+                $flattened[trim($separator.$key, $separator)] = $value;
+            }
+        }
+
+        return $flattened;
     }
 
     /**

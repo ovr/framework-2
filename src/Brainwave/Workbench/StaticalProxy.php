@@ -41,7 +41,7 @@ class StaticalProxy extends StaticalProxyManager
      * All alias for statical proxy
      * @var [type]
      */
-    protected $facadeAlias = array();
+    protected $facadeAlias = [];
 
     /**
      * Set the Application Brainwave\Workbench\Workbench for statical proxy
@@ -57,7 +57,7 @@ class StaticalProxy extends StaticalProxyManager
      * @param type array $facadeClass
      * @return Brainwave\Workbench\StaticalProxy
      */
-    public function registerFacade(array $facadeClass = array())
+    public function registerFacade(array $facadeClass = [])
     {
         $this->facadeAlias = $facadeClass;
         return $this;

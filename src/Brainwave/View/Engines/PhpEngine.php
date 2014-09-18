@@ -41,7 +41,7 @@ class PhpEngine implements EnginesInterface
      * @param  array   $data
      * @return string
      */
-    public function get(array $data = array())
+    public function get(array $data = [])
     {
         return $this->evaluatePath($this->path, $data);
     }

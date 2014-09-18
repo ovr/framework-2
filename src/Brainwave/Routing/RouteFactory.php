@@ -101,7 +101,7 @@ class RouteFactory
             throw new \InvalidArgumentException("Invalid callable '$callable' specified.");
         }
 
-        return array($matches[1], $matches[2]);
+        return [$matches[1], $matches[2]];
     }
 
     /**

@@ -68,7 +68,7 @@ class SessionManager implements SessionHandlerInterface
      * Session cookie parameters.
      * @var array
      */
-    protected $cookie_params = array();
+    protected $cookie_params = [];
 
     /**
      * Reference to Phpfunc
@@ -88,7 +88,7 @@ class SessionManager implements SessionHandlerInterface
         SegmentHandler $segmentHandler,
         CsrfTokenFactory $csrfTokenFactory,
         Str $phpfunc,
-        array $cookies = array(),
+        array $cookies = [],
         $delete_cookie = null
     ) {
         $this->segmentHandler     = $segmentHandler;
@@ -199,10 +199,10 @@ class SessionManager implements SessionHandlerInterface
     protected function moveFlash()
     {
         if (! isset($_SESSION[SessionManager::FLASH_NEXT])) {
-            $_SESSION[SessionManager::FLASH_NEXT] = array();
+            $_SESSION[SessionManager::FLASH_NEXT] = [];
         }
         $_SESSION[SessionManager::FLASH_NOW] = $_SESSION[SessionManager::FLASH_NEXT];
-        $_SESSION[SessionManager::FLASH_NEXT] = array();
+        $_SESSION[SessionManager::FLASH_NEXT] = [];
     }
 
     /**

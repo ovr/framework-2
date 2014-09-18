@@ -36,13 +36,13 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      * Cache of previously parsed keys
      * @var array
      */
-    protected $keys = array();
+    protected $keys = [];
 
     /**
      * Storage array of values
      * @var array
      */
-    protected $values = array();
+    protected $values = [];
 
     /**
      * Expected nested key separator
@@ -56,7 +56,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      * @param array $values
      * @required
      */
-    public function setArray(array $values = array())
+    public function setArray(array $values = [])
     {
         $this->values = $this->mergeArrays($this->values, $values);
     }
@@ -76,7 +76,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      */
     public function getAllFlat()
     {
-        return $this->flattenArray($this->values);
+        return Arr::flattenArray($this->values, $this->separator);
     }
 
     /**
@@ -85,7 +85,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      */
     public function getKeys()
     {
-        $flattened = $this->flattenArray($this->values);
+        $flattened = Arr::flattenArray($this->values, $this->separator);
         return array_keys($flattened);
     }
 
@@ -162,7 +162,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      * @param  array  $array
      * @return mixed
      */
-    protected function getValue($key, array $array = array())
+    protected function getValue($key, array $array = [])
     {
         $keys = $this->parseKey($key);
 
@@ -182,14 +182,14 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
      * @param  array   $array
      * @return array
      */
-    protected function setValue($key, $value, array &$array = array())
+    protected function setValue($key, $value, array &$array = [])
     {
         $keys = $this->parseKey($key, $this->separator);
         $pointer = &$array;
 
         while (count($keys) > 0) {
             $key = array_shift($keys);
-            $pointer[$key] = (isset($pointer[$key]) ? $pointer[$key] : array());
+            $pointer[$key] = (isset($pointer[$key]) ? $pointer[$key] : []);
             $pointer = &$pointer[$key];
         }
 
@@ -205,7 +205,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
     protected function mergeArrays()
     {
         $arrays = func_get_args();
-        $merged = array();
+        $merged = [];
 
         foreach ($arrays as $array) {
             foreach ($array as $key => $value) {
@@ -214,32 +214,6 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
         }
 
         return $merged;
-    }
-
-    /**
-     * Flatten a nested array to a separated key
-     *
-     * @param  array  $array
-     * @param  string $separator
-     * @return array
-     */
-    protected function flattenArray(array $array, $separator = null)
-    {
-        $flattened = array();
-
-        if (is_null($separator)) {
-            $separator = $this->separator;
-        }
-
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $flattened = array_merge($flattened, $this->flattenArray($value, $key.$separator));
-            } else {
-                $flattened[trim($separator.$key, $this->separator)] = $value;
-            }
-        }
-
-        return $flattened;
     }
 
     /**

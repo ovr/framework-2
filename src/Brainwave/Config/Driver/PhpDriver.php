@@ -38,8 +38,8 @@ class PhpDriver implements DriverInterface
     public function load($filename)
     {
         $config = require $filename;
-        $config = (1 === $config) ? array() : $config;
-        return $config ?: array();
+        $config = (1 === $config) ? [] : $config;
+        return $config ?: [];
     }
 
     /**
@@ -62,8 +62,8 @@ class PhpDriver implements DriverInterface
         $data = var_export($data, true);
 
         $formatted = str_replace(
-            array('  ', 'array ('),
-            array("\t", 'array('),
+            ['  ', 'array ('],
+            ["\t", 'array('],
             $data
         );
 

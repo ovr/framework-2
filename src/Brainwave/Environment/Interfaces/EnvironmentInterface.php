@@ -30,5 +30,5 @@ interface EnvironmentInterface
 {
     public function parse(array $environment);
 
-    public function mock(array $settings = array());
+    public function mock(array $settings = []);
 }

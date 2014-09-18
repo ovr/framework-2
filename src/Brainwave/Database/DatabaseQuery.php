@@ -53,17 +53,17 @@ class DatabaseQuery implements QueryInterface
 
     public function insert($table, $datas)
     {
-        $lastId = array();
+        $lastId = [];
 
         // Check indexed or associative array
         if (!isset($datas[0])) {
-            $datas = array($datas);
+            $datas = [$datas];
         }
 
         foreach ($datas as $data) {
-            $keys = array();
-            $values = array();
-            $columns = array();
+            $keys = [];
+            $values = [];
+            $columns = [];
 
             foreach ($data as $key => $value) {
                 array_push($columns, $this->manager->columnQuote($key));
@@ -129,7 +129,7 @@ class DatabaseQuery implements QueryInterface
 
     public function update($table, $data, $where = null)
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($data as $key => $value) {
             preg_match('/([\w])(\[(\|\-|\*|\/)\])?/i', $key, $match);
@@ -180,7 +180,7 @@ class DatabaseQuery implements QueryInterface
 
     public function toggle($table, $data, $where = null)
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($data as $key => $value) {
             $value = '`' . $value . '`';
@@ -200,7 +200,7 @@ class DatabaseQuery implements QueryInterface
     public function replace($table, $columns, $search = null, $replace = null, $where = null)
     {
         if (is_array($columns)) {
-            $replaceQuery = array();
+            $replaceQuery = [];
 
             foreach ($columns as $column => $replacements) {
                 foreach ($replacements as $replaceSearch => $replace_replacement) {
@@ -214,7 +214,7 @@ class DatabaseQuery implements QueryInterface
             $where = $search;
         } else {
             if (is_array($search)) {
-                $replaceQuery = array();
+                $replaceQuery = [];
 
                 foreach ($search as $replaceSearch => $replace_replacement) {
                     $replaceQuery[] = $columns.' = REPLACE('.$this->manager->columnQuote($columns).', '.
@@ -236,7 +236,7 @@ class DatabaseQuery implements QueryInterface
     public function get($table, $columns = null, $where = null)
     {
         if (!isset($where) && !isset($columns)) {
-            $columns = array();
+            $columns = [];
             $columns['LIMIT'] = 1;
         } elseif (!isset($where)) {
             $columns['LIMIT'] = 1;
@@ -273,14 +273,14 @@ class DatabaseQuery implements QueryInterface
         $join_key = is_array($join) ? array_keys($join) : null;
 
         if (strpos($join_key[0], '[') !== false) {
-            $table_join = array();
+            $table_join = [];
 
-            $join_array = array(
+            $join_array = [
                 '>' => 'LEFT',
                 '<' => 'RIGHT',
                 '<>' => 'FULL',
                 '><' => 'INNER'
-            );
+            ];
 
             foreach ($join as $sub_table => $relation) {
                 preg_match('/(\[(\<|\>|\>\<|\<\>)\])?([a-zA-Z0-9_\-]*)/', $sub_table, $match);

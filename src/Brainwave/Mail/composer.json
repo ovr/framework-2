@@ -17,6 +17,7 @@
         "php": ">=5.4.0",
         "brainwave/log": "0.9.*",
         "brainwave/view": "0.9.*",
+        "brainwave/config": "0.9.*",
         "swiftmailer/swiftmailer": "~5.1"
     },
     "autoload": {

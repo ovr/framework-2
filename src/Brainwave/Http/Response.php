@@ -76,7 +76,7 @@ class Response implements ResponseInterface
      * Response codes and associated messages
      * @var array
      */
-    protected static $messages = array(
+    protected static $messages = [
         //Informational 1xx
         100 => '100 Continue',
         101 => '101 Switching Protocols',
@@ -141,7 +141,7 @@ class Response implements ResponseInterface
         508 => '508 Loop Detected',
         510 => '510 Not Extended',
         511 => '511 Network Authentication Required'
-    );
+    ];
 
     /**
      * Constructor
@@ -375,7 +375,7 @@ class Response implements ResponseInterface
      * @param array  $settings
      * @api
      */
-    public function removeCookie($name, $settings = array())
+    public function removeCookie($name, $settings = [])
     {
         $this->cookies->remove($name, $settings);
     }
@@ -462,7 +462,7 @@ class Response implements ResponseInterface
     {
         $sendBody = true;
 
-        if (in_array($this->status, array(204, 304)) === true) {
+        if (in_array($this->status, [204, 304]) === true) {
             $this->headers->remove('Content-Type');
             $this->headers->remove('Content-Length');
             $sendBody = false;
@@ -550,7 +550,7 @@ class Response implements ResponseInterface
      */
     public function isEmpty()
     {
-        return in_array($this->status, array(201, 204, 304));
+        return in_array($this->status, [201, 204, 304]);
     }
 
     /**
@@ -594,7 +594,7 @@ class Response implements ResponseInterface
      */
     public function isRedirect()
     {
-        return in_array($this->status, array(301, 302, 303, 307));
+        return in_array($this->status, [301, 302, 303, 307]);
     }
 
     /**

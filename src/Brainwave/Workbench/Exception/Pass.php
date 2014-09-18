@@ -33,4 +33,5 @@ namespace Brainwave\Workbench\Exception;
  */
 class Pass extends \Exception
 {
+
 }

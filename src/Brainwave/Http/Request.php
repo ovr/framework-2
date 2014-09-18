@@ -58,7 +58,7 @@ class Request implements RequestInterface
     /**
      * @var array
      */
-    protected static $formDataMediaTypes = array('application/x-www-form-urlencoded');
+    protected static $formDataMediaTypes = ['application/x-www-form-urlencoded'];
 
     /**
      * Application environment
@@ -546,8 +546,8 @@ class Request implements RequestInterface
      */
     public function params($key = null)
     {
-        $get = $this->get() ?: array();
-        $post = $this->post() ?: array();
+        $get = $this->get() ?: [];
+        $post = $this->post() ?: [];
         $union = array_merge($get, $post);
         if ($key) {
             return isset($union[$key]) ? $union[$key] : null;
@@ -753,7 +753,7 @@ class Request implements RequestInterface
     public function getMediaTypeParams()
     {
         $contentType = $this->getContentType();
-        $contentTypeParams = array();
+        $contentTypeParams = [];
         if ($contentType) {
             $contentTypeParts = preg_split('/\s*[;,]\s*/', $contentType);
             $contentTypePartsLength = count($contentTypeParts);
@@ -877,7 +877,7 @@ class Request implements RequestInterface
      */
     public function getClientIp()
     {
-        $keys = array('HTTP_X_FORWARDED_FOR', 'CLIENT_IP', 'REMOTE_ADDR');
+        $keys = ['HTTP_X_FORWARDED_FOR', 'CLIENT_IP', 'REMOTE_ADDR'];
         foreach ($keys as $key) {
             if ($this->env->has($key) === true) {
                 return $this->env->get($key);
@@ -983,7 +983,7 @@ class Request implements RequestInterface
             $pathInfo = str_replace('?' . $queryString, '', $pathInfo); // <-- Remove query string
             $pathInfo = '/' . ltrim($pathInfo, '/'); // <-- Ensure leading slash
 
-            $this->paths = array();
+            $this->paths = [];
             $this->paths['physical'] = $scriptName;
             $this->paths['virtual'] = $pathInfo;
         }

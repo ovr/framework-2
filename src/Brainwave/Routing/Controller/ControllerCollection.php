@@ -38,7 +38,7 @@ use \Brainwave\Routing\Router;
  */
 class ControllerCollection
 {
-    protected $controllers = array();
+    protected $controllers = [];
     protected $defaultRoute;
     protected $defaultRouter;
 

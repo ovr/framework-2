@@ -89,7 +89,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clear()
     {
         if ($this->resumeSession()) {
-            $_SESSION[$this->name] = array();
+            $_SESSION[$this->name] = [];
         }
     }
 
@@ -128,7 +128,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlash()
     {
         if ($this->resumeSession()) {
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
         }
     }
 
@@ -169,8 +169,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlashNow()
     {
         if ($this->resumeSession()) {
-            $_SESSION[SessionManager::FLASH_NOW][$this->name] = array();
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NOW][$this->name] = [];
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
         }
     }
 
@@ -228,15 +228,15 @@ class SegmentHandler implements SegmentHandlerInterface
     protected function load()
     {
         if (!isset($_SESSION[$this->name])) {
-            $_SESSION[$this->name] = array();
+            $_SESSION[$this->name] = [];
         }
 
         if (!isset($_SESSION[SessionManager::FLASH_NOW][$this->name])) {
-            $_SESSION[SessionManager::FLASH_NOW][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NOW][$this->name] = [];
         }
 
         if (!isset($_SESSION[SessionManager::FLASH_NEXT][$this->name])) {
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array();
+            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
         }
     }
 

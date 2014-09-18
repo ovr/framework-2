@@ -38,7 +38,7 @@ class FileCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         // Cache directory is required
         if (!isset($options['cache_dir'])) {
@@ -71,7 +71,7 @@ class FileCache extends AbstractCache
         }
 
         // remove trailing slash
-        if (in_array(substr($cacheDir, -1), array('\\', '/'))) {
+        if (in_array(substr($cacheDir, -1), ['\\', '/'])) {
             $cacheDir = substr($cacheDir, 0, -1);
         }
 
@@ -159,7 +159,7 @@ class FileCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        $content = array('data' => $var, 'ttl' => (int) $ttl);
+        $content = ['data' => $var, 'ttl' => (int) $ttl];
         return (bool) file_put_contents($this->getFileName($key), serialize($content));
     }
 

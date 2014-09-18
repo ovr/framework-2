@@ -32,7 +32,7 @@ class ArrayCache extends AbstractCache
     /**
      * @var array $data
      */
-    private $_data = array();
+    private $data = [];
 
     /**
      * {@inheritdoc}
@@ -47,7 +47,7 @@ class ArrayCache extends AbstractCache
      */
     public function clear()
     {
-        $this->_data = array();
+        $this->data = [];
         return true;
     }
 
@@ -56,7 +56,7 @@ class ArrayCache extends AbstractCache
      */
     public function delete($key)
     {
-        unset($this->_data[$key]);
+        unset($this->data[$key]);
         return true;
     }
 
@@ -65,7 +65,7 @@ class ArrayCache extends AbstractCache
      */
     public function exists($key)
     {
-        return isset($this->_data[$key]);
+        return isset($this->data[$key]);
     }
 
     /**
@@ -73,8 +73,8 @@ class ArrayCache extends AbstractCache
      */
     public function fetch($key)
     {
-        if (isset($this->_data[$key])) {
-            return $this->_data[$key];
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
         }
 
         return false;
@@ -85,7 +85,7 @@ class ArrayCache extends AbstractCache
      */
     public function store($key, $var = null, $ttl = 0)
     {
-        $this->_data[$key] = $var;
+        $this->data[$key] = $var;
 
         return true;
     }

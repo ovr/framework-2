@@ -69,7 +69,7 @@ class MonologWriter
      *
      * @var array
      */
-    protected $levels = array(
+    protected $levels = [
         'debug',
         'info',
         'notice',
@@ -78,14 +78,14 @@ class MonologWriter
         'critical',
         'alert',
         'emergency',
-    );
+    ];
 
     /**
      * All of the handler.
      *
      * @var array
      */
-    protected $handler = array(
+    protected $handler = [
         'Stream',
         'RotatingFile',
         'Syslog',
@@ -101,14 +101,14 @@ class MonologWriter
         'NewRelic',
         'Loggly',
         'SyslogUdp'
-    );
+    ];
 
     /**
      * All of the formatter.
      *
      * @var array
      */
-    protected $formatter = array(
+    protected $formatter = [
         'Line',
         'Html',
         'Normalizer',
@@ -119,7 +119,7 @@ class MonologWriter
         'Gelf',
         'Logstash',
         'Elastica'
-    );
+    ];
 
     /**
      * @var folder path
@@ -465,7 +465,7 @@ class MonologWriter
     {
         $level = head(func_get_args());
 
-        return call_user_func_array(array($this, $level), array_slice(func_get_args(), 1));
+        return call_user_func_array([$this, $level], array_slice(func_get_args(), 1));
     }
 
     /**
@@ -483,7 +483,7 @@ class MonologWriter
 
             $this->formatParameters($parameters);
 
-            call_user_func_array(array($this, 'fireLogEvent'), array_merge(array($method), $parameters));
+            call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
 
             $method = 'add'.ucfirst($method);
 
@@ -507,7 +507,7 @@ class MonologWriter
             } elseif ($parameters[0] instanceof JsonableInterface) {
                 $parameters[0] = $parameters[0]->toJson();
             } elseif ($parameters[0] instanceof ArrayableInterface) {
-                $parameters[0] = var_export($parameters[0]->toArray(), true);
+                $parameters[0] = var_export($parameters[0]->to[], true);
             }
         }
     }

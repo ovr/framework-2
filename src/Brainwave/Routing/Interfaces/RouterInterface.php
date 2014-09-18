@@ -34,7 +34,7 @@ interface RouterInterface
 
     public function map(RouteInterface $route);
 
-    public function urlFor($name, $params = array());
+    public function urlFor($name, $params = []);
 
     public function addNamedRoute($name, RouteInterface $route);
 

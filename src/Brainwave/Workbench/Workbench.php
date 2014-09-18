@@ -95,7 +95,7 @@ class Workbench extends Container
      *
      * @var array
      */
-    protected $providers = array();
+    protected $providers = [];
 
     /**
      * Boots all providers.
@@ -109,75 +109,75 @@ class Workbench extends Container
      *
      * @var array
      */
-    protected $bootingCallbacks = array();
+    protected $bootingCallbacks = [];
 
     /**
      * The array of booted callbacks.
      *
      * @var array
      */
-    protected $bootedCallbacks = array();
+    protected $bootedCallbacks = [];
 
     /**
      * Narrowspark config files
      * @var array
      */
-    protected $config = array(
-        'app' => array(
+    protected $config = [
+        'app' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'mail' => array(
+        ],
+        'mail' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'cache' => array(
+        ],
+        'cache' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'services' => array(
+        ],
+        'services' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'session' => array(
+        ],
+        'session' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'cookies' => array(
+        ],
+        'cookies' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'view' => array(
+        ],
+        'view' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'autoload' => array(
+        ],
+        'autoload' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-        'database' => array(
+        ],
+        'database' => [
             'ext' => 'php',
             'namespace' => 'config',
             'env' => '',
             'group' => ''
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var integer Counts the number of available routes.
@@ -271,10 +271,10 @@ class Workbench extends Container
 
         // Route factory resolver
         $this['route.resolver'] = function ($c) {
-            $options = array(
+            $options = [
                 'route_class'    => $c['settings']->get('route.class', null),
                 'case_sensitive' => $c['settings']->get('route.case_sensitive', true),
-            );
+            ];
 
             return function ($pattern, $callable) use ($options) {
                 return new $options['route_class']($pattern, $callable, $options['case_sensitive']);
@@ -315,7 +315,7 @@ class Workbench extends Container
         };
 
         // Register providers
-        foreach ($this['settings']->get('services.providers', array()) as $provider => $arr) {
+        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
             $this->register(new $provider, $arr);
         }
 
@@ -324,7 +324,7 @@ class Workbench extends Container
 
         // Load lang files
         if (!is_null($this['settings']->get('app.language.files', null))) {
-            foreach ($this['settings']->get('app.language.files', array()) as $file => $lang) {
+            foreach ($this['settings']->get('app.language.files', []) as $file => $lang) {
                 $this['translator']->bind(
                     $file.'.'.$lang['ext'],
                     $lang['namespace'],
@@ -335,7 +335,7 @@ class Workbench extends Container
         }
 
         // Middleware stack
-        $this['middleware'] = array($this);
+        $this['middleware'] = [$this];
 
         // StaticalProxy
         $this['statical.resolver'] = function ($c) {
@@ -358,7 +358,7 @@ class Workbench extends Container
 
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.
-        foreach (Arr::arrayExcept($paths, array('app')) as $key => $value) {
+        foreach (Arr::arrayExcept($paths, ['app']) as $key => $value) {
             static::$paths["path.{$key}"] = realpath($value);
         }
     }
@@ -371,7 +371,7 @@ class Workbench extends Container
      *
      * @return Application
      */
-    public function register(ServiceProviderInterface $provider, array $values = array())
+    public function register(ServiceProviderInterface $provider, array $values = [])
     {
         $this->providers[] = $provider;
 
@@ -452,7 +452,7 @@ class Workbench extends Container
      * @throws \Brainwave\Http\Exception\HttpException
      * @throws \Brainwave\Http\Exception\NotFoundHttpException
      */
-    public function abort($code, $message = '', array $headers = array())
+    public function abort($code, $message = '', array $headers = [])
     {
         if ($code == 404) {
             throw new NotFoundHttpException($message);
@@ -713,7 +713,7 @@ class Workbench extends Container
      */
     public function getControllersRoutes()
     {
-        $route = array();
+        $route = [];
         $controllers = $this->controller_factory->getControllers();
         foreach ($controllers as $controller) {
             $route[] = $controller->getRouteName();
@@ -772,11 +772,11 @@ class Workbench extends Container
         } else {
             ob_start();
             if (is_array($this['notFound'])) {
-                call_user_func(array(new $this['notFound'][0], $this['notFound'][1]));
+                call_user_func([new $this['notFound'][0], $this['notFound'][1]]);
             } elseif (is_callable($this['notFound'])) {
                 call_user_func($this['notFound']);
             } else {
-                call_user_func(array($this['exception'], 'pageNotFound'));
+                call_user_func([$this['exception'], 'pageNotFound']);
             }
             $this->halt('404');
         }
@@ -830,7 +830,7 @@ class Workbench extends Container
     public function etag($value, $type = 'strong')
     {
         // Ensure type is correct
-        if (!in_array($type, array('strong', 'weak'))) {
+        if (!in_array($type, ['strong', 'weak'])) {
             throw new \InvalidArgumentException('Invalid Brainwave::etag type. Expected "strong" or "weak".');
         }
 
@@ -1138,7 +1138,7 @@ class Workbench extends Container
         $this->bootedCallbacks[] = $callback;
 
         if ($this->isBooted()) {
-            $this->fireAppCallbacks(array($callback));
+            $this->fireAppCallbacks([$callback]);
         }
     }
 
@@ -1262,17 +1262,17 @@ class Workbench extends Container
     public function subRequest(
         $url,
         $method = 'GET',
-        array $headers = array(),
-        array $CookieJar = array(),
+        array $headers = [],
+        array $CookieJar = [],
         $body = '',
-        array $serverVariables = array()
+        array $serverVariables = []
     ) {
         // Build sub-request and sub-response
-        $environment = new Environment(array_merge(array(
+        $environment = new Environment(array_merge([
             'REQUEST_METHOD' => $method,
             'REQUEST_URI' => $url,
             'SCRIPT_NAME' => '/index.php'
-        ), $serverVariables));
+        ], $serverVariables));
 
         $headers = new Headers($environment);
 

@@ -69,5 +69,5 @@ interface EventManagerInterface
      * @param array  $args  Array of arguments to pass to callback
      * @return mixed|void
      */
-    public function triggerChain($event, array $args = array());
+    public function triggerChain($event, array $args = []);
 }

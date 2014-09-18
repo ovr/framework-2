@@ -83,6 +83,6 @@ class FileCookieJar extends CookieJar
         }
 
         $this->unserialize($json);
-        $this->cookies = $this->cookies ?: array();
+        $this->cookies = $this->cookies ?: [];
     }
 }

@@ -84,7 +84,7 @@ class Redirector
      * @param string    $url        The route name
      * @param array     $params     Associative array of URL parameters and replacement values
      */
-    public function redirectTo($route, $params = array(), $status = 302)
+    public function redirectTo($route, $params = [], $status = 302)
     {
         $this->redirect($this->urlFor($route, $params), $status);
     }
@@ -97,7 +97,7 @@ class Redirector
      * @return string
      * @api
      */
-    public function urlFor($name, $params = array())
+    public function urlFor($name, $params = [])
     {
         return $this['request']->getScriptName() . $this['router']->urlFor($name, $params);
     }

@@ -34,9 +34,9 @@ class Cookie implements CookieInterface
 {
     protected $app;
 
-    public function __construct()
+    public function __construct($app)
     {
-        $this->app = new Workbench;
+        $this->app = $app;
     }
 
     /**
@@ -63,14 +63,14 @@ class Cookie implements CookieInterface
         $secure = null,
         $httponly = null
     ) {
-        $settings = array(
+        $settings = [
             'value' => $value,
             'expires' => is_null($time) ? $this->app['settings']->get('cookies.lifetime', '20minutes') : $time,
             'path' => is_null($path) ? $this->app['settings']->get('cookies.path', '/') : $path,
             'domain' => is_null($domain) ? $this->app['settings']->get('cookies.domain', null) : $domain,
             'secure' => is_null($secure) ? $this->app['settings']->get('cookies.secure', false) : $secure,
             'httponly' => is_null($httponly) ? $this->app['settings']->get('cookies.httponly', false) : $httponly
-        );
+        ];
         $this->app['response']->setCookie($name, $settings);
     }
 
@@ -157,12 +157,12 @@ class Cookie implements CookieInterface
         $secure = null,
         $httponly = null
     ) {
-        $settings = array(
+        $settings = [
             'domain' => is_null($domain) ? $this->app['settings']->get('cookies.domain', null) : $domain,
             'path' => is_null($path) ? $this->app['settings']->get('cookies.path', '/') : $path,
             'secure' => is_null($secure) ? $this->app['settings']->get('cookies.secure', false) : $secure,
             'httponly' => is_null($httponly) ?$this->app['settings']->get('cookies.httponly', flase) : $httponly
-        );
+        ];
         $this->app['response']->removeCookie($name, $settings);
     }
 }

@@ -65,14 +65,14 @@ class JsonEngine implements EnginesInterface
      * @param  array   $data
      * @return string
      */
-    public function get(array $data = array())
+    public function get(array $data = [])
     {
         if ($data['options'] === $this->app['settings']['json.option']) {
             $options = $this->app['settings']['json.option'];
         } else {
             $options = $data['options'];
         }
-        
+
         return $this->evaluateStatus(
             $this->status,
             $data,
@@ -97,7 +97,7 @@ class JsonEngine implements EnginesInterface
      * @param  array   $data
      * @return string
      */
-    protected function evaluateStatus($status = 200, array $data = array(), $option = 0)
+    protected function evaluateStatus($status = 200, array $data = [], $option = 0)
     {
         $app = $this->app;
         $collection = $this->collection;
@@ -132,18 +132,18 @@ class JsonEngine implements EnginesInterface
 
         $data = array_merge(
             $data,
-            array(
+            [
                 'method' => $app['request']->getMethod(),
                 'name' => $app['request']->get('name'),
                 'headers' => $app['request']->getHeaders(),
                 'params' => $app['request']->params()
-            )
+            ]
         );
 
         $app['response']->setStatus($status);
         $app['response']->addHeaders(
             array_merge(
-                array('Content-Type', 'application/json'),
+                ['Content-Type', 'application/json'],
                 $data['j.headers']
             )
         );

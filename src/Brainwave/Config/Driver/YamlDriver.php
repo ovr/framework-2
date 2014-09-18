@@ -42,7 +42,7 @@ class YamlDriver implements DriverInterface
             throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
         $config = Yaml::parse($filename);
-        return $config ?: array();
+        return $config ?: [];
     }
 
     /**

@@ -42,12 +42,12 @@ class EventManager implements EventManagerInterface
      * @var array
      */
     protected $hooks = array(
-        'before' => array(array()),
-        'before.router' => array(array()),
-        'before.dispatch' => array(array()),
-        'after.dispatch' => array(array()),
-        'after.router' => array(array()),
-        'after' => array(array())
+        'before' => [[]],
+        'before.router' => [[]],
+        'before.dispatch' => [[]],
+        'after.dispatch' => [[]],
+        'after.router' => [[]],
+        'after' => [[]]
     );
 
     /**
@@ -67,11 +67,11 @@ class EventManager implements EventManagerInterface
      */
     public function hook($event, callable $callable, $priority = 10)
     {
-        if (!isset($this->hooks[$name])) {
-            $this->hooks[$name] = array(array());
+        if (!isset($this->hooks[$event])) {
+            $this->hooks[$event] = [[]];
         }
         if (is_callable($callable)) {
-            $this->hooks[$name][(int) $priority][] = $callable;
+            $this->hooks[$event][(int) $priority][] = $callable;
         }
     }
 
@@ -96,7 +96,7 @@ class EventManager implements EventManagerInterface
     public function applyHook($name, $hookArg = null)
     {
         if (!isset($this->hooks[$name])) {
-            $this->hooks[$name] = array(array());
+            $this->hooks[$name] = [[]];
         }
         if (!empty($this->hooks[$name])) {
             // Sort by priority, low to high, if there's more than one priority
@@ -126,7 +126,7 @@ class EventManager implements EventManagerInterface
         $hooks = $this->app->getHooks();
 
         if (!isset($hooks[$name])) {
-            $hooks[$name] = array(array());
+            $hooks[$name] = [[]];
         }
         if (!empty($hooks[$name])) {
             // Sort by priority, low to hight, if there's more than one priority
@@ -157,7 +157,7 @@ class EventManager implements EventManagerInterface
      * @param array  $args  Array of arguments to pass to callback
      * @return mixed|void
      */
-    public function triggerChain($event, array $args = array())
+    public function triggerChain($event, array $args = [])
     {
         $this->applyChain($event, $args);
     }
@@ -196,10 +196,10 @@ class EventManager implements EventManagerInterface
     public function clearHooks($name = null)
     {
         if (!is_null($name) && isset($this->hooks[(string) $name])) {
-            $this->hooks[(string) $name] = array(array());
+            $this->hooks[(string) $name] = [[]];
         } else {
             foreach ($this->hooks as $key => $value) {
-                $this->hooks[$key] = array(array());
+                $this->hooks[$key] = [[]];
             }
         }
     }

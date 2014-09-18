@@ -35,7 +35,7 @@ class Environment extends Collection implements EnvironmentInterface
      * Mock data for an Environment
      * @var array
      */
-    public $mocked = array(
+    public $mocked = [
         'SERVER_PROTOCOL'      => 'HTTP/1.1',
         'REQUEST_METHOD'       => 'GET',
         'SCRIPT_NAME'          => '',
@@ -51,7 +51,7 @@ class Environment extends Collection implements EnvironmentInterface
         'HTTP_USER_AGENT'      => 'Brainwave',
         'REMOTE_ADDR'          => '127.0.0.1',
         'REQUEST_TIME'         => ''
-    );
+    ];
 
     /**
      * Constructor, will parse an array for environment information if present
@@ -89,7 +89,7 @@ class Environment extends Collection implements EnvironmentInterface
      * @param  array  $environment
      * @return void
      */
-    public function mock(array $settings = array())
+    public function mock(array $settings = [])
     {
         $this->mocked['REQUEST_TIME'] = time();
         $settings = array_merge($this->mocked, $settings);

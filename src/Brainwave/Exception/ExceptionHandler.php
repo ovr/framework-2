@@ -50,7 +50,7 @@ class ExceptionHandler
      * All of the register exception handlers.
      * @var array
      */
-    protected $handlers = array();
+    protected $handlers = [];
 
     public function __construct(Workbench $app, $charset)
     {
@@ -87,7 +87,7 @@ class ExceptionHandler
      */
     protected function registerErrorHandler()
     {
-        set_error_handler(array($this, 'handleError'));
+        set_error_handler([$this, 'handleError']);
     }
 
     /**
@@ -97,7 +97,7 @@ class ExceptionHandler
      */
     protected function registerExceptionHandler()
     {
-        set_exception_handler(array($this, 'handleException'));
+        set_exception_handler([$this, 'handleException']);
     }
 
     /**
@@ -106,7 +106,7 @@ class ExceptionHandler
      */
     protected function registerShutdownHandler()
     {
-        register_shutdown_function(array($this, 'handleShutdown'));
+        register_shutdown_function([$this, 'handleShutdown']);
     }
 
     /**
@@ -295,9 +295,9 @@ EOF;
         ob_start();
 
         if (is_array($this->app['error'])) {
-            call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
+            call_user_func_array([new $this->app['error'][0], $this->app['error'][1]], array($argument));
         } elseif (is_callable($this->app['error'])) {
-            call_user_func($this->app['error'], array($argument));
+            call_user_func($this->app['error'], [$argument]);
         } else {
             $this->displayException($argument);
         }
@@ -374,7 +374,7 @@ EOF;
      */
     protected function isFatal($type)
     {
-        return in_array($type, array(E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE));
+        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
     }
 
     /**

@@ -38,7 +38,7 @@ class MemcachedCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['memcached']) || !$options['memcached'] instanceof \Memcached) {
             $options['memcached'] = new \Memcached(uniqid());

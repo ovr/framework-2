@@ -38,7 +38,7 @@ class MemcacheCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['memcache']) || !$options['memcache'] instanceof \Memcache) {
             $options['memcache'] = new \Memcache;

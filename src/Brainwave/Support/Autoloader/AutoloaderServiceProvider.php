@@ -40,8 +40,7 @@ class AutoloaderServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app['autoloader'] = function ($app) {
-            $classLoader = new Autoloader();
-            return $classLoader;
+            return new Autoloader();
         };
     }
 }

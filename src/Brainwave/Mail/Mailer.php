@@ -70,7 +70,7 @@ class Mailer
      *
      * @var array
      */
-    protected $failedRecipients = array();
+    protected $failedRecipients = [];
 
     /**
      * Description
@@ -111,7 +111,7 @@ class Mailer
      */
     public function plain($view, array $data, $callback)
     {
-        return $this->send(array('text' => $view), $data, $callback);
+        return $this->send(['text' => $view], $data, $callback);
     }
 
     /**
@@ -245,7 +245,7 @@ class Mailer
     protected function parseView($view)
     {
         if (is_string($view)) {
-            return array($view, null);
+            return [$view, null];
         }
 
         // If the given view is an array with numeric keys, we will just assume that
@@ -257,9 +257,9 @@ class Mailer
             // the the views are being explicitly specified and will extract them via
             // named keys instead, allowing the developers to use one or the other.
         } elseif (is_array($view)) {
-            return array(
+            return [
                 array_get($view, 'html'), array_get($view, 'text')
-            );
+            ];
         }
 
         throw new \InvalidArgumentException("Invalid view.");

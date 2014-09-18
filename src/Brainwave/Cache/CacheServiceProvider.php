@@ -34,13 +34,13 @@ class CacheServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['cache.default_options'] = array(
+        $app['cache.default_options'] = [
             'driver' => 'array',
-        );
+        ];
 
         //All supported drivers
         $app['cache.drivers'] = function () {
-            return array(
+            return [
                 'apc'       => '\\Brainwave\\Cache\\Driver\\ApcCache',
                 'array'     => '\\Brainwave\\Cache\\Driver\\ArrayCache',
                 'file'      => '\\Brainwave\\Cache\\Driver\\FileCache',
@@ -49,11 +49,11 @@ class CacheServiceProvider implements ServiceProviderInterface
                 'xcache'    => '\\Brainwave\\Cache\\Driver\\XcacheCache',
                 'redis'     => '\\Brainwave\\Cache\\Driver\\RedisCache',
                 'wincache'  => '\\Brainwave\\Cache\\Driver\\WincacheCache',
-            );
+            ];
         };
 
         $app['cache.factory'] = function ($app) {
-            return new CacheManager($app['cache.drivers'], array());
+            return new CacheManager($app['cache.drivers'], []);
         };
 
         $app['caches.options.initializer'] = $app->protect(function () use ($app) {
@@ -66,9 +66,9 @@ class CacheServiceProvider implements ServiceProviderInterface
             $initialized = true;
 
             if (!isset($app['caches.options'])) {
-                $app['caches.options'] = array(
-                    'default' => isset($app['cache.options']) ? $app['cache.options'] : array()
-                );
+                $app['caches.options'] = [
+                    'default' => isset($app['cache.options']) ? $app['cache.options'] : []
+                ];
             }
 
             $tmp = $app['caches.options'];

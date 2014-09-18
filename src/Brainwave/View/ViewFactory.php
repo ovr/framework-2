@@ -71,7 +71,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * All registered custom engines
      * @var array
      */
-    protected $customEngines = array();
+    protected $customEngines = [];
 
     /**
      * Resolve the engine instance
@@ -83,7 +83,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * View data
      * @var array
      */
-    protected $viewData = array();
+    protected $viewData = [];
 
     /**
      * Constructor
@@ -150,7 +150,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         // Next we will register the various engines with the resolver so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
-        $engines = array_merge(array('php' => 'php', 'json' => 'json'), $this->customEngines);
+        $engines = array_merge(['php' => 'php', 'json' => 'json'], $this->customEngines);
 
         foreach ($engines as $engineName => $engineClass) {
             if ($engineName === 'php' || $engineName === 'json') {
@@ -216,7 +216,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @param  string $template Pathname of template file relative to templates directory
      * @api
      */
-    public function make($engine = 'php', $template = null, array $data = array())
+    public function make($engine = 'php', $template = null, array $data = [])
     {
         echo $this->fetch($engine, $template, $data);
     }
@@ -230,7 +230,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @return string           The rendered template
      * @api
      */
-    public function fetch($engine = 'php', $template = null, array $data = array())
+    public function fetch($engine = 'php', $template = null, array $data = [])
     {
         return $this->render($engine, $template, $data);
     }
@@ -240,7 +240,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @var    string $template Pathname of template file relative to templates directory
      * @return string
      */
-    protected function render($engine = 'php', $template = null, array $data = array())
+    protected function render($engine = 'php', $template = null, array $data = [])
     {
         $this->with($data);
 
@@ -303,7 +303,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * @param  array   $data
      * @return $this
      */
-    public function nest($factory, $key, $view, array $data = array())
+    public function nest($factory, $key, $view, array $data = [])
     {
         return $this->with($key, $this->make($factory, $view, $data));
     }

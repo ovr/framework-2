@@ -277,10 +277,10 @@ class DatabaseManager
         }
 
         if (is_string($columns) || is_int($columns)) {
-            $columns = array((string) $columns);
+            $columns = [(string) $columns];
         }
 
-        $stack = array();
+        $stack = [];
 
         foreach ($columns as $key => $value) {
             preg_match('/([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-\*]*)\)/i', $value, $match);
@@ -319,7 +319,7 @@ class DatabaseManager
      */
     public function dataImplode($part, $separator = null)
     {
-        $result = array();
+        $result = [];
         $separator = isset($separator) ? trim($separator): $separator;
 
         if (is_array($part)) {

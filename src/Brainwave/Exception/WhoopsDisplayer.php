@@ -77,16 +77,16 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
 
         $app['whoops.pageHandler']->setPageTitle("We're all going to be fired!");
         /*TODO set all parameter*/
-        $app['whoops.pageHandler']->addDataTable('Brainwave Application', array(
+        $app['whoops.pageHandler']->addDataTable('Brainwave Application', [
             'Charset'          => $request->getContentCharset(),
             'Locale'           => $request->getContentCharset() ?: '<none>',
             //'Route Name'       => $app['route']->getName() ?: '<none>',
             //'Route Pattern'    => $app['route']->getPattern() ?: '<none>',
             //'Route Middleware' => $app['route']->getMiddleware() ?: '<none>',
             'Application Class'=> get_class($app)
-        ));
+        ]);
 
-        $app['whoops.pageHandler']->addDataTable('Brainwave Application (Request)', array(
+        $app['whoops.pageHandler']->addDataTable('Brainwave Application (Request)', [
             'Base URL'    => $request->getUrl(),
             'URI'         => $request->getScriptName(),
             'Request URI' => $request->getPathInfo(),
@@ -98,7 +98,7 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
             'Port'        => $request->getPort(),
             'Protocol'    => $request->getProtocolVersion(),
             'Host'        => $request->getHost(),
-        ));
+        ]);
 
         $app['whoops'] = function () use ($app) {
             // Open with editor if editor is set

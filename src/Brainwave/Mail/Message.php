@@ -187,7 +187,7 @@ class Message
      * @param  array   $options
      * @return \Brainwave\Mail\Message
      */
-    public function attach($file, array $options = array())
+    public function attach($file, array $options = [])
     {
         $attachment = $this->createAttachmentFromPath($file);
         return $this->prepAttachment($attachment, $options);
@@ -212,7 +212,7 @@ class Message
      * @param  array   $options
      * @return \Brainwave\Mail\Message
      */
-    public function attachData($data, $name, array $options = array())
+    public function attachData($data, $name, array $options = [])
     {
         $attachment = $this->createAttachmentFromData($data, $name);
         return $this->prepAttachment($attachment, $options);
@@ -262,7 +262,7 @@ class Message
      * @param  array  $options
      * @return \Brainwave\Mail\Message
      */
-    protected function prepAttachment(\Swift_Attachment $attachment, $options = array())
+    protected function prepAttachment(\Swift_Attachment $attachment, $options = [])
     {
         // First we will check for a MIME type on the message, which instructs the
         // mail client on what type of attachment the file is so that it may be
@@ -301,7 +301,7 @@ class Message
      */
     public function __call($method, $parameters)
     {
-        $callable = array($this->swift, $method);
+        $callable = [$this->swift, $method];
         return call_user_func_array($callable, $parameters);
     }
 }

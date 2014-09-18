@@ -53,7 +53,8 @@ class DependencyResolver implements CallableResolverInterface
      */
     public function build($callable)
     {
-        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        if (is_string($callable) &&
+            preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
 
             $service = $matches[1];
             $method = $matches[2];
@@ -62,7 +63,7 @@ class DependencyResolver implements CallableResolverInterface
                 throw new \InvalidArgumentException('Route key does not exist in Workbench');
             }
 
-            $callable =  array($this->app[$service],$method);
+            $callable =  [$this->app[$service],$method];
         }
 
         if (!is_callable($callable)) {

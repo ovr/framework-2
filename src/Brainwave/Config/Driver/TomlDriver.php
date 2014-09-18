@@ -43,7 +43,7 @@ class TomlDriver implements DriverInterface
         }
 
         $config = Toml::Parse($filename);
-        return $config ?: array();
+        return $config ?: [];
     }
 
     /**

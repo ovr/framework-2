@@ -33,7 +33,7 @@ interface EnginesInterface
     * @param  array   $data
     * @return string
     */
-    public function get(array $data = array());
+    public function get(array $data = []);
 
    /**
     * Set path

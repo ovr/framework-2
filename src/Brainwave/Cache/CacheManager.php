@@ -40,7 +40,7 @@ class CacheManager
      * @param array $drivers The list of available drivers, key=driver name, value=driver class
      * @param array $options Options to pass to the driver
      */
-    public function __construct(array $drivers, array $options = array())
+    public function __construct(array $drivers, array $options = [])
     {
         $this->drivers = $drivers;
         $this->options = $options;
@@ -52,7 +52,7 @@ class CacheManager
      * @param array $options Options to pass to the driver
      * @return AbstractCache
      */
-    public function getCache($driver, array $options = array())
+    public function getCache($driver, array $options = [])
     {
         if (!$this->driverExists($driver)) {
             throw new CacheException('The cache driver "'.$driver.'" is not supported by the bundle.');

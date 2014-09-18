@@ -31,4 +31,5 @@ namespace Brainwave\Workbench\Exception;
  */
 class Stop extends \Exception
 {
+
 }

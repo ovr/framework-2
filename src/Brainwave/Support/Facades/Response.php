@@ -44,16 +44,16 @@ class Response extends StaticalProxy
      * @param  int    $options
      * @return \Brainwave\Http\Response
      */
-    public static function json($data = array(), $status = 200, array $headers = array(), $options = 0)
+    public static function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
         $app = StaticalProxy::getFacadeApp();
 
         $jsonData = array_merge(
             $data,
-            array(
+            [
                 'options' => $options,
                 'j.headers' => $headers
-            )
+            ]
         );
 
         $app['view']->make('json', $status, $jsonData);

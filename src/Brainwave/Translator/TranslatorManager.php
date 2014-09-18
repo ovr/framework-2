@@ -45,7 +45,7 @@ class TranslatorManager implements TranslatorInterface
      *
      * @var array
      */
-    protected $translations = array();
+    protected $translations = [];
 
     /**
      * [$loader description]
@@ -59,7 +59,7 @@ class TranslatorManager implements TranslatorInterface
      *
      * @var array
      */
-    protected $validLangs = array(
+    protected $validLangs = [
         'af', //afrikaans
         'ar', //arabic
         'cz', //czech
@@ -95,7 +95,7 @@ class TranslatorManager implements TranslatorInterface
         'cy', //welsh
         'be', //belarusian
         'bs'  //bosnian
-    );
+    ];
 
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
@@ -171,7 +171,7 @@ class TranslatorManager implements TranslatorInterface
         if (isset($this->translations[$language])) {
             return $this->translations[$language];
         }
-        return array();
+        return [];
     }
 
     /**
@@ -187,7 +187,7 @@ class TranslatorManager implements TranslatorInterface
         $this->checkLang($language);
 
         if (!isset($this->translations[$language])) {
-            $this->translations[$language] = array();
+            $this->translations[$language] = [];
         }
 
         $this->translations[$language][$orig] = $translation;
@@ -394,7 +394,7 @@ class TranslatorManager implements TranslatorInterface
      *
      * @return string
      */
-    private function applyReplacements($message, array $args = array())
+    private function applyReplacements($message, array $args = [])
     {
         $replacements = $this->replacements;
 

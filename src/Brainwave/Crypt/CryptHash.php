@@ -94,9 +94,9 @@ class CryptHash
     /**
     * Salt charsets.
     */
-    public $charsets = array(
+    public $charsets = [
     'itoa64' => './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-    );
+    ];
 
     /**
      * [__construct description]
@@ -178,7 +178,7 @@ class CryptHash
 
         switch($hashInfo['algo']) {
             case self::PBKDF2:
-                $param = array();
+                $param = [];
                 list( , , $params, $hash, $salt) = explode('$', $hash);
                 parse_str($params, $param);
 
@@ -255,7 +255,7 @@ class CryptHash
             case self::SHA256:
             case self::SHA512:
             case self::PBKDF2:
-                $param = array();
+                $param = [];
                 list( , , $params) = explode('$', $hash);
                 parse_str($params, $param);
                 $info['options'] = $param;
@@ -263,9 +263,9 @@ class CryptHash
 
             case self::BCRYPT:
                 list( , , $cost) = explode('$', $hash);
-                $info['options'] = array(
+                $info['options'] = [
                     'cost' => $cost,
-                );
+                ];
                 break;
         }
         $info['algo'] = $method;

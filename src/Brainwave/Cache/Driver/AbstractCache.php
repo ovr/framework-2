@@ -30,7 +30,7 @@ use \Brainwave\Cache\Interfaces\CacheInterface;
  */
 abstract class AbstractCache implements CacheInterface
 {
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
 
     }

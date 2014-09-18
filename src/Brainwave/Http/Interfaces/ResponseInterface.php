@@ -72,7 +72,7 @@ interface ResponseInterface
 
     public function setCookie($name, $value);
 
-    public function removeCookie($name, $settings = array());
+    public function removeCookie($name, $settings = []);
 
     public function encryptCookies(CryptInterface $crypt);
 

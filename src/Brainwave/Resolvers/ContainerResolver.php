@@ -53,13 +53,13 @@ class AppResolver implements CallableResolverInterface
      */
     public function build($callable)
     {
-        $matches = array();
+        $matches = [];
         if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
             $app = $this->app;
 
-            $callable = function() use ($class, $method, $app) {
+            $callable = function () use ($class, $method, $app) {
                 static $obj = null;
                 if ($obj === null) {
                     $obj = new $class($app);

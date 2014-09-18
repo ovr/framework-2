@@ -38,7 +38,7 @@ class IniDriver implements DriverInterface
     public function load($filename)
     {
         $config = @parse_ini_file($filename, true);
-        return $config ?: array();
+        return $config ?: [];
     }
 
     /**
@@ -66,7 +66,7 @@ class IniDriver implements DriverInterface
      * @param  array  $parent data
      * @return string data export
      */
-    protected function iniFormat(array $data, array $parent = array())
+    protected function iniFormat(array $data, array $parent = [])
     {
         $out = '';
 

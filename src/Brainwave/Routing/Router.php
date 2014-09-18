@@ -78,8 +78,8 @@ class Router implements RouterInterface
      */
     public function __construct()
     {
-        $this->routing = array();
-        $this->currentMiddleware = array();
+        $this->routing = [];
+        $this->currentMiddleware = [];
     }
 
     /**
@@ -122,7 +122,7 @@ class Router implements RouterInterface
      */
     public function getMatchedRoutes($httpMethod, $resourceUri, $save = true)
     {
-        $matchedRoutes = array();
+        $matchedRoutes = [];
 
         foreach ($this->routing as $route) {
             if (!$route->supportsHttpMethod($httpMethod) && !$route->supportsHttpMethod("ANY")) {
@@ -151,7 +151,7 @@ class Router implements RouterInterface
         if (null === $pattern) {
             return $this->routing;
         } else {
-            $routes = array();
+            $routes = [];
             foreach ($this->routing as $route) {
                 if ($route->getPattern() == $pattern) {
                     $routes[] = $route;
@@ -168,7 +168,7 @@ class Router implements RouterInterface
      */
     public function getMethodsAvailable($pattern)
     {
-        $methods = array();
+        $methods = [];
         foreach ($this->getAllRoutes($pattern) as $route) {
             $methods = array_merge($route->getHttpMethods(), $methods);
         }
@@ -204,7 +204,7 @@ class Router implements RouterInterface
      * @throws \RuntimeException         If named route not found
      * @api
      */
-    public function urlFor($name, $params = array())
+    public function urlFor($name, $params = [])
     {
         $cacheKey = md5($name . serialize($params));
 
@@ -291,7 +291,7 @@ class Router implements RouterInterface
     public function getNamedRoutes()
     {
         if (is_null($this->namedRouting)) {
-            $this->namedRouting = array();
+            $this->namedRouting = [];
             foreach ($this->routing as $route) {
                 if ($route->getName() !== null) {
                     $this->addNamedRoute($route->getName(), $route);

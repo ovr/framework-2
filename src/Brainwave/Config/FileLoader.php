@@ -40,7 +40,7 @@ class FileLoader implements LoaderInterface
      * The filesystem instance.
      * @var array
      */
-    protected $files = array();
+    protected $files = [];
 
     /**
      * The default configuration path.
@@ -53,7 +53,7 @@ class FileLoader implements LoaderInterface
      *
      * @var array
      */
-    protected $exists = array();
+    protected $exists = [];
 
     /**
      * Create a new file configuration loader.

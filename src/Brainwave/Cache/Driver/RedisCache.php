@@ -38,7 +38,7 @@ class RedisCache extends AbstractCache
     /**
      * {@inheritdoc}
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['redis']) || !$options['redis'] instanceof \Redis) {
             $options['redis'] = new \Redis;

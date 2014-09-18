@@ -41,7 +41,7 @@ class CompilerEngine extends PhpEngine
      * A stack of the last compiled templates.
      * @var array
      */
-    protected $lastCompiled = array();
+    protected $lastCompiled = [];
 
     /**
      * Create a view engine instance.
@@ -59,7 +59,7 @@ class CompilerEngine extends PhpEngine
      * @param  array   $data
      * @return string
      */
-    public function get($path, array $data = array())
+    public function get($path, array $data = [])
     {
         $this->lastCompiled[] = $path;
 

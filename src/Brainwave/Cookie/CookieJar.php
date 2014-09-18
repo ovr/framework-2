@@ -49,14 +49,14 @@ class CookieJar extends Collection implements CookiesJarInterface
      * Default cookie settings
      * @var array
      */
-    protected $defaults = array(
+    protected $defaults = [
         'value' => '',
         'domain' => null,
         'path' => null,
         'expires' => null,
         'secure' => false,
         'httponly' => false
-    );
+    ];
 
     /**
      * Constructor, will parse headers for cookie information if present
@@ -91,7 +91,7 @@ class CookieJar extends Collection implements CookiesJarInterface
         if (is_array($value)) {
             $settings = array_replace($this->defaults, $value);
         } else {
-            $settings = array_replace($this->defaults, array('value' => $value));
+            $settings = array_replace($this->defaults, ['value' => $value]);
         }
 
         parent::set($key, $settings);
@@ -109,7 +109,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      * @param array  $settings Optional cookie settings
      * @api
      */
-    public function remove($key, $settings = array())
+    public function remove($key, $settings = [])
     {
         $settings['value'] = '';
         $settings['expires'] = time() - 86400;
@@ -164,7 +164,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      */
     public function setHeader(HeadersInterface &$headers, $name, $value)
     {
-        $values = array();
+        $values = [];
 
         if (is_array($value)) {
             if (isset($value['domain']) && $value['domain']) {
@@ -207,7 +207,7 @@ class CookieJar extends Collection implements CookiesJarInterface
         if (!$headers->has('Set-Cookie') || $headers->get('Set-Cookie') === '') {
             $headers->set('Set-Cookie', $cookie);
         } else {
-            $headers->set('Set-Cookie', implode("\n", array($headers->get('Set-Cookie'), $cookie)));
+            $headers->set('Set-Cookie', implode("\n", [$headers->get('Set-Cookie'), $cookie]));
         }
     }
 
@@ -229,10 +229,10 @@ class CookieJar extends Collection implements CookiesJarInterface
      * @param array                                  $value
      * @api
      */
-    public function deleteHeader(HeadersInterface &$headers, $name, $value = array())
+    public function deleteHeader(HeadersInterface &$headers, $name, $value = [])
     {
-        $crumbs = ($headers->has('Set-Cookie') ? explode("\n", $headers->get('Set-Cookie')) : array());
-        $cookies = array();
+        $crumbs = ($headers->has('Set-Cookie') ? explode("\n", $headers->get('Set-Cookie')) : []);
+        $cookies = [];
 
         foreach ($crumbs as $crumb) {
             if (isset($value['domain']) && $value['domain']) {
@@ -256,12 +256,12 @@ class CookieJar extends Collection implements CookiesJarInterface
             $headers,
             $name,
             array_merge(
-                array(
+                [
                     'value' => '',
                     'path' => null,
                     'domain' => null,
                     'expires' => time() - 100
-                ),
+                ],
                 $value
             )
         );
@@ -281,7 +281,7 @@ class CookieJar extends Collection implements CookiesJarInterface
     {
         $header = rtrim($header, "\r\n");
         $pieces = preg_split('@\s*[;,]\s*@', $header);
-        $cookies = array();
+        $cookies = [];
 
         foreach ($pieces as $cookie) {
             $cookie = explode('=', $cookie, 2);

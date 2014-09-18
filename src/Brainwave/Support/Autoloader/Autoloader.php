@@ -33,7 +33,7 @@ class Autoloader
      *
      * @var array
      */
-    protected static $directories = array();
+    protected static $directories = [];
 
     /**
      * Indicates if a ClassLoader has been registered.
@@ -109,7 +109,7 @@ class Autoloader
     public static function removeDirectories($directories = null)
     {
         if (is_null($directories)) {
-            static::$directories = array();
+            static::$directories = [];
         } else {
             static::$directories = array_diff(static::$directories, (array) $directories);
         }

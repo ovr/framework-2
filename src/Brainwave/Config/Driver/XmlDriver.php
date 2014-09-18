@@ -38,8 +38,8 @@ class XmlDriver implements DriverInterface
     public function load($filename)
     {
         $config = require $filename;
-        $config = (1 === $config) ? array() : $config;
-        return $config ?: array();
+        $config = (1 === $config) ? [] : $config;
+        return $config ?: [];
     }
 
     /**

@@ -35,7 +35,7 @@ interface CookiesJarInterface extends CollectionInterface
 
     public function setHeader(HeadersInterface &$headers, $name, $value);
 
-    public function deleteHeader(HeadersInterface &$headers, $name, $value = array());
+    public function deleteHeader(HeadersInterface &$headers, $name, $value = []);
 
     public function parseHeader($header);
 }

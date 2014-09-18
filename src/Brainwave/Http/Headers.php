@@ -46,14 +46,14 @@ class Headers extends Collection implements HeadersInterface
      * Special header keys to treat like HTTP_ headers
      * @var array
      */
-    protected $special = array(
+    protected $special = [
         'CONTENT_TYPE',
         'CONTENT_LENGTH',
         'PHP_AUTH_USER',
         'PHP_AUTH_PW',
         'PHP_AUTH_DIGEST',
         'AUTH_TYPE'
-    );
+    ];
 
     /**
      * Constructor, will parse an environment for headers if present
@@ -151,7 +151,7 @@ class Headers extends Collection implements HeadersInterface
     public function normalizeKey($key)
     {
         $key = strtolower($key);
-        $key = str_replace(array('-', '_'), ' ', $key);
+        $key = str_replace(['-', '_'], ' ', $key);
         $key = preg_replace('#^http #', '', $key);
         $key = ucwords($key);
         $key = str_replace(' ', '-', $key);

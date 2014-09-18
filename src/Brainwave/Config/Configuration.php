@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      *
      * @var array
      */
-    protected $values = array();
+    protected $values = [];
 
     /**
      * Config folder path

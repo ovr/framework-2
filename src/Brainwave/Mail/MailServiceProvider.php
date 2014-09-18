@@ -66,7 +66,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
             // If a "from" address is set, we will set it on the mailer so that all mail
             // messages sent by the applications will utilize the same "from" address
             // on each one, which makes the developer's life a lot more convenient.
-            $from = $app['settings']->get('mail.from', array());
+            $from = $app['settings']->get('mail.from', []);
 
             if (is_array($from) && isset($from['address'])) {
                 $mailer->alwaysFrom($from['address'], $from['name']);
@@ -214,7 +214,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerMailgunTransport($config)
     {
-        $mailgun = $config->get('services.mailgun', array());
+        $mailgun = $config->get('services.mailgun', []);
 
         $$this->app['swift.transport'] = function () use ($mailgun) {
             return new MailgunTransport($mailgun['secret'], $mailgun['domain']);
@@ -229,7 +229,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerMandrillTransport($config)
     {
-        $mandrill = $this->app['config']->get('services.mandrill', array());
+        $mandrill = $this->app['config']->get('services.mandrill', []);
 
         $this->app['swift.transport'] = function () use ($mandrill) {
             return new MandrillTransport($mandrill['secret']);
