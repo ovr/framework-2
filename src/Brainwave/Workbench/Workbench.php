@@ -25,24 +25,19 @@ use \Pimple\Container;
 use \Brainwave\Support\Arr;
 use \Brainwave\Http\Headers;
 use \Brainwave\Http\Request;
-use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
-use \Brainwave\Routing\RouteFactory;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
 use \Brainwave\Workbench\StaticalProxy;
 use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
-use \Brainwave\Resolvers\CallableResolver;
 use \Brainwave\Exception\ExceptionHandler;
-use \Brainwave\Resolvers\ContainerResolver;
 use \Brainwave\Config\ConfigurationHandler;
-use \Brainwave\Resolvers\DependencyResolver;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Workbench\StaticalProxyResolver;
@@ -236,6 +231,11 @@ class Workbench extends Container
             return new Environment($_SERVER);
         };
 
+        // Register providers
+        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
+            $this->register(new $provider, $arr);
+        }
+
         // Request
         $this['request'] = function ($c) {
             $environment = $c['environment'];
@@ -264,60 +264,10 @@ class Workbench extends Container
             return $exception;
         };
 
-        // Route
-        $this['route.factory'] = function ($c) {
-            return new RouteFactory($c, $c['route.resolver']);
-        };
-
-        // Route factory resolver
-        $this['route.resolver'] = function ($c) {
-            $options = [
-                'route_class'    => $c['settings']->get('route.class', null),
-                'case_sensitive' => $c['settings']->get('route.case_sensitive', true),
-            ];
-
-            return function ($pattern, $callable) use ($options) {
-                return new $options['route_class']($pattern, $callable, $options['case_sensitive']);
-            };
-        };
-
-        // Route Callable Resolver
-        $this['resolver'] = function ($c) {
-
-            $resolverCofig = $c['settings']->get('callable.resolver', 'CallableResolver');
-
-            if ($resolverCofig == 'DependencyResolver') {
-                $resolver = new DependencyResolver($c);
-            } elseif ($resolverCofig == 'ContainerResolver') {
-                $resolver = new ContainerResolver($c);
-            } elseif ($resolverCofig == 'CallableResolver') {
-                $resolver = new CallableResolver();
-            } else {
-                throw new \Exception("Set a Callable Resolver");
-            }
-
-            return $resolver;
-        };
-
-        // Route
-        $this['route'] = function ($c) {
-            return new Route(
-                null,
-                null,
-                $c['settings']->get('route.case_sensitive', true),
-                $c['settings']->get('route.escape ', false)
-            );
-        };
-
         // Controllers factory
         $this['controllers.factory'] = function ($c) {
-            return new ControllerCollection($c['route'], $c['router']);
+            return new ControllerCollection($c['route.resolver'], $c['router']);
         };
-
-        // Register providers
-        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
-            $this->register(new $provider, $arr);
-        }
 
         // Set Loader an Path
         $this['translator']->setLoader(new FileLoader)->addPath(static::$paths['path.app']);

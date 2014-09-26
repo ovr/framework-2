@@ -21,6 +21,7 @@ namespace Brainwave\Routing;
 use \Pimple\Container;
 use \Brainwave\Routing\Router;
 use \Brainwave\Routing\Redirector;
+use \Brainwave\Routing\RouteFactory;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;
 
@@ -40,6 +41,8 @@ class RoutingServiceProvider implements ServiceProviderInterface
     {
         $this->app = $app;
         $this->registerRouter();
+        $this->registerRouteResolver();
+        $this->registerRouteFactory();
         $this->registerUrlGenerator();
         $this->registerRedirector();
     }
@@ -82,6 +85,38 @@ class RoutingServiceProvider implements ServiceProviderInterface
     {
         $this->app['redirect'] = function ($app) {
             return new Redirector($app['url']);
+        };
+    }
+
+    /**
+     * Register the Route factory resolver service.
+     *
+     * @return void
+     */
+    protected function registerRouteResolver()
+    {
+        $this->app['route.resolver'] = function ($c) {
+            $options = [
+                'route_class'    => $c['settings']->get('route.class', null),
+                'case_sensitive' => $c['settings']->get('route.case_sensitive', true),
+                'route_escape'   => $c['settings']->get('route.escape ', false)
+            ];
+
+            return function ($pattern, $callable) use ($options) {
+                return new $options['route_class']($pattern, $callable, $options['case_sensitive'], $options['route_escape']);
+            };
+        };
+    }
+
+    /**
+     * Register Route service.
+     *
+     * @return void
+     */
+    protected function registerRouteFactory()
+    {
+        $this->app['route.factory'] = function ($c) {
+            return new RouteFactory($c, $c['route.resolver']);
         };
     }
 }
