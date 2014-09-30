@@ -18,7 +18,8 @@ namespace Brainwave\Support\Serializes;
  *
  */
 
-use \Brainwave\Support\Serializes\Interfaces\SerializesInterface;
+use \Brainwave\Support\Serializes\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Support\Serializes\Encoder\Interfaces\DecoderInterface;
 
 /**
  * Stringset    Serializes cache data using a stringset (appendset) such as:
@@ -29,7 +30,7 @@ use \Brainwave\Support\Serializes\Interfaces\SerializesInterface;
  * @since   0.9.2-dev
  *
  */
-class Stringset implements SerializesInterface
+class Stringset implements EncoderInterface, DecoderInterface
 {
     /**
      * Holds this string dirtiness.

@@ -18,7 +18,7 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Cookie\Interfaces\CookieInterface;
 
@@ -34,7 +34,7 @@ class Cookie implements CookieInterface
 {
     protected $app;
 
-    public function __construct($app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
     }

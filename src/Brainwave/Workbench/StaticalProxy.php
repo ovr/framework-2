@@ -37,6 +37,12 @@ class StaticalProxy extends StaticalProxyManager
      */
     protected static $brainwave;
 
+     /**
+     * Brainwave\Workbench\Workbench
+     * @var bool
+     */
+    protected static $app;
+
     /**
      * All alias for statical proxy
      * @var [type]

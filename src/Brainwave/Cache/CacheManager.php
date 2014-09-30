@@ -101,7 +101,7 @@ class CacheManager
         // here and cache it so we can return it next time very quickly. If there is
         // already a driver created by this name, we'll just return that instance.
         if (!isset($this->drivers[$driver])) {
-            $this->drivers[$driver] = $this->createDriver($driver);
+            $this->drivers[$driver] = $this->createDriver($driver, $options);
         }
 
         $class = $this->drivers[$driver];

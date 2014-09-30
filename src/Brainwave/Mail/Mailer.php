@@ -20,11 +20,8 @@ namespace Brainwave\Mail;
 
 use \Swift_Mailer;
 use \Swift_Message;
-use \Swift_MailTransport;
-use \Swift_SmtpTransport;
 use \Brainwave\Log\Writer;
 use \Brainwave\Mail\Message;
-use \Swift_SendmailTransport;
 use \Brainwave\View\Interfaces\ViewInterface;
 
 /**

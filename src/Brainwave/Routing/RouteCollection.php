@@ -21,6 +21,7 @@ namespace Brainwave\Routing;
 use \Countable;
 use \ArrayIterator;
 use \IteratorAggregate;
+use \Brainwave\Support\Arr;
 use \Brainwave\Http\Request;
 use \Brainwave\Http\Response;
 use \Brainwave\Http\Exception\NotFoundHttpException;
@@ -234,7 +235,7 @@ class RouteCollection implements Countable, IteratorAggregate
      */
     protected function check(array $routes, Request $request, $includingMethod = true)
     {
-        return array_first($routes, function ($key, $value) use ($request, $includingMethod) {
+        return Arr::arrayFirst($routes, function ($key, $value) use ($request, $includingMethod) {
             return $value->matches($request, $includingMethod);
         });
     }

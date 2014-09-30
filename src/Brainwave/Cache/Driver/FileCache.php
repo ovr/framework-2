@@ -19,7 +19,6 @@ namespace Brainwave\Cache\Driver;
  */
 
 use \Brainwave\Support\Arr;
-use \Brainwave\Cache\CacheItem;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 use \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface;
 

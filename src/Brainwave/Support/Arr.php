@@ -163,7 +163,7 @@ class Arr
      */
     public static function arrayLast($array, $callback, $default = null)
     {
-        return array_first(array_reverse($array), $callback, $default);
+        return arrayFirst(array_reverse($array), $callback, $default);
     }
 
     /**

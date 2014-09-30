@@ -20,7 +20,6 @@ namespace Brainwave\Cache;
 
 use \Carbon\Carbon;
 use \Brainwave\Cache\Psr\Cache\CacheItemInterface;
-use \Brainwave\Cache\Interfaces\Driver\DriverInterface;
 use \Brainwave\Cache\Exception\InvalidArgumentException;
 
 /**

@@ -71,7 +71,7 @@ class Workbench extends Container
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.9.1-dev';
+    const BRAINWAVE_VERSION = '0.9.2-dev';
 
     /**
      * Has the app response been sent to the client?

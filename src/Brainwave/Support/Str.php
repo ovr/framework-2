@@ -320,18 +320,6 @@ class Str
     }
 
     /**
-     * Register a custom string macro.
-     *
-     * @param  string    $name
-     * @param  callable  $macro
-     * @return void
-     */
-    public static function macro($name, $macro)
-    {
-        static::$macros[$name] = $macro;
-    }
-
-    /**
      * Magic call to intercept any function pass to it.
      *
      * @param string $func The function to call.

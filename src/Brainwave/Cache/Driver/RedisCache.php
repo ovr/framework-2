@@ -19,7 +19,6 @@ namespace Brainwave\Cache\Driver;
  */
 
 use \Predis\Client as Client;
-use \Brainwave\Cache\CacheItem;
 use \Brainwave\Cache\Tag\TaggableStore;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 

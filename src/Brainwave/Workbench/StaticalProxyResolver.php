@@ -35,7 +35,7 @@ class StaticalProxyResolver
      * @param  string $facade
      * @return resolved class
      */
-    public function resolve($facade)
+    public function resolve(object $facade)
     {
         if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
             $rootClass = get_class($facade::getFacadeRoot());

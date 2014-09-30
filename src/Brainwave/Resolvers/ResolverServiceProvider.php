@@ -47,7 +47,7 @@ class ResolverServiceProvider implements ServiceProviderInterface
                     break;
 
                 case 'ContainerResolver':
-                    return new CallableResolver();
+                    return new ContainerResolver();
                     break;
 
                 case 'CallableResolver':

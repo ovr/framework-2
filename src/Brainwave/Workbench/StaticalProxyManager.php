@@ -30,7 +30,6 @@ use \Mockery\MockInterface;
  */
 abstract class StaticalProxyManager
 {
-
     /**
      * The application instance being facaded.
      *
@@ -211,7 +210,9 @@ abstract class StaticalProxyManager
      */
     public static function setFacadeApp($app)
     {
-        static::$app = $app;
+        self::$app = $app;
+
+        return self;
     }
 
     /**

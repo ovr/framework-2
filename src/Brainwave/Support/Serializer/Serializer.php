@@ -19,17 +19,59 @@ namespace Brainwave\Support\Serializes;
  */
 
 use \Brainwave\Support\Serializes\Interfaces\SerializesInterface;
+use \Brainwave\Support\Serializes\Interfaces\SerializerAwareInterface;
 
 /**
- * None    Blank/null/none serializer.
+ * Igbinary    Serializes cache data using the IgBinary extension.
  *
+ * @see https://github.com/IgBinary/IgBinary
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class None implements SerializesInterface
+class Serializer implements SerializesInterface, SerializerAwareInterface
 {
+    /**
+     * @var Serializer\Adapter
+     */
+    protected $serializer;
+
+    /**
+     * [__construct description]
+     * @param [type] $name [description]
+     */
+    public function __construct($name)
+    {
+        $this->setSerializer($name);
+    }
+
+    /**
+     * Sets the serializer.
+     *
+     * @param string $serializer
+     */
+    protected function setSerializer($serializer)
+    {
+        if (null === $name) {
+            $this->serializer = null;
+        } else {
+            $classname = __NAMESPACE__ . '\Serializer\\';
+            $classname .= ucfirst(strtolower($name));
+            $this->serializer = new $classname();
+        }
+    }
+
+    /**
+     * Gets the serializer.
+     *
+     * @return Serializer\Adapter
+     */
+    public function getSerializer()
+    {
+        return $this->serializer;
+    }
+
     /**
      * Serialises mixed data as a string.
      *
@@ -38,7 +80,7 @@ class None implements SerializesInterface
      */
     public function serialize($data)
     {
-        return $data;
+
     }
 
     /**
@@ -49,7 +91,7 @@ class None implements SerializesInterface
      */
     public function unserialize($str)
     {
-        return $str;
+
     }
 
     /**
@@ -60,6 +102,6 @@ class None implements SerializesInterface
      */
     public function isSerialized($str)
     {
-        return false;
+
     }
 }

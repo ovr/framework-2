@@ -29,20 +29,27 @@ namespace Brainwave\Support\Serializer\Interfaces;
 interface SerializerInterface
 {
     /**
-     * Serialises mixed data as a string.
+     * Serializes data in the appropriate format
      *
-     * @param  mixed        $data
-     * @return string|mixed
+     * @param mixed  $data    any data
+     * @param string $format  format name
+     * @param array  $context options normalizers/encoders have access to
+     *
+     * @return string
      */
-    public function serialize($data);
+    public function serialize($data, $format, array $context = array());
 
     /**
-     * Unserialises a string representation as mixed data.
+     * Deserializes data into the given type.
      *
-     * @param  string       $str
-     * @return mixed|string
+     * @param mixed  $data
+     * @param string $type
+     * @param string $format
+     * @param array  $context
+     *
+     * @return object
      */
-    public function unserialize($str);
+    public function deserialize($data, $type, $format, array $context = array());
 
     /**
      * Checks if the input is a serialized string representation.

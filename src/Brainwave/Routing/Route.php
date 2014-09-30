@@ -30,68 +30,79 @@ use \Brainwave\Routing\Interfaces\RouteInterface;
  */
 class Route implements RouteInterface
 {
-/**
+    /**
      * The route pattern (e.g. "/hello/:first/:name")
+     *
      * @var string
      */
     protected $pattern;
 
     /**
      * The route callable
+     *
      * @var mixed
      */
     protected $callable;
 
     /**
      * The Route context
+     *
      * @var mixed
      */
     protected $context;
 
     /**
      * Conditions for this route's URL parameters
+     *
      * @var array
      */
     protected $conditions = [];
 
     /**
      * Default conditions applied to all route instances
+     *
      * @var array
      */
     protected static $defaultConditions = [];
 
     /**
      * The name of this route (optional)
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Array of URL parameters
+     *
      * @var array
      */
     protected $params = [];
 
     /**
      * Array of URL parameter names
+     *
      * @var array
      */
     protected $paramNames = [];
 
     /**
      * Array of URL parameter names with at the end
+     *
      * @var array
      */
     protected $paramNamesPath = [];
 
     /**
      * HTTP methods supported by this route
+     *
      * @var array
      */
     protected $methods = [];
 
     /**
      * Middleware to be invoked before immediately before this route is dispatched
+     *
      * @var array[Callable]
      */
     protected $middleware = [];
@@ -103,18 +114,21 @@ class Route implements RouteInterface
 
     /**
      * Controller constructor dependencies
+     *
      * @var array
      */
     protected $controllerDependencies = [];
 
     /**
      * Array of Controller Constructor Parameters
+     *
      * @var array
      */
     protected $constructorParams = [];
 
     /**
      * Determine is the route pattern should be escaped or not
+     *
      * @var bool
      */
     protected $escapePattern;
@@ -143,18 +157,19 @@ class Route implements RouteInterface
         }
 
         $this->setEscapePattern($escapePattern);
-        $this->setConditions(static::getDefaultConditions());
+        $this->setConditions(self::$defaultConditions);
         $this->caseSensitive = $caseSensitive;
     }
 
     /**
      * Set default route conditions for all Routing
+     *
      * @param  array $defaultConditions
      * @api
      */
     public static function setDefaultConditions(array $defaultConditions)
     {
-        static::$defaultConditions = $defaultConditions;
+        self::$defaultConditions = $defaultConditions;
         return self;
     }
 
@@ -165,11 +180,12 @@ class Route implements RouteInterface
      */
     public static function getDefaultConditions()
     {
-        return static::$defaultConditions;
+        return self::$defaultConditions;
     }
 
     /**
      * Get escapePattern
+     *
      * @return bool
      * @api
      */
@@ -180,6 +196,7 @@ class Route implements RouteInterface
 
     /**
      * Set escapePattern
+     *
      * @param bool $escapePattern
      * @api
      */
@@ -190,6 +207,7 @@ class Route implements RouteInterface
 
     /**
      * Get route pattern
+     *
      * @return string
      * @api
      */
@@ -200,6 +218,7 @@ class Route implements RouteInterface
 
     /**
      * Set route pattern
+     *
      * @param  string $pattern
      * @api
      */
@@ -211,7 +230,9 @@ class Route implements RouteInterface
 
     /**
      * Parses controller string to an almost callable array
+     *
      * @param string $callable
+     *
      * @return bool|array
      */
     public static function stringToCallable($callable)
@@ -228,6 +249,7 @@ class Route implements RouteInterface
 
     /**
      * [getControllerDependencies description]
+     *
      * @return [type] [description]
      */
     public function getControllerDependencies()
@@ -237,7 +259,9 @@ class Route implements RouteInterface
 
     /**
      * Description
+     *
      * @param type $controllerDependencies
+     *
      * @return type
      */
     public function setControllerDependencies($controllerDependencies)
@@ -247,6 +271,7 @@ class Route implements RouteInterface
 
     /**
      * Get route callable
+     *
      * @return mixed
      * @api
      */
@@ -272,6 +297,7 @@ class Route implements RouteInterface
 
     /**
      * Set route callable
+     *
      * @param  mixed                     $callable
      * @throws \InvalidArgumentException If argument is not callable
      * @api
@@ -284,6 +310,7 @@ class Route implements RouteInterface
 
     /**
      * Get route conditions
+     *
      * @return array
      * @api
      */
@@ -294,6 +321,7 @@ class Route implements RouteInterface
 
     /**
      * Set route conditions
+     *
      * @param  array $conditions
      * @api
      */
@@ -328,6 +356,7 @@ class Route implements RouteInterface
 
     /**
      * Get route name (this may be null if not set)
+     *
      * @return string|null
      * @api
      */
@@ -338,6 +367,7 @@ class Route implements RouteInterface
 
     /**
      * Set route name
+     *
      * @param string $name
      * @api
      */
@@ -349,6 +379,7 @@ class Route implements RouteInterface
 
     /**
      * Get route parameters
+     *
      * @return array
      * @api
      */
@@ -359,6 +390,7 @@ class Route implements RouteInterface
 
     /**
      * Set route parameters
+     *
      * @param  array $params
      * @api
      */
@@ -370,6 +402,7 @@ class Route implements RouteInterface
 
     /**
      * Get constructor parameters
+     *
      * @return array
      * @api
      */
@@ -380,6 +413,7 @@ class Route implements RouteInterface
 
     /**
      * Set constructor parameters
+     *
      * @param  array $params
      * @api
      */
@@ -391,6 +425,7 @@ class Route implements RouteInterface
 
     /**
      * Get route parameter value
+     *
      * @param  string                    $index Name of URL parameter
      * @return string
      * @throws \InvalidArgumentException        If route parameter does not exist at index
@@ -407,6 +442,7 @@ class Route implements RouteInterface
 
     /**
      * Set route parameter value
+     *
      * @param  string                    $index     Name of URL parameter
      * @param  mixed                     $value     The new parameter value
      * @return void
@@ -435,6 +471,7 @@ class Route implements RouteInterface
 
     /**
      * Get supported HTTP methods
+     *
      * @return array
      * @api
      */
@@ -458,6 +495,7 @@ class Route implements RouteInterface
 
     /**
      * Append supported HTTP methods (alias for Route::appendHttpMethods)
+     *
      * @return Route
      * @api
      */
@@ -473,6 +511,7 @@ class Route implements RouteInterface
 
     /**
      * Detect support for an HTTP method
+     *
      * @param  string $method
      * @return bool
      * @api
@@ -484,6 +523,7 @@ class Route implements RouteInterface
 
     /**
      * Get middleware
+     *
      * @return array[Callable]
      * @api
      */
@@ -503,6 +543,7 @@ class Route implements RouteInterface
      * and an InvalidArgumentException is thrown immediately if it isn't.
      *
      * @param  Callable|array[Callable]
+     * 
      * @return Route
      * @throws \InvalidArgumentException If argument is not callable or not an array of callables.
      * @api
@@ -534,6 +575,7 @@ class Route implements RouteInterface
      * http://blog.sosedoff.com/2009/09/20/rails-like-php-url-router/
      *
      * @param  string $resourceUri A Request URI
+     * 
      * @return bool
      * @api
      */
@@ -593,7 +635,9 @@ class Route implements RouteInterface
 
     /**
      * Convert a URL parameter (e.g. ":id", ":id") into a regular expression
+     *
      * @param  array  $m URL parameters
+     *
      * @return string    Regular expression for URL parameter
      */
     protected function matchesCallback($m)
@@ -613,7 +657,9 @@ class Route implements RouteInterface
 
     /**
      * Set route name
+     *
      * @param  string      $name The name of the route
+     *
      * @return Route
      * @api
      */
@@ -625,7 +671,9 @@ class Route implements RouteInterface
 
     /**
      * Merge route conditions
+     *
      * @param  array       $conditions Key-value array of URL parameter conditions
+     *
      * @return Route
      * @api
      */
@@ -643,7 +691,9 @@ class Route implements RouteInterface
      * the order specified.
      *
      * @return bool
+     *
      * @param  mixed  $context the object context in which the callable should be invoked
+     *
      * @return object          The return value of the route callable, or FALSE on error
      * @api
      */

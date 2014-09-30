@@ -50,9 +50,9 @@ class Autoloader
      */
     public static function load($class)
     {
-        $class = static::normalizeClass($class);
+        $class = self::normalizeClass($class);
 
-        foreach (static::$directories as $directory) {
+        foreach (self::$directories as $directory) {
             if (file_exists($path = $directory.DIRECTORY_SEPARATOR.$class)) {
                 require_once $path;
                 return true;
@@ -82,8 +82,8 @@ class Autoloader
      */
     public static function register()
     {
-        if (!static::$registered) {
-            static::$registered = spl_autoload_register(
+        if (!self::$registered) {
+            self::$registered = spl_autoload_register(
                 array('\Brainwave\Support\Autoloader\Autoloader', 'load')
             );
         }
@@ -97,7 +97,7 @@ class Autoloader
      */
     public static function addDirectories($directories)
     {
-        static::$directories = array_unique(array_merge(static::$directories, (array) $directories));
+        self::$directories = array_unique(array_merge(self::$directories, (array) $directories));
     }
 
     /**
@@ -109,9 +109,9 @@ class Autoloader
     public static function removeDirectories($directories = null)
     {
         if (is_null($directories)) {
-            static::$directories = [];
+            self::$directories = [];
         } else {
-            static::$directories = array_diff(static::$directories, (array) $directories);
+            self::$directories = array_diff(self::$directories, (array) $directories);
         }
     }
 
@@ -122,6 +122,6 @@ class Autoloader
      */
     public static function getDirectories()
     {
-        return static::$directories;
+        return self::$directories;
     }
 }

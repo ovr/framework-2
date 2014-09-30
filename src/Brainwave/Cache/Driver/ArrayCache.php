@@ -17,7 +17,6 @@
  *
  */
 
-use \Brainwave\Cache\CacheItem;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
