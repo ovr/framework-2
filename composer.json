@@ -39,7 +39,7 @@
             "Brainwave": "src/"
         },
         "files": [
-            "Brainwave/Support/Helpers.php"
+            "src/Brainwave/Support/Helpers.php"
         ]
     },
     "extra": {

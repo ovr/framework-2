@@ -118,8 +118,6 @@ class DatabaseManager
      */
     public function __construct($options = null)
     {
-        print_r($options);
-
         if (isset(self::$connections[$this->databaseName])) {
             return true;
         }
