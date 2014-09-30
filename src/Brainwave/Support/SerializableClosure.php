@@ -30,7 +30,8 @@ use Jeremeamia\SuperClosure\SerializableClosure as SuperClosure;
  * @since   0.8.0-dev
  *
  */
-class SerializableClosure extends SuperClosure {
+class SerializableClosure extends SuperClosure
+{
 
     /**
      * The code for the closure
@@ -77,5 +78,4 @@ class SerializableClosure extends SuperClosure {
             list($this->code, $this->variables) = unserialize($this->serialize());
         }
     }
-
 }

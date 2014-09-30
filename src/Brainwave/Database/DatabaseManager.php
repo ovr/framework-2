@@ -19,6 +19,7 @@ namespace Brainwave\Database;
  */
 
 use \PDO;
+use \Predis\Client;
 
 /**
  * DatabaseManager
@@ -181,9 +182,8 @@ class DatabaseManager
                     $commands[] = $set_charset;
                     break;
                 case 'oracle':
-                    $dsn = 'oci:host=' . $this->server.
-                    ($is_port ? ';port=' . $port : '').';dbname='.$this->databaseName.
-                    ';charset=' . $this->charset;
+                    $dsn = 'oci:dbname=//' . $this->server.
+                    ($is_port ? ':' . $port : ':1521').'/'.$this->databaseName.';charset=' . $this->charset;
                     break;
                 case 'mssql':
                     $dsn = strpos(PHP_OS, 'WIN') !== false ?

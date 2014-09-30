@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Routing;
+namespace Brainwave\Resolvers;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -37,7 +37,7 @@ class ResolverServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         // Route Callable Resolver
-        $this['resolver'] = function ($app) {
+        $app['resolver'] = function ($app) {
 
             $resolverCofig = $app['settings']->get('callable.resolver', 'CallableResolver');
 

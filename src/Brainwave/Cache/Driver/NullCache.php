@@ -1,5 +1,4 @@
-<?php
-namespace Brainwave\Cache\Driver;
+<?php namespace Brainwave\Cache\Driver;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,54 +17,34 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\CacheItem;
 use \Brainwave\Cache\Tag\TaggableStore;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
- * ApcCache
+ * NullCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class ApcCache extends TaggableStore implements DriverInterface
+class NullCache extends TaggableStore implements DriverInterface
 {
     /**
-     * Indicates if APCu is supported.
+     * The array of stored values.
      *
-     * @var bool
+     * @var array
      */
-    protected $apcu = false;
+    protected $storage = array();
 
     /**
-     * A string that should be prepended to keys.
+     * Check if the cache driver is supported
      *
-     * @var string
-     */
-    protected $prefix;
-
-    /**
-     * Create a new APC store.
-     *
-     * @param  string  $prefix
-     * @return void
-     */
-    public function __construct($prefix = '')
-    {
-        $this->apcu = function_exists('apcu_fetch');
-        $this->prefix = $prefix;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
-        return extension_loaded('apc') ?
-        'APC exist: '.extension_loaded('apc') :
-        'APCu exist: '.function_exists('apcu_fetch');
+        return true;
     }
 
     /**
@@ -76,13 +55,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function get($key)
     {
-        $value = $this->apcu ?
-        apcu_fetch($this->prefix.$key) :
-        apc_fetch($this->prefix.$key);
-
-        if ($value !== false) {
-            return $value;
-        }
+        //
     }
 
     /**
@@ -91,13 +64,11 @@ class ApcCache extends TaggableStore implements DriverInterface
      * @param  string  $key
      * @param  mixed   $value
      * @param  int     $minutes
-     * @return array|bool
+     * @return void
      */
-    public function set($key, $value, $minutes)
+    public function store($key, $value, $minutes)
     {
-        return $this->apcu ?
-        apcu_store($this->prefix.$key, $value, $minutes * 60) :
-        apc_store($this->prefix.$key, $value, $minutes * 60);
+        //
     }
 
     /**
@@ -105,27 +76,23 @@ class ApcCache extends TaggableStore implements DriverInterface
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @return int|bool
+     * @return int
      */
     public function increment($key, $value = 1)
     {
-        return $this->apcu ?
-        apcu_inc($this->prefix.$key, $value) :
-        apc_inc($this->prefix.$key, $value);
+        //
     }
 
     /**
-     * Decrement the value of an item in the cache.
+     * Increment the value of an item in the cache.
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @return int|bool
+     * @return int
      */
     public function decrement($key, $value = 1)
     {
-        return $this->apcu ?
-        apcu_dec($this->prefix.$key, $value) :
-        apc_dec($this->prefix.$key, $value);
+        //
     }
 
     /**
@@ -133,24 +100,22 @@ class ApcCache extends TaggableStore implements DriverInterface
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @return array|bool
+     * @return void
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        //
     }
 
     /**
      * Remove an item from the cache.
      *
      * @param  string  $key
-     * @return array|bool
+     * @return void
      */
-    protected function forget($key)
+    public function forget($key)
     {
-        return $this->apcu ?
-        apcu_delete($this->prefix.$key) :
-        apc_delete($this->prefix.$key);
+        //
     }
 
     /**
@@ -161,19 +126,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function getMultiple($keys)
     {
-        $exists = false;
-
-        $cacheValues = $this->apcu ?
-        apcu_fetch($this->prefix.$key, $exists) :
-        apc_fetch($this->prefix.$key, $exists);
-
-        $ret = [];
-        foreach ($cacheValues as $key => $value) {
-            // @todo - identify the value when a cache item is not found.
-            $ret[$key] = new CacheItem($key, $value, true);
-        }
-
-        return $ret;
+        //
     }
 
     /**
@@ -185,7 +138,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function setMultiple($keys, $ttl = null)
     {
-        return $this->set($keys, null, $tll);
+        //
     }
 
     /**
@@ -196,9 +149,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function removeMultiple($keys)
     {
-        foreach ($keys as $key) {
-            $this->forget($key);
-        }
+        //
     }
 
     /**
@@ -208,7 +159,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function flush()
     {
-        $this->apcu ? apcu_clear_cache() : apc_clear_cache('user');
+        //
     }
 
     /**
@@ -218,6 +169,6 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function getPrefix()
     {
-        return $this->prefix;
+        return '';
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Interfaces;
+namespace Brainwave\Cache\Tag\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,28 +19,28 @@ namespace Brainwave\Cache\Interfaces;
  */
 
 /**
- * CacheInterface
+ * TaggedCacheInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-interface CacheInterface
+interface TaggedCacheInterface
 {
     /**
      * Invalidate all items in the cache
      *
      * @return bool Returns TRUE on success or FALSE on failure.
-     **/
-    public function clear();
+     */
+    public function flush();
 
     /**
      * Delete an item
      *
      * @param mixed $key The key of the item to delete.
      * @return bool Returns TRUE on success or FALSE on failure.
-     **/
+     */
     public function delete($key);
 
     /**
@@ -48,7 +48,7 @@ interface CacheInterface
      *
      * @param mixed $key The key of the item to retrieve.
      * @return bool Returns TRUE if the key exists, otherwise FALSE.
-     **/
+     */
     public function exists($key);
 
     /**
@@ -56,22 +56,57 @@ interface CacheInterface
      *
      * @param mixed $key The key used to store the value
      * @return mixed The stored variable
-     **/
-    public function fetch($key);
+     */
+    public function get($key);
+
+    /**
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function forever($key, $value);
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key);
 
     /**
      * Store variable in the cache
      *
-     * @param mixed $key The key to use to store the value
-     * @param mixed $var The variable to store
-     * @param int $ttl The expiration time, defaults to 0.
-     **/
-    public function store($key, $var = null, $ttl = 0);
+     * @param mixed $key The key to use to set the value
+     * @param mixed $value The variable to set
+     * @param int $ttl The expiration time.
+     */
+    public function set($key, $value, $minutes);
 
     /**
-     * Check if the cache driver is supported
+     * Increment the value of an item in the cache.
      *
-     * @return bool Returns TRUE if supported or FALSE if not.
-     **/
-    public static function isSupported();
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function increment($key, $value = 1);
+
+    /**
+     * Decrement the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function decrement($key, $value = 1);
+
+    /**
+     * Get the cache key prefix.
+     *
+     * @return string
+     */
+    public function getPrefix();
 }

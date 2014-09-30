@@ -17,25 +17,30 @@
  *
  */
 
-use \Brainwave\Cache\Driver\AbstractCache;
+use \Brainwave\Cache\CacheItem;
+use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
  * ArrayCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class ArrayCache extends AbstractCache
+class ArrayCache implements DriverInterface
 {
     /**
-     * @var array $data
+     * The array of stored values.
+     *
+     * @var array $storage
      */
-    private $data = [];
+    private $storage = [];
 
     /**
-     * {@inheritdoc}
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
@@ -43,50 +48,144 @@ class ArrayCache extends AbstractCache
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve an item from the cache by key.
+     *
+     * @param  string  $key
+     * @return mixed
      */
-    public function clear()
+    public function get($key)
     {
-        $this->data = [];
-        return true;
+        if (array_key_exists($key, $this->storage)) {
+            return $this->storage[$key];
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @param  int     $minutes
+     * @return void
      */
-    public function delete($key)
+    public function set($key, $value, $minutes)
     {
-        unset($this->data[$key]);
-        return true;
+        $this->storage[$key] = $value;
     }
 
     /**
-     * {@inheritdoc}
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
      */
-    public function exists($key)
+    public function increment($key, $value = 1)
     {
-        return isset($this->data[$key]);
+        $this->storage[$key] = $this->storage[$key] + $value;
+
+        return $this->storage[$key];
     }
 
     /**
-     * {@inheritdoc}
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
      */
-    public function fetch($key)
+    public function decrement($key, $value = 1)
     {
-        if (isset($this->data[$key])) {
-            return $this->data[$key];
+        $this->storage[$key] = $this->storage[$key] - $value;
+
+        return $this->storage[$key];
+    }
+
+    /**
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function forever($key, $value)
+    {
+        return $this->set($key, $value, 0);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        unset($this->storage[$key]);
+    }
+
+    /**
+     * [getMultiple description]
+     *
+     * @param  array $keys
+     * @return array
+     */
+    public function getMultiple($keys)
+    {
+
+        $cacheValues = [];
+
+        $ret = [];
+        foreach ($cacheValues as $key => $value) {
+            // @todo - identify the value when a cache item is not found.
+            $ret[$key] = new CacheItem($key, $value, true);
         }
 
-        return false;
+        return $ret;
     }
 
     /**
-     * {@inheritdoc}
+     * [setMultiple description]
+     *
+     * @param  array      $keys
+     * @param  null       $ttl
+     * @return array|bool
      */
-    public function store($key, $var = null, $ttl = 0)
+    public function setMultiple($keys, $ttl = null)
     {
-        $this->data[$key] = $var;
+        return $this->set($keys, null, $tll);
+    }
 
-        return true;
+    /**
+     * [removeMultiple description]
+     *
+     * @param  array      $keys
+     * @return array|void
+     */
+    public function removeMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->forget($key);
+        }
+    }
+
+    /**
+     * Remove all items from the cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        $this->storage = array();
+    }
+
+    /**
+     * Get the cache key prefix.
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return '';
     }
 }

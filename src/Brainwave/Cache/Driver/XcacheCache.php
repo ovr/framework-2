@@ -18,20 +18,31 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Driver\AbstractCache;
+use \Brainwave\Cache\CacheItem;
+use \Brainwave\Cache\Tag\TaggableStore;
+use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
  * XcacheCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class XcacheCache extends AbstractCache
+class XcacheCache extends TaggableStore implements DriverInterface
 {
     /**
-     * {@inheritdoc}
+     * A string that should be prepended to keys.
+     *
+     * @var string
+     */
+    protected $prefix;
+
+    /**
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
@@ -39,46 +50,145 @@ class XcacheCache extends AbstractCache
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new WinCache store.
+     *
+     * @param  string  $prefix
+     * @return void
      */
-    public function clear()
+    public function __construct($prefix = '')
     {
-        if (ini_get('xcache.admin.enable_auth')) {
-            throw new \BadMethodCallException('To use all features of \Brainwave\Cache\Driver\XcacheCache, you must set "xcache.admin.enable_auth" to "Off" in your php.ini.');
+        $this->prefix = $prefix;
+    }
+
+    /**
+     * Retrieve an item from the cache by key.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        $value = xcache_get($this->prefix.$key);
+
+        if (isset($value))
+        {
+            return $value;
         }
-
-        return xcache_clear_cache(XC_TYPE_VAR, 0);
     }
 
     /**
-     * {@inheritdoc}
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @param  int     $minutes
+     * @return void
      */
-    public function delete($key)
+    public function store($key, $value, $minutes)
     {
-        return xcache_unset($key);
+        xcache_set($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
-     * {@inheritdoc}
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
      */
-    public function exists($key)
+    public function increment($key, $value = 1)
     {
-        return xcache_isset($key);
+        return xcache_inc($this->prefix.$key, $value);
     }
 
     /**
-     * {@inheritdoc}
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
      */
-    public function fetch($key)
+    public function decrement($key, $value = 1)
     {
-        return $this->exists($key) ? unserialize(xcache_get($key)) : false;
+        return xcache_dec($this->prefix.$key, $value);
     }
 
     /**
-     * {@inheritdoc}
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
      */
-    public function store($key, $var = null, $ttl = 0)
+    public function forever($key, $value)
     {
-        return xcache_set($key, serialize($var), (int) $ttl);
+        return $this->store($key, $value, 0);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        xcache_unset($this->prefix.$key);
+    }
+
+    /**
+     * [getMultiple description]
+     *
+     * @param  array $keys
+     * @return array
+     */
+    public function getMultiple($keys)
+    {
+        //todo
+    }
+
+    /**
+     * [setMultiple description]
+     *
+     * @param  array      $keys
+     * @param  null       $ttl
+     * @return array|bool
+     */
+    public function setMultiple($keys, $ttl = null)
+    {
+        return $this->set($keys, null, $tll);
+    }
+
+    /**
+     * [removeMultiple description]
+     *
+     * @param  array      $keys
+     * @return array|void
+     */
+    public function removeMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->forget($key);
+        }
+    }
+
+    /**
+     * Remove all items from the cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        xcache_clear_cache(XC_TYPE_VAR);
+    }
+
+    /**
+     * Get the cache key prefix.
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 }

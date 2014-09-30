@@ -32,98 +32,52 @@ use \Pimple\ServiceProviderInterface;
  */
 class CacheServiceProvider implements ServiceProviderInterface
 {
+    protected $app;
+
     public function register(Container $app)
     {
-        $app['cache.default_options'] = [
-            'driver' => 'array',
-        ];
+        $this->app = $app;
 
-        //All supported drivers
-        $app['cache.drivers'] = function () {
-            return [
-                'apc'       => '\\Brainwave\\Cache\\Driver\\ApcCache',
-                'array'     => '\\Brainwave\\Cache\\Driver\\ArrayCache',
-                'file'      => '\\Brainwave\\Cache\\Driver\\FileCache',
-                'memcache'  => '\\Brainwave\\Cache\\Driver\\MemcacheCache',
-                'memcached' => '\\Brainwave\\Cache\\Driver\\MemcachedCache',
-                'xcache'    => '\\Brainwave\\Cache\\Driver\\XcacheCache',
-                'redis'     => '\\Brainwave\\Cache\\Driver\\RedisCache',
-                'wincache'  => '\\Brainwave\\Cache\\Driver\\WincacheCache',
-            ];
+        $this->registerCacheFactory();
+        $this->registerDefaultCache();
+        $this->registerCaches();
+    }
+
+    protected function registerCacheFactory()
+    {
+        $this->app['cache.factory'] = function ($app) {
+            $cacheFactory = new CacheManager($app, $app['settings']['cache.supported.drivers']);
+            $cacheFactory->setPrefix($app['settings']['cache.prefix']);
+            return $cacheFactory;
         };
+    }
 
-        $app['cache.factory'] = function ($app) {
-            return new CacheManager($app['cache.drivers'], []);
+    protected function registerDefaultCache()
+    {
+        $this->app['cache'] = function ($app) {
+
+            //The default driver
+            $app['cache.factory']->setDefaultDriver($app['settings']['cache.driver']);
+
+            return $app['cache.factory']->driver($app['cache.factory']->getDefaultDriver());
         };
+    }
 
-        $app['caches.options.initializer'] = $app->protect(function () use ($app) {
-            static $initialized = false;
-
-            if ($initialized) {
-                return;
-            }
-
-            $initialized = true;
-
-            if (!isset($app['caches.options'])) {
-                $app['caches.options'] = [
-                    'default' => isset($app['cache.options']) ? $app['cache.options'] : []
-                ];
-            }
-
-            $tmp = $app['caches.options'];
-            foreach ($tmp as $name => &$options) {
-                $options = array_replace($app['cache.default_options'], $options);
-
-                if (!isset($app['caches.default'])) {
-                    $app['caches.default'] = $name;
-                }
-            }
-            $app['caches.options'] = $tmp;
-        });
-
-        $app['caches'] = function ($app) {
-            $app['caches.options.initializer']();
-
-            $caches = new Container();
-            foreach ($app['caches.options'] as $name => $options) {
-                if ($app['caches.default'] === $name) {
+    protected function registerCaches()
+    {
+        if (!is_null($this->app['settings']['cache.caches'])) {
+            foreach ($this->app['settings']['cache.caches'] as $name => $class) {
+                if ($this->app['cache.factory']->getDefaultDriver() === $name) {
                     // we use shortcuts here in case the default has been overridden
-                    $config = $app['cache.config'];
+                    $config = $this->app['settings']['cache.driver'];
                 } else {
-                    $config = $app['caches.config'][$name];
+                    $config = $this->app['settings']['cache.caches'][$name];
                 }
 
-                $caches[$name] = function ($caches) use ($app, $config) {
-                    return $app['cache.factory']->getCache($config['driver'], $config);
+                $this->app['caches'][$name] = function () use ($config) {
+                    return $this->app['cache.factory']->driver($config['driver'], $config);
                 };
             }
-
-            return $caches;
-        };
-
-        $app['caches.config'] = function ($app) {
-            $app['caches.options.initializer']();
-
-            $configs = new Container();
-            foreach ($app['caches.options'] as $name => $options) {
-                $configs[$name] = $options;
-            }
-
-            return $configs;
-        };
-
-        // shortcuts for the "first" cache
-        $app['cache'] = function ($app) {
-            $caches = $app['caches'];
-
-            return $caches[$app['caches.default']];
-        };
-
-        $app['cache.config'] = function ($app) {
-            $caches = $app['caches.config'];
-
-            return $caches[$app['caches.default']];
-        };
+        }
     }
 }

@@ -18,102 +18,235 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Driver\AbstractCache;
+use \Memcached;
+use \Brainwave\Cache\CacheItem;
+use \Brainwave\Cache\Tag\TaggableStore;
+use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
  * MemcachedCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class MemcachedCache extends AbstractCache
+class MemcachedCache extends TaggableStore implements DriverInterface
 {
     /**
-     * @var Memcached
-     */
-    private $memcached;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $options = [])
-    {
-        if (!isset($options['memcached']) || !$options['memcached'] instanceof \Memcached) {
-            $options['memcached'] = new \Memcached(uniqid());
-            $options['memcached']->setOption(\Memcached::OPT_COMPRESSION, false);
-            $options['memcached']->addServer('127.0.0.1', 11211);
-        }
-
-        $this->setMemcached($options['memcached']);
-    }
-
-    /**
-     * Sets the Memcached instance to use.
+     * The Memcached instance.
      *
-     * @param Memcached $memcached
+     * @var \Memcached
      */
-    public function setMemcached(\Memcached $memcached)
-    {
-        $this->memcached = $memcached;
-    }
+    protected $memcached;
 
     /**
-     * Gets the Memcached instance used by the cache.
+     * A string that should be prepended to keys.
      *
-     * @return Memcached
+     * @var string
      */
-    public function getMemcached()
-    {
-        return $this->memcached;
-    }
+    protected $prefix;
 
     /**
-     * {@inheritdoc}
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
-        return extension_loaded('Memcached');
+        return extension_loaded('memcached');
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new Memcached connection.
+     *
+     * @param  array  $servers
+     * @return \Memcached
+     *
+     * @throws \RuntimeException
      */
-    public function clear()
+    public static function connect(array $servers)
     {
-        return $this->memcached->flush();
+        $memcached = static::getMemcached();
+
+        // For each server in the array, we'll just extract the configuration and add
+        // the server to the Memcached connection. Once we have added all of these
+        // servers we'll verify the connection is successful and return it back.
+        foreach ($servers as $server) {
+            $memcached->addServer(
+                $server['host'],
+                $server['port'],
+                $server['weight']
+            );
+        }
+
+        if ($memcached->getVersion() === false) {
+            throw new \RuntimeException("Could not establish Memcached connection.");
+        }
+
+        return $memcached;
     }
 
     /**
-     * {@inheritdoc}
+     * Get a new Memcached instance.
+     *
+     * @return \Memcached
      */
-    public function delete($key)
+    protected static function getMemcached()
     {
-        return $this->memcached->delete($key);
+        return new Memcached;
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new Memcached store.
+     *
+     * @param  \Memcached  $memcached
+     * @param  string      $prefix
+     * @return void
      */
-    public function exists($key)
+    public function __construct($memcached, $prefix = '')
     {
-        return !!$this->memcached->get($key);
+        $this->memcached = $memcached;
+        $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
     }
 
     /**
-     * {@inheritdoc}
+     * Retrieve an item from the cache by key.
+     *
+     * @param  string  $key
+     * @return mixed
      */
-    public function fetch($key)
+    public function get($key)
     {
-        return $this->memcached->get($key);
+        $value = $this->memcached->get($this->prefix.$key);
+
+        if ($this->memcached->getResultCode() == 0) {
+            return $value;
+        }
     }
 
     /**
-     * {@inheritdoc}
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @param  int     $minutes
+     * @return void
      */
-    public function store($key, $var = null, $ttl = 0)
+    public function store($key, $value, $minutes)
     {
-        return $this->memcached->set($key, $var, (int) $ttl);
+        $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+    }
+
+    /**
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function increment($key, $value = 1)
+    {
+        return $this->memcached->increment($this->prefix.$key, $value);
+    }
+
+    /**
+     * Decrement the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function decrement($key, $value = 1)
+    {
+        return $this->memcached->decrement($this->prefix.$key, $value);
+    }
+
+    /**
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function forever($key, $value)
+    {
+        return $this->store($key, $value, 0);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        $this->memcached->delete($this->prefix.$key);
+    }
+
+    /**
+     * [getMultiple description]
+     *
+     * @param  array $keys
+     * @return array
+     */
+    public function getMultiple($keys)
+    {
+
+        $cacheValues = [];
+
+        $ret = [];
+        foreach ($cacheValues as $key => $value) {
+            // @todo - identify the value when a cache item is not found.
+            $ret[$key] = new CacheItem($key, $value, true);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * [setMultiple description]
+     *
+     * @param  array      $keys
+     * @param  null       $ttl
+     * @return array|bool
+     */
+    public function setMultiple($keys, $ttl = null)
+    {
+        return $this->set($keys, null, $tll);
+    }
+
+    /**
+     * [removeMultiple description]
+     *
+     * @param  array      $keys
+     * @return array|void
+     */
+    public function removeMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->forget($key);
+        }
+    }
+
+    /**
+     * Remove all items from the cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        $this->memcached->flush();
+    }
+
+    /**
+     * Get the cache key prefix.
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 }

@@ -18,153 +18,312 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Driver\AbstractCache;
+use \Brainwave\Support\Arr;
+use \Brainwave\Cache\CacheItem;
+use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface;
 
 /**
  * FileCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class FileCache extends AbstractCache
+class FileCache implements DriverInterface
 {
     /**
-     * @var array $cacheDir
+     * The Brainwave Filesystem instance.
+     *
+     * @var \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface
      */
-    private $cacheDir;
+    protected $files;
 
     /**
-     * {@inheritdoc}
+     * The file cache directory
+     *
+     * @var string
      */
-    public function __construct(array $options = [])
-    {
-        // Cache directory is required
-        if (!isset($options['cache_dir'])) {
-            throw new \InvalidArgumentException('The option "cache_dir" must be passed to the FileCache constructor.');
-        }
-        $this->setCacheDir($options['cache_dir']);
-    }
+    protected $directory;
 
     /**
-     * {@inheritdoc}
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
-        return function_exists('file_put_contents');
+        return true;
     }
 
     /**
-     * Sets the cache directory to use.
+     * Create a new file cache store instance.
      *
-     * @param string $cacheDir
+     * @param  \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface  $files
+     * @param  string  $directory
+     * @return void
      */
-    public function setCacheDir($cacheDir)
+    public function __construct(FilesystemInterface $files, $directory)
     {
-        if (!$cacheDir) {
-            throw new \InvalidArgumentException('The parameter $cacheDir must not be empty.');
-        }
-
-        if (!is_dir($cacheDir) && !mkdir($cacheDir, 0777, true)) {
-            throw new \RuntimeException('Unable to create the directory "'.$cacheDir.'"');
-        }
-
-        // remove trailing slash
-        if (in_array(substr($cacheDir, -1), ['\\', '/'])) {
-            $cacheDir = substr($cacheDir, 0, -1);
-        }
-
-        $this->cacheDir = $cacheDir;
+        $this->files = $files;
+        $this->directory = $directory;
     }
 
     /**
-     * Gets the cache directory.
+     * Retrieve an item from the cache by key.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        return Arr::arrayGet($this->getPayload($key), 'data', null);
+    }
+
+    /**
+     * Retrieve an item and expiry time from the cache by key.
+     *
+     * @param  string  $key
+     * @return array
+     */
+    protected function getPayload($key)
+    {
+        $path = $this->path($key);
+
+        // If the file doesn't exists, we obviously can't return the cache so we will
+        // just return null. Otherwise, we'll get the contents of the file and get
+        // the expiration UNIX timestamps from the start of the file's contents.
+        if (!$this->files->exists($path)) {
+            return array('data' => null, 'time' => null);
+        }
+
+        try {
+            $expire = substr($contents = $this->files->get($path), 0, 10);
+        } catch (\Exception $e) {
+            return array('data' => null, 'time' => null);
+        }
+
+        // If the current time is greater than expiration timestamps we will delete
+        // the file and return null. This helps clean up the old files and keeps
+        // this directory much cleaner for us as old files aren't hanging out.
+        if (time() >= $expire) {
+            $this->forget($key);
+
+            return array('data' => null, 'time' => null);
+        }
+
+        $data = unserialize(substr($contents, 10));
+
+        // Next, we'll extract the number of minutes that are remaining for a cache
+        // so that we can properly retain the time for things like the increment
+        // operation that may be performed on the cache. We'll round this out.
+        $time = ceil(($expire - time()) / 60);
+
+        return compact('data', 'time');
+    }
+
+    /**
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @param  int     $minutes
+     * @return void
+     */
+    public function set($key, $value, $minutes)
+    {
+        $value = $this->expiration($minutes).serialize($value);
+
+        $this->createCacheDirectory($path = $this->path($key));
+
+        $this->files->put($path, $value);
+    }
+
+    /**
+     * Create the file cache directory if necessary.
+     *
+     * @param  string  $path
+     * @return void
+     */
+    protected function createCacheDirectory($path)
+    {
+        try {
+            $this->files->makeDirectory(dirname($path), 0777, true, true);
+        } catch (\Exception $e) {
+            //
+        }
+    }
+
+    /**
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
+     */
+    public function increment($key, $value = 1)
+    {
+        $raw = $this->getPayload($key);
+
+        $int = ((int) $raw['data']) + $value;
+
+        $this->set($key, $int, (int) $raw['time']);
+
+        return $int;
+    }
+
+    /**
+     * Decrement the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int
+     */
+    public function decrement($key, $value = 1)
+    {
+        return $this->increment($key, $value * -1);
+    }
+
+    /**
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function forever($key, $value)
+    {
+        return $this->set($key, $value, 0);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        $file = $this->path($key);
+
+        if ($this->files->exists($file)) {
+            $this->files->delete($file);
+        }
+    }
+
+    /**
+     * [getMultiple description]
+     *
+     * @param  array $keys
+     * @return array
+     */
+    public function getMultiple($keys)
+    {
+
+        $cacheValues = [];
+
+        $ret = [];
+        foreach ($cacheValues as $key => $value) {
+            // @todo - identify the value when a cache item is not found.
+            $ret[$key] = new CacheItem($key, $value, true);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * [setMultiple description]
+     *
+     * @param  array      $keys
+     * @param  null       $ttl
+     * @return array|bool
+     */
+    public function setMultiple($keys, $ttl = null)
+    {
+        return $this->set($keys, null, $tll);
+    }
+
+    /**
+     * [removeMultiple description]
+     *
+     * @param  array      $keys
+     * @return array|void
+     */
+    public function removeMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->forget($key);
+        }
+    }
+
+    /**
+     * Remove all items from the cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        foreach ($this->files->directories($this->directory) as $directory) {
+            $this->files->deleteDirectory($directory);
+        }
+    }
+
+    /**
+     * Get the full path for the given cache key.
+     *
+     * @param  string  $key
+     * @return string
+     */
+    protected function path($key)
+    {
+        $parts = array_slice(str_split($hash = md5($key), 2), 0, 2);
+
+        return $this->directory.'/'.join('/', $parts).'/'.$hash;
+    }
+
+    /**
+     * Get the expiration time based on the given minutes.
+     *
+     * @param  int  $minutes
+     * @return int
+     */
+    protected function expiration($minutes)
+    {
+        if ($minutes === 0) {
+            return 9999999999;
+        }
+
+        return time() + ($minutes * 60);
+    }
+
+    /**
+     * Get the Filesystem instance.
+     *
+     * @return \Brainwave\Support\Filesystem\Filesystem
+     */
+    public function getFilesystem()
+    {
+        return $this->files;
+    }
+
+    /**
+     * Get the working directory of the cache.
      *
      * @return string
      */
-    public function getCacheDir()
+    public function getDirectory()
     {
-        return $this->cacheDir;
+        return $this->directory;
     }
 
     /**
-     * Get the file name from a cache id.
+     * Get the cache key prefix.
      *
-     * @param string $id
+     * @return string
      */
-    protected function getFileName($key)
+    public function getPrefix()
     {
-        return $this->cacheDir . DIRECTORY_SEPARATOR . md5($key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function clear()
-    {
-        foreach (glob($this->cacheDir . "/*") as $filename) {
-            unlink($filename);
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($key)
-    {
-        $filename = $this->getFileName($key);
-
-        if (file_exists($filename)) {
-            return unlink($filename);
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exists($key)
-    {
-        return !!$this->fetch($this->getFileName($key));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetch($key)
-    {
-        $filename = $this->getFileName($key);
-
-        if (!file_exists($filename)) {
-            return false;
-        }
-
-        $content = unserialize(file_get_contents($filename));
-
-        if ($this->isContentAlive($content, $filename)) {
-            return $content['data'];
-        } else {
-            $this->delete($key);
-        }
-
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function store($key, $var = null, $ttl = 0)
-    {
-        $content = ['data' => $var, 'ttl' => (int) $ttl];
-        return (bool) file_put_contents($this->getFileName($key), serialize($content));
-    }
-
-    protected function isContentAlive($content, $filename)
-    {
-        return ($content['ttl'] === 0) || ((time() - filemtime($filename)) < $content['ttl']);
+        return '';
     }
 }

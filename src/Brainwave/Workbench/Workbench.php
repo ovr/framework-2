@@ -204,7 +204,7 @@ class Workbench extends Container
         // Settings
         $this['settings'] = function ($c) {
             $config = new Configuration(new ConfigurationHandler, new FileLoader);
-            $config->addPath(static::$paths['path.app']);
+            $config->addPath(static::$paths['path']);
 
             //Load config files
             foreach ($this->config as $file => $setting) {
@@ -231,11 +231,6 @@ class Workbench extends Container
             return new Environment($_SERVER);
         };
 
-        // Register providers
-        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
-            $this->register(new $provider, $arr);
-        }
-
         // Request
         $this['request'] = function ($c) {
             $environment = $c['environment'];
@@ -258,19 +253,19 @@ class Workbench extends Container
             return $response;
         };
 
+        // Register providers
+        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
+            $this->register(new $provider, $arr);
+        }
+
         // Exception handler
         $this['exception'] = function ($c) {
             $exception = new ExceptionHandler($this, $c['settings']->get('app.charset', 'en'));
             return $exception;
         };
 
-        // Controllers factory
-        $this['controllers.factory'] = function ($c) {
-            return new ControllerCollection($c['route.resolver'], $c['router']);
-        };
-
         // Set Loader an Path
-        $this['translator']->setLoader(new FileLoader)->addPath(static::$paths['path.app']);
+        $this['translator']->setLoader(new FileLoader)->addPath(static::$paths['path']);
 
         // Load lang files
         if (!is_null($this['settings']->get('app.language.files', null))) {
@@ -304,7 +299,7 @@ class Workbench extends Container
      */
     public static function bindInstallPaths(array $paths)
     {
-        static::$paths['path.app'] = realpath($paths['app']);
+        static::$paths['path'] = realpath($paths['app']);
 
         // Each path key is prefixed with path
         // so that they have the consistent naming convention.

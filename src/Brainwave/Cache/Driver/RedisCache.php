@@ -18,7 +18,10 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Driver\AbstractCache;
+use \Predis\Client as Client;
+use \Brainwave\Cache\CacheItem;
+use \Brainwave\Cache\Tag\TaggableStore;
+use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
  * RedisCache
@@ -28,49 +31,31 @@ use \Brainwave\Cache\Driver\AbstractCache;
  * @since   0.8.0-dev
  *
  */
-class RedisCache extends AbstractCache
+class RedisCache extends TaggableStore implements DriverInterface
 {
     /**
-     * @var Redis
-     */
-    private $redis;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(array $options = [])
-    {
-        if (!isset($options['redis']) || !$options['redis'] instanceof \Redis) {
-            $options['redis'] = new \Redis;
-            $options['redis']->connect('127.0.0.1');
-        }
-
-        $this->setRedis($options['redis']);
-    }
-
-    /**
-     * Sets the Redis instance to use.
+     * A string that should be prepended to keys.
      *
-     * @param Redis $redis
+     * @var string
      */
-    public function setRedis(\Redis $redis)
-    {
-        $redis->setOption(\Redis::OPT_SERIALIZER, $this->getSerializerValue());
-        $this->redis = $redis;
-    }
+    protected $prefix;
 
     /**
-     * Gets the Redis instance used by the cache.
+     * @var \Predis\Client
+     */
+    protected $redis;
+
+    /**
+     * The Redis connection that should be used.
      *
-     * @return Redis
+     * @var string
      */
-    public function getRedis()
-    {
-        return $this->redis;
-    }
+    protected $connection;
 
     /**
-     * {@inheritdoc}
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
@@ -78,58 +63,217 @@ class RedisCache extends AbstractCache
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new Redis connection.
+     *
+     * @param  array  $servers
+     * @return \Predis\Client
+     *
+     * @throws \RuntimeException
      */
-    public function clear()
+    public static function connect($parameters, array $options)
     {
-        return $this->redis->flushDB();
-    }
+        // since we connect to default setting localhost
+        // and 6379 port there is no need for extra
+        // configuration. If not then you can specify the
+        // scheme, host and port to connect as an array
+        // to the constructor.
+        $client = static::getRedis($parameters, $options);
 
-    /**
-     * {@inheritdoc}
-     */
-    public function delete($key)
-    {
-        return $this->redis->delete($key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function exists($key)
-    {
-        return !!$this->redis->exists($key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetch($key)
-    {
-        return $this->redis->get($key);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function store($key, $var = null, $ttl = 0)
-    {
-        if ($ttl > 0) {
-            return $this->redis->setex($key, (int) $ttl, $var);
+        try {
+            $client->connect();
+        } catch (\Predis\Network\ConnectionException $e) {
+            throw new \RuntimeException("Couldn't connected to Redis: ".$e->getMessage());
         }
 
-        return $this->redis->set($key, $var);
+        return $client;
     }
 
     /**
-     * Returns the serializer constant to use. If Redis is compiled with
-     * igbinary support, that is used. Otherwise the default PHP serializer is
-     * used.
+     * Get a new Predis instance.
      *
-     * @return integer One of the Redis::SERIALIZER_* constants
+     * @return \Predis\Client
      */
-    protected function getSerializerValue()
+    protected static function getRedis($parameters = '', array $options = [])
     {
-        return defined('Redis::SERIALIZER_IGBINARY') ? \Redis::SERIALIZER_IGBINARY : \Redis::SERIALIZER_PHP;
+        $options = array_filter($options);
+
+        if (!empty(parameters)) {
+            $redis = Client($parameters);
+        } elseif (!empty($parameters) && !empty($options)) {
+            $redis = Client($parameters, $options);
+        } else {
+            $redis = Client();
+        }
+
+        return new $redis;
+    }
+
+    /**
+     * Create a new RedisCache store.
+     *
+     * @param \Redis   $redis
+     * @param  string  $prefix
+     * @param  array   $options
+     * @return void
+     */
+    public function __construct(Client $redis, $prefix = '')
+    {
+        $this->redis = $redis;
+        $this->connection = $connection;
+        $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
+    }
+
+    /**
+     * Retrieve an item from the cache by key.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function get($key)
+    {
+        if (!is_null($value = $this->connection()->get($this->prefix.$key))) {
+            return is_numeric($value) ? $value : unserialize($value);
+        }
+    }
+
+    /**
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @param  int     $minutes
+     * @return void
+     */
+    public function set($key, $value, $minutes)
+    {
+        $value = is_numeric($value) ? $value : serialize($value);
+
+        $this->connection()->setex($this->prefix.$key, $minutes * 60, $value);
+    }
+
+     /**
+     * Increment the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function increment($key, $value = 1)
+    {
+        return $this->connection()->incrby($this->prefix.$key, $value);
+    }
+
+    /**
+     * Decrement the value of an item in the cache.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return int|bool
+     */
+    public function decrement($key, $value = 1)
+    {
+        return $this->connection()->decrby($this->prefix.$key, $value);
+    }
+
+    /**
+     * Store an item in the cache indefinitely.
+     *
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
+     */
+    public function forever($key, $value)
+    {
+        $value = is_numeric($value) ? $value : serialize($value);
+
+        $this->connection()->set($this->prefix.$key, $value);
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function forget($key)
+    {
+        return $this->connection->del($this->prefix.$key);
+    }
+
+    /**
+     * [getMultiple description]
+     *
+     * @param  array $keys
+     * @return array
+     */
+    public function getMultiple($keys)
+    {
+        //todo
+    }
+
+    /**
+     * [setMultiple description]
+     *
+     * @param  array      $keys
+     * @param  null       $ttl
+     * @return array|bool
+     */
+    public function setMultiple($keys, $ttl = null)
+    {
+        //todo
+    }
+
+    /**
+     * [removeMultiple description]
+     *
+     * @param  array      $keys
+     * @return array|void
+     */
+    public function removeMultiple($keys)
+    {
+        foreach ($keys as $key) {
+            $this->forget($key);
+        }
+    }
+
+    /**
+     * Remove all items from the cache.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        return $this->connection->flushDB();
+    }
+
+    /**
+     * Get the Redis connection instance.
+     *
+     * @return \Predis\ClientInterface
+     */
+    public function connection()
+    {
+        return $this->redis->connection($this->connection);
+    }
+
+    /**
+     * Set the connection name to be used.
+     *
+     * @param  string  $connection
+     * @return void
+     */
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * Get the cache key prefix.
+     *
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 }

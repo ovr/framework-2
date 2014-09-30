@@ -24,6 +24,7 @@ use \Brainwave\Routing\Redirector;
 use \Brainwave\Routing\RouteFactory;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Routing\Controller\ControllerCollection;
 
 /**
  * RoutingServiceProvider
@@ -45,6 +46,7 @@ class RoutingServiceProvider implements ServiceProviderInterface
         $this->registerRouteFactory();
         $this->registerUrlGenerator();
         $this->registerRedirector();
+        $this->registerControllersFactory();
     }
 
     /**
@@ -103,7 +105,12 @@ class RoutingServiceProvider implements ServiceProviderInterface
             ];
 
             return function ($pattern, $callable) use ($options) {
-                return new $options['route_class']($pattern, $callable, $options['case_sensitive'], $options['route_escape']);
+                return new $options['route_class'](
+                    $pattern,
+                    $callable,
+                    $options['case_sensitive'],
+                    $options['route_escape']
+                );
             };
         };
     }
@@ -117,6 +124,18 @@ class RoutingServiceProvider implements ServiceProviderInterface
     {
         $this->app['route.factory'] = function ($c) {
             return new RouteFactory($c, $c['route.resolver']);
+        };
+    }
+
+    /**
+     * Register Controllers Factory service.
+     *
+     * @return void
+     */
+    protected function registerControllersFactory()
+    {
+        $this->app['controllers.factory'] = function ($c) {
+            return new ControllerCollection($c['route.resolver'], $c['router']);
         };
     }
 }

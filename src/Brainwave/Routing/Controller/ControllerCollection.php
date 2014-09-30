@@ -21,6 +21,7 @@ namespace Brainwave\Routing\Controller;
 use \Brainwave\Http\Request;
 use \Brainwave\Routing\Route;
 use \Brainwave\Routing\Router;
+use \Brainwave\Routing\Controller\Controller;
 
 /**
  * ControllerCollection
@@ -64,7 +65,7 @@ class ControllerCollection
      * @param string $pattern Matched route pattern
      * @param mixed  $to      Callback that returns the response when matched
      *
-     * @return Controller
+     * @return \Brainwave\Routing\Controller\Controller
      */
     public function match($args)
     {

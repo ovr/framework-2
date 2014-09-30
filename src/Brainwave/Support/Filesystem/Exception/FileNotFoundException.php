@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Support\Filesystem\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,12 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Interfaces\CacheInterface;
-
 /**
- * AbstractCache
+ * FileNotFoundException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-abstract class AbstractCache implements CacheInterface
-{
-    public function __construct(array $options = [])
-    {
-
-    }
-}
+class FileNotFoundException extends \Exception {}

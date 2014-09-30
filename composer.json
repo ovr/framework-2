@@ -23,9 +23,7 @@
         "filp/whoops": "1.2.*@dev",
         "guzzlehttp/streams": "1.*",
         "jeremeamia/superclosure": "1.*",
-        "swiftmailer/swiftmailer": "5.2.*",
-        "classpreloader/classpreloader": "1.1.*",
-        "intahwebz/lowmemoryclassloader": "1.0.1"
+        "swiftmailer/swiftmailer": "5.2.*"
     },
     "replace": {
         "brainwave/conifg": "self.version"
@@ -39,7 +37,10 @@
     "autoload": {
         "psr-0": {
             "Brainwave": "src/"
-        }
+        },
+        "files": [
+            "Brainwave/Support/Helpers.php"
+        ]
     },
     "extra": {
         "branch-alias": {
@@ -53,7 +54,7 @@
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml" : "Narrowspark has support for YML files",
-        "classpreloader/classpreloader": "If opcache_is_script_cached exists, classpreloader will speed up your application."
+        "intahwebz/lowmemoryclassloader": "If opcache_is_script_cached exists, lowmemoryclassloader will speed up your application."
     },
     "minimum-stability": "dev"
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\CacheException;
+namespace Brainwave\Support\Filesystem;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,15 +18,24 @@ namespace Brainwave\Exception\CacheException;
  *
  */
 
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\Support\Filesystem\Filesystem;
+
 /**
- * CacheException
+ * FilesystemServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class CacheException extends \Exception
+class FilesystemServiceProvider implements ServiceProviderInterface
 {
-
+    public function register(Container $app)
+    {
+        $app['files'] = function ($app) {
+            return new Filesystem();
+        };
+    }
 }

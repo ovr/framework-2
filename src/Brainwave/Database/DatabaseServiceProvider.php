@@ -33,8 +33,11 @@ use \Brainwave\Database\DatabaseManager;
  */
 class DatabaseServiceProvider implements ServiceProviderInterface
 {
+    protected $app;
+
     public function register(Container $app)
     {
+        $this->app = $app;
 
         if ($app['settings']['db.frozen'] === false) {
             $app['db'] = function () use ($app) {
@@ -42,17 +45,23 @@ class DatabaseServiceProvider implements ServiceProviderInterface
                     $app['settings']['db']
                 );
             };
+            $this->registerDatabaseQuery($app['db']);
         } else {
             return 'Database is frozen. TODO add debuging';
         }
-
-        $this->registerDatabaseQuery($app['db']);
     }
 
-    public function registerDatabaseQuery(DatabaseManager $databaseManager)
+    protected function registerDatabaseQuery(DatabaseManager $databaseManager)
     {
-        $app['db.query'] = function () use ($databaseManager) {
+        $this->app['db.query'] = function () use ($databaseManager) {
             return new DatabaseQuery($databaseManager);
+        };
+    }
+
+    protected function registerRedisDatabase()
+    {
+        $this->appp['redis'] = function () {
+            //return new RedisDatabase($app['settings']['database.redis']);
         };
     }
 }
