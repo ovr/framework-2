@@ -197,7 +197,7 @@ abstract class StaticalProxyManager
      *
      * @return \Brainwave\Workbench\Workbench
      */
-    public static function getFacadeApp()
+    public static function getFacadeApplication()
     {
         return static::$app;
     }
@@ -208,11 +208,9 @@ abstract class StaticalProxyManager
      * @param  \Brainwave\Workbench\Workbench  $app
      * @return void
      */
-    public static function setFacadeApp($app)
+    public static function setFacadeApplication($app)
     {
         self::$app = $app;
-
-        return self;
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception;
+namespace Brainwave\Exception\Displayer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,7 +19,7 @@ namespace Brainwave\Exception;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Exception\ExceptionDisplayerInterface;
+use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
 
 /**
  * PlainDisplayer
@@ -56,7 +56,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
     /**
      * Error handler
      */
-    public function display($exception)
+    public function display($exception = '')
     {
         $this->app->contentType('text/html');
 

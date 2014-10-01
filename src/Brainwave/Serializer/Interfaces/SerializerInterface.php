@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializer\Interfaces;
+namespace Brainwave\Serializer\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -37,7 +37,7 @@ interface SerializerInterface
      *
      * @return string
      */
-    public function serialize($data, $format, array $context = array());
+    public function encode($data, $format, array $context = array());
 
     /**
      * Deserializes data into the given type.
@@ -49,7 +49,7 @@ interface SerializerInterface
      *
      * @return object
      */
-    public function deserialize($data, $type, $format, array $context = array());
+    public function decode($data, $type, $format, array $context = array());
 
     /**
      * Checks if the input is a serialized string representation.

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Facades;
+namespace Brainwave\Serializer\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,20 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Workbench\StaticalProxy;
-
 /**
- * Config
+ * SerializerAwareInterface    Defines the interface of encoders
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class Config extends StaticalProxy
+interface SerializerAwareInterface
 {
-    protected static function getFacadeAccessor()
-    {
-        return 'settings';
-    }
+    /**
+     * Sets the owning Serializer object
+     *
+     * @param SerializerInterface $serializer
+     */
+    public function setSerializer(SerializerInterface $serializer);
 }

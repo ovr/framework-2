@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializer\Interfaces;
+namespace Brainwave\Serializes\Normalizer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,31 @@ namespace Brainwave\Support\Serializer\Interfaces;
  *
  */
 
+use \Brainwave\Serializes\Interfaces\SerializerInterface;
+use \Brainwave\Serializes\Interfaces\SerializerAwareInterface;
+
 /**
- * SerializerAwareInterface    Defines the interface of encoders
+ * SerializerAwareNormalizer
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-interface SerializerAwareInterface
+abstract class SerializerAwareNormalizer implements SerializerAwareInterface
 {
     /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+     /**
      * Sets the owning Serializer object
      *
      * @param SerializerInterface $serializer
      */
-    public function setSerializer(SerializerInterface $serializer);
+    public function setSerializer(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
 }

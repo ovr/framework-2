@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception;
+namespace Brainwave\Exception\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,29 +18,15 @@ namespace Brainwave\Exception;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-
 /**
- * ExceptionDisplayerInterface
+ * FatalErrorException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-interface ExceptionDisplayerInterface
+class FatalErrorException extends \ErrorException
 {
 
-    /**
-     * @param Workbench $app Brainwave\Workbench\Workbench
-     * @param string    $charset language
-     */
-    public function __construct(Workbench $app, $charset);
-
-    /**
-     * Display the given exception to the user.
-     *
-     * @param  \Exception  $exception
-     */
-    public function display($exception);
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializes;
+namespace Brainwave\Serializes\Encoder;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,18 +18,18 @@ namespace Brainwave\Support\Serializes;
  *
  */
 
-use \Brainwave\Support\Serializes\Encoder\Interfaces\EncoderInterface;
-use \Brainwave\Support\Serializes\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializes\Interfaces\SerializesInterface;
 
 /**
- * Php    Serializes data using the native PHP serializer.
+ * Igbinary    Serializes cache data using the IgBinary extension.
  *
+ * @see https://github.com/IgBinary/IgBinary
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class Php implements EncoderInterface, DecoderInterface
+class Igbinary implements SerializesInterface
 {
     /**
      * Serialises mixed data as a string.
@@ -39,7 +39,7 @@ class Php implements EncoderInterface, DecoderInterface
      */
     public function serialize($data)
     {
-        return serialize($data);
+        return \igbinary_serialize($data);
     }
 
     /**
@@ -50,7 +50,7 @@ class Php implements EncoderInterface, DecoderInterface
      */
     public function unserialize($str)
     {
-        return unserialize($str);
+        return \igbinary_unserialize($str);
     }
 
     /**
@@ -65,6 +65,6 @@ class Php implements EncoderInterface, DecoderInterface
             return false;
         }
 
-        return (boolean) ($str=='b:0;' || @unserialize($str) !== false);
+        return @substr_count($str, "\000", 0, 3) == 3;
     }
 }

@@ -194,6 +194,8 @@ class Workbench extends Container
     {
         parent::__construct();
 
+        StaticalProxy::setFacadeApplication($this);
+
         // App setting
         $this['env']                = null;
         //
@@ -649,6 +651,26 @@ class Workbench extends Container
         }
 
         $controller->flush($prefix);
+    }
+
+    /**
+     * Resolve the given type from the container.
+     *
+     * @param  string  $abstract
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function make($abstract, $parameters = array())
+    {
+        $parameters = array_filter($parameters);
+
+        if (!empty($parameters)) {
+            //TODO
+        } else {
+
+        }
+
+        return $this[$abstract];
     }
 
     /**

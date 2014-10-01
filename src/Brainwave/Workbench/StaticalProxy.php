@@ -37,12 +37,6 @@ class StaticalProxy extends StaticalProxyManager
      */
     protected static $brainwave;
 
-     /**
-     * Brainwave\Workbench\Workbench
-     * @var bool
-     */
-    protected static $app;
-
     /**
      * All alias for statical proxy
      * @var [type]
@@ -55,7 +49,7 @@ class StaticalProxy extends StaticalProxyManager
      */
     public function __construct(Workbench $app)
     {
-        static::setFacadeApplication($app);
+        self::setFacadeApplication($app);
     }
 
     /**
@@ -98,10 +92,9 @@ class StaticalProxy extends StaticalProxyManager
      * Set the Application
      * @param Workbench $app Brainwave\Workbench\Workbench
      */
-    protected static function setFacadeApplication(Workbench $app)
+    public static function setFacadeApplication($app)
     {
-        parent::$app = $app;
-        self::$app = $app;
+        parent::setFacadeApplication($app);
 
         self::$brainwave = $app;
     }

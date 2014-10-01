@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializes;
+namespace Brainwave\Serializes\Encoder;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,8 +18,8 @@ namespace Brainwave\Support\Serializes;
  *
  */
 
-use \Brainwave\Support\Serializes\Encoder\Interfaces\EncoderInterface;
-use \Brainwave\Support\Serializes\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\DecoderInterface;
 
 /**
  * Json    Serializes data using the native PHP Json extension.

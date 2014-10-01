@@ -20,9 +20,10 @@ namespace Brainwave\Exception;
 
 use \Brainwave\Routing\Route;
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Exception\PlainDisplayer;
-use \Brainwave\Exception\BrainwaveException\Stop;
-use \Brainwave\Exception\FatalErrorException as FatalError;
+use \Brainwave\Workbench\Exception\Stop;
+use \Brainwave\Exception\Displayer\PlainDisplayer;
+use \Brainwave\Exception\Displayer\WhoopsDisplayer;
+use \Brainwave\Exception\Exception\FatalErrorException as FatalError;
 
 /**
  * ExceptionHandler
@@ -169,6 +170,7 @@ class ExceptionHandler
     {
         $this->app->contentType('text/html');
 
+        $this->app['response']->setStatus(404);
         $title = '404 Error';
         $header = 'Sorry, the page you are looking for could not be found.';
         $link = $this->app['request']->getScriptName();
@@ -299,10 +301,10 @@ EOF;
         } elseif (is_callable($this->app['error'])) {
             call_user_func($this->app['error'], [$argument]);
         } else {
-            $this->displayException($argument);
+            return $this->displayException($argument);
         }
 
-        return ob_get_clean();
+        ob_get_clean();
     }
 
     /**
@@ -311,24 +313,28 @@ EOF;
      * @param  \Exception  $exception
      * @return void
      */
-    protected function displayException($exception)
+    protected function displayException(\Exception $exception)
     {
         $settings = $this->app['settings'];
 
         if ($settings->get('app.mode', 'production') == 'development' && $settings->get('debug', false) == true ||
             $settings->get('app.mode', 'production') == 'testing' && $settings->get('debug', false) == true) {
-            return class_exists('\Whoops\Run') ?
-                $this->app['displayer.whoops']->display($exception) :
-                $this->app['displayer.plain']->display($exception);
+
+            ($settings['app.exception.handler'] == 'whoops') ?
+            $ext = $this->app['displayer.whoops']->display($exception) :
+            $ext = $this->app['displayer.plain']->display($exception);
         } else {
-            return $this->noException($exception);
+            $ext = $this->noException($exception);
         }
+
+        return $ext;
     }
 
     /**
-     * [noException description]
-     * @param  [type] $exception [description]
-     * @return [type]            [description]
+     * Logs Exception if debug is false
+     *
+     * @param  \Exception  $exception
+     * @return void
      */
     protected function noException($exception)
     {
@@ -434,20 +440,22 @@ EOF;
     }
 
    /**
-    * Description
-    * @param type plainDisplayer $displayer
-    * @return type
+    * Instance of PlainDisplayer
+    *
+    * @param type PlainDisplayer $displayer
+    * @return self
     */
-    protected function plainDisplayer(plainDisplayer $displayer)
+    protected function plainDisplayer(PlainDisplayer $displayer)
     {
         $this->app['displayer.plain'] = $displayer;
         return $this;
     }
 
     /**
-    * Description
-    * @param type plainDisplayer $displayer
-    * @return type
+    * Instance of WhoopsDisplayer
+    *
+    * @param type WhoopsDisplayer $displayer
+    * @return self
     */
     protected function whoopsDisplayer(WhoopsDisplayer $displayer)
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializes;
+namespace Brainwave\Serializes\Encoder;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,18 +18,18 @@ namespace Brainwave\Support\Serializes;
  *
  */
 
-use \Brainwave\Support\Serializes\Encoder\Interfaces\EncoderInterface;
-use \Brainwave\Support\Serializes\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\DecoderInterface;
 
 /**
- * None    Blank/null/none serializer.
+ * Php    Serializes data using the native PHP serializer.
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class None implements EncoderInterface, DecoderInterface
+class Php implements EncoderInterface, DecoderInterface
 {
     /**
      * Serialises mixed data as a string.
@@ -39,7 +39,7 @@ class None implements EncoderInterface, DecoderInterface
      */
     public function serialize($data)
     {
-        return $data;
+        return serialize($data);
     }
 
     /**
@@ -50,7 +50,7 @@ class None implements EncoderInterface, DecoderInterface
      */
     public function unserialize($str)
     {
-        return $str;
+        return unserialize($str);
     }
 
     /**
@@ -61,6 +61,10 @@ class None implements EncoderInterface, DecoderInterface
      */
     public function isSerialized($str)
     {
-        return false;
+        if (!is_string($str)) {
+            return false;
+        }
+
+        return (boolean) ($str=='b:0;' || @unserialize($str) !== false);
     }
 }

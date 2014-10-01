@@ -1,6 +1,4 @@
 <?php
-namespace Brainwave\Support;
-
 /**
  * Narrowspark - a PHP 5 framework
  *
@@ -33,13 +31,15 @@ namespace Brainwave\Support;
  * @param  string  $make
  * @return mixed
  */
-function app($make = null)
-{
-    if (!is_null($make)) {
-        return app()->make($make);
-    }
+if (!function_exists('app')) {
+    function app($make = null)
+    {
+        if (!is_null($make)) {
+            return app()->make($make);
+        }
 
-    return \Brainwave\Workbench\StaticalProxyManager::getFacadeApp();
+        return \Brainwave\Workbench\StaticalProxyManager::getFacadeApplication();
+    }
 }
 
 /**
@@ -48,9 +48,11 @@ function app($make = null)
  * @param  string  $path
  * @return string
  */
-function appPath($path = '')
-{
-    return app('path').($path ? '/'.$path : $path);
+if (!function_exists('appPath')) {
+    function appPath($path = '')
+    {
+        return app('path').($path ? '/'.$path : $path);
+    }
 }
 
 /**
@@ -59,7 +61,44 @@ function appPath($path = '')
  * @param   string  $path
  * @return  string
  */
-function storagePath($path = '')
-{
-    return app('path.storage').($path ? '/'.$path : $path);
+if (!function_exists('storagePath')) {
+    function storagePath($path = '')
+    {
+        return app('path.storage').($path ? '/'.$path : $path);
+    }
+}
+
+/**
+ * Get the class "basename" of the given object / class.
+ *
+ * @param  string|object  $class
+ * @return string
+ */
+if ( ! function_exists('class_basename')) {
+    function classBasename($class)
+    {
+        $class = is_object($class) ? get_class($class) : $class;
+
+        return basename(str_replace('\\', '/', $class));
+    }
+}
+
+/**
+ * Returns all traits used by a class, it's subclasses and trait of their traits
+ *
+ * @param  string  $class
+ * @return array
+ */
+if ( ! function_exists('class_uses_recursive')) {
+    function classUsesRecursive($class)
+    {
+        $results = [];
+
+        foreach (array_merge([$class => $class], class_parents($class)) as $class)
+        {
+            $results += trait_uses_recursive($class);
+        }
+
+        return array_unique($results);
+    }
 }

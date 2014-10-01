@@ -46,6 +46,12 @@ class DatabaseManager
     protected $databaseType;
 
     /**
+     * [$pdo description]
+     * @var [type]
+     */
+    public $pdo;
+
+    /**
      * DB server address
      * For MySQL, MariaDB, MSSQL, Sybase, PostgreSQL, Oracle, Google Cloud SQL
      * @var string
@@ -217,19 +223,6 @@ class DatabaseManager
     }
 
     /**
-     * [query description]
-     * @param  [type] $query [description]
-     * @return [type]        [description]
-     */
-    public function query($query)
-    {
-        $this->queryString = $query;
-        $this->addQueryToHistory($query);
-
-        return $this->pdo->query($query);
-    }
-
-    /**
      * [exec description]
      * @param  [type] $query [description]
      * @return [type]        [description]
@@ -284,7 +277,7 @@ class DatabaseManager
             preg_match('/([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-\*]*)\)/i', $value, $match);
 
             if (isset($match[1], $match[2])) {
-                if (in_array(strtoupper($match[1]), DatabaseManager::$AGGREGATIONS)) {
+                if (in_array(strtoupper($match[1]), self::$AGGREGATIONS)) {
                     array_push(
                         $stack,
                         $match[1]  . '(' .( $match[2] == '*' ?

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception;
+namespace Brainwave\Exception\Displayer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -24,7 +24,7 @@ use \Monolog\Logger as MonologLogger;
 use \Whoops\Handler\PlainTextHandler;
 use \Whoops\Handler\PrettyPageHandler;
 use \Whoops\Handler\JsonResponseHandler;
-use \Brainwave\Exception\ExceptionDisplayerInterface;
+use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
 
 /**
  * WhoopsDisplayer
@@ -60,7 +60,7 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
 
         // There's only ever going to be one error page...right?
         $this->setPageHandler(new PrettyPageHandler);
-        $app['whoops.pageHandler']->setResourcesPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'WhoopsResources');
+        $app['whoops.pageHandler']->setResourcesPath(dirname(__FILE__).DS.'..'.DS.'WhoopsResources');
 
         // Retrieves info on the Brainwave environment and ships it off
         // to the PrettyPageHandler's data tables:

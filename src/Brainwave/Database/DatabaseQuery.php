@@ -38,9 +38,26 @@ class DatabaseQuery implements QueryInterface
         $this->manager = $manager;
     }
 
+    /**
+     * [query description]
+     * @param  [type] $query  [description]
+     * @param  array  $params [description]
+     * @return [type]         [description]
+     */
+    public function query($query, $params = array()
+        $this->manager->queryString = $query;
+        $this->manager->addQueryToHistory($query);
+
+        $request = $this->manager->pdo->prepare($query);
+
+        $request->execute($params);
+
+        return $request;
+    }
+
     public function select($table, $join, $columns = null, $where = null, $return = 'obj')
     {
-        $query = $this->manager->query($this->selectQuery($table, $join, $columns, $where));
+        $query = $this->query($this->selectQuery($table, $join, $columns, $where));
 
         return $query ?
         $query->fetchAll(
@@ -121,7 +138,7 @@ class DatabaseQuery implements QueryInterface
                 '") VALUES ('.footerimplode($values, ', ') . ')'
             );
 
-            $lastId[] = $this->pdo->lastInsertId();
+            $lastId[] = $this->manager->pdo->lastInsertId();
         }
 
         return count($lastId) > 1 ? $lastId : $lastId[ 0 ];
@@ -264,7 +281,7 @@ class DatabaseQuery implements QueryInterface
             $statement = 'SELECT EXISTS(' . $this->selectQuery($table, $join, "1", $where) . ')';
         }
 
-        return $this->manager->query($statement)->fetchColumn() === '1';
+        return $this->query($statement)->fetchColumn() === '1';
     }
 
     private function selectQuery($table, $join, $columns = null, $where = null)
@@ -317,35 +334,35 @@ class DatabaseQuery implements QueryInterface
 
     public function count($table, $join, $where = null)
     {
-        return 0 + ($this->manager->query(
+        return 0 + ($this->query(
             $this->generateAggregationQuery('COUNT', $table, '*', $join, $where = null)
         )->fetchColumn());
     }
 
     public function max($table, $join, $column = '*', $where = null)
     {
-        return 0 + ($this->manager->query(
+        return 0 + ($this->query(
             $this->generateAggregationQuery('MAX', $table, $column, $join, $where = null)
         )->fetchColumn());
     }
 
     public function min($table, $join, $column = '*', $where = null)
     {
-        return 0 + ($this->manager->query(
+        return 0 + ($this->query(
             $this->generateAggregationQuery('MIN', $table, $column, $join, $where = null)
         )->fetchColumn());
     }
 
     public function avg($table, $join, $column = '*', $where = null)
     {
-        return 0 + ($this->manager->query(
+        return 0 + ($this->query(
             $this->generateAggregationQuery('AVG', $table, $column, $join, $where = null)
         )->fetchColumn());
     }
 
     public function sum($table, $join, $column = '*', $where = null)
     {
-        return 0 + ($this->manager->query(
+        return 0 + ($this->query(
             $this->generateAggregationQuery('SUM', $table, $column, $join, $where = null)
         )->fetchColumn());
     }

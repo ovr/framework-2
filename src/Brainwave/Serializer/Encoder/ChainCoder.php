@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Serializes;
+namespace Brainwave\Serializes\Encoder;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,8 +18,8 @@ namespace Brainwave\Support\Serializes;
  *
  */
 
-use \Brainwave\Support\Serializes\Encoder\Interfaces\EncoderInterface;
-use \Brainwave\Support\Serializes\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Serializes\Encoder\Interfaces\DecoderInterface;
 
 /**
  * ChainCoder    Decoder delegating the decoding to a chain of decoders.
@@ -36,32 +36,32 @@ class ChainCoder implements EncoderInterface, DecoderInterface
      * [$encoders description]
      * @var array
      */
-    protected $encoders = array();
+    protected $encoders = [];
 
     /**
      * [$encoderByFormat description]
      * @var array
      */
-    protected $encoderByFormat = array();
+    protected $encoderByFormat = [];
 
     /**
      * [$decoders description]
      * @var array
      */
-    protected $decoders = array();
+    protected $decoders = [];
 
     /**
      * [$decoderByFormat description]
      * @var array
      */
-    protected $decoderByFormat = array();
+    protected $decoderByFormat = [];
 
     /**
      * [__construct description]
      * @param array $encoders [description]
      * @param array $decoders [description]
      */
-    public function __construct(array $encoders = array(), array $decoders = array())
+    public function __construct(array $encoders = [], array $decoders = [])
     {
         $this->encoders = $encoders;
         $this->decoders = $decoders;
@@ -78,9 +78,9 @@ class ChainCoder implements EncoderInterface, DecoderInterface
      *
      * @throws \UnexpectedValueException
      */
-    final public function serialize($data, $format, array $context = array())
+    final public function encode($data, $format, array $context = [])
     {
-        return $this->getEncoder($format)->serialize($data, $format, $context);
+        return $this->getEncoder($format)->encode($data, $format, $context);
     }
 
     /**
@@ -99,9 +99,9 @@ class ChainCoder implements EncoderInterface, DecoderInterface
      *
      * @throws \UnexpectedValueException
      */
-    final public function unserialize($data, $format, array $context = array())
+    final public function decode($data, $format, array $context = [])
     {
-        return $this->getDecoder($format)->unserialize($data, $format, $context);
+        return $this->getDecoder($format)->decode($data, $format, $context);
     }
 
     /**
