@@ -19,10 +19,10 @@ namespace Brainwave\View\Engines\Plates;
  */
 
 use \League\Plates\Engine;
-use \League\Plates\Template;
 use \League\Plates\Extension\URI;
 use \League\Plates\Extension\Asset;
 use \Brainwave\Workbench\Workbench;
+use \League\Plates\Template\Template;
 use \Brainwave\View\Engines\Interfaces\EnginesInterface;
 
 /**
@@ -140,9 +140,9 @@ class PlatesEngine implements EnginesInterface
         }
 
         // Creat a new template
-        $template = new Template($this->engine);
+        $template = new Template($this->engine, $path);
 
-        if (!$this->engine->pathExists($path)) {
+        if (!$this->engine->exists($path)) {
             throw new \Exception('Template "'.$path.'" dont exist!');
         }
 
@@ -151,7 +151,7 @@ class PlatesEngine implements EnginesInterface
         // an exception is thrown. This prevents any partial views from leaking.
         ob_start();
         try {
-            return $template->render($path, $data);
+            return $template->render($data);
         } catch (\Exception $e) {
             $this->handleViewException($e);
         }
