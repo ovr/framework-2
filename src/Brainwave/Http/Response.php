@@ -19,6 +19,7 @@ namespace Brainwave\Http;
  */
 
 use \GuzzleHttp\Stream\Stream;
+use \Brainwave\Http\HeaderTrait;
 use \GuzzleHttp\Stream\StreamInterface;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;
@@ -231,99 +232,7 @@ class Response implements ResponseInterface
         return null;
     }
 
-    /**
-     * Get HTTP headers
-     *
-     * @return array
-     * @api
-     */
-    public function getHeaders()
-    {
-        return $this->headers->all();
-    }
-
-    /**
-     * Does this request have a given header?
-     *
-     * @param  string $name
-     * @return bool
-     * @api
-     */
-    public function hasHeader($name)
-    {
-        return $this->headers->has($name);
-    }
-
-    /**
-     * Get header value
-     *
-     * @param  string $name
-     * @return string
-     * @api
-     */
-    public function getHeader($name)
-    {
-        return $this->headers->get($name);
-    }
-
-    /**
-     * Set header value
-     *
-     * @param string $name
-     * @param string $value
-     * @api
-     */
-    public function setHeader($name, $value)
-    {
-        $this->headers->set($name, $value);
-    }
-
-    /**
-     * Set multiple header values
-     *
-     * @param array $headers
-     * @api
-     */
-    public function setHeaders(array $headers)
-    {
-        $this->headers->replace($headers);
-    }
-
-    /**
-     * Add a header value
-     *
-     * @param string $name
-     * @param string $value
-     * @api
-     */
-    public function addHeader($name, $value)
-    {
-        $this->headers->add($name, $value);
-    }
-
-    /**
-     * Add multiple header values
-     *
-     * @param array $headers
-     * @api
-     */
-    public function addHeaders(array $headers)
-    {
-        foreach ($headers as $name => $value) {
-            $this->headers->add($name, $value);
-        }
-    }
-
-    /**
-     * Remove header
-     *
-     * @param string $name
-     * @api
-     */
-    public function removeHeader($name)
-    {
-        $this->headers->remove($name);
-    }
+    use HeaderTrait;
 
     /**
      * Get cookies
@@ -524,7 +433,7 @@ class Response implements ResponseInterface
             foreach ($this->headers as $name => $value) {
                 if (is_array($value)) {
                     foreach ($value as $hVal) {
-                        header("$name: $value", false);
+                        header("$name: $hVal", false);
                     }
                 } else {
                     header("$name: $value", false);
