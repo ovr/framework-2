@@ -24,8 +24,8 @@ use \Brainwave\View\Engines\PhpEngine;
 use \Brainwave\View\Engines\JsonEngine;
 use \Brainwave\View\Engines\EngineResolver;
 use \Brainwave\View\Interfaces\ViewInterface;
-use \Brainwave\View\Interfaces\ArrayableInterface;
 use \Brainwave\View\Interfaces\ViewFactoryInterface;
+use \Brainwave\Support\ContractsInterfaces\ArrayableInterface;
 
 /**
  * ViewFactory

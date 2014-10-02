@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Serializes\Normalizer;
+namespace Brainwave\Serializer\Normalizer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,9 +18,9 @@ namespace Brainwave\Serializes\Normalizer;
  *
  */
 
-use \Brainwave\Serializes\Normalizer\SerializerAwareNormalizer;
-use \Brainwave\Serializes\Normalizer\Interfaces\NormalizerInterface;
-use \Brainwave\Serializes\Normalizer\Interfaces\DenormalizerInterface;
+use \Brainwave\Serializer\Normalizer\SerializerAwareNormalizer;
+use \Brainwave\Serializer\Normalizer\Interfaces\NormalizerInterface;
+use \Brainwave\Serializer\Normalizer\Interfaces\DenormalizerInterface;
 
 /**
  * CustomNormalizer
@@ -91,7 +91,7 @@ class CustomNormalizer extends SerializerAwareNormalizer implements NormalizerIn
         $class = new \ReflectionClass($type);
 
         return $class->isSubclassOf(
-            '\Brainwave\Serializes\Normalizer\Interfaces\DenormalizableInterface'
+            '\Brainwave\Serializer\Normalizer\Interfaces\DenormalizableInterface'
         );
     }
 }

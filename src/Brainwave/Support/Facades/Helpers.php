@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\View\Interfaces;
+namespace Brainwave\Support\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,19 +18,20 @@ namespace Brainwave\View\Interfaces;
  *
  */
 
+use Brainwave\Workbench\StaticalProxy;
+
 /**
- * Arrayable Interface
+ * Helpers
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-interface ArrayableInterface {
-
-    /**
-     * Get the instance as an array.
-     * @return array
-     */
-    public function toArray();
+class Helpers extends StaticalProxy
+{
+    protected static function getFacadeAccessor()
+    {
+        return 'helpers';
+    }
 }

@@ -228,6 +228,21 @@ class Str
     }
 
     /**
+     * Generate a "random" alpha-numeric string.
+     *
+     * Should not be considered sufficient for cryptography, etc.
+     *
+     * @param  int  $length
+     * @return string
+     */
+    public static function quickRandom($length = 16)
+    {
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
+    }
+
+    /**
      * Convert the given string to upper-case.
      *
      * @param  string  $value
@@ -247,6 +262,21 @@ class Str
     public static function title($value)
     {
         return mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
+    }
+
+    /**
+    * Get all of the given string except for a specified string of items.
+    *
+    * @param  string  $value
+    * @param  string|array  $except
+    * @param  bool    $trim
+    * @return string
+    */
+    public static function except($value, $except, $trim = true)
+    {
+        $value = str_replace($except, '', $value);
+
+        return ($trim === false) ? $value : trim($value);
     }
 
     /**

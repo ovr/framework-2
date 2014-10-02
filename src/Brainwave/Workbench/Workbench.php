@@ -1019,7 +1019,7 @@ class Workbench extends Container
      * @param  Middleware
      * @api
      */
-    public function add(Middleware $newMiddleware)
+    public function addMiddleware(Middleware $newMiddleware)
     {
         $middleware = $this['middleware'];
         if (in_array($newMiddleware, $middleware, true)) {

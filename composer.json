@@ -37,10 +37,7 @@
     "autoload": {
         "psr-0": {
             "Brainwave": "src/"
-        },
-        "files": [
-            "src/Brainwave/Support/helpers.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {

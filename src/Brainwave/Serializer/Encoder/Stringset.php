@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Serializes;
+namespace Brainwave\Serializer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,11 +18,11 @@ namespace Brainwave\Serializes;
  *
  */
 
-use \Brainwave\Serializes\Encoder\Interfaces\EncoderInterface;
-use \Brainwave\Serializes\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializer\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Serializer\Encoder\Interfaces\DecoderInterface;
 
 /**
- * Stringset    Serializes cache data using a stringset (appendset) such as:
+ * Stringset    Serializer cache data using a stringset (appendset) such as:
  * 'tag1 tag2 -tag2 -tag3'
  *
  * @package Narrowspark/framework

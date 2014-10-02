@@ -39,14 +39,14 @@ class SerializerServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['normalizers'] = [];
-        $app['encoders'] = [];
+        $normalizers = [];
+        $encoders = [];
 
-        $app['serializer'] = function ($app) {
+        $app['serializer'] = $app->factory(function ($app) use ($normalizers, $encoders) {
             $serializer = new Serializer();
-            $serializer->setNormalizers($app['normalizers']);
-            $serializer->setEncoders($app['encoders']);
+            $serializer->setNormalizers($normalizers);
+            $serializer->setEncoders($encoders);
             return $serializer;
-        };
+        });
     }
 }

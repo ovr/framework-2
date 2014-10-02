@@ -29,7 +29,7 @@ namespace Brainwave\Serializer\Interfaces;
 interface SerializerInterface
 {
     /**
-     * Serializes data in the appropriate format
+     * Serializer data in the appropriate format
      *
      * @param mixed  $data    any data
      * @param string $format  format name
@@ -37,7 +37,7 @@ interface SerializerInterface
      *
      * @return string
      */
-    public function encode($data, $format, array $context = array());
+    public function serialize($data, $format, array $context = []);
 
     /**
      * Deserializes data into the given type.
@@ -49,7 +49,7 @@ interface SerializerInterface
      *
      * @return object
      */
-    public function decode($data, $type, $format, array $context = array());
+    public function deserialize($data, $type, $format, array $context = []);
 
     /**
      * Checks if the input is a serialized string representation.

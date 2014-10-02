@@ -19,6 +19,7 @@ namespace Brainwave\Database;
  */
 
 use \PDO;
+use \PDOException;
 use \Predis\Client;
 
 /**
@@ -49,7 +50,7 @@ class DatabaseManager
      * [$pdo description]
      * @var [type]
      */
-    public $pdo;
+    protected $pdo;
 
     /**
      * DB server address
@@ -253,7 +254,9 @@ class DatabaseManager
      */
     protected function columnQuote($string)
     {
-        return ' "' . str_replace('.', '"."', preg_replace('/(^#|\(JSON\))/', '', $string)) . '" ';
+        return ' "' . str_replace('.', '
+
+            "."', preg_replace('/(^#|\(JSON\))/', '', $string)) . '" ';
     }
 
     /**
@@ -302,48 +305,179 @@ class DatabaseManager
         return implode($stack, ',');
     }
 
+    protected function arrayQuote($array)
+    {
+        $temp = array();
+
+        foreach ($array as $value) {
+            $temp[] = is_int($value) ? $value : $this->pdo->quote($value);
+        }
+
+        return implode($temp, ',');
+    }
+
+    protected function innerConjunct($data, $conjunctor, $outerConjunctor)
+    {
+        $haystack = array();
+
+        foreach ($data as $value) {
+            $haystack[] = '(' . $this->dataImplode($value, $conjunctor) . ')';
+        }
+
+        return implode($outerConjunctor . ' ', $haystack);
+    }
+
+    protected function fnQuote($column, $string)
+    {
+        return (strpos($column, '#') === 0 && preg_match('/^[A-Z0-9\_]*\([^)]*\)$/', $string)) ?
+
+            $string :
+
+            $this->quote($string);
+    }
+
     /**
      * [dataImplode description]
      * @param  [type] $part      [description]
      * @param  [type] $separator [description]
      * @return [type]            [description]
      */
-    public function dataImplode($part, $separator = null)
+    public function dataImplode($data, $conjunctor, $outerConjunctor = null)
     {
-        $result = [];
-        $separator = isset($separator) ? trim($separator): $separator;
+        $wheres = array();
 
-        if (is_array($part)) {
-            // boolean block and value lists
-            foreach ($part as $key => $value) {
-                $key = is_string($key) ? trim($key) : $key;
-                if ($key === 'ORDER' || $key === 'GROUP' ||$key === 'HAVING'
-                 ||$key === 'LIMIT' ||$key === 'LIKE' ||$key === 'MATCH' ) {
-                    break;
-                } elseif ($key === 'AND' || $key === 'OR') {
-                    if (isset($separator)) {
-                        $result[] = ' ('.$this->dataImplode($value, $key). ') ';
+        foreach ($data as $key => $value) {
+            $type = gettype($value);
+
+            if (
+                preg_match("/^(AND|OR)\s*#?/i", $key, $relation_match) &&
+                $type == 'array'
+            ) {
+                $wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
+                    '(' . $this->dataImplode($value, ' ' . $relation_match[1]) . ')' :
+                    '(' . $this->inner_conjunct($value, ' ' . $relation_match[1], $conjunctor) . ')';
+            } else {
+                preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
+                $column = $this->column_quote($match[2]);
+
+                if (isset($match[4])) {
+                    if ($match[4] == '!') {
+                        switch ($type)
+                        {
+                            case 'NULL':
+                                $wheres[] = $column . ' IS NOT NULL';
+                                break;
+
+                            case 'array':
+                                $wheres[] = $column . ' NOT IN (' . $this->array_quote($value) . ')';
+                                break;
+
+                            case 'integer':
+                            case 'double':
+                                $wheres[] = $column . ' != ' . $value;
+                                break;
+
+                            case 'boolean':
+                                $wheres[] = $column . ' != ' . ($value ? '1' : '0');
+                                break;
+
+                            case 'string':
+                                $wheres[] = $column . ' != ' . $this->fnQuote($key, $value);
+                                break;
+
+                            /*
+                            * Adding option for Select Query to be used in Where Statement
+                            * Example
+                            *
+                            * "AND" => [
+                            *      "employees.company" =>
+                            *      (object)['query'=>"(SELECT id FROM companies WHERE email = '".$email."')"],
+                            * ],
+                            *
+                            * Assuming in this example that companies.email is an unique field
+                            */
+                            case 'object':
+                                $wheres[] = $column . ' = ' . $value->query;
+                                break;
+                        }
                     } else {
-                        $result[] = $this->dataImplode($value, $key);
-                    }
-                } elseif (is_int($key)) {
-                    if ($separator === 'OR') {
-                        $result[] = ' ('.$this->dataImplode($value, 'AND'). ') ';
-                    } elseif ($separator === 'AND') {
-                        $result[] = ' ('.$this->dataImplode($value, 'OR'). ') ';
-                    } else {
-                        $result[] = $this->dataImplode($value, ',') ;
+                        if ($match[4] == '<>' || $match[4] == '><') {
+                            if ($type == 'array') {
+                                if ($match[4] == '><') {
+                                    $column .= ' NOT';
+                                }
+
+                                if (is_numeric($value[0]) && is_numeric($value[1])) {
+                                    $wheres[] = '(' . $column . ' BETWEEN ' . $value[0] . ' AND ' . $value[1] . ')';
+                                } else {
+                                    $wheres[] = '(' . $column . ' BETWEEN ' .
+                                        $this->quote($value[0]) . ' AND ' . $this->quote($value[1]) . ')';
+                                }
+                            }
+                        } else {
+                            if (is_numeric($value)) {
+                                $wheres[] = $column . ' ' . $match[4] . ' ' . $value;
+                            } else {
+                                $datetime = strtotime($value);
+
+                                if ($datetime) {
+                                    $wheres[] = $column . ' ' . $match[4] . ' ' .
+                                    $this->quote(date('Y-m-d H:i:s', $datetime));
+                                } else {
+                                    if (strpos($key, '#') === 0) {
+                                        $wheres[] = $column . ' ' . $match[4] . ' ' . $this->fnQuote($key, $value);
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
-                    // not a key less array or a boolean block
-                    $result[] = $this->getTerm($key, $value);
+                    if (is_int($key)) {
+                        $wheres[] = $this->quote($value);
+                    } else {
+                        switch ($type) {
+                            case 'NULL':
+                                $wheres[] = $column . ' IS NULL';
+                                break;
+
+                            case 'array':
+                                $wheres[] = $column . ' IN (' . $this->array_quote($value) . ')';
+                                break;
+
+                            case 'integer':
+                            case 'double':
+                                $wheres[] = $column . ' = ' . $value;
+                                break;
+
+                            case 'boolean':
+                                $wheres[] = $column . ' = ' . ($value ? '1' : '0');
+                                break;
+
+                            case 'string':
+                                $wheres[] = $column . ' = ' . $this->fnQuote($key, $value);
+                                break;
+
+                            /*
+                            * Adding option for Select Query to be used in Where Statement
+                            * Example
+                            *
+                            * "AND" => [
+                            *      "employees.company" =>
+                            *      (object)['query'=>"(SELECT id FROM companies WHERE email = '".$email."')"],
+                            * ],
+                            *
+                            * Assuming in this example that companies.email is an unique field
+                            */
+                            case 'object':
+                                $wheres[] = $column . ' = ' . $value->query;
+                                break;
+                        }
+                    }
                 }
             }
-        } else {
-            // single value
-            $result[] = $this->quote($part);
         }
-         return str_replace("  ", " ", implode((isset($separator) ? $separator : 'AND'), $result));
+
+        return implode($conjunctor . ' ', $wheres);
     }
 
     /**
@@ -447,109 +581,132 @@ class DatabaseManager
         $whereClause = '';
 
         if (is_array($where)) {
+            $whereKeys = array_keys($where);
+            $whereAND = preg_grep("/^AND\s*#?$/i", $whereKeys);
+            $whereOR = preg_grep("/^OR\s*#?$/i", $whereKeys);
+
             $single_condition = array_diff_key($where, array_flip(
                 explode(' ', 'AND OR GROUP ORDER HAVING LIMIT LIKE MATCH')
             ));
 
-            if ($single_condition != []) {
+            if ($single_condition != array()) {
                 $whereClause = ' WHERE ' . $this->dataImplode($single_condition, '');
             }
 
-            if (isset($where['AND'])) {
-                $whereClause = ' WHERE ' . $this->dataImplode($where['AND'], 'AND ');
+            if (!empty($whereAND)) {
+                $value = array_values($whereAND);
+                $whereClause = ' WHERE ' . $this->dataImplode($where[ $value[0] ], ' AND');
             }
 
-            if (isset($where['OR'])) {
-                $whereClause = ' WHERE ' . $this->dataImplode($where['OR'], 'OR ');
+            if (!empty($whereOR)) {
+                $value = array_values($whereOR);
+                $whereClause = ' WHERE ' . $this->dataImplode($where[ $value[0] ], ' OR');
             }
 
             if (isset($where['LIKE'])) {
-                $like_query = $where['LIKE'];
-                if (is_array($like_query)) {
-                    $is_OR = isset($like_query['OR']);
+                $LIKE = $where['LIKE'];
 
-                    if ($is_OR || isset($like_query['AND'])) {
+                if (is_array($LIKE)) {
+                    $is_OR = isset($LIKE['OR']);
+                    $clause_wrap = array();
+
+                    if ($is_OR || isset($LIKE['AND'])) {
                         $connector = $is_OR ? 'OR' : 'AND';
-                        $like_query = $is_OR ? $like_query['OR'] : $like_query['AND'];
+                        $LIKE = $is_OR ? $LIKE['OR'] : $LIKE['AND'];
                     } else {
                         $connector = 'AND';
                     }
 
-                    $clause_wrap = [];
-                    foreach ($like_query as $column => $keyword) {
-                        if (is_array($keyword)) {
-                            foreach ($keyword as $key) {
-                                $clause_wrap[] = $this->columnQuote($column).' LIKE '.
-                                $this->quote('%' . $key . '%');
+                    foreach ($LIKE as $column => $keyword) {
+                        $keyword = is_array($keyword) ? $keyword : array($keyword);
+
+                        foreach ($keyword as $key) {
+                            preg_match('/(%?)([a-zA-Z0-9_\-\.]*)(%?)((\[!\])?)/', $column, $column_match);
+
+                            if ($column_match[1] == '' && $column_match[3] == '') {
+                                $column_match[1] = '%';
+                                $column_match[3] = '%';
                             }
-                        } else {
-                            $clause_wrap[] = $this->columnQuote($column).' LIKE '.
-                            $this->quote('%' . $keyword . '%');
+
+                            $clause_wrap[] =
+                                $this->column_quote($column_match[2]) .
+                                ($column_match[4] != '' ? ' NOT' : '') . ' LIKE ' .
+                                $this->quote($column_match[1] . $key . $column_match[3]);
                         }
                     }
-                    $whereClause .= (
-                        $whereClause != '' ?
-                        ' AND ' :
-                        ' WHERE ') . '(' . implode($clause_wrap, ' ' . $connector . ' ') . ')';
+
+                    $whereClause .= ($whereClause != '' ? ' AND ' : ' WHERE ') .
+                    '(' . implode($clause_wrap, ' ' . $connector . ' ') . ')';
                 }
             }
 
             if (isset($where['MATCH'])) {
-                $match_query = $where['MATCH'];
-                if (
-                    is_array($match_query) &&
-                    isset($match_query['columns']) &&
-                    isset($match_query['keyword'])
-                ) {
-                    $whereClause .= (
-                        $whereClause != '' ?
-                        ' AND ' :
-                        ' WHERE ').' MATCH ("' . str_replace(
-                            '.',
-                            '"."',
-                            implode($match_query['columns'], '", "')
-                        ) . '") AGAINST (' . $this->quote($match_query['keyword']) . ')';
+                $MATCH = $where['MATCH'];
+
+                if (is_array($MATCH) && isset($MATCH['columns'], $MATCH['keyword'])) {
+                    $whereClause .= ($whereClause != '' ? ' AND ' : ' WHERE ') .
+                    ' MATCH ("' . str_replace('.', '"."', implode($MATCH['columns'], '", "')) . '") AGAINST (' .
+                        $this->quote($MATCH['keyword']) . ')';
                 }
             }
+
             if (isset($where['GROUP'])) {
-                $whereClause .= ' GROUP BY ' . $this->columnQuote($where['GROUP']);
+                $whereClause .= ' GROUP BY ' . $this->column_quote($where['GROUP']);
+            }
+
+            if (isset($where['ORDER'])) {
+                $rsort = '/(^[a-zA-Z0-9_\-\.]*)(\s*(DESC|ASC))?/';
+                $ORDER = $where['ORDER'];
+
+                if (is_array($ORDER)) {
+                    if (
+                        isset($ORDER[1]) &&
+                        is_array($ORDER[1])
+                    ) {
+                        $whereClause .= ' ORDER BY FIELD(' . $this->column_quote($ORDER[0]) .
+                            ', ' . $this->array_quote($ORDER[1]) . ')';
+                    } else {
+                        $stack = array();
+
+                        foreach ($ORDER as $column) {
+                            preg_match($rsort, $column, $order_match);
+
+                            array_push(
+                                $stack,
+                                '"' . str_replace('.', '"."', $order_match[1]) . '"' .
+                                (isset($order_match[3]) ? ' ' . $order_match[3] : '')
+                            );
+                        }
+
+                        $whereClause .= ' ORDER BY ' . implode($stack, ',');
+                    }
+                } else {
+                    preg_match($rsort, $ORDER, $order_match);
+
+                    $whereClause .= ' ORDER BY "' .
+                    str_replace('.', '"."', $order_match[1]) . '"' .
+                    (isset($order_match[3]) ? ' ' .
+                    $order_match[3] : '');
+                }
 
                 if (isset($where['HAVING'])) {
                     $whereClause .= ' HAVING ' . $this->dataImplode($where['HAVING'], '');
                 }
             }
 
-            if (isset($where['ORDER'])) {
-
-                $whereClause .= ' ORDER BY ';
-                $order_by_declaration = $where['ORDER'];
-
-                if (is_string($order_by_declaration)) {
-                    $order_by_declaration = explode(',', $where['ORDER']);
-                }
-
-                $order = [];
-
-                foreach ($order_by_declaration as $value) {
-                    preg_match('/(^[a-zA-Z0-9_\-\.]*)(\s*(DESC|ASC))?/', trim($value), $order_match);
-
-                    $order_by[] = $this->columnQuote($value) .' '. (isset($order_match[3]) ? $order_match[3] : '');
-                }
-
-                $whereClause .= implode(' , ', $order_by);
-            }
-
             if (isset($where['LIMIT'])) {
-                if (is_numeric($where['LIMIT'])) {
-                    $whereClause .= ' LIMIT ' . $where['LIMIT'];
+                $LIMIT = $where['LIMIT'];
+
+                if (is_numeric($LIMIT)) {
+                    $whereClause .= ' LIMIT ' . $LIMIT;
                 }
 
                 if (
-                    is_array($where['LIMIT']) &&
-                    is_numeric($where['LIMIT'][0]) &&
-                    is_numeric($where['LIMIT'][1])
+                    is_array($LIMIT) &&
+                    is_numeric($LIMIT[0]) &&
+                    is_numeric($LIMIT[1])
                 ) {
-                    $whereClause .= ' LIMIT ' . $where['LIMIT'][0] . ',' . $where['LIMIT'][1];
+                    $whereClause .= ' LIMIT ' . $LIMIT[0] . ',' . $LIMIT[1];
                 }
             }
         } else {
@@ -559,104 +716,6 @@ class DatabaseManager
         }
 
         return $whereClause;
-    }
-
-    /**
-     * [selectContext description]
-     * @param  [type] $table     [description]
-     * @param  [type] $join      [description]
-     * @param  [type] $columns   [description]
-     * @param  [type] $where     [description]
-     * @param  [type] $column_fn [description]
-     * @return [type]            [description]
-     */
-    protected function selectContext($table, $join, &$columns = null, $where = null, $column_fn = null)
-    {
-        $table = '"' . $table . '"';
-        $join_key = is_array($join) ? array_keys($join) : null;
-
-        if (
-            isset($join_key[0]) &&
-            strpos($join_key[0], '[') === 0
-        ) {
-            $table_join = [];
-
-            $join_array = [
-                '>' => 'LEFT',
-                '<' => 'RIGHT',
-                '<>' => 'FULL',
-                '><' => 'INNER'
-            ];
-
-            foreach ($join as $sub_table => $relation) {
-                preg_match('/(\[(\<|\>|\>\<|\<\>)\])?([a-zA-Z0-9_\-]*)/', $sub_table, $match);
-
-                if ($match[2] != '' && $match[3] != '') {
-                    if (is_string($relation)) {
-                        $relation = 'USING ("' . $relation . '")';
-                    }
-
-                    if (is_array($relation)) {
-                        // For ['column1', 'column2']
-                        if (isset($relation[0])) {
-                            $relation = 'USING ("' . implode($relation, '", "') . '")';
-                            // For ['column1' => 'column2']
-                        } else {
-                            $relation = 'ON '.$table.'."'.key($relation).'" = "'.
-                            $match[3] . '"."' . current($relation) . '"';
-                        }
-                    }
-
-                    $table_join[] = $join_array[$match[2]] . ' JOIN "' . $match[3] . '" ' . $relation;
-                }
-            }
-
-            $table .= ' ' . implode($table_join, ' ');
-        } else {
-            if (is_null($columns)) {
-                if (is_null($where)) {
-                    if (
-                        is_array($join) &&
-                        isset($column_fn)
-                    ) {
-                        $where = $join;
-                        $columns = null;
-                    } else {
-                        $where = null;
-                        $columns = $join;
-                    }
-                } else {
-                    $where = $join;
-                    $columns = null;
-                }
-            } else {
-                $where = $columns;
-                $columns = $join;
-            }
-        }
-
-        if (isset($column_fn)) {
-            if ($column_fn == 1) {
-                $column = '1';
-
-                if (is_null($where)) {
-                    $where = $columns;
-                } else {
-                    $where = $join;
-                }
-            } else {
-                if (empty($columns)) {
-                    $columns = '*';
-                    $where = $join;
-                }
-
-                $column = $column_fn . '(' . $this->columnPush($columns) . ')';
-            }
-        } else {
-            $column = $this->columnPush($columns);
-        }
-
-        return 'SELECT ' . $column . ' FROM ' . $table . $this->whereClause($where);
     }
 
     /**
@@ -687,51 +746,6 @@ class DatabaseManager
         }
 
         return $output;
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function beginTransaction()
-    {
-        $this->pdo->beginTransaction();
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function rollback()
-    {
-        $this->pdo->rollback();
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function commit()
-    {
-        $this->pdo->commit();
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function close()
-    {
-        $this->pdo = null;
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function error()
-    {
-        return $this->pdo->errorInfo();
     }
 
     /**
@@ -773,12 +787,86 @@ class DatabaseManager
     }
 
     /**
+     * [setQueryString description]
+     * @param [type] $query [description]
+     */
+    public function setQueryString($query)
+    {
+        $this->queryString = $query;
+    }
+
+    /**
+     * [getPdo description]
+     * @return [type] [description]
+     */
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * [beginTransaction description]
+     * @return [type] [description]
+     */
+    public function beginTransaction()
+    {
+        if ($this->pdo->inTransaction()) {
+            return $this->pdo->beginTransaction();
+        }
+    }
+
+    /**
+     * [beginTransaction description]
+     * @return [type] [description]
+     */
+    public function rollback()
+    {
+        if ($this->pdo->inTransaction()) {
+            try {
+                return $this->pdo->rollBack();
+            } catch (PDOException $ex) {
+                echo $ex->getMessage();
+                return false;
+            }
+        }
+    }
+
+    /**
+     * [beginTransaction description]
+     * @return [type] [description]
+     */
+    public function commit()
+    {
+        if ($this->pdo->inTransaction()) {
+            return $this->pdo->commit();
+        }
+    }
+
+    /**
+     * [beginTransaction description]
+     * @return [type] [description]
+     */
+    public function close()
+    {
+        $this->pdo = null;
+    }
+
+    /**
+     * [beginTransaction description]
+     * @return [type] [description]
+     */
+    public function error()
+    {
+        return $this->pdo->errorInfo();
+    }
+
+    /**
      * [debugPDO description]
      * @param  [type] $raw_sql    [description]
      * @param  [type] $parameters [description]
      * @return [type]             [description]
      */
-    public function debugPDO($raw_sql, $parameters)
+    public function debugPDO($rawSql, $parameters)
     {
         $keys = [];
         $values = $parameters;
@@ -802,9 +890,9 @@ class DatabaseManager
             }
         }
 
-        $raw_sql = preg_replace($keys, $values, $raw_sql, 1, $count);
+        $rawSql = preg_replace($keys, $values, $rawSql, 1, $count);
 
-        return $raw_sql;
+        return $rawSql;
     }
 
     /**

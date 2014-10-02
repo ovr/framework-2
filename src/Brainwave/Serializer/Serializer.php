@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Serializes;
+namespace Brainwave\Serializer;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,12 +18,13 @@ namespace Brainwave\Serializes;
  *
  */
 
-use \Brainwave\Serializes\Interfaces\SerializerInterface;
-use \Brainwave\Serializes\coder\Interfaces\coderInterface;
-use \Brainwave\Serializes\coder\Interfaces\DecoderInterface;
-use \Brainwave\Serializes\Normalizer\SerializerAwareNormalizer;
-use \Brainwave\Serializes\Normalizer\Interfaces\NormalizerInterface;
-use \Brainwave\Serializes\Normalizer\Interfaces\DenormalizerInterface;
+use \Brainwave\Serializer\Encoder\ChainCoder;
+use \Brainwave\Serializer\Interfaces\SerializerInterface;
+use \Brainwave\Serializer\Encoder\Interfaces\EncoderInterface;
+use \Brainwave\Serializer\Encoder\Interfaces\DecoderInterface;
+use \Brainwave\Serializer\Normalizer\SerializerAwareNormalizer;
+use \Brainwave\Serializer\Normalizer\Interfaces\NormalizerInterface;
+use \Brainwave\Serializer\Normalizer\Interfaces\DenormalizerInterface;
 
 /**
  * Serializer serializes and deserializes data
@@ -43,7 +44,7 @@ use \Brainwave\Serializes\Normalizer\Interfaces\DenormalizerInterface;
 class Serializer implements SerializerInterface,
 NormalizerInterface,
 DenormalizerInterface,
-coderInterface,
+EncoderInterface,
 DecoderInterface
 {
     /**
@@ -113,7 +114,7 @@ DecoderInterface
      * [setcoders description]
      * @param array $coders [description]
      */
-    public function setcoders(array $coders = [])
+    public function setEncoders(array $coders = [])
     {
         $coders = [];
         $realcoders = [];
@@ -136,7 +137,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    final public function serialize($data, $format, array $context = array())
+    final public function serialize($data, $format, array $context = [])
     {
         if (!$this->supportsEncoding($format)) {
             throw new \UnexpectedValueException(sprintf('Serialization for the format %s is not supported', $format));
@@ -152,7 +153,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    final public function deserialize($data, $type, $format, array $context = array())
+    final public function deserialize($data, $type, $format, array $context = [])
     {
         if (!$this->supportsDecoding($format)) {
             throw new \UnexpectedValueException(
@@ -168,7 +169,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($data, $format = null, array $context = array())
+    public function normalize($data, $format = null, array $context = [])
     {
         if (null === $data || is_scalar($data)) {
             return $data;
@@ -177,7 +178,7 @@ DecoderInterface
             return $this->normalizeObject($data, $format, $context);
         }
         if ($data instanceof \Traversable) {
-            $normalized = array();
+            $normalized = [];
             foreach ($data as $key => $val) {
                 $normalized[$key] = $this->normalize($val, $format, $context);
             }
@@ -202,7 +203,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $type, $format = null, array $context = array())
+    public function denormalize($data, $type, $format = null, array $context = [])
     {
         return $this->denormalizeObject($data, $type, $format, $context);
     }
@@ -280,7 +281,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    final public function encode($data, $format, array $context = array())
+    final public function encode($data, $format, array $context = [])
     {
         return $this->coder->encode($data, $format, $context);
     }
@@ -288,7 +289,7 @@ DecoderInterface
     /**
      * {@inheritdoc}
      */
-    final public function decode($data, $format, array $context = array())
+    final public function decode($data, $format, array $context = [])
     {
         return $this->coder->decode($data, $format, $context);
     }
@@ -305,7 +306,7 @@ DecoderInterface
      * @throws \LogicException
      * @throws \UnexpectedValueException
      */
-    private function normalizeObject($object, $format, array $context = array())
+    private function normalizeObject($object, $format, array $context = [])
     {
         if (!$this->normalizers) {
             throw new \LogicException('You must register at least one normalizer to be able to normalize objects.');
@@ -335,7 +336,7 @@ DecoderInterface
      * @throws \LogicException
      * @throws \UnexpectedValueException
      */
-    private function denormalizeObject($data, $class, $format, array $context = array())
+    private function denormalizeObject($data, $class, $format, array $context = [])
     {
         if (!$this->normalizers) {
             throw new \LogicException('You must register at least one normalizer to be able to denormalize objects.');
@@ -347,6 +348,17 @@ DecoderInterface
         throw new \UnexpectedValueException(
             sprintf('Could not denormalize object of type %s, no supporting normalizer found.', $class)
         );
+    }
+
+    /**
+     * Checks if the input is a serialized string representation.
+     *
+     * @param  string   $str
+     * @return boolean
+     */
+    public function isSerialized($str)
+    {
+
     }
 
     /**

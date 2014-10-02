@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Serializes\Encoder;
+namespace Brainwave\Serializer\Encoder;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,10 +18,10 @@ namespace Brainwave\Serializes\Encoder;
  *
  */
 
-use \Brainwave\Serializes\Interfaces\SerializesInterface;
+use \Brainwave\Serializer\Interfaces\SerializerInterface;
 
 /**
- * Igbinary    Serializes cache data using the IgBinary extension.
+ * Igbinary    Serializer cache data using the IgBinary extension.
  *
  * @see https://github.com/IgBinary/IgBinary
  * @package Narrowspark/framework
@@ -29,7 +29,7 @@ use \Brainwave\Serializes\Interfaces\SerializesInterface;
  * @since   0.9.2-dev
  *
  */
-class Igbinary implements SerializesInterface
+class Igbinary implements SerializerInterface
 {
     /**
      * Serialises mixed data as a string.

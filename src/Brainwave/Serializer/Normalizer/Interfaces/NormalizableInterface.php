@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Serializes\Normalizer\Interfaces;
+namespace Brainwave\Serializer\Normalizer\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,7 +18,7 @@ namespace Brainwave\Serializes\Normalizer\Interfaces;
  *
  */
 
-use \Brainwave\Serializes\Normalizer\Interfaces\NormalizerInterface;
+use \Brainwave\Serializer\Normalizer\Interfaces\NormalizerInterface;
 
 /**
  * NormalizableInterface

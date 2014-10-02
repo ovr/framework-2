@@ -89,7 +89,7 @@ class Headers extends Collection implements HeadersInterface
                     continue;
                 }
 
-                parent::set($this->normalizeKey($key), $value);
+                parent::set($this->normalizeKey($key), [$value]);
             }
         }
     }
@@ -103,20 +103,42 @@ class Headers extends Collection implements HeadersInterface
      */
     public function set($key, $value)
     {
-        parent::set($this->normalizeKey($key), $value);
+        parent::set($this->normalizeKey($key), [$value]);
     }
 
     /**
      * Get data value with key
      *
      * @param  string $key     The data key
-     * @param  mixed  $default The value to return if data key does not exist
+     * @param  mixed  $asArray The value to return if data key does not exist
      * @return mixed           The data value, or the default value
      * @api
      */
-    public function get($key, $default = null)
+    public function get($key, $asArray = null)
     {
-        return parent::get($this->normalizeKey($key), $default);
+        if ($asArray) {
+            return parent::get($this->normalizeKey($key), array());
+        } else {
+            return implode(', ', parent::get($this->normalizeKey($key), array()));
+        }
+    }
+
+    /**
+     * Add data to key
+     *
+     * @param string $key   The data key
+     * @param mixed  $value The data value
+     * @api
+     */
+    public function add($key, $value)
+    {
+        $header = $this->get($key, true);
+        if (is_array($value)) {
+            $header = array_merge($header, $value);
+        } else {
+            $header[] = $value;
+        }
+        parent::set($this->normalizeKey($key), $header);
     }
 
     /**

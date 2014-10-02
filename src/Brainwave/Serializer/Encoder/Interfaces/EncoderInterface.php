@@ -28,7 +28,7 @@ namespace Brainwave\Serializer\Encoder\Interfaces;
  */
 interface EncoderInterface
 {
-	/**
+    /**
      * Serialize data into the given format
      *
      * @param mixed  $data   Data to encode
@@ -39,9 +39,9 @@ interface EncoderInterface
      *
      * @throws \UnexpectedValueException
      */
-    public function serialize($data, $format, array $context = array());
+    public function encode($data, $format, array $context = []);
 
-	/**
+    /**
      * Checks whether the serializer can encode to given format
      *
      * @param string $format format name
