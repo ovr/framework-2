@@ -31,10 +31,22 @@ use \Brainwave\Database\Interfaces\QueryInterface;
  */
 class DatabaseQuery implements QueryInterface
 {
+    /**
+     * [$manager description]
+     * @var [type]
+     */
     protected $manager;
 
+    /**
+     * [$pdo description]
+     * @var [type]
+     */
     protected $pdo;
 
+    /**
+     * [__construct description]
+     * @param DatabaseManager $manager [description]
+     */
     public function __construct(DatabaseManager $manager)
     {
         $this->manager = $manager;
@@ -58,15 +70,29 @@ class DatabaseQuery implements QueryInterface
         return $request;
     }
 
+    /**
+     * [select description]
+     * @param  [type] $table   [description]
+     * @param  [type] $join    [description]
+     * @param  [type] $columns [description]
+     * @param  [type] $where   [description]
+     * @return [type]          [description]
+     */
     public function select($table, $join, $columns = null, $where = null)
     {
-        $query = $this->query($this->select_context($table, $join, $columns, $where));
+        $query = $this->query($this->selectContext($table, $join, $columns, $where));
 
         return $query ? $query->fetchAll(
             (is_string($columns) && $columns != '*') ? PDO::FETCH_COLUMN : PDO::FETCH_ASSOC
         ) : false;
     }
 
+    /**
+     * [insert description]
+     * @param  [type] $table [description]
+     * @param  [type] $datas [description]
+     * @return [type]        [description]
+     */
     public function insert($table, $datas)
     {
         $lastId = array();
@@ -81,7 +107,7 @@ class DatabaseQuery implements QueryInterface
             $columns = array();
 
             foreach ($data as $key => $value) {
-                array_push($columns, $this->column_quote($key));
+                array_push($columns, $this->columnQuote($key));
 
                 switch (gettype($value))
                 {
@@ -93,9 +119,9 @@ class DatabaseQuery implements QueryInterface
                         preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
                         if (isset($column_match[0])) {
-                            $values[] = $this->quote(json_encode($value));
+                            $values[] = $this->manager->quote(json_encode($value));
                         } else {
-                            $values[] = $this->quote(serialize($value));
+                            $values[] = $this->manager->quote(serialize($value));
                         }
                         break;
 
@@ -125,8 +151,8 @@ class DatabaseQuery implements QueryInterface
                 }
             }
 
-            $this->exec(
-                'INSERT INTO "' . $table . '" (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')'
+            $this->manager->exec(
+                'INSERT INTO "' . $this->manager->quoteIdent($table) . '" (' . implode(', ', $columns) . ') VALUES (' . implode($values, ', ') . ')'
             );
 
             $lastId[] = $this->getPdo()->lastInsertId();
@@ -135,6 +161,13 @@ class DatabaseQuery implements QueryInterface
         return count($lastId) > 1 ? $lastId : $lastId[ 0 ];
     }
 
+    /**
+     * [update description]
+     * @param  [type] $table [description]
+     * @param  [type] $data  [description]
+     * @param  [type] $where [description]
+     * @return [type]        [description]
+     */
     public function update($table, $data, $where = null)
     {
         $fields = array();
@@ -144,11 +177,11 @@ class DatabaseQuery implements QueryInterface
 
             if (isset($match[3])) {
                 if (is_numeric($value)) {
-                    $fields[] = $this->column_quote($match[1]) . ' = ' .
-                    $this->column_quote($match[1]) . ' ' . $match[3] . ' ' . $value;
+                    $fields[] = $this->columnQuote($match[1]) . ' = ' .
+                    $this->columnQuote($match[1]) . ' ' . $match[3] . ' ' . $value;
                 }
             } else {
-                $column = $this->column_quote($key);
+                $column = $this->columnQuote($key);
 
                 switch (gettype($value))
                 {
@@ -160,10 +193,10 @@ class DatabaseQuery implements QueryInterface
                         preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
                         if (isset($column_match[0])) {
-                            $fields[] = $this->column_quote($column_match[1]) . ' = ' .
-                            $this->quote(json_encode($value));
+                            $fields[] = $this->columnQuote($column_match[1]) . ' = ' .
+                            $this->manager->quote(json_encode($value));
                         } else {
-                            $fields[] = $column . ' = ' . $this->quote(serialize($value));
+                            $fields[] = $column . ' = ' . $this->manager->quote(serialize($value));
                         }
                         break;
 
@@ -180,48 +213,76 @@ class DatabaseQuery implements QueryInterface
             }
         }
 
-        return $this->exec('UPDATE "' . $table . '" SET ' . implode(', ', $fields) . $this->where_clause($where));
+        return $this->manager->exec(
+            'UPDATE "' . $this->manager->quoteIdent($table) . '" SET ' . implode(', ', $fields) . $this->whereClause($where)
+        );
     }
 
+    /**
+     * [delete description]
+     * @param  [type] $table [description]
+     * @param  [type] $where [description]
+     * @return [type]        [description]
+     */
     public function delete($table, $where)
     {
-        return $this->exec('DELETE FROM "' . $table . '"' . $this->where_clause($where));
+        return $this->manager->exec('DELETE FROM "' . $this->manager->quoteIdent($table) . '"' . $this->whereClause($where));
     }
 
+    /**
+     * [replace description]
+     * @param  [type] $table   [description]
+     * @param  [type] $columns [description]
+     * @param  [type] $search  [description]
+     * @param  [type] $replace [description]
+     * @param  [type] $where   [description]
+     * @return [type]          [description]
+     */
     public function replace($table, $columns, $search = null, $replace = null, $where = null)
     {
         if (is_array($columns)) {
-            $replace_query = array();
+            $replaceQuery = array();
 
             foreach ($columns as $column => $replacements) {
                 foreach ($replacements as $replace_search => $replace_replacement) {
-                    $replace_query[] = $column . ' = REPLACE(' . $this->column_quote($column) . ', ' .
-                        $this->quote($replace_search) . ', ' . $this->quote($replace_replacement) . ')';
+                    $replaceQuery[] = $column . ' = REPLACE(' . $this->columnQuote($column) . ', ' .
+                        $this->manager->quote($replace_search) . ', ' .
+                        $this->manager->quote($replace_replacement) . ')';
                 }
             }
 
-            $replace_query = implode(', ', $replace_query);
+            $replaceQuery = implode(', ', $replaceQuery);
             $where = $search;
         } else {
             if (is_array($search)) {
-                $replace_query = array();
+                $replaceQuery = array();
 
                 foreach ($search as $replace_search => $replace_replacement) {
-                    $replace_query[] = $columns . ' = REPLACE(' . $this->column_quote($columns) . ', ' .
-                        $this->quote($replace_search) . ', ' . $this->quote($replace_replacement) . ')';
+                    $replaceQuery[] = $columns . ' = REPLACE(' . $this->columnQuote($columns) . ', ' .
+                        $this->manager->quote($replace_search) . ', ' .
+                        $this->manager->quote($replace_replacement) . ')';
                 }
 
-                $replace_query = implode(', ', $replace_query);
+                $replaceQuery = implode(', ', $replaceQuery);
                 $where = $replace;
             } else {
-                $replace_query = $columns . ' = REPLACE(' . $this->column_quote($columns) . ', ' .
-                    $this->quote($search) . ', ' . $this->quote($replace) . ')';
+                $replaceQuery = $columns . ' = REPLACE(' . $this->columnQuote($columns) . ', ' .
+                    $this->manager->quote($search) . ', ' . $this->manager->quote($replace) . ')';
             }
         }
 
-        return $this->exec('UPDATE "' . $table . '" SET ' . $replace_query . $this->where_clause($where));
+        return $this->manager->exec(
+            'UPDATE "' . $this->manager->quoteIdent($table) . '" SET ' . $replaceQuery . $this->whereClause($where)
+        );
     }
 
+    /**
+     * [get description]
+     * @param  [type] $table   [description]
+     * @param  [type] $columns [description]
+     * @param  [type] $where   [description]
+     * @return [type]          [description]
+     */
     public function get($table, $columns, $where = null)
     {
         if (!isset($where)) {
@@ -235,42 +296,185 @@ class DatabaseQuery implements QueryInterface
         return isset($data[0]) ? $data[0] : false;
     }
 
+    /**
+     * [has description]
+     * @param  [type]  $table [description]
+     * @param  [type]  $join  [description]
+     * @param  [type]  $where [description]
+     * @return boolean        [description]
+     */
     public function has($table, $join, $where = null)
     {
         $column = null;
 
         $result=$this->query(
-            $this->select_context($table, $join, $column, $where, 1)
+            $this->selectContext($table, $join, $column, $where, 1)
         )->fetchColumn();
         return $result===1 || $result==='1';
     }
 
+    /**
+     * [count description]
+     * @param  [type] $table  [description]
+     * @param  [type] $join   [description]
+     * @param  [type] $column [description]
+     * @param  [type] $where  [description]
+     * @return [type]         [description]
+     */
     public function count($table, $join = null, $column = null, $where = null)
     {
-        return 0 + ($this->query($this->select_context($table, $join, $column, $where, 'COUNT'))->fetchColumn());
+        return 0 + ($this->query($this->selectContext($table, $join, $column, $where, 'COUNT'))->fetchColumn());
     }
 
+    /**
+     * [max description]
+     * @param  [type] $table  [description]
+     * @param  [type] $join   [description]
+     * @param  [type] $column [description]
+     * @param  [type] $where  [description]
+     * @return [type]         [description]
+     */
     public function max($table, $join, $column = null, $where = null)
     {
-        $max = $this->query($this->select_context($table, $join, $column, $where, 'MAX'))->fetchColumn();
+        $max = $this->query($this->selectContext($table, $join, $column, $where, 'MAX'))->fetchColumn();
 
         return is_numeric($max) ? $max + 0 : $max;
     }
 
+    /**
+     * [min description]
+     * @param  [type] $table  [description]
+     * @param  [type] $join   [description]
+     * @param  [type] $column [description]
+     * @param  [type] $where  [description]
+     * @return [type]         [description]
+     */
     public function min($table, $join, $column = null, $where = null)
     {
-        $min = $this->query($this->select_context($table, $join, $column, $where, 'MIN'))->fetchColumn();
+        $min = $this->query($this->selectContext($table, $join, $column, $where, 'MIN'))->fetchColumn();
 
         return is_numeric($min) ? $min + 0 : $min;
     }
 
+    /**
+     * [avg description]
+     * @param  [type] $table  [description]
+     * @param  [type] $join   [description]
+     * @param  [type] $column [description]
+     * @param  [type] $where  [description]
+     * @return [type]         [description]
+     */
     public function avg($table, $join, $column = null, $where = null)
     {
-        return 0 + ($this->query($this->select_context($table, $join, $column, $where, 'AVG'))->fetchColumn());
+        return 0 + ($this->query($this->selectContext($table, $join, $column, $where, 'AVG'))->fetchColumn());
     }
 
+    /**
+     * [sum description]
+     * @param  [type] $table  [description]
+     * @param  [type] $join   [description]
+     * @param  [type] $column [description]
+     * @param  [type] $where  [description]
+     * @return [type]         [description]
+     */
     public function sum($table, $join, $column = null, $where = null)
     {
-        return 0 + ($this->query($this->select_context($table, $join, $column, $where, 'SUM'))->fetchColumn());
+        return 0 + ($this->query($this->selectContext($table, $join, $column, $where, 'SUM'))->fetchColumn());
+    }
+
+    /**
+     * [selectContext description]
+     * @param  [type] $table    [description]
+     * @param  [type] $join     [description]
+     * @param  [type] $columns  [description]
+     * @param  [type] $where    [description]
+     * @param  [type] $columnFn [description]
+     * @return [type]           [description]
+     */
+    protected function selectContext($table, $join, &$columns = null, $where = null, $columnFn = null)
+    {
+        $table = '"' . $table . '"';
+        $join_key = is_array($join) ? array_keys($join) : null;
+
+        if (
+            isset($join_key[0]) &&
+            strpos($join_key[0], '[') === 0
+        ) {
+            $tableJoin = array();
+
+            $joinArray = array(
+                '>' => 'LEFT',
+                '<' => 'RIGHT',
+                '<>' => 'FULL',
+                '><' => 'INNER'
+            );
+
+            foreach ($join as $sub_table => $relation) {
+                preg_match('/(\[(\<|\>|\>\<|\<\>)\])?([a-zA-Z0-9_\-]*)/', $sub_table, $match);
+
+                if ($match[2] != '' && $match[3] != '') {
+                    if (is_string($relation)) {
+                        $relation = 'USING ("' . $relation . '")';
+                    }
+
+                    if (is_array($relation)) {
+                        // For ['column1', 'column2']
+                        if (isset($relation[0])) {
+                            $relation = 'USING ("' . implode($relation, '", "') . '")';
+                        // For ['column1' => 'column2']
+                        } else {
+                            $relation = 'ON ' . $table . '."' .
+                            key($relation) . '" = "' . $match[3] . '"."' . current($relation) . '"';
+                        }
+                    }
+
+                    $tableJoin[] = $joinArray[ $match[2] ] . ' JOIN "' . $match[3] . '" ' . $relation;
+                }
+            }
+
+            $table .= ' ' . implode($tableJoin, ' ');
+        } else {
+            if (is_null($columns)) {
+                if (is_null($where)) {
+                    if (
+                        is_array($join) &&
+                        isset($columnFn)
+                    ) {
+                        $where = $join;
+                        $columns = null;
+                    } else {
+                        $where = null;
+                        $columns = $join;
+                    }
+                } else {
+                    $where = $join;
+                    $columns = null;
+                }
+            } else {
+                $where = $columns;
+                $columns = $join;
+            }
+        }
+
+        if (isset($columnFn)) {
+            if ($columnFn == 1) {
+                $column = '1';
+
+                if (is_null($where)) {
+                    $where = $columns;
+                }
+            } else {
+                if (empty($columns)) {
+                    $columns = '*';
+                    $where = $join;
+                }
+
+                $column = $columnFn . '(' . $this->manager->columnPush($columns) . ')';
+            }
+        } else {
+            $column = $this->manager->columnPush($columns);
+        }
+
+        return 'SELECT ' . $column . ' FROM ' . $table . $this->manager->whereClause($where);
     }
 }

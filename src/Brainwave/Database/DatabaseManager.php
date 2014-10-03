@@ -20,7 +20,8 @@ namespace Brainwave\Database;
 
 use \PDO;
 use \PDOException;
-use \Predis\Client;
+
+//use \Predis\Client;
 
 /**
  * DatabaseManager
@@ -352,13 +353,12 @@ class DatabaseManager
         foreach ($data as $key => $value) {
             $type = gettype($value);
 
-            if (
-                preg_match("/^(AND|OR)\s*#?/i", $key, $relation_match) &&
+            if (preg_match("/^(AND|OR)\s*#?/i", $key, $relationMatch) &&
                 $type == 'array'
             ) {
                 $wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
-                    '(' . $this->dataImplode($value, ' ' . $relation_match[1]) . ')' :
-                    '(' . $this->innerConjunct($value, ' ' . $relation_match[1], $conjunctor) . ')';
+                    '(' . $this->dataImplode($value, ' ' . $relationMatch[1]) . ')' :
+                    '(' . $this->innerConjunct($value, ' ' . $relationMatch[1], $conjunctor) . ')';
             } else {
                 preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
                 $column = $this->columnQuote($match[2]);
@@ -372,7 +372,7 @@ class DatabaseManager
                                 break;
 
                             case 'array':
-                                $wheres[] = $column . ' NOT IN (' . $this->array_quote($value) . ')';
+                                $wheres[] = $column . ' NOT IN (' . $this->arrayQuote($value) . ')';
                                 break;
 
                             case 'integer':
@@ -444,7 +444,7 @@ class DatabaseManager
                                 break;
 
                             case 'array':
-                                $wheres[] = $column . ' IN (' . $this->array_quote($value) . ')';
+                                $wheres[] = $column . ' IN (' . $this->arrayQuote($value) . ')';
                                 break;
 
                             case 'integer':
@@ -497,12 +497,12 @@ class DatabaseManager
             $whereAND = preg_grep("/^AND\s*#?$/i", $whereKeys);
             $whereOR = preg_grep("/^OR\s*#?$/i", $whereKeys);
 
-            $single_condition = array_diff_key($where, array_flip(
+            $singleCondition = array_diff_key($where, array_flip(
                 explode(' ', 'AND OR GROUP ORDER HAVING LIMIT LIKE MATCH')
             ));
 
-            if ($single_condition != []) {
-                $whereClause = ' WHERE ' . $this->dataImplode($single_condition, '');
+            if ($singleCondition !== []) {
+                $whereClause = ' WHERE ' . $this->dataImplode($singleCondition, '');
             }
 
             if (!empty($whereAND)) {
@@ -576,29 +576,29 @@ class DatabaseManager
                         is_array($ORDER[1])
                     ) {
                         $whereClause .= ' ORDER BY FIELD(' . $this->columnQuote($ORDER[0]) .
-                            ', ' . $this->array_quote($ORDER[1]) . ')';
+                            ', ' . $this->arrayQuote($ORDER[1]) . ')';
                     } else {
                         $stack = [];
 
                         foreach ($ORDER as $column) {
-                            preg_match($rsort, $column, $order_match);
+                            preg_match($rsort, $column, $orderMatch);
 
                             array_push(
                                 $stack,
-                                '"' . str_replace('.', '"."', $order_match[1]) . '"' .
-                                (isset($order_match[3]) ? ' ' . $order_match[3] : '')
+                                '"' . str_replace('.', '"."', $orderMatch[1]) . '"' .
+                                (isset($orderMatch[3]) ? ' ' . $orderMatch[3] : '')
                             );
                         }
 
                         $whereClause .= ' ORDER BY ' . implode($stack, ',');
                     }
                 } else {
-                    preg_match($rsort, $ORDER, $order_match);
+                    preg_match($rsort, $ORDER, $orderMatch);
 
                     $whereClause .= ' ORDER BY "' .
-                    str_replace('.', '"."', $order_match[1]) . '"' .
-                    (isset($order_match[3]) ? ' ' .
-                    $order_match[3] : '');
+                    str_replace('.', '"."', $orderMatch[1]) . '"' .
+                    (isset($orderMatch[3]) ? ' ' .
+                    $orderMatch[3] : '');
                 }
 
                 if (isset($where['HAVING'])) {
