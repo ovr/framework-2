@@ -302,7 +302,6 @@ class SessionManager implements SessionHandlerInterface
     /**
      * TODO
      * [gc description]
-     * @param  [type] $maxlifetime [description]
      * @return [type]              [description]
      */
     public function open($save_path, $name)
@@ -313,7 +312,6 @@ class SessionManager implements SessionHandlerInterface
     /**
      * TODO
      * [gc description]
-     * @param  [type] $maxlifetime [description]
      * @return [type]              [description]
      */
     public function read($session_id)
@@ -324,7 +322,6 @@ class SessionManager implements SessionHandlerInterface
     /**
      * TODO
      * [gc description]
-     * @param  [type] $maxlifetime [description]
      * @return [type]              [description]
      */
     public function write($session_id, $session_data)

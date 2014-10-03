@@ -38,7 +38,7 @@ class Json implements EncoderInterface, DecoderInterface
      * @param string $format Format name
      * @param array  $context options that normalizers/encoders have access to.
      *
-     * @return scalar
+     * @return string
      *
      * @throws UnexpectedValueException
      */

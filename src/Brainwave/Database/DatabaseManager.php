@@ -229,7 +229,7 @@ class DatabaseManager
 
     /**
      * [exec description]
-     * @param  [type] $query [description]
+     * @param  string $query [description]
      * @return [type]        [description]
      */
     public function exec($query)
@@ -320,6 +320,9 @@ class DatabaseManager
         return implode($temp, ',');
     }
 
+    /**
+     * @param string $conjunctor
+     */
     protected function innerConjunct($data, $conjunctor, $outerConjunctor)
     {
         $haystack = [];
@@ -342,8 +345,6 @@ class DatabaseManager
 
     /**
      * [dataImplode description]
-     * @param  [type] $part      [description]
-     * @param  [type] $separator [description]
      * @return [type]            [description]
      */
     public function dataImplode($data, $conjunctor)
@@ -774,7 +775,7 @@ class DatabaseManager
 
     /**
      * [debugPDO description]
-     * @param  [type] $raw_sql    [description]
+     * @param  [type] $rawSql    [description]
      * @param  [type] $parameters [description]
      * @return [type]             [description]
      */

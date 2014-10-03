@@ -56,7 +56,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Constructor
      *
-     * @param mixed $handler
+     * @param ConfigurationHandlerInterface $handler
      */
     public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
     {
@@ -108,7 +108,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Set the configuration loader
      *
-     * @return \Brainwave\Config\FileLoader
+     * @return Configuration
      */
     public function setLoader(FileLoader $loader)
     {
@@ -253,7 +253,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Get an ArrayIterator for the stored items
      *
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {

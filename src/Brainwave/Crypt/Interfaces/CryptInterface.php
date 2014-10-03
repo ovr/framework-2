@@ -28,6 +28,9 @@ namespace Brainwave\Crypt\Interfaces;
  */
 interface CryptInterface
 {
+    /**
+     * @return string
+     */
     public function encrypt($data);
 
     public function decrypt($data);

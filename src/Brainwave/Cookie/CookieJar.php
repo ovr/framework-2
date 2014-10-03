@@ -157,7 +157,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $header
+     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
      * @param string                                 $name
      * @param string                                 $value
      * @api

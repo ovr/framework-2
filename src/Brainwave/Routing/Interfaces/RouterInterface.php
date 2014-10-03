@@ -30,17 +30,38 @@ use \Brainwave\Routing\Interfaces\RouteInterface;
  */
 interface RouterInterface
 {
+    /**
+     * @return RouteInterface|null
+     */
     public function getCurrentRoute();
 
+    /**
+     * @return void
+     */
     public function map(RouteInterface $route);
 
+    /**
+     * @return string
+     */
     public function urlFor($name, $params = []);
 
+    /**
+     * @return void
+     */
     public function addNamedRoute($name, RouteInterface $route);
 
+    /**
+     * @return boolean
+     */
     public function hasNamedRoute($name);
 
+    /**
+     * @return RouteInterface|null
+     */
     public function getNamedRoute($name);
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getNamedRoutes();
 }

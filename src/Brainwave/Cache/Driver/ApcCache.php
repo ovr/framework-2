@@ -49,7 +49,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Create a new APC store.
      *
      * @param  string  $prefix
-     * @return void
+     * @return DriverInterface
      */
     public function __construct($prefix = '')
     {
@@ -60,7 +60,7 @@ class ApcCache extends TaggableStore implements DriverInterface
     /**
      * Check if the cache driver is supported
      *
-     * @return bool Returns TRUE if supported or FALSE if not.
+     * @return string Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
@@ -105,7 +105,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return int|bool
      */
     public function increment($key, $value = 1)
@@ -119,7 +119,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return int|bool
      */
     public function decrement($key, $value = 1)

@@ -42,15 +42,29 @@ interface QueryInterface
 
     public function get($table, $columns = null, $where = null);
 
+    /**
+     * @return boolean
+     */
     public function has($table, $join, $where = null);
 
+    /**
+     * @param |null $join
+     *
+     * @return integer
+     */
     public function count($table, $join, $where = null);
 
     public function max($table, $join, $column = '*', $where = null);
 
     public function min($table, $join, $column = '*', $where = null);
 
+    /**
+     * @return integer
+     */
     public function avg($table, $join, $column = '*', $where = null);
 
+    /**
+     * @return integer
+     */
     public function sum($table, $join, $column = '*', $where = null);
 }

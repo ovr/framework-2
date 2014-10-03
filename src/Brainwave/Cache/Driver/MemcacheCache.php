@@ -122,7 +122,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      * @param  string  $key
      * @param  mixed   $value
      * @param  int     $minutes
-     * @return void
+     * @return boolean
      */
     public function set($key, $value, $minutes)
     {
@@ -133,8 +133,8 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return integer
      */
     public function increment($key, $value = 1)
     {
@@ -145,8 +145,8 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return integer
      */
     public function decrement($key, $value = 1)
     {
@@ -158,7 +158,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @return void
+     * @return boolean
      */
     public function forever($key, $value)
     {
@@ -169,7 +169,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      * Remove an item from the cache.
      *
      * @param  string  $key
-     * @return void
+     * @return boolean
      */
     public function forget($key)
     {
@@ -201,7 +201,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      *
      * @param  array      $keys
      * @param  null       $ttl
-     * @return array|bool
+     * @return boolean
      */
     public function setMultiple($keys, $ttl = null)
     {
@@ -224,7 +224,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return boolean
      */
     public function flush()
     {

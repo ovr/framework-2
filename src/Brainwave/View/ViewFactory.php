@@ -88,7 +88,6 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     /**
      * Constructor
      * @param  \Brainwave\Workbench\Workbench  $app
-     * @param  \Closure   $factory
      */
     public function __construct(Workbench $app)
     {
@@ -238,6 +237,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     /**
      * Get the evaluated contents of the view.
      * @var    string $template Pathname of template file relative to templates directory
+     * @param string $template
      * @return string
      */
     protected function render($engine = 'php', $template = null, array $data = [])
@@ -432,7 +432,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     /**
      * Remove a piece of bound data from the view.
      * @param  string  $key
-     * @return bool
+     * @return boolean|null
      */
     public function __unset($key)
     {

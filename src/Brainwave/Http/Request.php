@@ -108,7 +108,7 @@ class Request implements RequestInterface
      *
      * @param \Brainwave\Environment\Interfaces\EnvironmentInterface  $env
      * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param \Brainwave\Http\Interfaces\CookiesJarInterface $cookies
+     * @param CookiesJarInterface $cookies
      * @param string                                 $body
      * @api
      */
@@ -552,7 +552,7 @@ class Request implements RequestInterface
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
-     * @return array|mixed|null
+     * @return string
      * @throws \RuntimeException         If environment input is not available
      * @api
      */

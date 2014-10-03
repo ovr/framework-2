@@ -28,6 +28,9 @@ namespace Brainwave\Config\Interfaces;
  */
 interface ConfigurationInterface extends \ArrayAccess
 {
+    /**
+     * @return void
+     */
     public function setArray(array $values);
 
     /**

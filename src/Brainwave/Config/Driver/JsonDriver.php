@@ -52,7 +52,7 @@ class JsonDriver implements DriverInterface
     /**
      * Checking if file ist supported
      * @param  string $filename
-     * @return mixed
+     * @return boolean
      */
     public function supports($filename)
     {
@@ -72,8 +72,8 @@ class JsonDriver implements DriverInterface
 
     /**
      * Reporting all json erros
-     * @param  mixed $code all json errors
-     * @return mixed
+     * @param  integer $code all json errors
+     * @return string
      */
     private function getJsonError($code)
     {

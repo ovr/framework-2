@@ -41,8 +41,7 @@ class Stringset implements EncoderInterface, DecoderInterface
     /**
      * Serialises mixed data as a string.
      *
-     * @param  mixed        $data
-     * @return string|mixed
+     * @return string|null
      *
      * e.g. ['a','c'] => 'a b '
      */

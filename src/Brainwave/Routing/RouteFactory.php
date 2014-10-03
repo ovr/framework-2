@@ -45,7 +45,6 @@ class RouteFactory
     /**
      * Constructor
      * @param  \Brainwave\Workbench\Workbench  $app
-     * @param  \Closure   $factory
      */
     public function __construct(Workbench $app, \Closure $resolver)
     {
@@ -93,7 +92,7 @@ class RouteFactory
      *
      * @param  string $callable
      * @throws \InvalidArgumentException
-     * @return array
+     * @return string[]
      */
     protected function parseCallable($callable)
     {

@@ -35,7 +35,7 @@ class Php implements EncoderInterface, DecoderInterface
      * Serialises mixed data as a string.
      *
      * @param  mixed        $data
-     * @return string|mixed
+     * @return string
      */
     public function serialize($data)
     {

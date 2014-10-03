@@ -65,7 +65,7 @@ class CacheItem implements CacheItemInterface
      *
      * @param string                    $key
      * @param mixed                     $value
-     * @param \DateTime|integer|null    $ttl
+     * @param boolean    $ttl
      * @param bool                      $hit
      */
     public function __construct(
@@ -108,8 +108,7 @@ class CacheItem implements CacheItemInterface
 
     /**
      * @param null $value
-     * @param null $ttl
-     * @return bool
+     * @return CacheItem
      */
     public function set($value = null)
     {

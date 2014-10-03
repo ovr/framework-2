@@ -316,7 +316,7 @@ class Workbench extends Container
      * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
      * @param array                    $values   An array of values that customizes the provider
      *
-     * @return Application
+     * @return ServiceProviderInterface
      */
     public function register(ServiceProviderInterface $provider, array $values = [])
     {
@@ -481,7 +481,7 @@ class Workbench extends Container
      * Set the current application locale.
      *
      * @param  string  $locale
-     * @return void
+     * @return Workbench
      */
     public function setLocale($locale)
     {
@@ -1177,8 +1177,8 @@ class Workbench extends Container
      * The provided Request and Response objects are updated by reference. There is no
      * value returned by this method.
      *
-     * @param  Request  The request instance
-     * @param  Response The response instance
+     * @param  Request  Request request instance
+     * @param  Response Response response instance
      */
     protected function dispatchRequest(Request $request, Response $response)
     {
@@ -1303,7 +1303,6 @@ class Workbench extends Container
     /**
      * Dynamically access application services.
      *
-     * @param  string  $key
      * @return mixed
      */
     public function __get($id)
@@ -1326,9 +1325,7 @@ class Workbench extends Container
     /**
      * Dynamically check if application services exists.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @return void
+     * @return boolean
      */
     public function __isset($id)
     {
@@ -1338,8 +1335,6 @@ class Workbench extends Container
     /**
      * Dynamically remove application services.
      *
-     * @param  string  $key
-     * @param  mixed   $value
      * @return void
      */
     public function __unset($id)
@@ -1361,7 +1356,7 @@ class Workbench extends Container
      * Sets a parameter or an object.
      * @param string           $id    The unique identifier for the parameter or object
      * @param mixed            $value The value of the parameter or a closure to define an object
-     * @return Workbench\Workbench
+     * @return Workbench
      */
     public function offsetSet($id, $value)
     {

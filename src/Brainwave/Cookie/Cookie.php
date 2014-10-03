@@ -125,7 +125,7 @@ class Cookie implements CookieInterface
     /**
      * Encrypt cookies
      *
-     * @param \Brainwave\Interfaces\CryptInterface $crypt
+     * @param CryptInterface $crypt
      * @api
      */
     public function encryptCookies(CryptInterface $crypt)
