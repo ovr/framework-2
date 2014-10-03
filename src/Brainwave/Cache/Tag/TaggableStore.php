@@ -46,7 +46,7 @@ abstract class TaggableStore
     /**
      * Begin executing a new tags operation.
      *
-     * @param  array|mixed  $names
+     * @param  string  $names
      * @return \Brainwave\Cache\TaggedCache
      */
     public function tags($names)

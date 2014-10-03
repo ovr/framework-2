@@ -116,7 +116,6 @@ class Router implements RouterInterface
      *
      * @param  string             $httpMethod  The HTTP request method
      * @param  string             $resourceUri The resource URI
-     * @param  bool               $reload      Should matching routes be re-parsed?
      * @return array[\Brainwave\Interfaces\RouteInterface]
      * @api
      */
@@ -164,7 +163,7 @@ class Router implements RouterInterface
     /**
      * Return array of methods avaliable for the current pattern
      * @param  string               $pattern      The pattern to match against
-     * @return array
+     * @return string[]
      */
     public function getMethodsAvailable($pattern)
     {

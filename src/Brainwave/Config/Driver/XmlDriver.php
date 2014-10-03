@@ -45,7 +45,7 @@ class XmlDriver implements DriverInterface
     /**
      * Checking if file ist supported
      * @param  string $filename
-     * @return mixed
+     * @return boolean
      */
     public function supports($filename)
     {
@@ -71,7 +71,7 @@ class XmlDriver implements DriverInterface
     /**
      * Defination to convert array to xml
      * @param  array $data  config data
-     * @param  void $xml    \SimpleXMLElement
+     * @param  \SimpleXMLElement $xml    \SimpleXMLElement
      * @return string       data
      */
     protected function arrayToXml($data, &$xml)

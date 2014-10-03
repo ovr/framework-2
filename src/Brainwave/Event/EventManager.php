@@ -60,8 +60,7 @@ class EventManager implements EventManagerInterface
 
     /**
      * Assign hook
-     * @param  string $name     The hook name
-     * @param  mixed  $callable A callable object
+     * @param  callable  $callable A callable object
      * @param  int    $priority The hook priority; 0 = high, 10 = low
      * @api
      */
@@ -117,7 +116,7 @@ class EventManager implements EventManagerInterface
      * Triger a chained hook
      * the first callback to return a non-null value will be returned
      *
-     * @param string $@name the hook name
+     * @param string $name the hook name
      * @param mixed $hookArg (Optional) Argument for hooked functions
      * @return mixed|void
      */

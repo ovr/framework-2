@@ -33,6 +33,10 @@ class HttpException extends \RuntimeException implements HttpExceptionInterface
     private $statusCode;
     private $headers;
 
+    /**
+     * @param integer $statusCode
+     * @param string $message
+     */
     public function __construct(
         $statusCode,
         $message = null,

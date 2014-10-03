@@ -46,7 +46,7 @@ class None implements EncoderInterface, DecoderInterface
      * Unserialises a string representation as mixed data.
      *
      * @param  string       $str
-     * @return mixed|string
+     * @return string
      */
     public function unserialize($str)
     {

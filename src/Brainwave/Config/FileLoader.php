@@ -57,7 +57,7 @@ class FileLoader implements LoaderInterface
 
     /**
      * Create a new file configuration loader.
-     * @param  string  $defaultPath
+     * @param string $path
      * @return void
      */
     public function addDefaultPath($path)

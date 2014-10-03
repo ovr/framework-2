@@ -81,7 +81,7 @@ interface TaggedCacheInterface
      *
      * @param mixed $key The key to use to set the value
      * @param mixed $value The variable to set
-     * @param int $ttl The expiration time.
+     * @return void
      */
     public function set($key, $value, $minutes);
 
@@ -89,8 +89,8 @@ interface TaggedCacheInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return void
      */
     public function increment($key, $value = 1);
 
@@ -98,8 +98,8 @@ interface TaggedCacheInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return void
      */
     public function decrement($key, $value = 1);
 

@@ -102,7 +102,7 @@ class MemcachedCache extends TaggableStore implements DriverInterface
      *
      * @param  \Memcached  $memcached
      * @param  string      $prefix
-     * @return void
+     * @return DriverInterface
      */
     public function __construct($memcached, $prefix = '')
     {
@@ -142,8 +142,8 @@ class MemcachedCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return integer
      */
     public function increment($key, $value = 1)
     {
@@ -154,8 +154,8 @@ class MemcachedCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
-     * @return int|bool
+     * @param  integer   $value
+     * @return integer
      */
     public function decrement($key, $value = 1)
     {

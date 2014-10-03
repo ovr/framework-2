@@ -86,7 +86,6 @@ DecoderInterface
     /**
      * Serialises mixed data as a string.
      *
-     * @param  mixed        $data
      * @return string|mixed
      */
     public function setNormalizers(array $normalizers = [])
@@ -103,7 +102,7 @@ DecoderInterface
     /**
      * Gets the serializer.
      *
-     * @return Serializer\Adapter
+     * @return boolean
      */
     public function getcoders()
     {
@@ -354,7 +353,7 @@ DecoderInterface
      * Checks if the input is a serialized string representation.
      *
      * @param  string   $str
-     * @return boolean
+     * @return boolean|null
      */
     public function isSerialized($str)
     {

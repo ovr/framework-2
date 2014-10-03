@@ -32,6 +32,7 @@ interface SerializerAwareInterface
      * Sets the owning Serializer object
      *
      * @param SerializerInterface $serializer
+     * @return void
      */
     public function setSerializer(SerializerInterface $serializer);
 }

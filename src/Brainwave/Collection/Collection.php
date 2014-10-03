@@ -136,7 +136,7 @@ class Collection implements CollectionInterface
 
     /**
      * Encrypt set
-     * @param  \Brainwave\Interfaces\CryptInterface $crypt
+     * @param  CryptInterface $crypt
      * @return void
      * @api
      */
@@ -149,7 +149,7 @@ class Collection implements CollectionInterface
 
     /**
      * Decrypt set
-     * @param  \Brainwave\Interfaces\CryptInterface $crypt
+     * @param  CryptInterface $crypt
      * @return void
      * @api
      */
@@ -257,7 +257,7 @@ class Collection implements CollectionInterface
      * Remove a piece of bound data from the view.
      *
      * @param  string  $key
-     * @return bool
+     * @return boolean|null
      */
     public function __unset($key)
     {

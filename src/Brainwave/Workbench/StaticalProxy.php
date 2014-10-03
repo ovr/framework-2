@@ -45,7 +45,7 @@ class StaticalProxy extends StaticalProxyManager
 
     /**
      * Set the Application Brainwave\Workbench\Workbench for statical proxy
-     * @return bool
+     * @return boolean|null
      */
     public function __construct(Workbench $app)
     {
@@ -55,7 +55,7 @@ class StaticalProxy extends StaticalProxyManager
     /**
      * Register all system facades/proxys
      * @param type array $facadeClass
-     * @return Brainwave\Workbench\StaticalProxy
+     * @return StaticalProxy
      */
     public function registerFacade(array $facadeClass = [])
     {
@@ -74,7 +74,6 @@ class StaticalProxy extends StaticalProxyManager
 
     /**
      * Register aliases
-     * @param type $aliases
      * @return type
      */
     public function registerAliases()

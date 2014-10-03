@@ -33,7 +33,7 @@ class CryptRand
     /**
     * Generate pseudorandom bytes.
     * @param  integer $len
-    * @return binary
+    * @return string
     */
     public function bytes($len)
     {

@@ -28,7 +28,13 @@ namespace Brainwave\Environment\Interfaces;
  */
 interface EnvironmentInterface
 {
+    /**
+     * @return void
+     */
     public function parse(array $environment);
 
+    /**
+     * @return void
+     */
     public function mock(array $settings = []);
 }

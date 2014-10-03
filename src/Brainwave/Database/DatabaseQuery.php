@@ -55,7 +55,7 @@ class DatabaseQuery implements QueryInterface
 
     /**
      * [query description]
-     * @param  [type] $query  [description]
+     * @param  string $query  [description]
      * @param  array  $params [description]
      * @return [type]         [description]
      */
@@ -385,7 +385,7 @@ class DatabaseQuery implements QueryInterface
     /**
      * [selectContext description]
      * @param  [type] $table    [description]
-     * @param  [type] $join     [description]
+     * @param  Interfaces|null $join     [description]
      * @param  [type] $columns  [description]
      * @param  [type] $where    [description]
      * @param  [type] $columnFn [description]
