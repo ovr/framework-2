@@ -215,6 +215,9 @@ class DatabaseManager
                 $options['option']
             );
 
+            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
             foreach ($commands as $value) {
                 $this->pdo->exec($value);
             }
@@ -307,7 +310,7 @@ class DatabaseManager
 
     protected function arrayQuote($array)
     {
-        $temp = array();
+        $temp = [];
 
         foreach ($array as $value) {
             $temp[] = is_int($value) ? $value : $this->pdo->quote($value);
@@ -318,7 +321,7 @@ class DatabaseManager
 
     protected function innerConjunct($data, $conjunctor, $outerConjunctor)
     {
-        $haystack = array();
+        $haystack = [];
 
         foreach ($data as $value) {
             $haystack[] = '(' . $this->dataImplode($value, $conjunctor) . ')';
@@ -342,9 +345,9 @@ class DatabaseManager
      * @param  [type] $separator [description]
      * @return [type]            [description]
      */
-    public function dataImplode($data, $conjunctor, $outerConjunctor = null)
+    public function dataImplode($data, $conjunctor)
     {
-        $wheres = array();
+        $wheres = [];
 
         foreach ($data as $key => $value) {
             $type = gettype($value);
@@ -355,10 +358,10 @@ class DatabaseManager
             ) {
                 $wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
                     '(' . $this->dataImplode($value, ' ' . $relation_match[1]) . ')' :
-                    '(' . $this->inner_conjunct($value, ' ' . $relation_match[1], $conjunctor) . ')';
+                    '(' . $this->innerConjunct($value, ' ' . $relation_match[1], $conjunctor) . ')';
             } else {
                 preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
-                $column = $this->column_quote($match[2]);
+                $column = $this->columnQuote($match[2]);
 
                 if (isset($match[4])) {
                     if ($match[4] == '!') {
@@ -481,97 +484,6 @@ class DatabaseManager
     }
 
     /**
-     * [getTerm description]
-     * @param  [type] $key   [description]
-     * @param  [type] $value [description]
-     * @return [type]        [description]
-     */
-    private function getTerm($key, $value)
-    {
-        $not = '';
-        preg_match('/(#?)([\w\.])(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
-
-        $is_function = isset($match[3]);
-
-        if (isset($match[4])) {
-            if ($match[4] == '') {
-                return $this->columnQuote($key).'='.$this->quote($value, $is_function);
-            } else {
-                // not block
-                if ($match[4] == '!') {
-                    switch (gettype($value)) {
-                        case 'NULL':
-                        case 'array':
-                            $not = 'NOT ';
-                            break;
-                        case 'integer':
-                        case 'double':
-                        case 'string':
-                            $not = '!';
-                            break;
-                    }
-                }
-            }
-        }
-
-        switch (gettype($value)){
-            case 'NULL':
-                return $this->columnQuote($key).' IS '.$not.$this->quote($value, $is_function);
-                break;
-            case 'array':
-                if (isset($match[4]) && $match[3] === '<>' && count($value) == 2) {
-                    return ' ('.$this->columnQuote($match[1]).' BETWEEN '.
-                    $this->quote(
-                        $value[0],
-                        $is_function
-                    ).' AND '.$this->quote($value[1], $is_function).') ';
-                } else {
-                    return $this->columnQuote($match[1]).$not.' IN ('.$this->dataImplode($value, ',').') ';
-                }
-                break;
-            case 'string':
-                // for the date feature you need a condition (e.g. [=] or [!=])
-                if (isset($match[3])) {
-                    $datetime = strtotime($value);
-                    if ($datetime) {
-                        $value = date('Y-m-d H:i:s', $datetime);
-                    }
-                }
-                //no break
-            case 'integer':
-            case 'double':
-                if (isset($match[4]) && $match[4] !== '!') {
-                    return $this->columnQuote($match[1]).' '.$match[4].' '.
-                    $this->quote($value, $is_function).' ';
-                } else {
-                    return $this->columnQuote(
-                        $match[1]
-                    ).$not.'= '.$this->quote($value, $is_function).' ';
-                }
-                break;
-            case 'boolean':
-                $wheres[] = $column . ' = ' . ($value ? '1' : '0');
-                break;
-
-            /*
-             * Adding option for Select Query to be used in Where Statement
-             * Example
-             *
-             * "AND" => [
-             *      "employees.company" => (object)['query'=>"(SELECT id FROM companies WHERE email = '".$email."')"],
-             * ],
-             *
-             * Assuming in this example that companies.email is an unique field
-             */
-            case 'object':
-                $wheres[] = $column . ' = ' . $value->query;
-                break;
-        }
-
-        throw new \Exception('Unknown term type');
-    }
-
-    /**
      * [whereClause description]
      * @param  [type] $where [description]
      * @return [type]        [description]
@@ -589,7 +501,7 @@ class DatabaseManager
                 explode(' ', 'AND OR GROUP ORDER HAVING LIMIT LIKE MATCH')
             ));
 
-            if ($single_condition != array()) {
+            if ($single_condition != []) {
                 $whereClause = ' WHERE ' . $this->dataImplode($single_condition, '');
             }
 
@@ -608,7 +520,7 @@ class DatabaseManager
 
                 if (is_array($LIKE)) {
                     $is_OR = isset($LIKE['OR']);
-                    $clause_wrap = array();
+                    $clause_wrap = [];
 
                     if ($is_OR || isset($LIKE['AND'])) {
                         $connector = $is_OR ? 'OR' : 'AND';
@@ -629,7 +541,7 @@ class DatabaseManager
                             }
 
                             $clause_wrap[] =
-                                $this->column_quote($column_match[2]) .
+                                $this->columnQuote($column_match[2]) .
                                 ($column_match[4] != '' ? ' NOT' : '') . ' LIKE ' .
                                 $this->quote($column_match[1] . $key . $column_match[3]);
                         }
@@ -651,7 +563,7 @@ class DatabaseManager
             }
 
             if (isset($where['GROUP'])) {
-                $whereClause .= ' GROUP BY ' . $this->column_quote($where['GROUP']);
+                $whereClause .= ' GROUP BY ' . $this->columnQuote($where['GROUP']);
             }
 
             if (isset($where['ORDER'])) {
@@ -663,10 +575,10 @@ class DatabaseManager
                         isset($ORDER[1]) &&
                         is_array($ORDER[1])
                     ) {
-                        $whereClause .= ' ORDER BY FIELD(' . $this->column_quote($ORDER[0]) .
+                        $whereClause .= ' ORDER BY FIELD(' . $this->columnQuote($ORDER[0]) .
                             ', ' . $this->array_quote($ORDER[1]) . ')';
                     } else {
-                        $stack = array();
+                        $stack = [];
 
                         foreach ($ORDER as $column) {
                             preg_match($rsort, $column, $order_match);
@@ -710,7 +622,7 @@ class DatabaseManager
                 }
             }
         } else {
-            if ($where != null) {
+            if ($where !== null) {
                 $whereClause .= ' ' . $where;
             }
         }
@@ -755,7 +667,7 @@ class DatabaseManager
      */
     protected function addQueryToHistory($query, $timestamp = true)
     {
-        if ($this->logQueries == false) {
+        if ($this->logQueries === false) {
             return;
         }
 

@@ -22,7 +22,6 @@ use \Brainwave\Serializer\Encoder\ChainCoder;
 use \Brainwave\Serializer\Interfaces\SerializerInterface;
 use \Brainwave\Serializer\Encoder\Interfaces\EncoderInterface;
 use \Brainwave\Serializer\Encoder\Interfaces\DecoderInterface;
-use \Brainwave\Serializer\Normalizer\SerializerAwareNormalizer;
 use \Brainwave\Serializer\Normalizer\Interfaces\NormalizerInterface;
 use \Brainwave\Serializer\Normalizer\Interfaces\DenormalizerInterface;
 

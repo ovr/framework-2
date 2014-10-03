@@ -433,7 +433,7 @@ class Request implements RequestInterface
      */
     public function isAjax()
     {
-        return $this->params('isajax') == true ||
+        return $this->params('isajax') === true ||
         $this->headers->get('HTTP_X_REQUESTED_WITH') === 'XMLHttpRequest'; // <-- Loose equality is on purpose
     }
 

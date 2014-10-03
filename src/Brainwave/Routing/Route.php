@@ -157,7 +157,7 @@ class Route implements RouteInterface
         }
 
         $this->setEscapePattern($escapePattern);
-        $this->setConditions(self::$defaultConditions);
+        $this->setConditions(self::getDefaultConditions());
         $this->caseSensitive = $caseSensitive;
     }
 
@@ -167,10 +167,9 @@ class Route implements RouteInterface
      * @param  array $defaultConditions
      * @api
      */
-    public static function setDefaultConditions(array $defaultConditions)
+    public static function setDefaultConditions(array $conditions = [])
     {
-        self::$defaultConditions = $defaultConditions;
-        return self;
+        self::$defaultConditions = $conditions;
     }
 
     /**

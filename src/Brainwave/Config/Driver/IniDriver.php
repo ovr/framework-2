@@ -37,7 +37,11 @@ class IniDriver implements DriverInterface
      */
     public function load($filename)
     {
-        $config = @parse_ini_file($filename, true);
+        if (file_exists($filename)) {
+            $config = parse_ini_file($filename, true);
+        } else {
+            throw new \Exception("INI file dont exists: ".$filename);
+        }
         return $config ?: [];
     }
 

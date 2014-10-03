@@ -391,8 +391,7 @@ class Response implements ResponseInterface
             $this->headers->remove('Content-Length');
             $sendBody = false;
         } else {
-            $size = @$this->getSize();
-            if ($size) {
+            if (null !== ($size = $this->getSize())) {
                 $this->headers->set('Content-Length', $size);
             }
         }

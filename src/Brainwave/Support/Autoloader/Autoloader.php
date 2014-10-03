@@ -52,7 +52,7 @@ class Autoloader
     {
         $class = self::normalizeClass($class);
 
-        foreach (self::$directories as $directory) {
+        foreach (self::getDirectories() as $directory) {
             if (file_exists($path = $directory.DIRECTORY_SEPARATOR.$class)) {
                 require_once $path;
                 return true;

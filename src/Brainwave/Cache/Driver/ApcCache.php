@@ -58,7 +58,9 @@ class ApcCache extends TaggableStore implements DriverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Check if the cache driver is supported
+     *
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {

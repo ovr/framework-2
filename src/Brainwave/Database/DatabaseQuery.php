@@ -77,7 +77,6 @@ class DatabaseQuery implements QueryInterface
         }
 
         foreach ($datas as $data) {
-            $keys = array_keys($data);
             $values = array();
             $columns = array();
 
@@ -273,94 +272,5 @@ class DatabaseQuery implements QueryInterface
     public function sum($table, $join, $column = null, $where = null)
     {
         return 0 + ($this->query($this->select_context($table, $join, $column, $where, 'SUM'))->fetchColumn());
-    }
-
-    private function selectQuery($table, $join, &$columns = null, $where = null, $columnFn = null)
-    {
-        $table = '"' . $table . '"';
-        $join_key = is_array($join) ? array_keys($join) : null;
-
-        if (
-            isset($join_key[0]) &&
-            strpos($join_key[0], '[') === 0
-        ) {
-            $tableJoin = [];
-
-            $join_array = [
-                '>' => 'LEFT',
-                '<' => 'RIGHT',
-                '<>' => 'FULL',
-                '><' => 'INNER'
-            ];
-
-            foreach ($join as $sub_table => $relation) {
-                preg_match('/(\[(\<|\>|\>\<|\<\>)\])?([a-zA-Z0-9_\-]*)/', $sub_table, $match);
-
-                if ($match[2] != '' && $match[3] != '') {
-                    if (is_string($relation)) {
-                        $relation = 'USING ("' . $relation . '")';
-                    }
-
-                    if (is_array($relation)) {
-                        // For ['column1', 'column2']
-                        if (isset($relation[0])) {
-                            $relation = 'USING ("' . implode($relation, '", "') . '")';
-                            // For ['column1' => 'column2']
-                        } else {
-                            $relation = 'ON '.$table.'."'.key($relation).'" = "'.
-                            $match[3] . '"."' . current($relation) . '"';
-                        }
-                    }
-
-                    $tableJoin[] = $join_array[$match[2]] . ' JOIN "' . $match[3] . '" ' . $relation;
-                }
-            }
-
-            $table .= ' ' . implode($tableJoin, ' ');
-        } else {
-            if (is_null($columns)) {
-                if (is_null($where)) {
-                    if (
-                        is_array($join) &&
-                        isset($columnFn)
-                    ) {
-                        $where = $join;
-                        $columns = null;
-                    } else {
-                        $where = null;
-                        $columns = $join;
-                    }
-                } else {
-                    $where = $join;
-                    $columns = null;
-                }
-            } else {
-                $where = $columns;
-                $columns = $join;
-            }
-        }
-
-        if (isset($columnFn)) {
-            if ($columnFn == 1) {
-                $column = '1';
-
-                if (is_null($where)) {
-                    $where = $columns;
-                } else {
-                    $where = $join;
-                }
-            } else {
-                if (empty($columns)) {
-                    $columns = '*';
-                    $where = $join;
-                }
-
-                $column = $columnFn . '(' . $this->columnPush($columns) . ')';
-            }
-        } else {
-            $column = $this->columnPush($columns);
-        }
-
-        return 'SELECT ' . $column . ' FROM ' . $table . $this->whereClause($where);
     }
 }
