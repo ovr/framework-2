@@ -62,6 +62,8 @@ class ControllerCollection
      *
      * You can optionally specify HTTP methods that should be matched.
      *
+     * @param string $pattern Matched route pattern
+     * @param mixed  $to      Callback that returns the response when matched
      *
      * @return \Brainwave\Routing\Controller\Controller
      */
@@ -85,7 +87,7 @@ class ControllerCollection
 
     /**
      * Add route without HTTP method
-     * @return Controller
+     * @return Route
      */
     public function map()
     {

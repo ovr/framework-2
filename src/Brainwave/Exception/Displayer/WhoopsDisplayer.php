@@ -42,9 +42,6 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
      */
     protected $app;
 
-    /**
-     * @return WhoopsDisplayer
-     */
     public function __construct(Workbench $app, $appharset)
     {
         $this->app = $app;
@@ -157,6 +154,7 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
 
    /**
     * [FunctionName description]
+    * @param JsonResponseHandler $pageHandler [description]
     */
     protected function setJsonHanlder(JsonResponseHandler $jsonHandler)
     {
@@ -167,7 +165,7 @@ class WhoopsDisplayer implements ExceptionDisplayerInterface
    /**
     * Description
     * @param type PlainTextHandler $text
-    * @return WhoopsDisplayer
+    * @return type
     */
     protected function setPlainTextHandler(PlainTextHandler $text)
     {

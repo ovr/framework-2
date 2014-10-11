@@ -75,7 +75,7 @@ class NullCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function increment($key, $value = 1)
@@ -87,7 +87,7 @@ class NullCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function decrement($key, $value = 1)

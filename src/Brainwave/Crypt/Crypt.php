@@ -286,7 +286,7 @@ class Crypt implements CryptInterface
     * @param integer $count                 Iteration count.
     * @param integer $dkLen                 Derived key length.
     * @param string $hash_algo              A hash algorithm.
-    * @return string                        Derived key.
+    * @return binary                        Derived key.
     */
     public function pbkdf2($password, $salt, $count, $dkLen, $hash_algo = 'sha256')
     {

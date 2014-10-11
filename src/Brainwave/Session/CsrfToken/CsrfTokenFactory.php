@@ -48,8 +48,8 @@ class CsrfTokenFactory
     /**
      * Constructor.
      *
-     * @param SegmentHandlerInterface $segment A segment for values in this class.
-     * @param Crypt $randval A cryptographically-secure random
+     * @param Segment $segment A segment for values in this class.
+     * @param RandvalInterface $randval A cryptographically-secure random
      * value generator.
      */
     public function __construct(SegmentHandlerInterface $segment, Crypt $randval)

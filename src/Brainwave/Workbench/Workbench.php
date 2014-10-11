@@ -120,55 +120,55 @@ class Workbench extends Container
     protected $config = [
         'app' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'mail' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'cache' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'services' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'session' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'cookies' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'view' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'autoload' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
         'database' => [
             'ext' => 'php',
-            'namespace' => 'config',
+            'namespace' => '',
             'env' => '',
             'group' => ''
         ],
@@ -206,7 +206,7 @@ class Workbench extends Container
         // Settings
         $this['settings'] = function ($c) {
             $config = new Configuration(new ConfigurationHandler, new FileLoader);
-            $config->addPath(static::$paths['path']);
+            $config->addPath(static::$paths['path.config']);
 
             //Load config files
             foreach ($this->config as $file => $setting) {
@@ -316,7 +316,7 @@ class Workbench extends Container
      * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
      * @param array                    $values   An array of values that customizes the provider
      *
-     * @return ServiceProviderInterface
+     * @return Application
      */
     public function register(ServiceProviderInterface $provider, array $values = [])
     {
@@ -481,7 +481,7 @@ class Workbench extends Container
      * Set the current application locale.
      *
      * @param  string  $locale
-     * @return Workbench
+     * @return void
      */
     public function setLocale($locale)
     {
@@ -1177,8 +1177,8 @@ class Workbench extends Container
      * The provided Request and Response objects are updated by reference. There is no
      * value returned by this method.
      *
-     * @param  Request  Request request instance
-     * @param  Response Response response instance
+     * @param  Request  The request instance
+     * @param  Response The response instance
      */
     protected function dispatchRequest(Request $request, Response $response)
     {
@@ -1303,6 +1303,7 @@ class Workbench extends Container
     /**
      * Dynamically access application services.
      *
+     * @param  string  $key
      * @return mixed
      */
     public function __get($id)
@@ -1325,7 +1326,9 @@ class Workbench extends Container
     /**
      * Dynamically check if application services exists.
      *
-     * @return boolean
+     * @param  string  $key
+     * @param  mixed   $value
+     * @return void
      */
     public function __isset($id)
     {
@@ -1335,6 +1338,8 @@ class Workbench extends Container
     /**
      * Dynamically remove application services.
      *
+     * @param  string  $key
+     * @param  mixed   $value
      * @return void
      */
     public function __unset($id)
@@ -1356,7 +1361,7 @@ class Workbench extends Container
      * Sets a parameter or an object.
      * @param string           $id    The unique identifier for the parameter or object
      * @param mixed            $value The value of the parameter or a closure to define an object
-     * @return Workbench
+     * @return Workbench\Workbench
      */
     public function offsetSet($id, $value)
     {

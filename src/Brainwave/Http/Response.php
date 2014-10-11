@@ -147,8 +147,8 @@ class Response implements ResponseInterface
     /**
      * Constructor
      *
-     * @param HeadersInterface $headers The HTTP response headers
-     * @param CookiesJarInterface $cookies The HTTP response cookies
+     * @param \Brainwave\Interfaces\Http\HeadersInterface $headers The HTTP response headers
+     * @param \Brainwave\Interfaces\Http\CookiesInterface $cookies The HTTP response cookies
      * @param string                                      $body    The HTTP response body
      * @param int                                         $status  The HTTP response status
      * @api
@@ -360,7 +360,7 @@ class Response implements ResponseInterface
     /**
      * Get the response body size if known
      *
-     * @return integer|null
+     * @return int|false
      * @api
      */
     public function getSize()
@@ -379,7 +379,7 @@ class Response implements ResponseInterface
      * so that it is suitable for delivery to the client.
      *
      * @param  \Brainwave\Http\Interfaces\RequestInterface $request
-     * @return Response Self
+     * @return \Brainwave\Http\Interfaces\Response Self
      * @api
      */
     public function finalize(RequestInterface $request)
@@ -416,7 +416,7 @@ class Response implements ResponseInterface
     /**
      * Send HTTP response headers and body
      *
-     * @return Response Self
+     * @return \Brainwave\Http\Interfaces\Response Self
      * @api
      */
     public function send()

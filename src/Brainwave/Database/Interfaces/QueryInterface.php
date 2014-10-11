@@ -19,52 +19,151 @@ namespace Brainwave\Database\Interfaces;
  */
 
 /**
- * Query Interface
+ * QueryInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.1-dev
+ * @since   0.9.2-dev
  *
  */
 interface QueryInterface
 {
-    public function select($table, $join, $columns = null, $where = null, $return = 'obj');
+    /**
+     * This function is for special and customized SQL query
+     * that used for complex query. With each data that will be inserted,
+     * please use quote function to prevent SQL injection.
+     *
+     * @param  string $query         The SQL query
+     * @param  array  $params        SQL params
+     * @param  array  $driverOptions
+     * @return object                The PDOStatement object
+     */
+    public function query($query, array $params = [], array $driverOptions = []);
 
+    /**
+     * Select data from database
+     *
+     * @param  string          $table   The table name
+     * @param  array           $join    Table relativity for table joining.
+     *                                  Ignore it if no table joining required
+     * @param  string/array    $columns The target columns of data will be fetched
+     * @param  array           $where   The WHERE clause to filter records
+     * @return array
+     */
+    public function select($table, $join, $columns = null, $where = null);
+
+    /**
+     * Insert new records in table
+     *
+     * @param  string $table The table name
+     * @param  array  $datas The data that will be inserted into table.
+     * @return number        The last insert id
+     */
     public function insert($table, $datas);
 
+    /**
+     * Modify data in table
+     *
+     * @param  string $table The table name
+     * @param  array  $data  The data that will be modified
+     * @param  array  $where The WHERE clause to filter record
+     * @return number        The number of rows affected
+     */
     public function update($table, $data, $where = null);
 
-    public function toggle($table, $data, $where = null);
-
+    /**
+     * Delete data from table
+     *
+     * @param  string $table The table name
+     * @param  array  $where The WHERE clause to filter records
+     * @return number        The number of rows affected
+     */
     public function delete($table, $where);
 
+    /**
+     * Replace old data into new one
+     *
+     * @param  string        $table   The table name
+     * @param  string/array  $columns The target columns of data will be replaced
+     * @param  string        $search  The value being searched for
+     * @param  string        $replace The replacement value that replaces found search values
+     * @param  array         $where   The WHERE clause to filter records
+     * @return nummber                The number of rows affected
+     */
     public function replace($table, $columns, $search = null, $replace = null, $where = null);
 
+    /**
+     * Get only one record from table
+     *
+     * @param  string       $table   The table name
+     * @param  string/array $columns The target columns of data will be fetch
+     * @param  array        $where   The WHERE clause to filter records
+     * @return string/array          Return the data of the column
+     */
     public function get($table, $columns = null, $where = null);
 
     /**
-     * @return boolean
+     * Determine whether the target data existed
+     *
+     * @param  string  $table The table name
+     * @param  array   $join  Table relativity for table joining
+     * @param  array   $where The WHERE clause to filter records
+     * @return boolean        True of False if the target data has been founded
      */
     public function has($table, $join, $where = null);
 
     /**
-     * @param |null $join
+     * Counts the number of rows
      *
-     * @return integer
+     * @param  string  $table  The table name
+     * @param  array   $join   Table relativity for table joining
+     * @param  string  $column The target column will be counted
+     * @param  array   $where  The WHERE clause to filter records
+     * @return number          The number of rows
      */
-    public function count($table, $join, $where = null);
+    public function count($table, $join = null, $column = null, $where = null);
 
-    public function max($table, $join, $column = '*', $where = null);
+    /**
+     * Get the maximum value for the column
+     *
+     * @param  tring  $table  The table name
+     * @param  array  $join   Table relativity for table joining
+     * @param  string $column The target column will be calculated
+     * @param  array  $where  The WHERE clause to filter records
+     * @return number         The maximum number of the column
+     */
+    public function max($table, $join, $column = null, $where = null);
 
+    /**
+     * Get the minimum value for the column
+     *
+     * @param  string $table  The table name
+     * @param  array  $join   Table relativity for table joining
+     * @param  string $column The target column will be calculated
+     * @param  array  $where  The WHERE clause to filter records
+     * @return number         The minimum number of the column
+     */
     public function min($table, $join, $column = '*', $where = null);
 
     /**
-     * @return integer
+     * Get the average value for the column
+     *
+     * @param  string $table  The table name
+     * @param  array  $join   Table relativity for table joining
+     * @param  string $column The target column will be calculated
+     * @param  array  $where  The WHERE clause to filter records
+     * @return number         The average number of the column
      */
     public function avg($table, $join, $column = '*', $where = null);
 
     /**
-     * @return integer
+     * Get the total value for the column
+     *
+     * @param  string $table  The table name
+     * @param  array  $join   Table relativity for table joining
+     * @param  string $column The target column will be calculated
+     * @param  array  $where  The WHERE clause to filter records
+     * @return number         The total number of the column
      */
     public function sum($table, $join, $column = '*', $where = null);
 }

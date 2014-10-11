@@ -45,7 +45,7 @@ class CompilerEngine extends PhpEngine
 
     /**
      * Create a view engine instance.
-     * @param  CompilerInterface  $compiler
+     * @param  \Brainwave\View\Compilers\CompilerInterface  $compiler
      * @return void
      */
     public function __construct(CompilerInterface $compiler)

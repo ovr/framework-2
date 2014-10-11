@@ -67,6 +67,7 @@ class ExceptionHandler
     /**
      * Register the exception / error handlers for the application.
      *
+     * @param  string  $environment
      * @return void
      */
     public function register()
@@ -251,6 +252,7 @@ EOF;
      * Handle the given exception.
      *
      * @param  \Exception  $exception
+     * @param  bool  $fromConsole
      * @return void
      */
     protected function callCustomHandlers($exception)
@@ -384,7 +386,7 @@ EOF;
     /**
      * Determine if the given handler handles this exception.
      *
-     * @param  \Closure    $handler
+     * @param  Closure    $handler
      * @param  \Exception  $exception
      * @return bool
      */
@@ -398,7 +400,7 @@ EOF;
     /**
      * Determine if the given handler type hints the exception.
      *
-     * @param  \ReflectionFunction  $reflection
+     * @param  ReflectionFunction  $reflection
      * @param  \Exception  $exception
      * @return bool
      */

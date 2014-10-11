@@ -46,7 +46,7 @@ class Autoloader
      * Load the given class file.
      *
      * @param  string  $class
-     * @return boolean|null
+     * @return void
      */
     public static function load($class)
     {

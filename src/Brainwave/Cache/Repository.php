@@ -22,7 +22,6 @@ use \Closure;
 use \DateTime;
 use \ArrayAccess;
 use \Carbon\Carbon;
-use \Brainwave\Cache\Psr\Cache\CacheItemPoolInterface;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**
@@ -215,7 +214,7 @@ class Repository implements ArrayAccess
     /**
      * Get the cache driver implementation.
      *
-     * @return DriverInterface
+     * @return \Brainwave\Cache\driverInterface
      */
     public function getdriver()
     {

@@ -61,7 +61,7 @@ class FileCache implements DriverInterface
      *
      * @param  \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface  $files
      * @param  string  $directory
-     * @return DriverInterface
+     * @return void
      */
     public function __construct(FilesystemInterface $files, $directory)
     {
@@ -158,7 +158,7 @@ class FileCache implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function increment($key, $value = 1)
@@ -176,7 +176,7 @@ class FileCache implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function decrement($key, $value = 1)
@@ -240,7 +240,7 @@ class FileCache implements DriverInterface
      */
     public function setMultiple($keys, $ttl = null)
     {
-        return $this->set($keys, null, $tll);
+        return $this->set($keys, null, $ttl);
     }
 
     /**
@@ -294,16 +294,6 @@ class FileCache implements DriverInterface
         }
 
         return time() + ($minutes * 60);
-    }
-
-    /**
-     * Get the Filesystem instance.
-     *
-     * @return \Brainwave\Support\Filesystem\Filesystem
-     */
-    public function getFilesystem()
-    {
-        return $this->files;
     }
 
     /**

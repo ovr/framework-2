@@ -22,12 +22,26 @@
         "patchwork/utf8": "1.1.*",
         "monolog/monolog": "1.9.1",
         "filp/whoops": "1.2.*@dev",
+        "vlucas/phpdotenv": "~1.0",
         "guzzlehttp/streams": "1.*",
+        "league/flysystem": "0.5.*",
         "jeremeamia/superclosure": "1.*",
+        "symfony/serializer": "2.6.*@dev",
         "swiftmailer/swiftmailer": "5.2.*"
     },
     "replace": {
-        "brainwave/conifg": "self.version"
+        "brainwave/log": "self.version",
+        "brainwave/view": "self.version",
+        "brainwave/mail": "self.version",
+        "brainwave/cache": "self.version",
+        "brainwave/crypt": "self.version",
+        "brainwave/event": "self.version",
+        "brainwave/cookie": "self.version",
+        "brainwave/conifg": "self.version",
+        "brainwave/session": "self.version",
+        "brainwave/support": "self.version",
+        "brainwave/exception": "self.version",
+        "brainwave/translator": "self.version"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
@@ -41,7 +55,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.2-dev"
+            "dev-master": "0.9.3-dev"
         }
     },
     "suggest": {

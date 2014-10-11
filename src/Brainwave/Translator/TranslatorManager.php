@@ -114,7 +114,7 @@ class TranslatorManager implements TranslatorInterface
     /**
      * [setLoader description]
      *
-     * @param FileLoader $loader \Brainwave\Config\Fileloader
+     * @param bool $loader \Brainwave\Config\Fileloader
      */
     public function setLoader(FileLoader $loader)
     {
@@ -224,6 +224,7 @@ class TranslatorManager implements TranslatorInterface
      *
      * @param type $str
      * @param type $count
+     * @param type $lang_id
      *
      * @return type
      */
@@ -451,9 +452,9 @@ class TranslatorManager implements TranslatorInterface
     /**
      * Check if lang is valid
      *
+     * @param string $lang
      *
-     * @param string|boolean $checkLang
-     * @return boolean|null or InvalidArgumentException
+     * @return true or InvalidArgumentException
      */
     protected function checkLang($checkLang)
     {

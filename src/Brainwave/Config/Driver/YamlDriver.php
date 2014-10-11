@@ -48,7 +48,7 @@ class YamlDriver implements DriverInterface
     /**
      * Checking if file ist supported
      * @param  string $filename
-     * @return boolean
+     * @return mixed
      */
     public function supports($filename)
     {

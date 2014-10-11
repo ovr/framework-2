@@ -123,7 +123,7 @@ class MailgunTransport implements Swift_Transport
      * Get the "to" payload field for the API request.
      *
      * @param  \Swift_Mime_Message  $message
-     * @return string
+     * @return array
      */
     protected function getTo(Swift_Mime_Message $message)
     {
@@ -166,7 +166,7 @@ class MailgunTransport implements Swift_Transport
      * Set the API key being used by the transport.
      *
      * @param  string  $key
-     * @return string
+     * @return void
      */
     public function setKey($key)
     {
@@ -187,7 +187,7 @@ class MailgunTransport implements Swift_Transport
      * Set the domain being used by the transport.
      *
      * @param  string  $domain
-     * @return string
+     * @return void
      */
     public function setDomain($domain)
     {

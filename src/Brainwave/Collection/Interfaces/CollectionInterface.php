@@ -30,51 +30,21 @@ use \Brainwave\Crypt\Interfaces\CryptInterface;
  */
 interface CollectionInterface extends \ArrayAccess, \Countable, \IteratorAggregate
 {
-    /**
-     * @param string $key
-     *
-     * @return void
-     */
     public function set($key, $value);
 
-    /**
-     * @param string $key
-     */
     public function get($key, $default = null);
 
-    /**
-     * @return void
-     */
     public function replace(array $items);
 
     public function all();
 
-    /**
-     * @param string $key
-     *
-     * @return boolean
-     */
     public function has($key);
 
-    /**
-     * @param string $key
-     *
-     * @return void
-     */
     public function remove($key);
 
-    /**
-     * @return void
-     */
     public function clear();
 
-    /**
-     * @return void
-     */
     public function encrypt(CryptInterface $crypt);
 
-    /**
-     * @return void
-     */
     public function decrypt(CryptInterface $crypt);
 }

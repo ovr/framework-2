@@ -18,803 +18,273 @@ namespace Brainwave\Database;
  *
  */
 
-use \PDO;
-use \PDOException;
-
-//use \Predis\Client;
+use \Pimple\Container;
+use \Brainwave\Support\Arr;
+use \Brainwave\Database\Connection\Connection;
+use \Brainwave\Database\Connection\ConnectionFactory;
+use \Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
 
 /**
  * DatabaseManager
  *
  * @package Narrowspark/Database
  * @author  Daniel Bannert
- * @since   0.9.1-dev
+ * @since   0.9.2-dev
  *
  */
-class DatabaseManager
+class DatabaseManager implements ConnectionResolverInterface
 {
+    /**
+     * The application instance.
+     *
+     * @var \Pimple\Container
+     */
+    protected $app;
 
     /**
-     * DB connections
-     * To avoid multiple connection to same database
+     * The database connection factory instance.
+     *
+     * @var \Brainwave\Database\Connection\ConnectionFactory
+     */
+    protected $factory;
+
+    /**
+     * The active connection instances.
+     *
      * @var array
      */
-    static private $connections = [];
+    protected $connections = [];
 
     /**
-     * DB type
-     * @var string
-     */
-    protected $databaseType;
-
-    /**
-     * [$pdo description]
-     * @var [type]
-     */
-    protected $pdo;
-
-    /**
-     * DB server address
-     * For MySQL, MariaDB, MSSQL, Sybase, PostgreSQL, Oracle, Google Cloud SQL
-     * @var string
-     */
-    protected $server;
-
-     /**
-     * DB username
-     * @var string
-     */
-    protected $username;
-
-    /**
-     * DB password
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * SQLite File
-     * @var string
-     */
-    protected $databaseFile;
-
-    /**
-     * DB port
-     * @var int
-     */
-    protected $port;
-
-    /**
-     * DB encoding
-     * @var string
-     */
-    protected $charset;
-
-    /**
-     * DB NAME
-     * @var string
-     */
-    protected $databaseName;
-
-    /**
-     * For debug
-     * @var string
-     */
-    protected $logQueries = true;
-
-    /**
-     * [$queryHistory description]
-     * @var [type]
-     */
-    public $queryHistory = [];
-
-    /**
-     * Variable
-     * @var string
-     */
-    protected $queryString;
-
-    /**
-     * [$AGGREGATIONS description]
+     * The custom connection resolvers.
+     *
      * @var array
      */
-    private static $AGGREGATIONS = ['AVG','SUM','MIN','COUNT','MAX'];
+    protected $extensions = [];
 
     /**
-     * All settings for PDO
-     * @param array $options
+     * Create a new database manager instance.
+     *
+     * @param  \Pimple\Container  $app
+     * @param  \Brainwave\Database\Connection\ConnectionFactory  $factory
+     * @return void
      */
-    public function __construct($options = null)
+    public function __construct(Container $app, ConnectionFactory $factory)
     {
-        if (isset(self::$connections[$this->databaseName])) {
-            return true;
+        $this->app = $app;
+        $this->factory = $factory;
+    }
+
+    /**
+     * Get a database connection instance.
+     *
+     * @param  string  $name
+     * @return \Brainwave\Database\Connection\Connection
+     */
+    public function connection($name = null)
+    {
+        // If we haven't created this connection, we'll create it based on the config
+        // provided in the application. Once we've created the connections we will
+        // set the "fetch mode" for PDO which determines the query return types.
+        if (!isset($this->connections[$name])) {
+            $connection = $this->makeConnection($name);
+
+            $this->connections[$name] = $this->prepare($connection);
         }
 
-        try {
-            $commands = [];
+        return $this->connections[$name];
+    }
 
-            if (is_string($options) && !empty($options)) {
-                if (strtolower($this->databaseType) == 'sqlite') {
-                    $this->databaseFile = $options['dbname'];
-                } else {
-                    $this->databaseName = $options['dbname'];
-                }
-            }
+    /**
+     * Disconnect from the given database and remove from local cache.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function purge($name = null)
+    {
+        $this->disconnect($name);
 
-            $this->databaseType = $options['type'];
-            $this->port = $options['port'];
-            $this->charset = (!empty($options['charset'])) ? $options['charset'] : $app['settings']['charset'];
+        unset($this->connections[$name]);
+    }
 
-            if (!empty($options['server'])) {
-                $this->server = $options['server'];
-            }
-            if (!empty($options['username'])) {
-                $this->username = $options['username'];
-            }
-            if (!empty($options['password'])) {
-                $this->password = $options['password'];
-            }
-
-            if (isset($this->port) && is_int($this->port * 1)) {
-                $port = $this->port;
-            }
-
-            $set_charset = "SET NAMES '" . $this->charset . "'";
-            $type = strtolower($this->databaseType);
-            $is_port = isset($port);
-
-            switch ($type)
-            {
-                case 'mariadb':
-                    $type = 'mysql';
-                    //no break
-                case 'mysql':
-                    // Make MySQL using standard quoted identifier
-                    $commands[] = 'SET SQL_MODE=ANSI_QUOTES';
-                    //no break
-                case 'cloudsql':
-                    $dsn = 'mysql:unix_socket=/cloudsql/' . $this->server . ';dbname=' . $this->databaseName;
-                    $commands[] = 'SET SQL_MODE=ANSI_QUOTES';
-                    $commands[] = $set_charset;
-                    break;
-                case 'pgsql':
-                    $dsn = $type . ':host=' . $this->server.
-                    ($is_port ? ';port=' . $port : '') . ';dbname=' . $this->databaseName;
-                    $commands[] = $set_charset;
-                    break;
-                case 'sybase':
-                    $dsn = 'dblib:host=' . $this->server.
-                    ($is_port ? ':' . $port : '') . ';dbname=' . $this->databaseName;
-                    $commands[] = $set_charset;
-                    break;
-                case 'oracle':
-                    $dsn = 'oci:dbname=//' . $this->server.
-                    ($is_port ? ':' . $port : ':1521').'/'.$this->databaseName.';charset=' . $this->charset;
-                    break;
-                case 'mssql':
-                    $dsn = strpos(PHP_OS, 'WIN') !== false ?
-                        'sqlsrv:server=' . $this->server . ($is_port ? ',' . $port : '').
-                        ';database=' . $this->databaseName :
-                        'dblib:host=' . $this->server . ($is_port ? ':' . $port : '').
-                        ';dbname=' . $this->databaseName;
-
-                    // Keep MSSQL QUOTED_IDENTIFIER is ON for standard quoting
-                    $commands[] = 'SET QUOTED_IDENTIFIER ON';
-                    $commands[] = $set_charset;
-                    break;
-                case 'sqlite':
-                    $dsn = $type . ':' . $this->databaseFile;
-                    $this->username = null;
-                    $this->password = null;
-                    break;
-            }
-
-            $this->pdo = new PDO(
-                $dsn,
-                $this->username,
-                $this->password,
-                $options['option']
-            );
-
-            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            foreach ($commands as $value) {
-                $this->pdo->exec($value);
-            }
-        } catch (PDOException $e) {
-            throw new Exception($e->getMessage());
+    /**
+     * Disconnect from the given database.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function disconnect($name = null)
+    {
+        if (isset($this->connections[$name = $name ?: $this->getDefaultConnection()])) {
+            $this->connections[$name]->disconnect();
         }
     }
 
     /**
-     * [exec description]
-     * @param  string $query [description]
-     * @return [type]        [description]
+     * Reconnect to the given database.
+     *
+     * @param  string  $name
+     * @return \Brainwave\Database\Connection\Connection
      */
-    public function exec($query)
+    public function reconnect($name = null)
     {
-        $this->queryString = $query;
-        $this->addQueryToHistory($query);
+        $this->disconnect($name = $name ?: $this->getDefaultConnection());
 
-        return $this->pdo->exec($query);
-    }
-
-    /**
-     * [quote description]
-     * @param  [type]  $string      [description]
-     * @param  boolean $is_function [description]
-     * @return [type]               [description]
-     */
-    public function quote($string, $is_function = false)
-    {
-        return $is_function ? $string : $this->pdo->quote($string);
-    }
-
-    /**
-     * [columnQuote description]
-     * @param  [type] $string [description]
-     * @return [type]         [description]
-     */
-    protected function columnQuote($string)
-    {
-        return ' "' . str_replace('.', '
-
-            "."', preg_replace('/(^#|\(JSON\))/', '', $string)) . '" ';
-    }
-
-    /**
-     * [columnPush description]
-     * @param  [type] $columns [description]
-     * @return [type]          [description]
-     */
-    protected function columnPush($columns)
-    {
-        if ($columns == '*') {
-            return $columns;
-        }
-
-        if (is_string($columns) || is_int($columns)) {
-            $columns = [(string) $columns];
-        }
-
-        $stack = [];
-
-        foreach ($columns as $key => $value) {
-            preg_match('/([a-zA-Z0-9_\-\.]*)\s*\(([a-zA-Z0-9_\-\*]*)\)/i', $value, $match);
-
-            if (isset($match[1], $match[2])) {
-                if (in_array(strtoupper($match[1]), self::$AGGREGATIONS)) {
-                    array_push(
-                        $stack,
-                        $match[1]  . '(' .( $match[2] == '*' ?
-                        $match[2] :
-                        $this->columnQuote($match[2])) . ')'
-                    );
-                } else {
-                    array_push(
-                        $stack,
-                        $this->columnQuote($match[1]) . ' AS ' . $this->columnQuote($match[2])
-                    );
-                }
-            } else {
-                if ($value == "1") {
-                    array_push($stack, $value);
-                } else {
-                    array_push($stack, $this->columnQuote($value));
-                }
-            }
-        }
-
-        return implode($stack, ',');
-    }
-
-    protected function arrayQuote($array)
-    {
-        $temp = [];
-
-        foreach ($array as $value) {
-            $temp[] = is_int($value) ? $value : $this->pdo->quote($value);
-        }
-
-        return implode($temp, ',');
-    }
-
-    /**
-     * @param string $conjunctor
-     */
-    protected function innerConjunct($data, $conjunctor, $outerConjunctor)
-    {
-        $haystack = [];
-
-        foreach ($data as $value) {
-            $haystack[] = '(' . $this->dataImplode($value, $conjunctor) . ')';
-        }
-
-        return implode($outerConjunctor . ' ', $haystack);
-    }
-
-    protected function fnQuote($column, $string)
-    {
-        return (strpos($column, '#') === 0 && preg_match('/^[A-Z0-9\_]*\([^)]*\)$/', $string)) ?
-
-            $string :
-
-            $this->quote($string);
-    }
-
-    /**
-     * [dataImplode description]
-     * @return [type]            [description]
-     */
-    public function dataImplode($data, $conjunctor)
-    {
-        $wheres = [];
-
-        foreach ($data as $key => $value) {
-            $type = gettype($value);
-
-            if (preg_match("/^(AND|OR)\s*#?/i", $key, $relationMatch) &&
-                $type == 'array'
-            ) {
-                $wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
-                    '(' . $this->dataImplode($value, ' ' . $relationMatch[1]) . ')' :
-                    '(' . $this->innerConjunct($value, ' ' . $relationMatch[1], $conjunctor) . ')';
-            } else {
-                preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
-                $column = $this->columnQuote($match[2]);
-
-                if (isset($match[4])) {
-                    if ($match[4] == '!') {
-                        switch ($type)
-                        {
-                            case 'NULL':
-                                $wheres[] = $column . ' IS NOT NULL';
-                                break;
-
-                            case 'array':
-                                $wheres[] = $column . ' NOT IN (' . $this->arrayQuote($value) . ')';
-                                break;
-
-                            case 'integer':
-                            case 'double':
-                                $wheres[] = $column . ' != ' . $value;
-                                break;
-
-                            case 'boolean':
-                                $wheres[] = $column . ' != ' . ($value ? '1' : '0');
-                                break;
-
-                            case 'string':
-                                $wheres[] = $column . ' != ' . $this->fnQuote($key, $value);
-                                break;
-
-                            /*
-                            * Adding option for Select Query to be used in Where Statement
-                            * Example
-                            *
-                            * "AND" => [
-                            *      "employees.company" =>
-                            *      (object)['query'=>"(SELECT id FROM companies WHERE email = '".$email."')"],
-                            * ],
-                            *
-                            * Assuming in this example that companies.email is an unique field
-                            */
-                            case 'object':
-                                $wheres[] = $column . ' = ' . $value->query;
-                                break;
-                        }
-                    } else {
-                        if ($match[4] == '<>' || $match[4] == '><') {
-                            if ($type == 'array') {
-                                if ($match[4] == '><') {
-                                    $column .= ' NOT';
-                                }
-
-                                if (is_numeric($value[0]) && is_numeric($value[1])) {
-                                    $wheres[] = '(' . $column . ' BETWEEN ' . $value[0] . ' AND ' . $value[1] . ')';
-                                } else {
-                                    $wheres[] = '(' . $column . ' BETWEEN ' .
-                                        $this->quote($value[0]) . ' AND ' . $this->quote($value[1]) . ')';
-                                }
-                            }
-                        } else {
-                            if (is_numeric($value)) {
-                                $wheres[] = $column . ' ' . $match[4] . ' ' . $value;
-                            } else {
-                                $datetime = strtotime($value);
-
-                                if ($datetime) {
-                                    $wheres[] = $column . ' ' . $match[4] . ' ' .
-                                    $this->quote(date('Y-m-d H:i:s', $datetime));
-                                } else {
-                                    if (strpos($key, '#') === 0) {
-                                        $wheres[] = $column . ' ' . $match[4] . ' ' . $this->fnQuote($key, $value);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if (is_int($key)) {
-                        $wheres[] = $this->quote($value);
-                    } else {
-                        switch ($type) {
-                            case 'NULL':
-                                $wheres[] = $column . ' IS NULL';
-                                break;
-
-                            case 'array':
-                                $wheres[] = $column . ' IN (' . $this->arrayQuote($value) . ')';
-                                break;
-
-                            case 'integer':
-                            case 'double':
-                                $wheres[] = $column . ' = ' . $value;
-                                break;
-
-                            case 'boolean':
-                                $wheres[] = $column . ' = ' . ($value ? '1' : '0');
-                                break;
-
-                            case 'string':
-                                $wheres[] = $column . ' = ' . $this->fnQuote($key, $value);
-                                break;
-
-                            /*
-                            * Adding option for Select Query to be used in Where Statement
-                            * Example
-                            *
-                            * "AND" => [
-                            *      "employees.company" =>
-                            *      (object)['query'=>"(SELECT id FROM companies WHERE email = '".$email."')"],
-                            * ],
-                            *
-                            * Assuming in this example that companies.email is an unique field
-                            */
-                            case 'object':
-                                $wheres[] = $column . ' = ' . $value->query;
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return implode($conjunctor . ' ', $wheres);
-    }
-
-    /**
-     * [whereClause description]
-     * @param  [type] $where [description]
-     * @return [type]        [description]
-     */
-    protected function whereClause($where)
-    {
-        $whereClause = '';
-
-        if (is_array($where)) {
-            $whereKeys = array_keys($where);
-            $whereAND = preg_grep("/^AND\s*#?$/i", $whereKeys);
-            $whereOR = preg_grep("/^OR\s*#?$/i", $whereKeys);
-
-            $singleCondition = array_diff_key($where, array_flip(
-                explode(' ', 'AND OR GROUP ORDER HAVING LIMIT LIKE MATCH')
-            ));
-
-            if ($singleCondition !== []) {
-                $whereClause = ' WHERE ' . $this->dataImplode($singleCondition, '');
-            }
-
-            if (!empty($whereAND)) {
-                $value = array_values($whereAND);
-                $whereClause = ' WHERE ' . $this->dataImplode($where[ $value[0] ], ' AND');
-            }
-
-            if (!empty($whereOR)) {
-                $value = array_values($whereOR);
-                $whereClause = ' WHERE ' . $this->dataImplode($where[ $value[0] ], ' OR');
-            }
-
-            if (isset($where['LIKE'])) {
-                $LIKE = $where['LIKE'];
-
-                if (is_array($LIKE)) {
-                    $is_OR = isset($LIKE['OR']);
-                    $clause_wrap = [];
-
-                    if ($is_OR || isset($LIKE['AND'])) {
-                        $connector = $is_OR ? 'OR' : 'AND';
-                        $LIKE = $is_OR ? $LIKE['OR'] : $LIKE['AND'];
-                    } else {
-                        $connector = 'AND';
-                    }
-
-                    foreach ($LIKE as $column => $keyword) {
-                        $keyword = is_array($keyword) ? $keyword : array($keyword);
-
-                        foreach ($keyword as $key) {
-                            preg_match('/(%?)([a-zA-Z0-9_\-\.]*)(%?)((\[!\])?)/', $column, $column_match);
-
-                            if ($column_match[1] == '' && $column_match[3] == '') {
-                                $column_match[1] = '%';
-                                $column_match[3] = '%';
-                            }
-
-                            $clause_wrap[] =
-                                $this->columnQuote($column_match[2]) .
-                                ($column_match[4] != '' ? ' NOT' : '') . ' LIKE ' .
-                                $this->quote($column_match[1] . $key . $column_match[3]);
-                        }
-                    }
-
-                    $whereClause .= ($whereClause != '' ? ' AND ' : ' WHERE ') .
-                    '(' . implode($clause_wrap, ' ' . $connector . ' ') . ')';
-                }
-            }
-
-            if (isset($where['MATCH'])) {
-                $MATCH = $where['MATCH'];
-
-                if (is_array($MATCH) && isset($MATCH['columns'], $MATCH['keyword'])) {
-                    $whereClause .= ($whereClause != '' ? ' AND ' : ' WHERE ') .
-                    ' MATCH ("' . str_replace('.', '"."', implode($MATCH['columns'], '", "')) . '") AGAINST (' .
-                        $this->quote($MATCH['keyword']) . ')';
-                }
-            }
-
-            if (isset($where['GROUP'])) {
-                $whereClause .= ' GROUP BY ' . $this->columnQuote($where['GROUP']);
-            }
-
-            if (isset($where['ORDER'])) {
-                $rsort = '/(^[a-zA-Z0-9_\-\.]*)(\s*(DESC|ASC))?/';
-                $ORDER = $where['ORDER'];
-
-                if (is_array($ORDER)) {
-                    if (
-                        isset($ORDER[1]) &&
-                        is_array($ORDER[1])
-                    ) {
-                        $whereClause .= ' ORDER BY FIELD(' . $this->columnQuote($ORDER[0]) .
-                            ', ' . $this->arrayQuote($ORDER[1]) . ')';
-                    } else {
-                        $stack = [];
-
-                        foreach ($ORDER as $column) {
-                            preg_match($rsort, $column, $orderMatch);
-
-                            array_push(
-                                $stack,
-                                '"' . str_replace('.', '"."', $orderMatch[1]) . '"' .
-                                (isset($orderMatch[3]) ? ' ' . $orderMatch[3] : '')
-                            );
-                        }
-
-                        $whereClause .= ' ORDER BY ' . implode($stack, ',');
-                    }
-                } else {
-                    preg_match($rsort, $ORDER, $orderMatch);
-
-                    $whereClause .= ' ORDER BY "' .
-                    str_replace('.', '"."', $orderMatch[1]) . '"' .
-                    (isset($orderMatch[3]) ? ' ' .
-                    $orderMatch[3] : '');
-                }
-
-                if (isset($where['HAVING'])) {
-                    $whereClause .= ' HAVING ' . $this->dataImplode($where['HAVING'], '');
-                }
-            }
-
-            if (isset($where['LIMIT'])) {
-                $LIMIT = $where['LIMIT'];
-
-                if (is_numeric($LIMIT)) {
-                    $whereClause .= ' LIMIT ' . $LIMIT;
-                }
-
-                if (
-                    is_array($LIMIT) &&
-                    is_numeric($LIMIT[0]) &&
-                    is_numeric($LIMIT[1])
-                ) {
-                    $whereClause .= ' LIMIT ' . $LIMIT[0] . ',' . $LIMIT[1];
-                }
-            }
+        if (!isset($this->connections[$name])) {
+            return $this->connection($name);
         } else {
-            if ($where !== null) {
-                $whereClause .= ' ' . $where;
-            }
-        }
-
-        return $whereClause;
-    }
-
-    /**
-     * [lastQuery description]
-     * @return [type] [description]
-     */
-    public function lastQuery()
-    {
-        return "SET SQL_MODE=ANSI_QUOTES; " .$this->queryString;
-    }
-
-    /**
-     * [info description]
-     * @return [type] [description]
-     */
-    public function info()
-    {
-        $output = [
-            'server' => 'SERVER_INFO',
-            'driver' => 'DRIVER_NAME',
-            'client' => 'CLIENT_VERSION',
-            'version' => 'SERVER_VERSION',
-            'connection' => 'CONNECTION_STATUS'
-        ];
-
-        foreach ($output as $key => $value) {
-            $output[ $key ] = $this->pdo->getAttribute(constant('PDO::ATTR_' . $value));
-        }
-
-        return $output;
-    }
-
-    /**
-     * [addQueryToHistory description]
-     * @param [type]  $query     [description]
-     * @param boolean $timestamp [description]
-     */
-    protected function addQueryToHistory($query, $timestamp = true)
-    {
-        if ($this->logQueries === false) {
-            return;
-        }
-
-        if ($timestamp) {
-            $date = new DateTime();
-            $query = $date->format("Y-m-d H:i:s:u") . $query;
-        }
-
-        $this->queryHistory[] = $query;
-    }
-
-    /**
-     * [getQueryToHistory description]
-     * @return [type] [description]
-     */
-    public function getQueryToHistory()
-    {
-        return $this->queryHistory;
-    }
-
-    /**
-     * [logQueries description]
-     * @param  [type] $true [description]
-     * @return [type]       [description]
-     */
-    public function logQueries($true)
-    {
-        $this->logQueries = $true;
-    }
-
-    /**
-     * [setQueryString description]
-     * @param [type] $query [description]
-     */
-    public function setQueryString($query)
-    {
-        $this->queryString = $query;
-    }
-
-    /**
-     * [getPdo description]
-     * @return [type] [description]
-     */
-    public function getPdo()
-    {
-        return $this->pdo;
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function beginTransaction()
-    {
-        if ($this->pdo->inTransaction()) {
-            return $this->pdo->beginTransaction();
+            return $this->refreshPdoConnections($name);
         }
     }
 
     /**
-     * [beginTransaction description]
-     * @return [type] [description]
+     * Refresh the PDO connections on a given connection.
+     *
+     * @param  string  $name
+     * @return \Brainwave\Database\Connection\Connection
      */
-    public function rollback()
+    protected function refreshPdoConnections($name)
     {
-        if ($this->pdo->inTransaction()) {
-            try {
-                return $this->pdo->rollBack();
-            } catch (PDOException $ex) {
-                echo $ex->getMessage();
-                return false;
-            }
-        }
+        $fresh = $this->makeConnection($name);
+
+        return $this->connections[$name]->setPdo($fresh->getPdo());
     }
 
     /**
-     * [beginTransaction description]
-     * @return [type] [description]
+     * Make the database connection instance.
+     *
+     * @param  string  $name
+     * @return \Brainwave\Database\Connection\Connection
      */
-    public function commit()
+    protected function makeConnection($name)
     {
-        if ($this->pdo->inTransaction()) {
-            return $this->pdo->commit();
-        }
-    }
+        $config = $this->getConfig($name);
 
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function close()
-    {
-        $this->pdo = null;
-    }
-
-    /**
-     * [beginTransaction description]
-     * @return [type] [description]
-     */
-    public function error()
-    {
-        return $this->pdo->errorInfo();
-    }
-
-    /**
-     * [debugPDO description]
-     * @param  [type] $rawSql    [description]
-     * @param  [type] $parameters [description]
-     * @return [type]             [description]
-     */
-    public function debugPDO($rawSql, $parameters)
-    {
-        $keys = [];
-        $values = $parameters;
-
-        foreach ($parameters as $key => $value) {
-
-            // check if named parameters (':param') or anonymous parameters ('?') are used
-            if (is_string($key)) {
-                $keys[] = '/:'.$key.'/';
-            } else {
-                $keys[] = '/[?]/';
-            }
-
-            // bring parameter into human-readable format
-            if (is_string($value)) {
-                $values[$key] = "'" . $value . "'";
-            } elseif (is_array($value)) {
-                $values[$key] = implode(',', $value);
-            } elseif (is_null($value)) {
-                $values[$key] = 'NULL';
-            }
+        // First we will check by the connection name to see if an extension has been
+        // registered specifically for that connection. If it has we will call the
+        // Closure and pass it the config allowing it to resolve the connection.
+        if (isset($this->extensions[$name])) {
+            return call_user_func($this->extensions[$name], $config, $name);
         }
 
-        $rawSql = preg_replace($keys, $values, $rawSql, 1, $count);
+        $driver = $config['driver'];
 
-        return $rawSql;
+        // Next we will check to see if an extension has been registered for a driver
+        // and will call the Closure if so, which allows us to have a more generic
+        // resolver for the drivers themselves which applies to all connections.
+        if (isset($this->extensions[$driver])) {
+            return call_user_func($this->extensions[$driver], $config, $name);
+        }
+
+        return $this->factory->make($config, $name);
     }
 
     /**
-     * [__get description]
-     * @param  [type] $prop [description]
-     * @return [type]       [description]
+     * Prepare the database connection instance.
+     *
+     * @param  \Brainwave\Database\Connection\Connection  $connection
+     * @return \Brainwave\Database\Connection\Connection
      */
-    public function __get($prop)
+    protected function prepare(Connection $connection)
     {
-        return $this->$prop;
+        $connection->setFetchMode($this->app['settings']['database.fetch']);
+
+        // The database connection can also utilize a cache manager instance when cache
+        // functionality is used on queries, which provides an expressive interface
+        // to caching both fluent queries and Eloquent queries that are executed.
+        $app = $this->app;
+
+        $connection->setCacheManager(function () use ($app) {
+            return $app['cache'];
+        });
+
+        // Here we'll set a reconnector callback. This reconnector can be any callable
+        // so we will set a Closure to reconnect from this manager with the name of
+        // the connection, which will allow us to reconnect from the connections.
+        $connection->setReconnector(function ($connection) {
+            $this->reconnect($connection->getName());
+        });
+
+        return $connection;
+    }
+
+    /**
+     * Get the configuration for a connection.
+     *
+     * @param  string  $name
+     * @return array
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function getConfig($name)
+    {
+        $name = $name ?: $this->getDefaultConnection();
+
+        // To get the database connection configuration, we will just pull each of the
+        // connection configurations and get the configurations for the given name.
+        // If the configuration doesn't exist, we'll throw an exception and bail.
+        $connections = $this->app['settings']['database.connections'];
+
+        if (is_null($config = Arr::arrayGet($connections, $name))) {
+            throw new \InvalidArgumentException("Database [$name] not configured.");
+        }
+
+        return $config;
+    }
+
+    /**
+     * Get the default connection name.
+     *
+     * @return string
+     */
+    public function getDefaultConnection()
+    {
+        return $this->app['settings']['database.default'];
+    }
+
+    /**
+     * Set the default connection name.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function setDefaultConnection($name)
+    {
+        $this->app['settings']['database.default'] = $name;
+    }
+
+    /**
+     * Register an extension connection resolver.
+     *
+     * @param  string    $name
+     * @param  callable  $resolver
+     * @return void
+     */
+    public function extend($name, callable $resolver)
+    {
+        $this->extensions[$name] = $resolver;
+    }
+
+    /**
+     * Return all of the created connections.
+     *
+     * @return array
+     */
+    public function getConnections()
+    {
+        return $this->connections;
+    }
+
+    /**
+     * Dynamically pass methods to the default connection.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return call_user_func_array(array($this->connection(), $method), $parameters);
     }
 }

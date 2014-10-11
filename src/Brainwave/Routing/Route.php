@@ -137,7 +137,7 @@ class Route implements RouteInterface
      * Constructor
      *
      * @param string $pattern       The URL pattern
-     * @param null|callable  $callable      Anything that returns `true` for `is_callable()`
+     * @param mixed  $callable      Anything that returns `true` for `is_callable()`
      * @param bool   $caseSensitive Whether or not this route should be matched in a case-sensitive manner
      * @param bool   $escapePattern If false, the route pattern is considered as a RegExp pattern,
      *
@@ -164,6 +164,7 @@ class Route implements RouteInterface
     /**
      * Set default route conditions for all Routing
      *
+     * @param  array $defaultConditions
      * @api
      */
     public static function setDefaultConditions(array $conditions = [])
@@ -270,7 +271,7 @@ class Route implements RouteInterface
     /**
      * Get route callable
      *
-     * @return callable
+     * @return mixed
      * @api
      */
     public function getCallable()
@@ -296,14 +297,44 @@ class Route implements RouteInterface
     /**
      * Set route callable
      *
-     * @param  callable                     $callable
+     * @param  mixed                     $callable
      * @throws \InvalidArgumentException If argument is not callable
      * @api
      */
-    public function setCallable(callable $callable)
+    public function setCallable($callable)
     {
+        $matches = array();
+        if (
+            is_string($callable) &&
+            preg_match(
+                '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!',
+                $callable,
+                $matches
+            )
+        ) {
+            $class = $matches[1];
+            $method = $matches[2];
+
+            $callable = function () use ($class, $method) {
+                static $obj = null;
+                if ($obj === null) {
+                    if (!class_exists($class)) {
+                        throw new \InvalidArgumentException('Route callable class does not exist');
+                    }
+                    $obj = new $class;
+                }
+                if (!method_exists($obj, $method)) {
+                    throw new \InvalidArgumentException('Route callable method does not exist');
+                }
+                return call_user_func_array(array($obj, $method), func_get_args());
+            };
+        }
+
+        if (!is_callable($callable)) {
+            throw new \InvalidArgumentException('Route callable must be callable');
+        }
+
         $this->callable = $callable;
-        return $this;
     }
 
     /**
@@ -355,7 +386,7 @@ class Route implements RouteInterface
     /**
      * Get route name (this may be null if not set)
      *
-     * @return string
+     * @return string|null
      * @api
      */
     public function getName()
@@ -443,7 +474,7 @@ class Route implements RouteInterface
      *
      * @param  string                    $index     Name of URL parameter
      * @param  mixed                     $value     The new parameter value
-     * @return Route
+     * @return void
      * @throws \InvalidArgumentException            If route parameter does not exist at index
      * @api
      */
@@ -541,7 +572,7 @@ class Route implements RouteInterface
      * and an InvalidArgumentException is thrown immediately if it isn't.
      *
      * @param  Callable|array[Callable]
-     * 
+     *
      * @return Route
      * @throws \InvalidArgumentException If argument is not callable or not an array of callables.
      * @api
@@ -573,7 +604,7 @@ class Route implements RouteInterface
      * http://blog.sosedoff.com/2009/09/20/rails-like-php-url-router/
      *
      * @param  string $resourceUri A Request URI
-     * 
+     *
      * @return bool
      * @api
      */

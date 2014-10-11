@@ -80,7 +80,7 @@ abstract class StaticalProxyManager
      * Create a fresh mock instance for the given class.
      *
      * @param  string  $name
-     * @return MockInterface
+     * @return \Mockery\Expectation
      */
     protected static function createFreshMockInstance($name)
     {
@@ -97,7 +97,7 @@ abstract class StaticalProxyManager
      * Create a fresh mock instance for the given class.
      *
      * @param  string  $name
-     * @return MockInterface
+     * @return \Mockery\Expectation
      */
     protected static function createMockByName($name)
     {

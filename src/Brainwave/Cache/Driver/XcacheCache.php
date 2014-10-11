@@ -52,7 +52,7 @@ class XcacheCache extends TaggableStore implements DriverInterface
      * Create a new WinCache store.
      *
      * @param  string  $prefix
-     * @return DriverInterface
+     * @return void
      */
     public function __construct($prefix = '')
     {
@@ -92,7 +92,7 @@ class XcacheCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function increment($key, $value = 1)
@@ -104,7 +104,7 @@ class XcacheCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int
      */
     public function decrement($key, $value = 1)

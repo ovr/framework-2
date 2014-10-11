@@ -45,7 +45,7 @@ class SegmentHandler implements SegmentHandlerInterface
 
     /**
      * Constructor.
-     * @param SessionManager $session The session manager.
+     * @param Manager $session The session manager.
      * @param string $name The segment name.
      */
     public function __construct(SessionManager $session, $name)

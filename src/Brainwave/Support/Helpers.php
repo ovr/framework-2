@@ -29,6 +29,17 @@ namespace Brainwave\Support;
 class Helpers
 {
     /**
+     * Escape HTML entities in a string.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public static function e($value)
+    {
+        return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
+    }
+
+    /**
      * Get the root Facade application instance.
      *
      * @param  string  $make
@@ -79,6 +90,23 @@ class Helpers
     }
 
     /**
+     * Replace a given value in the string sequentially with an array.
+     *
+     * @param  string  $search
+     * @param  array   $replace
+     * @param  string  $subject
+     * @return string
+     */
+    public static function strReplaceArray($search, array $replace, $subject)
+    {
+        foreach ($replace as $value) {
+            $subject = preg_replace('/'.$search.'/', $value, $subject, 1);
+        }
+
+        return $subject;
+    }
+
+    /**
      * Returns all traits used by a class, it's subclasses and trait of their traits
      *
      * @param  string  $class
@@ -93,5 +121,58 @@ class Helpers
         }
 
         return array_unique($results);
+    }
+
+    /**
+     * A timing safe equals comparison.
+     *
+     * To prevent leaking length information, it is important
+     * that user input is always used as the second parameter.
+     * Based on code by Anthony Ferrara.
+     * @see http://blog.ircmaxell.com/2012/12/seven-ways-to-screw-up-bcrypt.html
+     *
+     * @param string $safe
+     *   The internal (safe) value to be checked
+     *
+     * @param string $user
+     *   The user submitted (unsafe) value
+     *
+     * @return boolean
+     *   True if the two strings are identical.
+     */
+    public static function timingSafe($safe, $user)
+    {
+        /* Prevent issues if string length is 0. */
+        $safe .= chr(0);
+        $user .= chr(0);
+
+        $safeLen = strlen($safe);
+        $userLen = strlen($user);
+
+        /* Set the result to the difference between the lengths. */
+        $result = $safeLen - $userLen;
+
+        for ($i = 0; $i < $userLen; $i++) {
+            $result |= (ord($safe[$i % $safeLen]) ^ ord($user[$i]));
+        }
+
+        // They are only identical strings if $result is exactly 0...
+        return $result === 0;
+    }
+
+    /**
+     * You can call private/protected methods with getClosure
+     *
+     * @param  object $object Class
+     * @param  string $method private/protected method
+     * @param  array  $args
+     * @return void
+     */
+    public static function callPrivateMethod($object, $method, array $args = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $closure = $reflection->getMethod($method)->getClosure($object);
+
+        return call_user_func_array($closure, $args);
     }
 }

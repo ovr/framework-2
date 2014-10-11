@@ -58,7 +58,7 @@ class Headers extends Collection implements HeadersInterface
     /**
      * Constructor, will parse an environment for headers if present
      *
-     * @param EnvironmentInterface $environment
+     * @param \Brainwave\Interfaces\EnvironmentInterface $environment
      * @api
      */
     public function __construct(EnvironmentInterface $environment = null)
@@ -71,7 +71,7 @@ class Headers extends Collection implements HeadersInterface
     /**
      * Parse provided headers into this collection
      *
-     * @param  EnvironmentInterface $environment
+     * @param  \Brainwave\Interfaces\EnvironmentInterface $environment
      * @return void
      * @api
      */
@@ -110,7 +110,7 @@ class Headers extends Collection implements HeadersInterface
      * Get data value with key
      *
      * @param  string $key     The data key
-     * @param  boolean  $asArray The value to return if data key does not exist
+     * @param  mixed  $asArray The value to return if data key does not exist
      * @return mixed           The data value, or the default value
      * @api
      */

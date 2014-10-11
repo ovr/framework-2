@@ -352,6 +352,8 @@ class MonologWriter
     /**
      * Parse the formatter into a Monolog constant.
      *
+     * @param  string  $formatter
+     * @param  string  $formatterInput
      * @return int
      *
      * @throws \InvalidArgumentException

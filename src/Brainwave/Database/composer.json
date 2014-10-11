@@ -2,7 +2,7 @@
     "name": "brainwave/conifg",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "database", "slim", "SQL", "MySQL", "MSSQL", "SQLite"],
+    "keywords": ["narrowspark", "brainwave", "database", "slim", "SQL", "MySQL", "MSSQL", "SQLite", "Sybase", "Oracle", "Google Cloud SQL"],
     "license": "MIT",
     "homepage": "http://github.com/n-brainwave/database",
     "authors": [
@@ -15,6 +15,10 @@
     ],
     "require": {
         "php": ">=5.4.0",
+        "pimple/pimple": "2.*",
+        "brainwave/cache": "self.version",
+        "brainwave/config": "self.version",
+        "brainwave/support": "self.version",
         "ext-pdo": "*"
     },
     "autoload": {
@@ -25,7 +29,7 @@
     "target-dir": "Brainwave/Database",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.1-dev"
+            "dev-master": "0.9.2-dev"
         }
     },
     "suggest": {

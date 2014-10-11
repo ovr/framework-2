@@ -52,7 +52,7 @@ class TaggedCache implements TaggedCacheInterface
      * Create a new tagged cache instance.
      *
      * @param  \Brainwave\Cache\CacheInterface  $store
-     * @param  TagSet  $tags
+     * @param  \Brainwave\Cache\TagSet  $tags
      * @return void
      */
     public function __construct(CacheInterface $store, TagSet $tags)
@@ -125,7 +125,7 @@ class TaggedCache implements TaggedCacheInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return void
      */
     public function increment($key, $value = 1)
@@ -137,7 +137,7 @@ class TaggedCache implements TaggedCacheInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return void
      */
     public function decrement($key, $value = 1)

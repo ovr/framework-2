@@ -28,19 +28,10 @@ namespace Brainwave\Middleware\Interfaces;
  */
 interface MiddlewareInterface
 {
-    /**
-     * @return void
-     */
     public function setApplication($application);
 
-    /**
-     * @return \Brainwave\Workbench\Workbench
-     */
     public function getApplication();
 
-    /**
-     * @return void
-     */
     public function setNextMiddleware($nextMiddleware);
 
     public function getNextMiddleware();

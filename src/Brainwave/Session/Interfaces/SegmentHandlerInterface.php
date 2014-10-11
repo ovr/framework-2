@@ -42,7 +42,6 @@ interface SegmentHandlerInterface
      *
      * @param string $key The key to set.
      * @param mixed $val The value to set it to.
-     * @return void
      */
     public function set($key, $val);
 
@@ -58,7 +57,6 @@ interface SegmentHandlerInterface
      *
      * @param string $key The key for the flash value.
      * @param mixed $val The flash value itself.
-     * @return void
      */
     public function setFlash($key, $val);
 

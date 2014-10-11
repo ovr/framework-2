@@ -35,7 +35,7 @@ interface ControllerProviderInterface
      *
      * @param Workbench $app An Application instance
      *
-     * @return string A ControllerCollection instance
+     * @return ControllerCollection A ControllerCollection instance
      */
     public function connect(Workbench $app);
 }

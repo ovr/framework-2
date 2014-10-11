@@ -18,6 +18,7 @@ namespace Brainwave\Cookie;
  *
  */
 
+use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;
@@ -138,7 +139,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
      * @api
      */
-    public function setHeaders(HeadersInterface &$headers)
+    public function setHeaders(HeadersInterface $headers)
     {
         foreach ($this->data as $name => $settings) {
             $this->setHeader($headers, $name, $settings);
@@ -157,22 +158,29 @@ class CookieJar extends Collection implements CookiesJarInterface
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param string                                 $name
-     * @param string                                 $value
+     * @param \Brainwave\Http\Interfaces\HeadersInterface $header
+     * @param string                                      $name
+     * @param string                                      $value
      * @api
      */
-    public function setHeader(HeadersInterface &$headers, $name, $value)
+    public function setHeader(HeadersInterface $headers, $name, $value)
     {
         $values = [];
 
         if (is_array($value)) {
-            if (isset($value['domain']) && $value['domain']) {
-                $values[] = '; domain=' . $value['domain'];
-            }
 
-            if (isset($value['path']) && $value['path']) {
-                $values[] = '; path=' . $value['path'];
+            $headerArray = [
+                'domain' => ' domain=',
+                'path' => ' path=',
+                'secure' => ' secure',
+                'httponly' => ' HttpOnly'
+            ];
+
+            foreach ($headerArray as $variable => $valueHeader) {
+                if (isset($value[$variable]) && $value[$variable]) {
+                    $erg = ($value[$variable] === true) ? '' : $value[$variable];
+                    $values[] = ';'. $valueHeader . $erg;
+                }
             }
 
             if (isset($value['expires'])) {
@@ -185,14 +193,6 @@ class CookieJar extends Collection implements CookiesJarInterface
                 if ($timestamp !== 0) {
                     $values[] = '; expires=' . gmdate('D, d-M-Y H:i:s e', $timestamp);
                 }
-            }
-
-            if (isset($value['secure']) && $value['secure']) {
-                $values[] = '; secure';
-            }
-
-            if (isset($value['httponly']) && $value['httponly']) {
-                $values[] = '; HttpOnly';
             }
 
             $value = (string)$value['value'];
@@ -229,7 +229,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      * @param array                                  $value
      * @api
      */
-    public function deleteHeader(HeadersInterface &$headers, $name, $value = [])
+    public function deleteHeader(HeadersInterface $headers, $name, $value = [])
     {
         $crumbs = ($headers->has('Set-Cookie') ? explode("\n", $headers->get('Set-Cookie')) : []);
         $cookies = [];

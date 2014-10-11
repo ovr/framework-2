@@ -64,6 +64,7 @@ class RedisCache extends TaggableStore implements DriverInterface
     /**
      * Create a new Redis connection.
      *
+     * @param  array  $servers
      * @return \Predis\Client
      *
      * @throws \RuntimeException
@@ -111,7 +112,8 @@ class RedisCache extends TaggableStore implements DriverInterface
      *
      * @param \Redis   $redis
      * @param  string  $prefix
-     * @return DriverInterface
+     * @param  array   $options
+     * @return void
      */
     public function __construct(Client $redis, $prefix = '')
     {
@@ -152,7 +154,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int|bool
      */
     public function increment($key, $value = 1)
@@ -164,7 +166,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int|bool
      */
     public function decrement($key, $value = 1)

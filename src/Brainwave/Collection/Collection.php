@@ -29,7 +29,7 @@ use \Brainwave\Collection\Interfaces\CollectionInterface;
  * @since   0.8.0-dev
  *
  */
-class Collection implements CollectionInterface
+class Collection implements \ArrayAccess, CollectionInterface
 {
     /**
      * Key-value array of data
@@ -136,7 +136,7 @@ class Collection implements CollectionInterface
 
     /**
      * Encrypt set
-     * @param  CryptInterface $crypt
+     * @param  \Brainwave\Interfaces\CryptInterface $crypt
      * @return void
      * @api
      */
@@ -149,7 +149,7 @@ class Collection implements CollectionInterface
 
     /**
      * Decrypt set
-     * @param  CryptInterface $crypt
+     * @param  \Brainwave\Interfaces\CryptInterface $crypt
      * @return void
      * @api
      */
@@ -225,7 +225,7 @@ class Collection implements CollectionInterface
      * @param  string  $key
      * @return mixed
      */
-    public function &__get($key)
+    public function __get($key)
     {
         return $this->data[$key];
     }
@@ -257,7 +257,7 @@ class Collection implements CollectionInterface
      * Remove a piece of bound data from the view.
      *
      * @param  string  $key
-     * @return boolean|null
+     * @return bool
      */
     public function __unset($key)
     {

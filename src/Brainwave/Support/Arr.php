@@ -18,6 +18,8 @@ namespace Brainwave\Support;
  *
  */
 
+use \ArrayAccess;
+
 /**
  * Arr
  *
@@ -66,6 +68,19 @@ class Arr
     }
 
     /**
+     * Swap two elements between positions
+     *
+     * @param  array $array  array to swap
+     * @param  string $swapA
+     * @param  string $swapB
+     * @return array
+     */
+    public static function arraySwap($array, $swapA, $swapB)
+    {
+        list($array[$swapA], $array[$swapB]) = [$array[$swapB], $array[$swapA]];
+    }
+
+    /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
      * @param  array  $array
@@ -73,7 +88,7 @@ class Arr
      */
     public static function arrayDivide($array)
     {
-        return array(array_keys($array), array_values($array));
+        return [array_keys($array), array_values($array)];
     }
 
     /**
@@ -102,7 +117,7 @@ class Arr
      * Get all of the given array except for a specified array of items.
      *
      * @param  array  $array
-     * @param  string[]  $keys
+     * @param  array  $keys
      * @return array
      */
     public static function arrayExcept($array, $keys)
@@ -138,7 +153,7 @@ class Arr
      * Return the first element in an array passing a given truth test.
      *
      * @param  array    $array
-     * @param  \Closure  $callback
+     * @param  Closure  $callback
      * @param  mixed    $default
      * @return mixed
      */
@@ -150,7 +165,7 @@ class Arr
             }
         }
 
-        return value($default);
+        return self::value($default);
     }
 
     /**
@@ -227,7 +242,7 @@ class Arr
 
         foreach (explode('.', $key) as $segment) {
             if (!is_array($array) || ! array_key_exists($segment, $array)) {
-                return value($default);
+                return self::value($default);
             }
 
             $array = $array[$segment];
@@ -261,7 +276,7 @@ class Arr
         $results = [];
 
         foreach ($array as $item) {
-            $itemValue = is_object($item) ? $item->{$value} : $item[$value];
+            $itemValue = is_object($item) && !($item instanceof ArrayAccess) ? $item->{$value} : $item[$value];
 
             // If the key is "null", we will just append the value to the array and keep
             // looping. Otherwise we will key the array using the value of the key we
@@ -269,7 +284,7 @@ class Arr
             if (is_null($key)) {
                 $results[] = $itemValue;
             } else {
-                $itemKey = is_object($item) ? $item->{$key} : $item[$key];
+                $itemKey = is_object($item) && !($item instanceof ArrayAccess) ? $item->{$key} : $item[$key];
 
                 $results[$itemKey] = $itemValue;
             }
@@ -468,70 +483,22 @@ class Arr
     }
 
     /**
-     * A timing safe equals comparison.
-     *
-     * To prevent leaking length information, it is important
-     * that user input is always used as the second parameter.
-     * Based on code by Anthony Ferrara.
-     * @see http://blog.ircmaxell.com/2012/12/seven-ways-to-screw-up-bcrypt.html
-     *
-     * @param string $safe
-     *   The internal (safe) value to be checked
-     *
-     * @param string $user
-     *   The user submitted (unsafe) value
-     *
-     * @return boolean
-     *   True if the two strings are identical.
-     */
-    public static function timingSafe($safe, $user)
-    {
-        /* Prevent issues if string length is 0. */
-        $safe .= chr(0);
-        $user .= chr(0);
-
-        $safeLen = strlen($safe);
-        $userLen = strlen($user);
-
-        /* Set the result to the difference between the lengths. */
-        $result = $safeLen - $userLen;
-
-        for ($i = 0; $i < $userLen; $i++) {
-            $result |= (ord($safe[$i % $safeLen]) ^ ord($user[$i]));
-        }
-
-        // They are only identical strings if $result is exactly 0...
-        return $result === 0;
-    }
-
-    /**
      * Transform old key to readable key name
      * @param  array $array    to transform array
      * @param  string $old_key old key name
      * @param  string $new_key new humen readable key name
      * @return array           returns a new array with the new key
      */
-    public static function changeKey($array, $old_key, $new_key)
+    public static function changeKey($array, $oldKey, $newKey)
     {
-        if (!array_key_exists($old_key, $array)) {
+        if (!array_key_exists($oldKey, $array)) {
             return $array;
         }
 
         $keys = array_keys($array);
-        $keys[array_search($old_key, $keys)] = $new_key;
+        $keys[array_search($oldKey, $keys)] = $newKey;
 
         return array_combine($keys, $array);
-    }
-
-    /**
-     * Escape HTML entities in a string.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public static function e($value)
-    {
-        return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
     /**
@@ -573,13 +540,37 @@ class Arr
     }
 
     /**
+     * A shorter way to run a match on the array's keys rather than the values
+     *
+     * @param  string  $pattern
+     * @param  array   $input
+     * @param  integer $flags
+     * @return array
+     */
+    public static function pregGrepKeys($pattern, array $input, $flags = 0)
+    {
+        return array_intersect_key($input, array_flip(preg_grep($pattern, array_keys($input), $flags)));
+    }
+
+    /**
      * Return the given object. Useful for chaining.
      *
-     * @param  \Brainwave\Environment\EnvironmentDetector  $object
+     * @param  mixed  $object
      * @return mixed
      */
     public static function with($object)
     {
         return $object;
+    }
+
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public static function value($value)
+    {
+        return $value instanceof Closure ? $value() : $value;
     }
 }

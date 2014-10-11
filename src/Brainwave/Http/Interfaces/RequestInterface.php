@@ -32,170 +32,79 @@ interface RequestInterface
 {
     /***** Header *****/
 
-    /**
-     * @return string
-     */
     public function getProtocolVersion();
 
-    /**
-     * @return string
-     */
     public function getMethod();
 
-    /**
-     * @return void
-     */
     public function setMethod($method);
 
-    /**
-     * @return string
-     */
     public function getUrl();
 
-    /**
-     * @return void
-     */
     public function setUrl($url);
 
     public function getHeaders();
 
-    /**
-     * @return boolean
-     */
     public function hasHeader($name);
 
-    /**
-     * @return string
-     */
     public function getHeader($name);
 
-    /**
-     * @param string $value
-     *
-     * @return void
-     */
     public function setHeader($name, $value);
 
-    /**
-     * @return void
-     */
     public function setHeaders(array $headers);
 
-    /**
-     * @param string $value
-     *
-     * @return void
-     */
     public function addHeader($name, $value);
 
-    /**
-     * @return void
-     */
     public function addHeaders(array $headers);
 
-    /**
-     * @return void
-     */
     public function removeHeader($name);
 
     /***** Body *****/
 
-    /**
-     * @return StreamInterface
-     */
     public function getBody();
 
-    /**
-     * @return void
-     */
     public function setBody(StreamInterface $body);
 
     /***** Metadata *****/
 
-    /**
-     * @return string
-     */
     public function getScriptName();
 
-    /**
-     * @return string
-     */
     public function getPathInfo();
 
-    /**
-     * @return string
-     */
     public function getPath();
 
-    /**
-     * @return string
-     */
     public function getQueryString();
 
-    /**
-     * @return boolean
-     */
     public function isGet();
 
     public function get($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isJson();
 
     public function json($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isPost();
 
     public function post($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isPut();
 
     public function put($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isPatch();
 
     public function patch($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isDelete();
 
     public function delete($key = null, $default = null);
 
-    /**
-     * @return boolean
-     */
     public function isHead();
 
-    /**
-     * @return boolean
-     */
     public function isOptions();
 
-    /**
-     * @return boolean
-     */
     public function isAjax();
 
-    /**
-     * @return boolean
-     */
     public function isXhr();
 
-    /**
-     * @return boolean
-     */
     public function isFormData();
 }

@@ -31,25 +31,11 @@ use \Brainwave\Collection\Interfaces\CollectionInterface;
  */
 interface CookiesJarInterface extends CollectionInterface
 {
-    /**
-     * @return void
-     */
-    public function setHeaders(HeadersInterface &$headers);
+    public function setHeaders(HeadersInterface $headers);
 
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return void
-     */
-    public function setHeader(HeadersInterface &$headers, $name, $value);
+    public function setHeader(HeadersInterface $headers, $name, $value);
 
-    /**
-     * @param string $name
-     *
-     * @return void
-     */
-    public function deleteHeader(HeadersInterface &$headers, $name, $value = []);
+    public function deleteHeader(HeadersInterface $headers, $name, $value = []);
 
     public function parseHeader($header);
 }

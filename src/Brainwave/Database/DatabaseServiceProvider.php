@@ -19,9 +19,10 @@ namespace Brainwave\Database;
  */
 
 use \Pimple\Container;
+use \Brainwave\Database\Query;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Database\DatabaseQuery;
 use \Brainwave\Database\DatabaseManager;
+use \Brainwave\Database\Connection\ConnectionFactory;
 
 /**
  * Database ServiceProvider
@@ -39,29 +40,53 @@ class DatabaseServiceProvider implements ServiceProviderInterface
     {
         $this->app = $app;
 
-        if ($app['settings']['db.frozen'] === false) {
-            $app['db'] = function () use ($app) {
-                return new DatabaseManager(
-                    $app['settings']['db']
-                );
+        if ($this->app['settings']['db.frozen'] === false) {
+            $this->app['db'] = function () {
+                return 'Database is frozen.';
             };
-            $this->registerDatabaseQuery($app['db']);
         } else {
-            return 'Database is frozen. TODO add debuging';
+
+            $this->registerConnectionFactory();
+
+            // The database manager is used to resolve various connections, since multiple
+            // connections might be managed. It also implements the connection resolver
+            // interface which may be used by other components requiring connections.
+            $this->app['db'] = function ($app) {
+                $manager = new DatabaseManager(
+                    $app,
+                    $app['db.factory']
+                );
+                return $manager;
+            };
+
+            $this->registerDatabaseQuery();
         }
     }
 
-    protected function registerDatabaseQuery(DatabaseManager $databaseManager)
+    protected function registerDatabaseQuery()
     {
-        $this->app['db.query'] = function () use ($databaseManager) {
-            return new DatabaseQuery($databaseManager);
+        $app = $this->app;
+        $type = $app['db']->getConnections();
+
+        $app['db.query'] = function ($app) {
+            return new Query($app['db']->connection());
         };
+
+        foreach ($type as $driver => $value) {
+            $app["db.{$driver}.query"] = function ($app) {
+                return new Query($app['db']->connection($driver));
+            };
+        }
     }
 
-    protected function registerRedisDatabase()
+    protected function registerConnectionFactory()
     {
-        $this->appp['redis'] = function () {
-            //return new RedisDatabase($app['settings']['database.redis']);
+        $app = $this->app;
+        // The connection factory is used to create the actual connection instances on
+        // the database. We will inject the factory into the manager so that it may
+        // make the connections while they are actually needed and not of before.
+        $this->app['db.factory'] = function ($app) {
+            return new ConnectionFactory($app);
         };
     }
 }

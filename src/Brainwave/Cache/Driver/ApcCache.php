@@ -49,7 +49,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Create a new APC store.
      *
      * @param  string  $prefix
-     * @return DriverInterface
+     * @return void
      */
     public function __construct($prefix = '')
     {
@@ -60,13 +60,11 @@ class ApcCache extends TaggableStore implements DriverInterface
     /**
      * Check if the cache driver is supported
      *
-     * @return string Returns TRUE if supported or FALSE if not.
+     * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
-        return extension_loaded('apc') ?
-        'APC exist: '.extension_loaded('apc') :
-        'APCu exist: '.function_exists('apcu_fetch');
+        return extension_loaded('apc') ? extension_loaded('apc') : function_exists('apcu_fetch');
     }
 
     /**
@@ -105,7 +103,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int|bool
      */
     public function increment($key, $value = 1)
@@ -119,7 +117,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  mixed   $value
      * @return int|bool
      */
     public function decrement($key, $value = 1)
@@ -165,8 +163,8 @@ class ApcCache extends TaggableStore implements DriverInterface
         $exists = false;
 
         $cacheValues = $this->apcu ?
-        apcu_fetch($this->prefix.$key, $exists) :
-        apc_fetch($this->prefix.$key, $exists);
+        apcu_fetch($this->prefix.$keys, $exists) :
+        apc_fetch($this->prefix.$keys, $exists);
 
         $ret = [];
         foreach ($cacheValues as $key => $value) {
@@ -186,7 +184,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function setMultiple($keys, $ttl = null)
     {
-        return $this->set($keys, null, $tll);
+        return $this->set($keys, null, $ttl);
     }
 
     /**

@@ -86,6 +86,7 @@ class Environment extends Collection implements EnvironmentInterface
      * This method will parse a mock environment array and add the data to
      * this collection
      *
+     * @param  array  $environment
      * @return void
      */
     public function mock(array $settings = [])

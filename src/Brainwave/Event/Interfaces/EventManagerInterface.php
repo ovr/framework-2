@@ -34,7 +34,6 @@ interface EventManagerInterface
      * @param  string   $event    Event/Hook name
      * @param  callable $callback EventManager
      * @param  integer  $priority 0 = high, 10 = low
-     * @return void
      */
     public function hook($event, callable $callback, $priority = 10);
 
@@ -44,7 +43,6 @@ interface EventManagerInterface
      * @param             $event
      * @param callable     callable $callback
      * @param int         $priority
-     * @return void
      */
     public function addEventListener($event, callable $callback, $priority = 10);
 
@@ -52,7 +50,6 @@ interface EventManagerInterface
      * Trigger a hook
      * @param string $name
      * @param mixed $hookArg
-     * @return void
      */
     public function applyHook($name, $hookArg = null);
 
@@ -60,7 +57,7 @@ interface EventManagerInterface
      * Triger a chained hook
      * the first callback to return a non-null value will be returned
      *
-     * @param string $name the hook name
+     * @param string $@name the hook name
      * @param mixed $hookArg (Optional) Argument for hooked functions
      * @return mixed|void
      */
