@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines\Plates;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -68,7 +68,7 @@ class PlatesEngine implements EnginesInterface
     {
         $this->app = $app;
 
-        if ($extensions = !is_null($this->app['settings']->get('plates.extensions', null))) {
+        if ($extensions = !is_null($this->app['settings']->get('view::plates.extensions', null))) {
             $this->availableExtensions = $extensions;
         }
 
@@ -81,10 +81,10 @@ class PlatesEngine implements EnginesInterface
      */
     protected function loader()
     {
-        $engine = new Engine($this->app['settings']->get('view.default.template.path', null));
+        $engine = new Engine($this->app['settings']->get('view::default.template.path', null));
 
-        if (!is_null($this->app['settings']->get('view.template.paths', null))) {
-            foreach ($this->app['settings']->get('view.template.paths', null) as $name => $addPaths) {
+        if (!is_null($this->app['settings']->get('view::template.paths', null))) {
+            foreach ($this->app['settings']->get('view::template.paths', null) as $name => $addPaths) {
                 $engine->addFolder($name, $addPaths);
             }
         }
@@ -130,10 +130,10 @@ class PlatesEngine implements EnginesInterface
         $engine->loadExtension(new URI($this->app['request']->getPathInfo()));
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->app['settings']->get('view.asset', null)));
+        $engine->loadExtension(new Asset($this->app['settings']->get('view::asset', null)));
 
         // Get all extensions
-        if (!is_null($this->app['settings']->get('plates.extensions', null))) {
+        if (!is_null($this->app['settings']->get('view::plates.extensions', null))) {
             foreach ($this->availableExtensions as $ext) {
                 $this->engine->loadedExtensions($ext);
             }

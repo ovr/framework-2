@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -65,11 +65,11 @@ class Cookie implements CookieInterface
     ) {
         $settings = [
             'value' => $value,
-            'expires' => is_null($time) ? $this->app['settings']->get('cookies.lifetime', '20minutes') : $time,
-            'path' => is_null($path) ? $this->app['settings']->get('cookies.path', '/') : $path,
-            'domain' => is_null($domain) ? $this->app['settings']->get('cookies.domain', null) : $domain,
-            'secure' => is_null($secure) ? $this->app['settings']->get('cookies.secure', false) : $secure,
-            'httponly' => is_null($httponly) ? $this->app['settings']->get('cookies.httponly', false) : $httponly
+            'expires' => ($time === null) ? $this->app['settings']->get('cookies::lifetime', '20minutes') : $time,
+            'path' => ($path === null) ? $this->app['settings']->get('cookies::path', '/') : $path,
+            'domain' => ($domain === null) ? $this->app['settings']->get('cookies::domain', null) : $domain,
+            'secure' => ($secure === null) ? $this->app['settings']->get('cookies::secure', false) : $secure,
+            'httponly' => ($httponly === null) ? $this->app['settings']->get('cookies::httponly', false) : $httponly
         ];
         $this->app['response']->setCookie($name, $settings);
     }
@@ -158,10 +158,10 @@ class Cookie implements CookieInterface
         $httponly = null
     ) {
         $settings = [
-            'domain' => is_null($domain) ? $this->app['settings']->get('cookies.domain', null) : $domain,
-            'path' => is_null($path) ? $this->app['settings']->get('cookies.path', '/') : $path,
-            'secure' => is_null($secure) ? $this->app['settings']->get('cookies.secure', false) : $secure,
-            'httponly' => is_null($httponly) ?$this->app['settings']->get('cookies.httponly', flase) : $httponly
+            'domain' => is_null($domain) ? $this->app['settings']->get('cookies::domain', null) : $domain,
+            'path' => is_null($path) ? $this->app['settings']->get('cookies::path', '/') : $path,
+            'secure' => is_null($secure) ? $this->app['settings']->get('cookies::secure', false) : $secure,
+            'httponly' => is_null($httponly) ?$this->app['settings']->get('cookies::httponly', flase) : $httponly
         ];
         $this->app['response']->removeCookie($name, $settings);
     }

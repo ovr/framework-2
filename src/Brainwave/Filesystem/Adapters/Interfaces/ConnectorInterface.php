@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Filesystem;
+namespace Brainwave\Filesystem\Adapters\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Support\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,24 +18,21 @@ namespace Brainwave\Support\Filesystem;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Support\Filesystem\Filesystem;
-
 /**
- * FilesystemServiceProvider
+ * ConnectorInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.3-dev
  *
  */
-class FilesystemServiceProvider implements ServiceProviderInterface
+interface ConnectorInterface
 {
-    public function register(Container $app)
-    {
-        $app['files'] = function ($app) {
-            return new Filesystem();
-        };
-    }
+    /**
+     * Establish a connection.
+     *
+     * @param  array  $config
+     * @return \League\Flysystem\AdapterInterface
+     */
+    public function connect(array $config);
 }

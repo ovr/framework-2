@@ -8,7 +8,7 @@ namespace Brainwave\View;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -96,8 +96,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         $this->app = $app;
 
         //
-        if (!is_null($this->app['settings']->get('view.engine', 'plates'))) {
-            $this->customEngines = $this->app['settings']->get('view.engine', 'plates');
+        if (!is_null($this->app['settings']->get('view::engine', 'plates'))) {
+            $this->customEngines = $this->app['settings']->get('view::engine', 'plates');
         }
 
         //
@@ -105,8 +105,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
         //Set extension
         $this->extensions = (
-            !is_null($this->app['settings']->get('view.extensions', null))) ?
-            $this->app['settings']->get('view.extensions', null) : '.php';
+            !is_null($this->app['settings']->get('view::extensions', null))) ?
+            $this->app['settings']->get('view::extensions', null) : '.php';
 
         //
         $this->registerEngineResolver();
@@ -130,8 +130,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     protected function registerItems()
     {
-        if (!is_null($this->app['settings']->get('view.items', null))) {
-            $data = array_merge($this->app['settings']->get('view.items', null), $this->gatherData());
+        if ($this->app['settings']->get('view::items', null) !== null) {
+            $data = array_merge($this->app['settings']->get('view::items', null), $this->gatherData());
         } else {
             $data = $this->gatherData();
         }
@@ -155,12 +155,12 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         foreach ($engines as $engineName => $engineClass) {
             if ($engineName === 'php' || $engineName === 'json') {
                 $this->{'register'.ucfirst($engineClass).'Engine'}($resolver);
-            } elseif (!is_null($this->app['settings']->get('view.compiler', null))) {
-                foreach ($this->app['settings']->get('view.compiler', null) as $compilerName => $compilerClass) {
+            } elseif ($this->app['settings']->get('view::compiler', null) !== null) {
+                foreach ($this->app['settings']->get('view::compiler', []) as $compilerName => $compilerClass) {
                     if ($engineName === $compilerClass) {
                         $this->registercustomEngine(
                             $engineName,
-                            $engineClass($compilerClass($this->app['settings']->get('view.cache', null))),
+                            $engineClass($compilerClass($this->app['settings']->get('view::cache', null))),
                             $resolver
                         );
                     }
@@ -249,7 +249,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             $explodeTemplate = explode('::', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']->get('view.template.paths', null) as $pathName => $path) {
+                foreach ($this->app['settings']->get('view::template.paths', []) as $pathName => $path) {
                     if (trim($explodeTemplate[0]) == $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
@@ -258,7 +258,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
             } else {
-                $path = $this->app['settings']->get('view.default.template.path', null).
+                $path = $this->app['settings']->get('view::default.template.path', null).
                         $template.
                         $this->getExtensions();
             }
@@ -320,7 +320,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             $explodeTemplate = explode('::', $view, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']->get('view.template.paths', null) as $pathName => $path) {
+                foreach ($this->app['settings']->get('view::template.paths', []) as $pathName => $path) {
                     if (trim($explodeTemplate[0]) == $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
@@ -329,7 +329,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
             } else {
-                $path = $this->app['settings']->get('view.default.template.path', null).
+                $path = $this->app['settings']->get('view::default.template.path', null).
                         $template.
                         $this->getExtensions();
             }

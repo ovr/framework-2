@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Filesystem\Exception;
+namespace Brainwave\Filesystem\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Support\Filesystem\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,11 +19,20 @@ namespace Brainwave\Support\Filesystem\Exception;
  */
 
 /**
- * FileNotFoundException
+ * FilesystemManagerInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.3-dev
  *
  */
-class FileNotFoundException extends \Exception {}
+interface FilesystemManagerInterface
+{
+    /**
+     * Get a filesystem implementation.
+     *
+     * @param  string  $name
+     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     */
+    public function disk($name = null);
+}

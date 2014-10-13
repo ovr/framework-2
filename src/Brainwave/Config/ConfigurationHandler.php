@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,6 +18,7 @@ namespace Brainwave\Config;
  *
  */
 
+use \Brainwave\Support\Arr;
 use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
 
 /**
@@ -34,18 +35,21 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 {
     /**
      * Cache of previously parsed keys
+     *
      * @var array
      */
     protected $keys = [];
 
     /**
      * Storage array of values
+     *
      * @var array
      */
     protected $values = [];
 
     /**
      * Expected nested key separator
+     *
      * @var string
      */
     protected $separator = '.';
@@ -53,6 +57,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
     /**
      * Set an array of configuration options
      * Merge provided values with the defaults to ensure all required values are set
+     *
      * @param array $values
      * @required
      */
@@ -63,6 +68,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Get all values as nested array
+     *
      * @return array
      */
     public function getAllNested()
@@ -72,6 +78,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Get all values as flattened key array
+     *
      * @return array
      */
     public function getAllFlat()
@@ -81,6 +88,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Get all flattened array keys
+     *
      * @return array
      */
     public function getKeys()
@@ -91,6 +99,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Get a value from a nested array based on a separated key
+     *
      * @param  string $key
      * @return mixed
      */
@@ -101,6 +110,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Set nested array values based on a separated key
+     *
      * @param  string  $key
      * @param  mixed   $value
      * @return array
@@ -112,6 +122,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Check an array has a value based on a separated key
+     *
      * @param  string  $key
      * @return boolean
      */
@@ -122,6 +133,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Remove nested array value based on a separated key
+     *
      * @param  string  $key
      */
     public function offsetUnset($key)
@@ -144,6 +156,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Parse a separated key and cache the result
+     *
      * @param  string $key
      * @return array
      */
@@ -158,6 +171,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
     /**
      * Get a value from a nested array based on a separated key
+     *
      * @param  string $key
      * @param  array  $array
      * @return mixed
@@ -200,6 +214,7 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
     /**
      * Merge arrays with nested keys into the values store
      * Usage: $this->mergeArrays(array $array [, array $...])
+     *
      * @return array
      */
     protected function mergeArrays()

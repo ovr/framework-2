@@ -7,7 +7,7 @@
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -35,7 +35,7 @@ interface LoaderInterface
      * @param  string  $group
      * @return array
      */
-    public function load($file, $namespace = null, $environment = null, $group = null);
+    public function load($file, $group = null, $environment = null, $namespace = null);
 
     /**
      * Determine if the given file exists.
@@ -45,7 +45,7 @@ interface LoaderInterface
      * @param  string  $group
      * @return bool
      */
-    public function exists($file, $namespace = null, $environment = null, $group = null);
+    public function exists($file, $group = null, $environment = null, $namespace = null);
 
     /**
      * Apply any cascades to an array of package options.
@@ -56,5 +56,5 @@ interface LoaderInterface
      * @param  array   $items
      * @return array
      */
-    public function cascadePackage($file, $env, $package, $group, $items);
+    public function cascadePackage($file, $package, $group, $env, $items, $namespace = 'packages');
 }

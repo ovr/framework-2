@@ -11,7 +11,7 @@ PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/"
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -30,9 +30,10 @@ use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
+use \Brainwave\Workbench\AliasLoader;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
-use \Brainwave\Workbench\StaticalProxy;
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
@@ -40,6 +41,7 @@ use \Brainwave\Exception\ExceptionHandler;
 use \Brainwave\Config\ConfigurationHandler;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
+use \Brainwave\Workbench\StaticalProxyManager;
 use \Brainwave\Workbench\StaticalProxyResolver;
 use \Brainwave\Environment\EnvironmentDetector;
 use \Brainwave\Http\Exception\NotFoundHttpException;
@@ -71,7 +73,7 @@ class Workbench extends Container
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.9.2-dev';
+    const BRAINWAVE_VERSION = '0.9.3-dev';
 
     /**
      * Has the app response been sent to the client?
@@ -120,64 +122,65 @@ class Workbench extends Container
     protected $config = [
         'app' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'app'
+        ],
+        'http' => [
+            'ext' => 'php',
+            'namespace' => null,
+            'env' => null,
+            'group' => 'http'
         ],
         'mail' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'mail'
         ],
         'cache' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'cache'
         ],
         'services' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'services'
         ],
         'session' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'session'
         ],
         'cookies' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'cookies'
         ],
         'view' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'view'
         ],
         'autoload' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'autoload'
         ],
         'database' => [
             'ext' => 'php',
-            'namespace' => '',
-            'env' => '',
-            'group' => ''
+            'namespace' => null,
+            'env' => null,
+            'group' => 'database'
         ],
     ];
-
-    /**
-     * @var integer Counts the number of available routes.
-     */
-    private $routeCount = 0;
 
     /**
      * Workbench paths
@@ -194,27 +197,32 @@ class Workbench extends Container
     {
         parent::__construct();
 
-        StaticalProxy::setFacadeApplication($this);
+        StaticalProxyManager::setFacadeApplication($this);
 
         // App setting
-        $this['env']                = null;
+        $this['env'] = null;
         //
-        $this['error']              = null;
+        $this['error'] = null;
         // Not Found
-        $this['notFound']           = null;
+        $this['notFound'] = null;
 
         // Settings
         $this['settings'] = function ($c) {
-            $config = new Configuration(new ConfigurationHandler, new FileLoader);
-            $config->addPath(static::$paths['path.config']);
+            $config = new Configuration(
+                new ConfigurationHandler(),
+                new FileLoader(
+                    new Filesystem(),
+                    static::$paths['path.config']
+                )
+            );
 
             //Load config files
             foreach ($this->config as $file => $setting) {
                 $config->bind(
                     $file.'.'.$setting['ext'],
-                    $setting['namespace'],
+                    $setting['group'],
                     $setting['env'],
-                    $setting['group']
+                    $setting['namespace']
                 );
             }
 
@@ -238,7 +246,7 @@ class Workbench extends Container
             $environment = $c['environment'];
             $headers = new Headers($environment);
             $CookieJar = new CookieJar($headers);
-            if ($c['settings']->get('CookieJar.encrypt', false) ===  true) {
+            if ($c['settings']->get('cookies::encrypt', false) ===  true) {
                 $CookieJar->decrypt($c['crypt']);
             }
 
@@ -250,33 +258,37 @@ class Workbench extends Container
             $headers = new Headers();
             $CookieJar = new CookieJar();
             $response = new Response($headers, $CookieJar);
-            $response->setProtocolVersion('HTTP/' . $c['settings']->get('http.version', '1.1'));
+            $response->setProtocolVersion('HTTP/' . $c['settings']->get('http::version', '1.1'));
 
             return $response;
         };
 
         // Register providers
-        foreach ($this['settings']->get('services.providers', []) as $provider => $arr) {
+        foreach ($this['settings']['services::providers'] as $provider => $arr) {
             $this->register(new $provider, $arr);
         }
 
         // Exception handler
         $this['exception'] = function ($c) {
-            $exception = new ExceptionHandler($this, $c['settings']->get('app.charset', 'en'));
-            return $exception;
+            return new ExceptionHandler($this, $c['settings']->get('app::charset', 'en'));
         };
 
         // Set Loader an Path
-        $this['translator']->setLoader(new FileLoader)->addPath(static::$paths['path']);
+        $this['translator']->setLoader(
+            new FileLoader(
+                new Filesystem(),
+                static::$paths['path']
+            )
+        );
 
         // Load lang files
-        if (!is_null($this['settings']->get('app.language.files', null))) {
-            foreach ($this['settings']->get('app.language.files', []) as $file => $lang) {
+        if ($this['settings']['app::language.files'] !== null) {
+            foreach ($this['settings']['app::language.files'] as $file => $lang) {
                 $this['translator']->bind(
                     $file.'.'.$lang['ext'],
-                    $lang['namespace'],
+                    $lang['group'],
                     $lang['env'],
-                    $lang['group']
+                    $lang['namespace']
                 );
             }
         }
@@ -288,8 +300,9 @@ class Workbench extends Container
         $this['statical.resolver'] = function ($c) {
             return new StaticalProxyResolver();
         };
-        $this['statical'] = function ($c) {
-            return new StaticalProxy($c);
+
+        $this['alias'] = function ($c) {
+            return new AliasLoader();
         };
     }
 
@@ -474,7 +487,7 @@ class Workbench extends Container
      */
     public function getLocale()
     {
-        return $this['settings']->get('app.locale', 'en');
+        return $this['settings']->get('app::locale', 'en');
     }
 
     /**
@@ -485,147 +498,13 @@ class Workbench extends Container
      */
     public function setLocale($locale)
     {
-        $this['settings']->set('app.locale', $locale);
+        $this['settings']->set('app::locale', $locale);
         return $this;
     }
 
     /**
-     * Add GET|POST|PUT|PATCH|DELETE route
-     *
-     * Adds a new route to the router with associated callable. This
-     * route will only be invoked when the HTTP request's method matches
-     * this route's method.
-     *
-     * ARGUMENTS:
-     *
-     * First:       string  The URL pattern (REQUIRED)
-     * In-Between:  mixed   Anything that returns TRUE for `is_callable` (OPTIONAL)
-     * Last:        mixed   Anything that returns TRUE for `is_callable` (REQUIRED)
-     *
-     * The first argument is required and must always be the
-     * route pattern (ie. '/books/:id').
-     *
-     * The last argument is required and must always be the callable object
-     * to be invoked when the route matches an HTTP request.
-     *
-     * You may also provide an unlimited number of in-between arguments;
-     * each interior argument must be callable and will be invoked in the
-     * order specified before the route's callable is invoked.
-     *
-     * USAGE:
-     *
-     * App::get('/foo'[, middleware, middleware, ...], callable);
-     *
-     * @param  array
-     * @return Route
-     */
-    protected function mapRoute($args)
-    {
-        $pattern = array_shift($args);
-        $callable = $this['resolver']->build(array_pop($args));
-
-        $route = $this['route.factory']->make($pattern, $callable);
-
-        $this->routeCount++;
-        $route->setName((string)$this->routeCount);
-
-        $this['router']->map($route);
-        if (count($args) > 0) {
-            $route->setMiddleware($args);
-        }
-
-        return $route;
-    }
-
-    /**
-     * Add route without HTTP method
-     * @return Route
-     */
-    public function map()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args);
-    }
-
-    /**
-     * Add GET route
-     * @return Route
-     * @api
-     */
-    public function get()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_GET, Request::METHOD_HEAD);
-    }
-
-    /**
-     * Add POST route
-     * @return Route
-     * @api
-     */
-    public function post()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_POST);
-    }
-
-    /**
-     * Add PUT route
-     * @return Route
-     * @api
-     */
-    public function put()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_PUT);
-    }
-
-    /**
-     * Add PATCH route
-     * @return Route
-     * @api
-     */
-    public function patch()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_PATCH);
-    }
-
-    /**
-     * Add DELETE route
-     * @return Route
-     * @api
-     */
-    public function delete()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_DELETE);
-    }
-
-    /**
-     * Add OPTIONS route
-     * @return Route
-     * @api
-     */
-    public function options()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_OPTIONS);
-    }
-
-    /**
-     * Add route for any HTTP method
-     * @return Route
-     * @api
-     */
-    public function any()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via("ANY");
-    }
-
-    /**
      * Mounts controllers under the given route prefix.
+     *
      * @return Application
      */
     public function mount()
@@ -1019,19 +898,22 @@ class Workbench extends Container
      * @param  Middleware
      * @api
      */
-    public function addMiddleware(Middleware $newMiddleware)
+    public function middleware(Middleware $newMiddleware)
     {
         $middleware = $this['middleware'];
+
         if (in_array($newMiddleware, $middleware, true)) {
-            $middleware_class = get_class($newMiddleware);
+            $middlewareClass = get_class($newMiddleware);
             throw new \RuntimeException(
                 "Circular Middleware setup detected.
-                Tried to queue the same Middleware instance ({$middleware_class}) twice."
+                Tried to queue the same Middleware instance ({$middlewareClass}) twice."
             );
         }
+
         $newMiddleware->setApplication($this);
         $newMiddleware->setNextMiddleware($this['middleware'][0]);
         array_unshift($middleware, $newMiddleware);
+
         $this['middleware'] = $middleware;
     }
 
@@ -1291,8 +1173,8 @@ class Workbench extends Container
             $this->responded = true;
 
             // Encrypt CookieJar
-            if ($this['settings']['CookieJar.encrypt']) {
-                $this['response']->encryptCookieJar($this['crypt']);
+            if ($this['settings']['cookie::encrypt']) {
+                $this['response']->encryptCookies($this['crypt']);
             }
 
             // Send response

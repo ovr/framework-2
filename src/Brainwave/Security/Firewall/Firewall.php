@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Contracts;
+namespace Brainwave\Security\Firewall;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Support\Contracts;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,13 +18,15 @@ namespace Brainwave\Support\Contracts;
  *
  */
 
-interface JsonableInterface
+/**
+ * Firewall
+ *
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.9.3-dev
+ *
+ */
+class Firewall
 {
-    /**
-     * Convert the object to its JSON representation.
-     *
-     * @param  int  $options
-     * @return string
-     */
-    public function toJson($options = 0);
+    
 }

@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -22,6 +22,7 @@ use \Pimple\Container;
 use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Configuration;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Config\ConfigurationHandler;
 
 /**
@@ -37,7 +38,13 @@ class ConfigServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app['settings'] = function ($app) {
-            $config = new Configuration(new ConfigurationHandler, new FileLoader);
+            $config = new Configuration(
+                new ConfigurationHandler,
+                new FileLoader(
+                    new Filesystem(),
+                    ''
+                )
+            );
 
             return $config;
         };

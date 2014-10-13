@@ -8,7 +8,7 @@ namespace Brainwave\Mail;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -92,8 +92,8 @@ class Mailer
      */
     public function alwaysFrom($address, $name = null)
     {
-        $email_address = (empty($address)) ? $this->app['settings']->get('always_from', '') : $address;
-        $email_name = (isset($name)) ? $this->app['settings']->get('email_name', '') : $name;
+        $email_address = (empty($address)) ? $this->app['settings']->get('mail::always.from', '') : $address;
+        $email_name = (isset($name)) ? $this->app['settings']->get('mail::email.name', '') : $name;
 
         $this->from = compact($email_address, $email_name);
     }

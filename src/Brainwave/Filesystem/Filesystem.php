@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Filesystem;
+namespace Brainwave\Filesystem;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Support\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,7 @@ namespace Brainwave\Support\Filesystem;
  */
 
 use \FilesystemIterator;
-use \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface;
-use \Brainwave\Support\Filesystem\Exception\FileNotFoundException;
+use \Brainwave\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Filesystem
@@ -30,7 +29,7 @@ use \Brainwave\Support\Filesystem\Exception\FileNotFoundException;
  * @since   0.9.2-dev
  *
  */
-class Filesystem implements FilesystemInterface
+class Filesystem
 {
     /**
      * Determine if a file exists.

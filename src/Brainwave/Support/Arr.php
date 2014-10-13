@@ -8,7 +8,7 @@ namespace Brainwave\Support;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -480,25 +480,6 @@ class Arr
         }
 
         return $flattened;
-    }
-
-    /**
-     * Transform old key to readable key name
-     * @param  array $array    to transform array
-     * @param  string $old_key old key name
-     * @param  string $new_key new humen readable key name
-     * @return array           returns a new array with the new key
-     */
-    public static function changeKey($array, $oldKey, $newKey)
-    {
-        if (!array_key_exists($oldKey, $array)) {
-            return $array;
-        }
-
-        $keys = array_keys($array);
-        $keys[array_search($oldKey, $keys)] = $newKey;
-
-        return array_combine($keys, $array);
     }
 
     /**

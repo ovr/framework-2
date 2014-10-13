@@ -1,5 +1,5 @@
 {
-    "name": "brainwave/conifg",
+    "name": "brainwave/session",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["narrowspark", "brainwave", "session", "slim"],
@@ -15,8 +15,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "brainwave/crypt": "0.9.*",
-        "brainwave/support": "0.9.*"
+        "brainwave/crypt": "self.version",
+        "brainwave/support": "self.version"
     },
     "autoload": {
         "psr-0": {

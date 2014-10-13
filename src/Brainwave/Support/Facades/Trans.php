@@ -8,7 +8,7 @@ namespace Brainwave\Support\Facades;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Workbench\StaticalProxy;
+use Brainwave\Workbench\StaticalProxyManager;
 
 /**
  * Lang
@@ -28,7 +28,7 @@ use Brainwave\Workbench\StaticalProxy;
  * @since   0.9.1-dev
  *
  */
-class Trans extends StaticalProxy
+class Trans extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
@@ -37,6 +37,6 @@ class Trans extends StaticalProxy
 
     public function get($orig, $language = false, $replacements = null)
     {
-        return self::$brainwave->getTranslation($orig, $language, $replacements);
+        return self::$app->getTranslation($orig, $language, $replacements);
     }
 }

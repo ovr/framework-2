@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,6 +18,7 @@ namespace Brainwave\Routing;
  *
  */
 
+use \Brainwave\Http\Request;
 use \Brainwave\Workbench\Workbench;
 
 /**
@@ -43,6 +44,11 @@ class RouteFactory
     protected $resolver;
 
     /**
+     * @var integer Counts the number of available routes.
+     */
+    private $routeCount = 0;
+
+    /**
      * Constructor
      * @param  \Brainwave\Workbench\Workbench  $app
      * @param  \Closure   $factory
@@ -66,6 +72,141 @@ class RouteFactory
         }
 
         return call_user_func($this->resolver, $pattern, $callable);
+    }
+
+    /**
+     * Add GET|POST|PUT|PATCH|DELETE route
+     *
+     * Adds a new route to the router with associated callable. This
+     * route will only be invoked when the HTTP request's method matches
+     * this route's method.
+     *
+     * ARGUMENTS:
+     *
+     * First:       string  The URL pattern (REQUIRED)
+     * In-Between:  mixed   Anything that returns TRUE for `is_callable` (OPTIONAL)
+     * Last:        mixed   Anything that returns TRUE for `is_callable` (REQUIRED)
+     *
+     * The first argument is required and must always be the
+     * route pattern (ie. '/books/:id').
+     *
+     * The last argument is required and must always be the callable object
+     * to be invoked when the route matches an HTTP request.
+     *
+     * You may also provide an unlimited number of in-between arguments;
+     * each interior argument must be callable and will be invoked in the
+     * order specified before the route's callable is invoked.
+     *
+     * USAGE:
+     *
+     * Route::get('/foo'[, middleware, middleware, ...], callable);
+     *
+     * @param  array
+     * @return Route
+     */
+    protected function mapRoute($args)
+    {
+        $pattern = array_shift($args);
+        $callable = $this->app['resolver']->build(array_pop($args));
+
+        $route = $this->make($pattern, $callable);
+
+        $this->routeCount++;
+        $route->setName((string)$this->routeCount);
+
+        $this->app['router']->map($route);
+        if (count($args) > 0) {
+            $route->setMiddleware($args);
+        }
+
+        return $route;
+    }
+
+    /**
+     * Add route without HTTP method
+     * @return Route
+     */
+    public function map()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args);
+    }
+
+    /**
+     * Add GET route
+     * @return Route
+     * @api
+     */
+    public function get()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_GET, Request::METHOD_HEAD);
+    }
+
+    /**
+     * Add POST route
+     * @return Route
+     * @api
+     */
+    public function post()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_POST);
+    }
+
+    /**
+     * Add PUT route
+     * @return Route
+     * @api
+     */
+    public function put()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_PUT);
+    }
+
+    /**
+     * Add PATCH route
+     * @return Route
+     * @api
+     */
+    public function patch()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_PATCH);
+    }
+
+    /**
+     * Add DELETE route
+     * @return Route
+     * @api
+     */
+    public function delete()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_DELETE);
+    }
+
+    /**
+     * Add OPTIONS route
+     * @return Route
+     * @api
+     */
+    public function options()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via(Request::METHOD_OPTIONS);
+    }
+
+    /**
+     * Add route for any HTTP method
+     * @return Route
+     * @api
+     */
+    public function any()
+    {
+        $args = func_get_args();
+        return $this->mapRoute($args)->via("ANY");
     }
 
     /**

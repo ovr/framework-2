@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,6 +39,13 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     protected $handler;
 
+     /**
+     * Fileloader instance
+     *
+     * @var mixed
+     */
+    protected $loader;
+
     /**
      * Storage array of values
      *
@@ -60,8 +67,8 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
     {
-        $this->setHandler($handler);
-        $this->setLoader($loader);
+        $this->handler = $handler;
+        $this->loader = $loader;
     }
 
     /**
@@ -74,27 +81,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
         $this->handler->setArray($values);
     }
 
-
-    /**
-     * Get the default settings
-     *
-     * @return array
-     */
-    public function getDefaults()
-    {
-        return $this->defaults;
-    }
-
-    /**
-     * Set a configuration handler and provide it some defaults
-     *
-     * @param \Brainwave\Config\Interfaces\ConfigurationHandlerInterface $handler
-     */
-    public function setHandler(ConfigurationHandlerInterface $handler)
-    {
-        $this->handler = $handler;
-    }
-
     /**
      * Get the configuration handler for access
      *
@@ -103,17 +89,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function getHandler()
     {
         return $this->handler;
-    }
-
-    /**
-     * Set the configuration loader
-     *
-     * @return \Brainwave\Config\FileLoader
-     */
-    public function setLoader(FileLoader $loader)
-    {
-        $this->loader = $loader;
-        return $this;
     }
 
     /**
@@ -136,9 +111,9 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      *
      * @return void
      */
-    public function bind($file, $namespace = null, $environment = null, $group = null)
+    public function bind($file, $group = null, $environment = null, $namespace = null)
     {
-        $config = $this->getLoader()->load($file, $namespace, $environment, $group);
+        $config = $this->loader->load($file, $group, $environment, $namespace);
         return $this->setArray($config);
     }
 
@@ -154,7 +129,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function cascadePackage($file, $package = null, $group = null, $env = null, $items = null)
     {
-        return $this->getLoader()->cascadePackage($file, $package, $group, $env, $items);
+        return $this->loader->cascadePackage($file, $package, $group, $env, $items);
     }
 
     /**
@@ -192,7 +167,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function addPath($path)
     {
         $this->path = $path;
-        $this->getLoader()->addDefaultPath($path);
+        $this->loader->addDefaultPath($path);
         return $this;
     }
 

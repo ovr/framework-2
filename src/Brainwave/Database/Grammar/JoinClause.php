@@ -8,7 +8,7 @@ namespace Brainwave\Database\Grammar;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,8 +17,6 @@ namespace Brainwave\Database\Grammar;
  * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
  *
  */
-
-use \Brainwave\Database\Grammar\Expression;
 
 /**
  * JoinClause

@@ -8,7 +8,7 @@ namespace Brainwave\Exception\Displayer;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -64,7 +64,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
         $this->app['response']->setStatus(500);
         $title = 'Brainwave Application Error';
         $header = 'The application could not run because of the following error:';
-        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app.footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app::footer', 'narrowspark');
 
         if ($exception instanceof \Exception) {
             $code = $exception->getCode();
@@ -136,7 +136,7 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer, $css = '', $js = '')
     {
-        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app['settings']->get('app.footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app['settings']->get('app::footer', 'narrowspark');
 
         print <<<EOF
 <!DOCTYPE html>

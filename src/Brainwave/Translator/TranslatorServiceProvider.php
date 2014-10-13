@@ -8,7 +8,7 @@ namespace Brainwave\Translator;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,7 +39,7 @@ class TranslatorServiceProvider implements ServiceProviderInterface
     {
         $app['translator'] = function ($app) {
             $translator = new TranslatorManager();
-            $translator->setLocale($app['settings']->get('app.locale', 'en'));
+            $translator->setLocale($app['settings']->get('app::locale', 'en'));
             return $translator;
         };
     }

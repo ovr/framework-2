@@ -8,7 +8,7 @@ namespace Brainwave\Database;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,8 +20,8 @@ namespace Brainwave\Database;
 
 use \Pimple\Container;
 use \Brainwave\Support\Arr;
-use \Brainwave\Database\Connection\Connection;
 use \Brainwave\Database\Connection\ConnectionFactory;
+use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
 use \Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
 
 /**
@@ -183,12 +183,12 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Brainwave\Database\Connection\Connection  $connection
+     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
      * @return \Brainwave\Database\Connection\Connection
      */
-    protected function prepare(Connection $connection)
+    protected function prepare(ConnectionInterface $connection)
     {
-        $connection->setFetchMode($this->app['settings']['database.fetch']);
+        $connection->setFetchMode($this->app['settings']['database::fetch']);
 
         // The database connection can also utilize a cache manager instance when cache
         // functionality is used on queries, which provides an expressive interface
@@ -202,7 +202,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // Here we'll set a reconnector callback. This reconnector can be any callable
         // so we will set a Closure to reconnect from this manager with the name of
         // the connection, which will allow us to reconnect from the connections.
-        $connection->setReconnector(function ($connection) {
+        $connection->setReconnector(function (ConnectionInterface $connection) {
             $this->reconnect($connection->getName());
         });
 
@@ -224,7 +224,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // To get the database connection configuration, we will just pull each of the
         // connection configurations and get the configurations for the given name.
         // If the configuration doesn't exist, we'll throw an exception and bail.
-        $connections = $this->app['settings']['database.connections'];
+        $connections = $this->app['settings']['database::connections'];
 
         if (is_null($config = Arr::arrayGet($connections, $name))) {
             throw new \InvalidArgumentException("Database [$name] not configured.");
@@ -240,7 +240,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->app['settings']['database.default'];
+        return $this->app['settings']['database::default'];
     }
 
     /**
@@ -251,7 +251,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function setDefaultConnection($name)
     {
-        $this->app['settings']['database.default'] = $name;
+        $this->app['settings']['database::default'] = $name;
     }
 
     /**

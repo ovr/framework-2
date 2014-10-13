@@ -8,7 +8,7 @@ namespace Brainwave\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -187,7 +187,7 @@ class ExceptionHandler
     <i class="fa fa-circle-o"></i><a href="$link/">Visit the Home Page</a>
 </div>
 EOF;
-        $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app.footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app::footer', 'narrowspark');
 
         return $this->app['displayer.plain']->decorate(
             $title,
@@ -317,8 +317,8 @@ EOF;
     {
         $settings = $this->app['settings'];
 
-        if ($settings->get('app.mode', 'production') === 'development' && $settings->get('debug', false) === true ||
-            $settings->get('app.mode', 'production') === 'testing' && $settings->get('debug', false) === true) {
+        if ($settings->get('app::mode', 'production') === 'development' && $settings->get('app::debug', false) === true ||
+            $settings->get('app::mode', 'production') === 'testing' && $settings->get('app::debug', false) === true) {
 
             ($settings['app.exception.handler'] == 'whoops') ?
             $ext = $this->app['displayer.whoops']->display($exception) :
@@ -361,7 +361,7 @@ EOF;
     </span>
 </div>
 EOF;
-        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app.footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app::footer', 'narrowspark');
 
         return $this->app['displayer.plain']->decorate(
             $title,

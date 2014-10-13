@@ -8,7 +8,7 @@ namespace Brainwave\Database\Connection;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,6 @@ namespace Brainwave\Database\Connection;
 
 use \PDO;
 use \Brainwave\Support\Str;
-use \Brainwave\Cache\CacheManager;
 use \Brainwave\Database\Grammar\Builder;
 use \Brainwave\Database\Exception\ConnectException;
 use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;

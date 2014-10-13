@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,6 +18,7 @@ namespace Brainwave\Config\Driver;
  *
  */
 
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
@@ -31,19 +32,51 @@ use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 class XmlDriver implements DriverInterface
 {
     /**
+     * The filesystem instance.
+     *
+     * @var \Brainwave\Filesystem\Filesystem
+     */
+    protected $files;
+
+    /**
+     * Create a new file filesystem loader.
+     *
+     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @return void
+     */
+    public function __construct(Filesystem $files)
+    {
+        $this->files = $files;
+    }
+
+    /**
      * Loads a xML file and gets its' contents as an array
+     *
      * @param  string $filename
+     * @param  string $group
      * @return array            config data
      */
-    public function load($filename)
+    public function load($filename, $group = null)
     {
-        $config = require $filename;
-        $config = (1 === $config) ? [] : $config;
-        return $config ?: [];
+        if ($this->files->exists($filename)) {
+            $config = simplexml_load_file($filename);
+        }
+
+        $groupConfig = [];
+
+        if ($group !== null) {
+            foreach ($config as $key => $value) {
+                $groupConfig["{$group}::{$key}"] = $value;
+            }
+            $config = $groupConfig;
+        }
+
+        return $config;
     }
 
     /**
      * Checking if file ist supported
+     *
      * @param  string $filename
      * @return mixed
      */
@@ -53,7 +86,8 @@ class XmlDriver implements DriverInterface
     }
 
     /**
-     * Format a config file for saving. [NOT IMPLEMENTED]
+     * Format a config file for saving.
+     *
      * @param  array     $data config data
      * @return string data export
      */
@@ -69,7 +103,8 @@ class XmlDriver implements DriverInterface
     }
 
     /**
-     * Defination to convert array to xml
+     * Defination to convert array to xml [NOT IMPLEMENTED]
+     *
      * @param  array $data  config data
      * @param  void $xml    \SimpleXMLElement
      * @return string       data

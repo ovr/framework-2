@@ -24,10 +24,11 @@
         "filp/whoops": "1.2.*@dev",
         "vlucas/phpdotenv": "~1.0",
         "guzzlehttp/streams": "1.*",
-        "league/flysystem": "0.5.*",
+        "league/flysystem": "~0.5.6",
         "jeremeamia/superclosure": "1.*",
         "symfony/serializer": "2.6.*@dev",
-        "swiftmailer/swiftmailer": "5.2.*"
+        "swiftmailer/swiftmailer": "5.2.*",
+        "classpreloader/classpreloader": "1.1.*"
     },
     "replace": {
         "brainwave/log": "self.version",
@@ -46,6 +47,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
+        "rackspace/php-opencloud": "~1.8",
         "codeception/codeception": "*"
     },
     "autoload": {
@@ -63,8 +65,7 @@
         "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
         "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML files",
-        "symfony/yaml" : "Narrowspark has support for YML files",
-        "intahwebz/lowmemoryclassloader": "If opcache_is_script_cached exists, lowmemoryclassloader will speed up your application."
+        "symfony/yaml" : "Narrowspark has support for YML files"
     },
     "minimum-stability": "dev"
 }

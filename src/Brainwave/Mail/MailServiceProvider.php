@@ -8,7 +8,7 @@ namespace Brainwave\Mail;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -66,7 +66,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
             // If a "from" address is set, we will set it on the mailer so that all mail
             // messages sent by the applications will utilize the same "from" address
             // on each one, which makes the developer's life a lot more convenient.
-            $from = $app['settings']->get('mail.from', []);
+            $from = $app['settings']['mail::from'];
 
             if (is_array($from) && isset($from['address'])) {
                 $mailer->alwaysFrom($from['address'], $from['name']);
@@ -103,7 +103,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerSwiftTransport($config)
     {
-        switch ($config->get('mail.driver', ''))
+        switch ($config['mail::driver', ''))
         {
             case 'smtp':
                 return $this->registerSmtpTransport($config);
@@ -148,31 +148,31 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
             // switch between ssl, tls and normal
 
-            if ($this->app['settings']->get('mail.entcryption', 0) == 'ssl') {
+            if ($this->app['settings']['mail::entcryption', 0) == 'ssl') {
 
                 return Swift_SmtpTransport::newInstance()
-                    ->setHost($config->get('mail.host', ''))
-                      ->setPort($this->app['settings']->get('mail.port', ''))
+                    ->setHost($config['mail::host'])
+                      ->setPort($this->app['settings']['mail::port'])
                       ->setEncryption('ssl')
-                      ->setUsername($config->get('mail.smtp_username', ''))
-                      ->setPassword($config->get('mail.smtp_password', ''));
+                      ->setUsername($config['mail::smtp_username'])
+                      ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']->get('mail.entcryption', 0) == 'tls') {
+            } elseif ($this->app['settings']['mail::entcryption', 0) == 'tls') {
 
                 return Swift_SmtpTransport::newInstance()
-                    ->setHost($config->get('mail.host', ''))
-                      ->setPort($config->get('mail.port', ''))
+                    ->setHost($config['mail::host'])
+                      ->setPort($config['mail::port'])
                       ->setEncryption('tls')
-                      ->setUsername($config->get('mail.smtp_username', ''))
-                      ->setPassword($config->get('mail.smtp_password', ''));
+                      ->setUsername($config['mail::smtp_username'])
+                      ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']->get('mail.entcryption', 0) == 0) {
+            } elseif ($this->app['settings']['mail::entcryption', 0) == 0) {
 
                 return Swift_SmtpTransport::newInstance()
-                    ->setHost($config->get('mail.host', ''))
-                    ->setPort($config->get('mail.port', ''))
-                    ->setUsername($config->get('mail.smtp_username', ''))
-                    ->setPassword($config->get('mail.smtp_password', ''));
+                    ->setHost($config['mail::host'])
+                    ->setPort($config['mail::port'])
+                    ->setUsername($config['mail::smtp_username'])
+                    ->setPassword($config['mail::smtp_password']);
 
             } else {
                 throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
@@ -189,7 +189,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
     protected function registerSendmailTransport($config)
     {
         $this->app['swift.transport'] = function ($app) use ($config) {
-            return Swift_SendmailTransport::newInstance($config->get('mail.sendmail', ''));
+            return Swift_SendmailTransport::newInstance($config['mail::sendmail']);
         };
     }
 
@@ -214,7 +214,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerMailgunTransport($config)
     {
-        $mailgun = $config->get('services.mailgun', []);
+        $mailgun = $config['mail::services.mailgun'];
 
         $$this->app['swift.transport'] = function () use ($mailgun) {
             return new MailgunTransport($mailgun['secret'], $mailgun['domain']);
@@ -229,7 +229,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerMandrillTransport($config)
     {
-        $mandrill = $this->app['config']->get('services.mandrill', []);
+        $mandrill = $this->app['config']['mail::services.mandrill'];
 
         $this->app['swift.transport'] = function () use ($mandrill) {
             return new MandrillTransport($mandrill['secret']);

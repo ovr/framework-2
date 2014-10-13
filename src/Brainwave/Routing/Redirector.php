@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -72,7 +72,7 @@ class Redirector
      */
     public function redirect($url, $status = 302)
     {
-        $this['response']->redirect($url, $status);
+        $this->app['response']->redirect($url, $status);
         $this->halt($status);
     }
 
@@ -99,7 +99,7 @@ class Redirector
      */
     public function urlFor($name, $params = [])
     {
-        return $this['request']->getScriptName() . $this['router']->urlFor($name, $params);
+        return $this->app['request']->getScriptName() . $this['router']->urlFor($name, $params);
     }
 
     /**

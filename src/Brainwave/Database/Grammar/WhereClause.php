@@ -8,7 +8,7 @@ namespace Brainwave\Database\Grammar;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,9 +18,7 @@ namespace Brainwave\Database\Grammar;
  *
  */
 
-use \Brainwave\Support\Arr;
 use \Brainwave\Database\Grammar\Builder;
-use \Brainwave\Database\Grammar\Expression;
 
 /**
  * WhereClause
@@ -177,7 +175,7 @@ class WhereClause
 
                     array_push(
                         $stack,
-                        "{str_replace('.', '"."', $arrayMatch[1])}".(isset($arrayMatch[3]) ? ' '.$arrayMatch[3] : '')
+                        "{str_replace('.', '`.`', $arrayMatch[1])}".(isset($arrayMatch[3]) ? ' '.$arrayMatch[3] : '')
                     );
                 }
 
@@ -186,7 +184,7 @@ class WhereClause
         } else {
             preg_match($rsort, $array, $arrayMatch);
 
-            return " ORDER BY {$this->query->wrapValue(str_replace('.', '"."', $arrayMatch[1]))}".
+            return " ORDER BY {$this->query->wrapValue(str_replace('.', '`.`', $arrayMatch[1]))}".
             (isset($arrayMatch[3]) ? ' '.$arrayMatch[3] : '');
         }
     }
@@ -277,7 +275,7 @@ class WhereClause
     {
         if (is_array($array) && isset($array['columns'], $array['keyword'])) {
 
-            $columns = $this->query->wrapValue(str_replace('.', '"."', implode($array['columns'], '", "')));
+            $columns = $this->query->wrapValue(str_replace('.', '`.`', implode($array['columns'], '", "')));
             $keyword = $this->query->wrapValue($array['keyword']);
 
             return ($whereClause !== '' ? ' AND ' : ' WHERE ')." MATCH ({$columns}) AGAINST ({$keyword})";
@@ -377,12 +375,12 @@ class WhereClause
      * [whereDataImplodeSwitch description]
      *
      * @param  string  $column
-     * @param  string  $value
+     * @param  array   $value
      * @param  string  $type
      * @param  boolean $not
      * @return string
      */
-    protected function whereDataImplodeSwitch($column, $value, $type, $key = null, $not = false)
+    protected function whereDataImplodeSwitch($column, array $value, $type, $key = null, $not = false)
     {
         switch ($type) {
             case 'NULL':

@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,6 +19,7 @@ namespace Brainwave\Config\Driver;
  */
 
 use Symfony\Component\Yaml\Yaml;
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
@@ -32,21 +33,55 @@ use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 class YamlDriver implements DriverInterface
 {
     /**
+     * The filesystem instance.
+     *
+     * @var \Brainwave\Filesystem\Filesystem
+     */
+    protected $files;
+
+    /**
+     * Create a new file filesystem loader.
+     *
+     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @return void
+     */
+    public function __construct(Filesystem $files)
+    {
+        $this->files = $files;
+    }
+
+    /**
      * Loads a YAML file and gets its' contents as an array
+     *
      * @param  string $filename
+     * @param  string $group
      * @return array            config data
      */
-    public function load($filename)
+    public function load($filename, $group = null)
     {
         if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
             throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
-        $config = Yaml::parse($filename);
-        return $config ?: [];
+
+        if ($this->files->exists($filename)) {
+            $config = Yaml::parse($filename);
+        }
+
+        $groupConfig = [];
+
+        if ($group !== null) {
+            foreach ($config as $key => $value) {
+                $groupConfig["{$group}::{$key}"] = $value;
+            }
+            $config = $groupConfig;
+        }
+
+        return $config;
     }
 
     /**
      * Checking if file ist supported
+     *
      * @param  string $filename
      * @return mixed
      */

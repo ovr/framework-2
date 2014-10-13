@@ -1,5 +1,5 @@
 {
-    "name": "narrowspark/framework",
+    "name": "narrowspark/mail",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["framework", "narrowspark", "slim", "mail", "brainwave"],
@@ -15,9 +15,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "brainwave/log": "0.9.*",
-        "brainwave/view": "0.9.*",
-        "brainwave/config": "0.9.*",
+        "brainwave/log": "self.version",
+        "brainwave/view": "self.version",
+        "brainwave/config": "self.version",
         "swiftmailer/swiftmailer": "~5.1"
     },
     "autoload": {
@@ -28,7 +28,7 @@
     "target-dir": "Brainwave/Mail",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.1-dev"
+            "dev-master": "0.9.3-dev"
         }
     },
     "suggest" : {

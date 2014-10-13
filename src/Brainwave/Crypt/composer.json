@@ -1,5 +1,5 @@
 {
-    "name": "brainwave/conifg",
+    "name": "brainwave/crypt",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["narrowspark", "brainwave", "crypt"],
@@ -24,7 +24,7 @@
     "target-dir": "Brainwave/Crypt",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.1-dev"
+            "dev-master": "0.9.3-dev"
         }
     },
     "suggest": {

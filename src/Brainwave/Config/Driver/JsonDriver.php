@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,6 +18,7 @@ namespace Brainwave\Config\Driver;
  *
  */
 
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Config\Driver\Interfaces\DriverInterface;
 
 /**
@@ -30,6 +31,24 @@ use \Brainwave\Config\Driver\Interfaces\DriverInterface;
  */
 class JsonDriver implements DriverInterface
 {
+    /**
+     * The filesystem instance.
+     *
+     * @var \Brainwave\Filesystem\Filesystem
+     */
+    protected $files;
+
+    /**
+     * Create a new file filesystem loader.
+     *
+     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @return void
+     */
+    public function __construct(Filesystem $files)
+    {
+        $this->files = $files;
+    }
+
     /**
      * Loads a JSON file and gets its' contents as an array
      * @param  string $filename
@@ -66,7 +85,7 @@ class JsonDriver implements DriverInterface
      */
     private function parseJson($filename)
     {
-        $json = file_get_contents($filename);
+        $json = $this->files->get($filename);
         return json_decode($json, true);
     }
 

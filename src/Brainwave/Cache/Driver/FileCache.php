@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,7 +20,7 @@ namespace Brainwave\Cache\Driver;
 
 use \Brainwave\Support\Arr;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
-use \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface;
+use \Brainwave\Filesystem\Interfaces\FilesystemInterface;
 
 /**
  * FileCache
@@ -59,7 +59,7 @@ class FileCache implements DriverInterface
     /**
      * Create a new file cache store instance.
      *
-     * @param  \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface  $files
+     * @param  \Brainwave\Filesystem\Interfaces\FilesystemInterface  $files
      * @param  string  $directory
      * @return void
      */

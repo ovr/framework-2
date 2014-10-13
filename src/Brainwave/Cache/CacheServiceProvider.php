@@ -8,7 +8,7 @@ namespace Brainwave\Cache;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -46,8 +46,8 @@ class CacheServiceProvider implements ServiceProviderInterface
     protected function registerCacheFactory()
     {
         $this->app['cache.factory'] = function ($app) {
-            $cacheFactory = new CacheManager($app, $app['settings']['cache.supported.drivers']);
-            $cacheFactory->setPrefix($app['settings']['cache.prefix']);
+            $cacheFactory = new CacheManager($app, $app['settings']['cache::supported.drivers']);
+            $cacheFactory->setPrefix($app['settings']['cache::prefix']);
             return $cacheFactory;
         };
     }
@@ -57,7 +57,7 @@ class CacheServiceProvider implements ServiceProviderInterface
         $this->app['cache'] = function ($app) {
 
             //The default driver
-            $app['cache.factory']->setDefaultDriver($app['settings']['cache.driver']);
+            $app['cache.factory']->setDefaultDriver($app['settings']['cache::driver']);
 
             return $app['cache.factory']->driver($app['cache.factory']->getDefaultDriver());
         };
@@ -65,13 +65,13 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     protected function registerCaches()
     {
-        if (!is_null($this->app['settings']['cache.caches'])) {
-            foreach ($this->app['settings']['cache.caches'] as $name => $class) {
+        if ($this->app['settings']['cache::caches'] !== null) {
+            foreach ($this->app['settings']['cache::caches'] as $name => $class) {
                 if ($this->app['cache.factory']->getDefaultDriver() === $name) {
                     // we use shortcuts here in case the default has been overridden
-                    $config = $this->app['settings']['cache.driver'];
+                    $config = $this->app['settings']['cache::driver'];
                 } else {
-                    $config = $this->app['settings']['cache.caches'][$name];
+                    $config = $this->app['settings']['cache::caches'][$name];
                 }
 
                 $this->app['caches'][$name] = function () use ($config) {

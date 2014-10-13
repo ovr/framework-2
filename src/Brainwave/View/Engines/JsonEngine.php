@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -67,8 +67,8 @@ class JsonEngine implements EnginesInterface
      */
     public function get(array $data = [])
     {
-        if ($data['options'] === $this->app['settings']['json.option']) {
-            $options = $this->app['settings']['json.option'];
+        if ($data['options'] === $options = $this->app['settings']['http::json.option']) {
+            $options;
         } else {
             $options = $data['options'];
         }
@@ -144,7 +144,7 @@ class JsonEngine implements EnginesInterface
         $app['response']->addHeaders(
             array_merge(
                 ['Content-Type', 'application/json'],
-                $data['j.headers']
+                $data['json.headers']
             )
         );
 

@@ -8,7 +8,7 @@ namespace Brainwave\Support\Facades;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use \Brainwave\Workbench\StaticalProxy;
+use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
  * Response
@@ -28,7 +28,7 @@ use \Brainwave\Workbench\StaticalProxy;
  * @since   0.8.0-dev
  *
  */
-class Response extends StaticalProxy
+class Response extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
@@ -46,13 +46,13 @@ class Response extends StaticalProxy
      */
     public static function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
-        $app = StaticalProxy::getFacadeApp();
+        $app = StaticalProxyManager::getFacadeApp();
 
         $jsonData = array_merge(
             $data,
             [
                 'options' => $options,
-                'j.headers' => $headers
+                'json.headers' => $headers
             ]
         );
 

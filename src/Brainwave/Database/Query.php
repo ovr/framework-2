@@ -8,7 +8,7 @@ namespace Brainwave\Database;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,7 @@ namespace Brainwave\Database;
  */
 
 use \Brainwave\Database\Grammar\Builder;
-use \Brainwave\Database\Grammar\WhereClause;
+use \Brainwave\Database\Grammar\whereClause;
 use \Brainwave\Database\Interfaces\QueryInterface;
 
 /**
@@ -47,9 +47,9 @@ class Query implements QueryInterface
     protected $grammar;
 
     /**
-     * WhereClause instance.
+     * where->where instance.
      *
-     * @var \Brainwave\Database\Grammar\WhereClause
+     * @var \Brainwave\Database\Grammar\where->where
      */
     protected $where;
 
@@ -78,7 +78,7 @@ class Query implements QueryInterface
         $this->connection = $connection;
         $this->connection->setQueryGrammar(new Builder($this->connection));
         $this->grammar = $this->connection->getQueryGrammar();
-        $this->where = new WhereClause($this->grammar);
+        $this->where = new whereClause($this->grammar);
     }
 
     /**
@@ -166,8 +166,6 @@ class Query implements QueryInterface
      */
     public function insert($table, $datas)
     {
-        $lastId = [];
-
         // Check indexed or associative array
         if (!isset($datas[0])) {
             $datas = array($datas);
@@ -215,7 +213,7 @@ class Query implements QueryInterface
             $table = $this->grammar->getTablePrefix().$table;
             $col = implode(', ', $columns);
             $val = implode($values, ', ');
-            
+
             $query = "INSERT INTO 
                 {$this->grammar->wrapValue($table)} ({$col}) VALUES ({$val})";
         }
@@ -270,15 +268,15 @@ class Query implements QueryInterface
                     case 'integer':
                     case 'double':
                     case 'string':
-                        $fields[] = "{$column} = {$this->wrapFunctionName($key, $value)}";
+                        $fields[] = "{$column} = {$this->grammar->wrapFunctionName($key, $value)}";
                         break;
                 }
             }
         }
 
         $table = $this->grammar->getTablePrefix().$table;
-        $query = "UPDATE {$this->grammar->wrapValue($table)} SET 
-            {implode(', ', $fields)} {$this->whereClause($where)}";
+        $field = implode(', ', $fields);
+        $query = "UPDATE {$this->grammar->wrapValue($table)} SET {$field} {$this->where->where($where)}";
 
         return $this->connection->affectingStatement($query, $this->getBindings());
     }
@@ -345,7 +343,7 @@ class Query implements QueryInterface
         }
 
         $table = $this->grammar->wrapValue($this->grammar->getTablePrefix().$table);
-        $query = "UPDATE {$table} SET {$replaceQuery} {$this->whereClause($where)}";
+        $query = "UPDATE {$table} SET {$replaceQuery} {$this->where->where($where)}";
 
         return $this->connection->affectingStatement($query, $this->getBindings());
     }
@@ -511,7 +509,7 @@ class Query implements QueryInterface
                     if (is_array($relation)) {
                         // For ['column1', 'column2']
                         if (isset($relation[0])) {
-                            $relation = 'USING ("'.implode($relation, '", "').'")';
+                            $relation = 'USING (`'.implode($relation, '`, `').'`)';
                         // For ['column1' => 'column2']
                         } else {
                             $relation = "ON {$table} {$this->grammar->wrapValue(key($relation))} = 

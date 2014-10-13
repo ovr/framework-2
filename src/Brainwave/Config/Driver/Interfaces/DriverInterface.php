@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver\Interfaces;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -30,13 +30,16 @@ interface DriverInterface
 {
     /**
      * Loads a file and gets its' contents as an array
+     *
      * @param  string $filename
+     * @param  string $group
      * @return array            config data
      */
-    public function load($filename);
+    public function load($filename, $group = null);
 
     /**
      * Checking if file ist supported
+     *
      * @param  string $filename
      * @return mixed
      */
@@ -44,6 +47,7 @@ interface DriverInterface
 
     /**
      * Format a config file for saving.
+     *
      * @param  array     $data config data
      * @return string data export
      */

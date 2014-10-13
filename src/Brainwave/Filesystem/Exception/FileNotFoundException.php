@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Filesystem\Interfaces;
+namespace Brainwave\Filesystem\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Support\Filesystem\Interfaces;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,14 +19,14 @@ namespace Brainwave\Support\Filesystem\Interfaces;
  */
 
 /**
- * FilesystemInterface
+ * FileNotFoundException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-interface FilesystemInterface
+class FileNotFoundException extends \Exception
 {
 
 }

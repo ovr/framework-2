@@ -8,7 +8,7 @@ namespace Brainwave\Cache;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.2-dev
+ * @version     0.9.3-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -217,7 +217,7 @@ class CacheManager
         $config = array_filter($config);
 
         $path = empty($config) ?
-        $this->app['settings']['cache.path'] :
+        $this->app['settings']['cache::path'] :
         $config['path'];
 
         return $this->repository(new FileCache($this->app['files'], $path));
@@ -234,7 +234,7 @@ class CacheManager
         $config = array_filter($config);
 
         $servers = empty($config) ?
-        $this->app['settings']['cache.memcached'] :
+        $this->app['settings']['cache::memcached'] :
         $config['memcached'];
 
         $memcached = MemcachedCache::connect($servers);
@@ -253,7 +253,7 @@ class CacheManager
         $config = array_filter($config);
 
         $servers = empty($config) ?
-        $this->app['settings']['cache.memcache'] :
+        $this->app['settings']['cache::memcache'] :
         $config['memcache'];
 
         $memcached = MemcacheCache::connect($servers);
@@ -273,16 +273,16 @@ class CacheManager
 
         $servers = empty($config) ?
         (
-            (!is_null($this->app['settings']['cache.redis.parameters'])) ?
-            $this->app['settings']['cache.redis.parameters'] :
+            (!is_null($this->app['settings']['cache::redis.parameters'])) ?
+            $this->app['settings']['cache::redis.parameters'] :
             ''
         ) :
         $config['parameters'];
 
         $options = empty($config) ?
         (
-            (!is_null($this->app['settings']['cache.redis.options'])) ?
-            $this->app['settings']['cache.redis.options'] :
+            (!is_null($this->app['settings']['cache::redis.options'])) ?
+            $this->app['settings']['cache::redis.options'] :
             []
         ) :
         $config['options'];
@@ -330,7 +330,7 @@ class CacheManager
      */
     public function getPrefix()
     {
-        return $this->app['settings']['cache.prefix'];
+        return $this->app['settings']['cache::prefix'];
     }
 
     /**
@@ -341,7 +341,7 @@ class CacheManager
      */
     public function setPrefix($name)
     {
-        $this->app['settings']['cache.prefix'] = $name;
+        $this->app['settings']['cache::prefix'] = $name;
     }
 
     /**
@@ -362,7 +362,7 @@ class CacheManager
      */
     public function getDefaultDriver()
     {
-        return $this->app['settings']['cache.driver'];
+        return $this->app['settings']['cache::driver'];
     }
 
     /**
@@ -373,6 +373,6 @@ class CacheManager
      */
     public function setDefaultDriver($name)
     {
-        $this->app['settings']['cache.driver'] = $name;
+        $this->app['settings']['cache::driver'] = $name;
     }
 }
