@@ -54,7 +54,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\": "src/"
+            "Brainwave\\": "src/Brainwave/"
         }
     },
     "extra": {
