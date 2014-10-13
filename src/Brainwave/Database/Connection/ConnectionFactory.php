@@ -122,28 +122,28 @@ class ConnectionFactory
         switch ($config['driver'])
         {
             case 'mysql':
-                $connector = new MySqlConnector;
+                $connector = new MySqlConnector();
                 break;
             case 'mariadb':
-                $connector = new MariaDBConnector;
+                $connector = new MariaDBConnector();
                 break;
             case 'pgsql':
-                $connector = new PostgresConnector;
+                $connector = new PostgresConnector();
                 break;
             case 'mssql':
-                $connector = new PostgresConnector;
+                $connector = new PostgresConnector();
                 break;
             case 'sybase':
-                $connector = new PostgresConnector;
+                $connector = new PostgresConnector();
                 break;
             case 'cloudsql':
-                $connector = new PostgresConnector;
+                $connector = new PostgresConnector();
                 break;
             case 'sqlite':
-                $connector = new SQLiteConnector;
+                $connector = new SQLiteConnector();
                 break;
             case 'sqlsrv':
-                $connector = new SqlServerConnector;
+                $connector = new SqlServerConnector();
                 break;
             default:
                 throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");

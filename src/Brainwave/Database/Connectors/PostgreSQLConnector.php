@@ -91,7 +91,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorInterface
         // need to establish the PDO connections and return them back for use.
         extract($config);
 
-        $host = isset($server) ? "host={$server};" : '';
+        $server = isset($server) ? "host={$server};" : '';
 
         $dsn = "pgsql:{$server}dbname={$dbname}";
 

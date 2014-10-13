@@ -763,4 +763,4 @@ return array_merge($core, array_map('realpath', [
 	$basePath.'vendor/symfony/serializer/Symfony/Component/Serializer/SerializerAwareInterface.php',
 	$basePath.'vendor/symfony/serializer/Symfony/Component/Serializer/SerializerInterface.php',
 	$basePath.'vendor/vlucas/phpdotenv/src/Dotenv.php',
-]);
+]));

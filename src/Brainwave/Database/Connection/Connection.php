@@ -583,14 +583,14 @@ class Connection implements ConnectionInterface
      */
     public function statement($query, $bindings = array())
     {
-        return $this->run($query, $bindings, function ($me, $query, $bindings) {
-            if ($me->pretending()) {
+        return $this->run($query, $bindings, function ($query, $bindings) {
+            if ($this->pretending()) {
                 return true;
             }
 
-            $bindings = $me->prepareBindings($bindings);
+            $bindings = $this->prepareBindings($bindings);
 
-            return $me->getPdo()->prepare($query)->execute($bindings);
+            return $this->getPdo()->prepare($query)->execute($bindings);
         });
     }
 
@@ -603,17 +603,17 @@ class Connection implements ConnectionInterface
      */
     public function affectingStatement($query, $bindings = array())
     {
-        return $this->run($query, $bindings, function ($me, $query, $bindings) {
-            if ($me->pretending()) {
+        return $this->run($query, $bindings, function ($query, $bindings) {
+            if ($this->pretending()) {
                 return 0;
             }
 
             // For update or delete statements, we want to get the number of rows affected
             // by the statement and return that back to the developer. We'll first need
             // to execute the statement and then we'll use PDO to fetch the affected.
-            $statement = $me->getPdo()->prepare($query);
+            $statement = $this->getPdo()->prepare($query);
 
-            $statement->execute($me->prepareBindings($bindings));
+            $statement->execute($this->prepareBindings($bindings));
 
             return $statement->rowCount();
         });

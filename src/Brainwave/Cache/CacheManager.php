@@ -27,6 +27,7 @@ use \Brainwave\Cache\Driver\ArrayCache;
 use \Brainwave\Cache\Driver\RedisCache;
 use \Brainwave\Cache\Driver\XCacheCache;
 use \Brainwave\Cache\Driver\WinCacheCache;
+use \Brainwave\Cache\Driver\MemcacheCache;
 use \Brainwave\Cache\Driver\MemcachedCache;
 use \Brainwave\Cache\Exception\CacheException;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;

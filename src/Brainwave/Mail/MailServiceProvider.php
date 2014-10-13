@@ -103,7 +103,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      */
     protected function registerSwiftTransport($config)
     {
-        switch ($config['mail::driver', ''))
+        switch ($config['mail::driver'])
         {
             case 'smtp':
                 return $this->registerSmtpTransport($config);

@@ -119,7 +119,7 @@ class FileLoader implements LoaderInterface
             $envDriver = $this->driver($this->files->extension($file), $path.$env);
 
             // Return config array
-            $envItems = $driver->load($envConfigFile, $group);
+            $envItems = $envDriver->load($envConfigFile, $group);
 
             // Merege env config and config
             $items = $this->configMerge($items, $envItems);
