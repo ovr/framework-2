@@ -157,7 +157,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption', 0) == 'tls') {
+            } elseif ($this->app['settings']['mail::entcryption'] == 'tls') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -166,7 +166,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption', 0) == 0) {
+            } elseif ($this->app['settings']['mail::entcryption'] == 0) {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])

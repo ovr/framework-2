@@ -28,8 +28,8 @@ use \Brainwave\Database\Connectors\SQLiteConnector;
 use \Brainwave\Database\Connectors\SybaseConnector;
 use \Brainwave\Database\Connectors\MariaDBConnector;
 use \Brainwave\Database\Connectors\SqlServerConnector;
-use \Brainwave\Database\Connectors\GoogleCloudConnector;
 use \Brainwave\Database\Connectors\PostgreSQLConnector;
+use \Brainwave\Database\Connectors\GoogleCloudConnector;
 
 /**
  * ConnectionFactory
@@ -118,7 +118,6 @@ class ConnectionFactory
             throw new \InvalidArgumentException("A driver must be specified.");
         }
 
-
         switch ($config['driver'])
         {
             case 'mysql':
@@ -128,7 +127,7 @@ class ConnectionFactory
                 $connector = new MariaDBConnector();
                 break;
             case 'pgsql':
-                $connector = new PostgresConnector();
+                $connector = new PostgreSQLConnector();
                 break;
             case 'mssql':
                 $connector = new MSSQLConnector();
@@ -144,6 +143,9 @@ class ConnectionFactory
                 break;
             case 'sqlsrv':
                 $connector = new SqlServerConnector();
+                break;
+            case 'oracle':
+                $connector = new OracleConnector();
                 break;
             default:
                 throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");

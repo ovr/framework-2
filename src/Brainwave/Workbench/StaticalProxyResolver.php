@@ -70,7 +70,7 @@ class StaticalProxyResolver
     public function isFacade($facade)
     {
         if (class_exists($facade)) {
-            return array_key_exists('Brainwave\Workbench\StaticalProxy', class_parents($facade));
+            return array_key_exists('Brainwave\Workbench\StaticalProxyManager', class_parents($facade));
         } else {
             return false;
         }

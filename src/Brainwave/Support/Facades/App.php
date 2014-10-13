@@ -18,7 +18,7 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use Brainwave\Workbench\StaticalProxyManagerManager;
+use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
  * App
@@ -28,11 +28,11 @@ use Brainwave\Workbench\StaticalProxyManagerManager;
  * @since   0.8.0-dev
  *
  */
-class App extends StaticalProxyManagerManager
+class App extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
-        return self::$brainwave;
+        return self::$app;
     }
 
     public static function make($key)
