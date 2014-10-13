@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Filesystem\Interfaces;
+namespace Brainwave\Cache\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,20 +19,21 @@ namespace Brainwave\Filesystem\Interfaces;
  */
 
 /**
- * FilesystemManagerInterface
+ * CacheManagerInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.3-dev
+ * @since   0.9.2-dev
  *
  */
-interface FilesystemManagerInterface
+interface CacheManagerInterface
 {
     /**
-     * Get a filesystem implementation.
+     * Get a cache driver instance.
      *
-     * @param  string  $name
-     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @param  string $driver
+     * @param  array  $options
+     * @return mixed
      */
-    public function disk($name = null);
+    public function driver($driver, array $options = []);
 }

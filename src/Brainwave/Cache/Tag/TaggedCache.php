@@ -18,26 +18,26 @@ namespace Brainwave\Cache\Tag;
  *
  */
 
-use \Closure;
-use \DateTime;
 use \Carbon\Carbon;
+use \Brainwave\Cache\TagSet;
+use \Brainwave\Cache\Interfaces\CacheManagerInterface;
 use \Brainwave\Cache\Tag\Interfaces\TaggedCacheInterface;
 
 /**
- * CacheInterface
+ * TaggedCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class TaggedCache implements TaggedCacheInterface
+class TaggedCache implements TaggedCacheManagerInterface
 {
 
     /**
      * The cache store implementation.
      *
-     * @var \Brainwave\Cache\CacheInterface
+     * @var \Brainwave\Cache\CacheManagerInterface
      */
     protected $store;
 
@@ -51,11 +51,11 @@ class TaggedCache implements TaggedCacheInterface
     /**
      * Create a new tagged cache instance.
      *
-     * @param  \Brainwave\Cache\CacheInterface  $store
+     * @param  \Brainwave\Cache\Interfaces\CacheManagerInterface  $store
      * @param  \Brainwave\Cache\TagSet  $tags
      * @return void
      */
-    public function __construct(CacheInterface $store, TagSet $tags)
+    public function __construct(CacheManagerInterface $store, TagSet $tags)
     {
         $this->tags = $tags;
         $this->store = $store;
@@ -186,7 +186,7 @@ class TaggedCache implements TaggedCacheInterface
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback)
+    public function remember($key, $minutes, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -207,7 +207,7 @@ class TaggedCache implements TaggedCacheInterface
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function sear($key, Closure $callback)
+    public function sear($key, \Closure $callback)
     {
         return $this->rememberForever($key, $callback);
     }
@@ -219,7 +219,7 @@ class TaggedCache implements TaggedCacheInterface
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback)
+    public function rememberForever($key, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -262,7 +262,7 @@ class TaggedCache implements TaggedCacheInterface
      */
     protected function getMinutes($duration)
     {
-        if ($duration instanceof DateTime) {
+        if ($duration instanceof \DateTime) {
             $fromNow = Carbon::instance($duration)->diffInMinutes();
 
             return $fromNow > 0 ? $fromNow : null;

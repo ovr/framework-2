@@ -19,6 +19,7 @@ namespace Brainwave\Mail;
  */
 
 use \Swift_Mailer;
+use \Swift_Message;
 use \Pimple\Container;
 use \Swift_SmtpTransport;
 use \Swift_MailTransport;
