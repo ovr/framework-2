@@ -15,15 +15,15 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "symfony/serializer": "2.6.*@dev",
-        "narrowspark/framework": "0.9.3.*@dev"
+        "pimple/pimple": "2.*",
+        "brainwave/config": "self.version",
+        "symfony/serializer": "2.6.*@dev"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Cache": ""
         }
     },
-    "target-dir": "Brainwave/Cache",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

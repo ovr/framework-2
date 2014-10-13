@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Facades;
+namespace Brainwave\Workbench\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -21,17 +21,17 @@ namespace Brainwave\Support\Facades;
 use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
- * Mail
+ * Event
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class Mail extends StaticalProxyManager
+class Event extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
-        return 'mailer';
+        return 'event';
     }
 }

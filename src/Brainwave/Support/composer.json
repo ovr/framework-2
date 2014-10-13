@@ -19,11 +19,10 @@
         "patchwork/utf8": "1.1.*"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Support": ""
         }
     },
-    "target-dir": "Brainwave/Support",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

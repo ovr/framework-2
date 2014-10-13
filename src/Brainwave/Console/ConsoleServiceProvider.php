@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Facades;
+namespace Brainwave\Console;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,22 @@ namespace Brainwave\Support\Facades;
  *
  */
 
-use \Brainwave\Workbench\StaticalProxyManager;
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
 
 /**
- * Request
+ * ConsoleServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.3-dev
  *
  */
-class Request extends StaticalProxyManager
+class ConsoleServiceProvider implements ServiceProviderInterface
 {
-    protected static function getFacadeAccessor()
+    public function register(Container $app)
     {
-        return 'request';
+        $app['cerebro'] = function ($app) {
+        };
     }
 }

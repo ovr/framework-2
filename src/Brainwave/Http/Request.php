@@ -63,42 +63,49 @@ class Request implements RequestInterface
 
     /**
      * Application environment
+     *
      * @var \Brainwave\Environment\Interfaces\EnvironmentInterface
      */
     protected $env;
 
     /**
      * Request paths (physical and virtual) cached per instance
+     *
      * @var array
      */
     protected $paths;
 
     /**
      * Request headers
+     *
      * @var \Brainwave\Http\Interfaces\HeadersInterface
      */
     protected $headers;
 
     /**
      * Request cookies
+     *
      * @var \Brainwave\Http\Interfaces\CookiesJarInterface
      */
     protected $cookies;
 
     /**
      * Request query parameters
+     *
      * @var array
      */
     protected $queryParameters;
 
     /**
      * Request body (raw)
+     *
      * @var \GuzzleHttp\Stream\StreamInterface
      */
     protected $bodyRaw;
 
     /**
      * Request body (parsed; only available if body is form-urlencoded)
+     *
      * @var array
      */
     protected $body;
@@ -140,7 +147,7 @@ class Request implements RequestInterface
      */
     public function server($key = null)
     {
-        return $this->env->get($server);
+        return $_SERVER[$key];
     }
 
     /*******************************************************************************

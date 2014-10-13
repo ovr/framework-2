@@ -317,10 +317,13 @@ EOF;
     {
         $settings = $this->app['settings'];
 
-        if ($settings->get('app::mode', 'production') === 'development' && $settings->get('app::debug', false) === true ||
-            $settings->get('app::mode', 'production') === 'testing' && $settings->get('app::debug', false) === true) {
+        if ($settings->get('app::mode', 'production') === 'development' &&
+            $settings->get('app::debug', false) === true ||
+            $settings->get('app::mode', 'production') === 'testing' &&
+            $settings->get('app::debug', false) === true
+        ) {
 
-            ($settings['app.exception.handler'] == 'whoops') ?
+            ($settings['app::exception.handler'] == 'whoops') ?
             $ext = $this->app['displayer.whoops']->display($exception) :
             $ext = $this->app['displayer.plain']->display($exception);
         } else {

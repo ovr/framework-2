@@ -18,11 +18,10 @@
         "brainwave/config": "self.version"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Translator": ""
         }
     },
-    "target-dir": "Brainwave/Translator",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

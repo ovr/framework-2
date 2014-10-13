@@ -22,11 +22,10 @@
         "ext-pdo": "*"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Database": ""
         }
     },
-    "target-dir": "Brainwave/Database",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

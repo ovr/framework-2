@@ -468,7 +468,7 @@ class Workbench extends Container
      */
     public function isLocal()
     {
-        return $this['env'] == 'local';
+        return $this['env'] = 'local';
     }
 
     /**
@@ -478,7 +478,17 @@ class Workbench extends Container
      */
     public function runningUnitTests()
     {
-        return $this['env'] == 'testing';
+        return $this['env'] = 'testing';
+    }
+
+    /**
+     * Determine if we are running console.
+     *
+     * @return bool
+     */
+    public function runningInConsole()
+    {
+        return $this['env'] = 'console';
     }
 
     /**
@@ -1006,6 +1016,16 @@ class Workbench extends Container
     }
 
     /**
+     * Set the application request for the console environment.
+     *
+     * @return void
+     */
+    public function setRequestForConsoleEnvironment()
+    {
+        $this->runningInConsole();
+    }
+
+    /**
      * Run
      *
      * This method invokes the middleware stack, including the core Brainwave application;
@@ -1018,9 +1038,7 @@ class Workbench extends Container
     {
         $this['events']->applyHook('before');
 
-        if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) {
-            ob_start("ob_gzhandler");
-        } else {
+        if ($this['env'] !== 'console') {
             ob_start('mb_output_handler');
         }
 
@@ -1041,12 +1059,16 @@ class Workbench extends Container
 
     /**
      * Shutdown The Application
+     *
      * @return Flush the output buffer.
      *         Turns off exception handling
      */
     public function shutdown()
     {
-        ob_end_flush();
+        if ($this['env'] !== 'console') {
+            ob_end_flush();
+        }
+
         $this['exception']->unregister();
     }
 

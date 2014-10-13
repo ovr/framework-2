@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Facades;
+namespace Brainwave\Workbench\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -21,17 +21,22 @@ namespace Brainwave\Support\Facades;
 use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
- * Helpers
+ * Lang
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.1-dev
  *
  */
-class Helpers extends StaticalProxyManager
+class Trans extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
-        return 'helpers';
+        return 'translator';
+    }
+
+    public function get($orig, $language = false, $replacements = null)
+    {
+        return self::$app->getTranslation($orig, $language, $replacements);
     }
 }

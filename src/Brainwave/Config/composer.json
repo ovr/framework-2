@@ -17,11 +17,10 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Config": ""
         }
     },
-    "target-dir": "Brainwave/Config",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

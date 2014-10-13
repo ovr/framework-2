@@ -21,11 +21,10 @@
         "swiftmailer/swiftmailer": "~5.1"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Mail": ""
         }
     },
-    "target-dir": "Brainwave/Mail",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

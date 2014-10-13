@@ -19,11 +19,10 @@
         "ext-mcrypt": "*"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Crypt": ""
         }
     },
-    "target-dir": "Brainwave/Crypt",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

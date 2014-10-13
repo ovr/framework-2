@@ -22,11 +22,10 @@
         "rackspace/php-opencloud": "~1.8"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Filesystem": ""
         }
     },
-    "target-dir": "Brainwave/Filesystem",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.3-dev"

@@ -19,11 +19,10 @@
         "brainwave/support": "self.version"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Brainwave\\Session": ""
         }
     },
-    "target-dir": "Brainwave/Session",
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.1-dev"
