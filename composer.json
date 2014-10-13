@@ -15,6 +15,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
+        "ext-openssl": "*",
+        "ext-mcrypt": "*",
         "pimple/pimple": "2.*",
         "league/plates": "3.*",
         "nesbot/carbon": "1.9.*",
@@ -62,8 +64,6 @@
     },
     "suggest": {
         "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers",
-        "ext-mcrypt": "Mcrypt generates the next best secure CSRF tokens and it is required for HTTP cookie encryption",
-        "ext-openssl": "OpenSSL generates the best secure CSRF tokens.",
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml" : "Narrowspark has support for YML files"
     },
