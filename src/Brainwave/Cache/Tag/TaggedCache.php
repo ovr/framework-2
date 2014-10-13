@@ -31,7 +31,7 @@ use \Brainwave\Cache\Tag\Interfaces\TaggedCacheInterface;
  * @since   0.9.2-dev
  *
  */
-class TaggedCache implements TaggedCacheManagerInterface
+class TaggedCache implements TaggedCacheInterface
 {
 
     /**

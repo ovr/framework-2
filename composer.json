@@ -53,8 +53,8 @@
         "codeception/codeception": "*"
     },
     "autoload": {
-        "psr-0": {
-            "Brainwave": "src/"
+        "psr-4": {
+            "Brainwave\\": "src/"
         }
     },
     "extra": {

@@ -99,6 +99,7 @@ class IniDriver implements DriverInterface
 
     /**
      * Format a ini config file.
+     *
      * @param  array  $data   config data
      * @param  array  $parent data
      * @return string data export
@@ -107,11 +108,11 @@ class IniDriver implements DriverInterface
     {
         $out = '';
 
-        foreach ($a as $k => $v) {
+        foreach ($data as $k => $v) {
             if (is_array($v)) {
                 //subsection case
                 //merge all the sections into one array...
-                $sec = array_merge((array) $parent, (array) $k);
+                $sec = array_merge($parent, $k);
                 //add section information to the output
                 $out .= '[' . join('.', $sec) . ']' . PHP_EOL;
                 //recursively traverse deeper
