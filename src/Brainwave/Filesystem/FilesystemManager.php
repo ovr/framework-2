@@ -32,7 +32,7 @@ use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
  * @since   0.9.3-dev
  *
  */
-class FilesystemManager implements FactoryContract {
+class FilesystemManager implements FilesystemManagerInterface {
 
     /**
      * The application instance.

@@ -25,6 +25,7 @@ use \Pimple\Container;
 use \Brainwave\Support\Arr;
 use \Brainwave\Http\Headers;
 use \Brainwave\Http\Request;
+use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;

@@ -119,40 +119,6 @@ class NullCache extends TaggableStore implements DriverInterface
     }
 
     /**
-     * [getMultiple description]
-     *
-     * @param  array $keys
-     * @return array
-     */
-    public function getMultiple($keys)
-    {
-        //
-    }
-
-    /**
-     * [setMultiple description]
-     *
-     * @param  array      $keys
-     * @param  null       $ttl
-     * @return array|bool
-     */
-    public function setMultiple($keys, $ttl = null)
-    {
-        //
-    }
-
-    /**
-     * [removeMultiple description]
-     *
-     * @param  array      $keys
-     * @return array|void
-     */
-    public function removeMultiple($keys)
-    {
-        //
-    }
-
-    /**
      * Remove all items from the cache.
      *
      * @return void

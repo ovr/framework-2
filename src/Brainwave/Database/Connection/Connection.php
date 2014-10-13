@@ -20,6 +20,7 @@ namespace Brainwave\Database\Connection;
 
 use \PDO;
 use \Brainwave\Support\Str;
+use \Brainwave\Support\Arr;
 use \Brainwave\Database\Grammar\Builder;
 use \Brainwave\Database\Exception\ConnectException;
 use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
@@ -524,7 +525,7 @@ class Connection implements ConnectionInterface
      * @param  \Closure  $callback
      * @return array
      */
-    public function pretend(Closure $callback)
+    public function pretend(\Closure $callback)
     {
         $this->pretending = true;
 
@@ -564,7 +565,7 @@ class Connection implements ConnectionInterface
             // We need to transform all instances of the DateTime class into an actual
             // date string. Each query grammar maintains its own date string format
             // so we'll just ask the grammar for the format to get from the date.
-            if ($value instanceof DateTime) {
+            if ($value instanceof \DateTime) {
                 $bindings[$key] = $value->format($grammar->getDateFormat());
             } elseif ($value === false) {
                 $bindings[$key] = 0;
@@ -634,7 +635,7 @@ class Connection implements ConnectionInterface
         }
 
         if ($time === null) {
-            $date = new DateTime();
+            $date = new \DateTime();
             $query = $date->format("Y-m-d H:i:s:u") . $query;
         }
 

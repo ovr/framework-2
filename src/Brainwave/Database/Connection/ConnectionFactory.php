@@ -131,13 +131,13 @@ class ConnectionFactory
                 $connector = new PostgresConnector();
                 break;
             case 'mssql':
-                $connector = new PostgresConnector();
+                $connector = new MSSQLConnector();
                 break;
             case 'sybase':
-                $connector = new PostgresConnector();
+                $connector = new SybaseConnector();
                 break;
             case 'cloudsql':
-                $connector = new PostgresConnector();
+                $connector = new GoogleCloudConnector();
                 break;
             case 'sqlite':
                 $connector = new SQLiteConnector();

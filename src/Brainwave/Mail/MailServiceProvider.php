@@ -148,7 +148,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
             // switch between ssl, tls and normal
 
-            if ($this->app['settings']['mail::entcryption', 0) == 'ssl') {
+            if ($this->app['settings']['mail::entcryption'] == 'ssl') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])

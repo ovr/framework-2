@@ -18,7 +18,6 @@ namespace Brainwave\Config;
  *
  */
 
-use \Brainwave\Support\Arr;
 use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Config\Driver\PhpDriver;
 use \Brainwave\Config\Driver\IniDriver;

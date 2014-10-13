@@ -32,10 +32,11 @@ class StaticalProxyResolver
 {
     /**
      * Resolve a facade quickly to its root class
+     *
      * @param  string $facade
      * @return resolved class
      */
-    public function resolve(object $facade)
+    public function resolve($facade)
     {
         if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
             $rootClass = get_class($facade::getFacadeRoot());
@@ -45,6 +46,12 @@ class StaticalProxyResolver
         }
     }
 
+    /**
+     * [getFacadeNameFromInput description]
+     *
+     * @param  [type] $facadeName [description]
+     * @return [type]             [description]
+     */
     public function getFacadeNameFromInput($facadeName)
     {
         if ($this->isUppercase($facadeName)) {
@@ -54,6 +61,12 @@ class StaticalProxyResolver
         }
     }
 
+    /**
+     * [isFacade description]
+     *
+     * @param  [type]  $facade [description]
+     * @return boolean         [description]
+     */
     public function isFacade($facade)
     {
         if (class_exists($facade)) {
@@ -63,6 +76,12 @@ class StaticalProxyResolver
         }
     }
 
+    /**
+     * [isUppercase description]
+     *
+     * @param  [type]  $string [description]
+     * @return boolean         [description]
+     */
     private function isUppercase($string)
     {
         return (strtoupper($string) == $string);

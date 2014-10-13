@@ -18,7 +18,6 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;

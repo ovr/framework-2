@@ -200,42 +200,6 @@ class RedisCache extends TaggableStore implements DriverInterface
     }
 
     /**
-     * [getMultiple description]
-     *
-     * @param  array $keys
-     * @return array
-     */
-    public function getMultiple($keys)
-    {
-        //todo
-    }
-
-    /**
-     * [setMultiple description]
-     *
-     * @param  array      $keys
-     * @param  null       $ttl
-     * @return array|bool
-     */
-    public function setMultiple($keys, $ttl = null)
-    {
-        //todo
-    }
-
-    /**
-     * [removeMultiple description]
-     *
-     * @param  array      $keys
-     * @return array|void
-     */
-    public function removeMultiple($keys)
-    {
-        foreach ($keys as $key) {
-            $this->forget($key);
-        }
-    }
-
-    /**
      * Remove all items from the cache.
      *
      * @return void

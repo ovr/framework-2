@@ -95,31 +95,6 @@ interface DriverInterface
     public static function isSupported();
 
     /**
-     * [getMultiple description]
-     *
-     * @param  array $keys
-     * @return array
-     */
-    public function getMultiple($keys);
-
-    /**
-     * [setMultiple description]
-     *
-     * @param  array      $keys
-     * @param  null       $ttl
-     * @return array|bool
-     */
-    public function setMultiple($keys, $ttl = null);
-
-    /**
-     * [removeMultiple description]
-     *
-     * @param  array      $keys
-     * @return array|void
-     */
-    public function removeMultiple($keys);
-
-    /**
      * Get the cache key prefix.
      *
      * @return string

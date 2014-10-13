@@ -116,7 +116,7 @@ class Query implements QueryInterface
      * @param  arrray $bindings
      * @return \Brainwave\Database\Query
      */
-    public function bind(arrray $bindings)
+    public function bind(array $bindings)
     {
         $this->bindings = $bindings;
 

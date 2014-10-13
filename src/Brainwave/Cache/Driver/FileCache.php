@@ -212,51 +212,6 @@ class FileCache implements DriverInterface
     }
 
     /**
-     * [getMultiple description]
-     *
-     * @param  array $keys
-     * @return array
-     */
-    public function getMultiple($keys)
-    {
-
-        $cacheValues = [];
-
-        $ret = [];
-        foreach ($cacheValues as $key => $value) {
-            // @todo - identify the value when a cache item is not found.
-            $ret[$key] = new CacheItem($key, $value, true);
-        }
-
-        return $ret;
-    }
-
-    /**
-     * [setMultiple description]
-     *
-     * @param  array      $keys
-     * @param  null       $ttl
-     * @return array|bool
-     */
-    public function setMultiple($keys, $ttl = null)
-    {
-        return $this->set($keys, null, $ttl);
-    }
-
-    /**
-     * [removeMultiple description]
-     *
-     * @param  array      $keys
-     * @return array|void
-     */
-    public function removeMultiple($keys)
-    {
-        foreach ($keys as $key) {
-            $this->forget($key);
-        }
-    }
-
-    /**
      * Remove all items from the cache.
      *
      * @return void
