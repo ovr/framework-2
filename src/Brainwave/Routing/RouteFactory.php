@@ -239,7 +239,7 @@ class RouteFactory
     protected function parseCallable($callable)
     {
         if (!preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
-            throw new \InvalidArgumentException("Invalid callable '$callable' specified.");
+            throw new \InvalidArgumentException("Invalid callable '{$callable}' specified.");
         }
 
         return [$matches[1], $matches[2]];
@@ -266,7 +266,7 @@ class RouteFactory
         }
 
         throw new \InvalidArgumentException(
-            "The specified '$service' route handler is an undefined service or 
+            "The specified '{$service}' route handler is an undefined service or 
             the controller could not be instantiated."
         );
     }

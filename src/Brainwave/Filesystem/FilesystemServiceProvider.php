@@ -55,11 +55,11 @@ class FilesystemServiceProvider implements ServiceProviderInterface
         $this->registerManager();
 
         $this->app['filesystem.disk'] = function () {
-            return $this->app['filesystem']->disk($this->getDefaultDriver());
+            return $this->app['filesystem']->disk($this->app['settings']['filesystems::default']);
         };
 
         $this->app['filesystem.cloud'] = function () {
-            return $this->app['filesystem']->disk($this->getCloudDriver());
+            return $this->app['filesystem']->disk($this->app['settings']['filesystems::cloud']);
         };
     }
 
@@ -85,25 +85,5 @@ class FilesystemServiceProvider implements ServiceProviderInterface
         $this->app['filesystem'] = function () {
             return new FilesystemManager($this->app, $app['filesystem.factory']);
         };
-    }
-
-    /**
-     * Get the default file driver.
-     *
-     * @return string
-     */
-    protected function getDefaultDriver()
-    {
-        return $this->app['settings']['filesystems::default'];
-    }
-
-    /**
-     * Get the default cloud based file driver.
-     *
-     * @return string
-     */
-    protected function getCloudDriver()
-    {
-        return $this->app['settings']['filesystems::cloud'];
     }
 }

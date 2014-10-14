@@ -118,6 +118,7 @@ class Workbench extends Container
 
     /**
      * Narrowspark config files
+     *
      * @var array
      */
     protected $config = [

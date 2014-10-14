@@ -37,12 +37,12 @@ class ConfigServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['settings'] = function ($app) {
+        $app['settings'] = function ($path) {
             $config = new Configuration(
                 new ConfigurationHandler,
                 new FileLoader(
                     new Filesystem(),
-                    ''
+                    $path
                 )
             );
 
