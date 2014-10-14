@@ -29,8 +29,6 @@ use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;
-use \Brainwave\Config\FileLoader;
-use \Brainwave\Config\Configuration;
 use \Brainwave\Workbench\AliasLoader;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
@@ -39,12 +37,13 @@ use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
 use \Brainwave\Exception\ExceptionHandler;
-use \Brainwave\Config\ConfigurationHandler;
+use \Brainwave\Config\ConfigServiceProvider;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Workbench\StaticalProxyManager;
 use \Brainwave\Workbench\StaticalProxyResolver;
 use \Brainwave\Environment\EnvironmentDetector;
+use \Brainwave\Translator\TranslatorServiceProvider;
 use \Brainwave\Http\Exception\NotFoundHttpException;
 use \Brainwave\Routing\Controller\ControllerCollection;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
@@ -89,7 +88,7 @@ class Workbench extends Container
     protected $dispatchContext;
 
     /**
-     * All provicers
+     * All registered providers
      *
      * @var array
      */
@@ -208,34 +207,24 @@ class Workbench extends Container
         // Not Found
         $this['notFound'] = null;
 
-        // Settings
-        $this['settings'] = function ($c) {
-            $config = new Configuration(
-                new ConfigurationHandler(),
-                new FileLoader(
-                    new Filesystem(),
-                    static::$paths['path.config']
-                )
-            );
-
-            //Load config files
-            foreach ($this->config as $file => $setting) {
-                $config->bind(
-                    $file.'.'.$setting['ext'],
-                    $setting['group'],
-                    $setting['env'],
-                    $setting['namespace']
-                );
-            }
-
-            return $config;
-        };
-
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
         // so that they have the consistent naming convention inside the container.
         foreach (static::$paths as $key => $value) {
             $this[$key] = $value;
+        }
+
+        // Settings
+        $this->register(new ConfigServiceProvider(), ['settings.path' => static::$paths['path.config']]);
+
+        //Load config files
+        foreach ($this->config as $file => $setting) {
+            $this['settings']->bind(
+                $file.'.'.$setting['ext'],
+                $setting['group'],
+                $setting['env'],
+                $setting['namespace']
+            );
         }
 
         // Environment
@@ -275,13 +264,8 @@ class Workbench extends Container
             return new ExceptionHandler($this, $c['settings']->get('app::charset', 'en'));
         };
 
-        // Set Loader an Path
-        $this['translator']->setLoader(
-            new FileLoader(
-                new Filesystem(),
-                static::$paths['path']
-            )
-        );
+        // Translator
+        $this->register(new TranslatorServiceProvider(), ['translator.path' => static::$paths['path.config']]);
 
         // Load lang files
         if ($this['settings']['app::language.files'] !== null) {
@@ -335,13 +319,9 @@ class Workbench extends Container
      */
     public function register(ServiceProviderInterface $provider, array $values = [])
     {
+        parent::register($provider, $values);
+
         $this->providers[] = $provider;
-
-        $provider->register($this);
-
-        foreach ($values as $key => $value) {
-            $this[$key] = $value;
-        }
 
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
@@ -349,8 +329,6 @@ class Workbench extends Container
         if ($this->booted) {
             $provider->boot();
         }
-
-        return $provider;
     }
 
     /**

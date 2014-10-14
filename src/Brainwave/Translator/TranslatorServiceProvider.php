@@ -19,6 +19,8 @@ namespace Brainwave\Translator;
  */
 
 use \Pimple\Container;
+use \Brainwave\Config\FileLoader;
+use \Brainwave\Filesystem\Filesystem;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Translator\TranslatorManager;
 
@@ -37,9 +39,17 @@ class TranslatorServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
+        $app['translator.path'] = '';
+
         $app['translator'] = function ($app) {
             $translator = new TranslatorManager();
             $translator->setLocale($app['settings']->get('app::locale', 'en'));
+            $translator->setLoader(
+                new FileLoader(
+                    new Filesystem(),
+                    $app['translator.path']
+                )
+            );
             return $translator;
         };
     }
