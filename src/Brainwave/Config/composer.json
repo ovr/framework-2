@@ -1,5 +1,5 @@
 {
-    "name": "brainwave/conifg",
+    "name": "brainwave/config",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["narrowspark", "brainwave", "config", "configuration"],
