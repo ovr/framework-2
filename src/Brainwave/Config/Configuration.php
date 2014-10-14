@@ -133,6 +133,19 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     }
 
     /**
+     * Determine if the given configuration value exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        $default = microtime(true);
+
+        return $this->get($key, $default) !== $default;
+    }
+
+    /**
      * Get a value
      *
      * @param  string $key
