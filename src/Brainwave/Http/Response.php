@@ -37,9 +37,10 @@ use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
  * - The response cookies
  * - The response body
  *
- * @package Brainwave
- * @author  Josh Lockhart
- * @since   1.0.0
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.8.0-dev
+ *
  */
 class Response implements ResponseInterface
 {

@@ -36,6 +36,8 @@ use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
 use \Brainwave\Exception\ExceptionHandler;
+use \Brainwave\Http\RequestServiceProvider;
+use \Brainwave\Http\ResponseServiceProvider;
 use \Brainwave\Config\ConfigServiceProvider;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
@@ -232,36 +234,10 @@ class Workbench extends Container
         };
 
         // Request
-        $this['request'] = function ($c) {
-            $environment = $c['environment'];
-            $headers = new Headers($environment);
-            $CookieJar = new CookieJar($headers);
-            if ($c['settings']->get('cookies::encrypt', false) ===  true) {
-                $CookieJar->decrypt($c['crypt']);
-            }
-
-            return new Request($environment, $headers, $CookieJar);
-        };
+        $this->register(new RequestServiceProvider(), []);
 
         // Response
-        $this['response'] = function ($c) {
-            $headers = new Headers();
-            $CookieJar = new CookieJar();
-            $response = new Response($headers, $CookieJar);
-            $response->setProtocolVersion('HTTP/' . $c['settings']->get('http::version', '1.1'));
-
-            return $response;
-        };
-
-        // Register providers
-        foreach ($this['settings']['services::providers'] as $provider => $arr) {
-            $this->register(new $provider, $arr);
-        }
-
-        // Exception handler
-        $this['exception'] = function ($c) {
-            return new ExceptionHandler($this, $c['settings']->get('app::charset', 'en'));
-        };
+        $this->register(new ResponseServiceProvider(), []);
 
         // Translator
         $this->register(new TranslatorServiceProvider(), ['translator.path' => static::$paths['path.config']]);
@@ -276,6 +252,16 @@ class Workbench extends Container
                     $lang['namespace']
                 );
             }
+        }
+
+        // Exception handler
+        $this['exception'] = function ($c) {
+            return new ExceptionHandler($this, $c['settings']->get('app::charset', 'en'));
+        };
+
+        // Register providers
+        foreach ($this['settings']['services::providers'] as $provider => $arr) {
+            $this->register(new $provider, $arr);
         }
 
         // Middleware stack
@@ -1104,7 +1090,7 @@ class Workbench extends Container
      * @param  string $url             The request URL
      * @param  string $method          The request method
      * @param  array  $headers         Associative array of request headers
-     * @param  array  $CookieJar         Associative array of request CookieJar
+     * @param  array  $CookieJar       Associative array of request CookieJar
      * @param  string $body            The request body
      * @param  array  $serverVariables Custom $_SERVER variables
      * @return Response
