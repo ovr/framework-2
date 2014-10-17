@@ -73,6 +73,12 @@ class Router implements RouterInterface
     protected $cachedUrls;
 
     /**
+     * all params of the matched route
+     * @var array
+     */
+    protected $routeParams;
+
+    /**
      * Constructor
      * @api
      */
@@ -80,6 +86,28 @@ class Router implements RouterInterface
     {
         $this->routing = [];
         $this->currentMiddleware = [];
+        $this->routeParams = [];
+    }
+
+    /**
+     * Get any matched route params
+     *
+     * @param   string|null  $name the param name in the route pattern,
+     *                             if null, return all the matched route param as array,
+     *                             return null if the $key doesn't exist
+     * @return  string|array
+     */
+    public function getParam($key = false)
+    {
+        if ($key === false) {
+            return $this->routeParams;
+        }
+
+        if (array_key_exists($key, $this->routeParams)) {
+            return $this->routeParams["$key"];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -136,6 +164,7 @@ class Router implements RouterInterface
 
         if ($save === true) {
             $this->matchedRoutes = $matchedRoutes;
+            $this->routeParams = array_merge($this->routeParams, $route->getParams());
         }
 
         return $matchedRoutes;

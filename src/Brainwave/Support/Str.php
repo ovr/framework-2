@@ -29,13 +29,6 @@ namespace Brainwave\Support;
 class Str
 {
     /**
-     * The registered string macros.
-     *
-     * @var array
-     */
-    protected static $macros = [];
-
-    /**
      * Transliterate a UTF-8 value to ASCII.
      *
      * @param  string  $value
@@ -347,35 +340,5 @@ class Str
         $value = ucwords(str_replace(['-', '_'], ' ', $value));
 
         return str_replace(' ', '', $value);
-    }
-
-    /**
-     * Magic call to intercept any function pass to it.
-     *
-     * @param string $func The function to call.
-     * @param array $args Arguments passed to the function.
-     * @return mixed The result of the function call.
-     */
-    public function __call($func, $args)
-    {
-        return call_user_func_array($func, $args);
-    }
-
-    /**
-     * Dynamically handle calls to the string class.
-     *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return mixed
-     *
-     * @throws \BadMethodCallException
-     */
-    public static function __callStatic($method, $parameters)
-    {
-        if (isset(static::$macros[$method])) {
-            return call_user_func_array(static::$macros[$method], $parameters);
-        }
-
-        throw new \BadMethodCallException("Method {$method} does not exist.");
     }
 }

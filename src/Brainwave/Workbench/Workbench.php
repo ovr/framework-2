@@ -32,7 +32,6 @@ use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Workbench\AliasLoader;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
-use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;

@@ -44,8 +44,8 @@ use \Monolog\Formatter\ChromePHPFormatter;
 use \Monolog\Formatter\GelfFormatter;
 use \Monolog\Formatter\LogstashFormatter;
 use \Monolog\Formatter\ElasticaFormatter;
-use Brainwave\Support\ContractsInterfaces\JsonableInterface;
-use Brainwave\Support\ContractsInterfaces\ArrayableInterface;
+use \Brainwave\Support\Interfaces\JsonableInterface;
+use \Brainwave\Support\Interfaces\ArrayableInterface;
 
 /**
  * MonologWriter

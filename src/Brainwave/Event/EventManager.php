@@ -87,10 +87,12 @@ class EventManager implements EventManagerInterface
         $this->hook($event, $callback, $priority);
     }
 
-    /**
+   /**
      * Invoke hook
-     * @param  string $name    The hook name
-     * @param  mixed  $hookArg (Optional) Argument for hooked functions
+     *
+     * @param  string $name The hook name
+     * @param  mixed  ...   (Optional) Argument(s) for hooked functions,
+     *                      can specify multiple arguments
      * @api
      */
     public function applyHook($name, $hookArg = null)
@@ -98,15 +100,20 @@ class EventManager implements EventManagerInterface
         if (!isset($this->hooks[$name])) {
             $this->hooks[$name] = [[]];
         }
+
         if (!empty($this->hooks[$name])) {
             // Sort by priority, low to high, if there's more than one priority
             if (count($this->hooks[$name]) > 1) {
                 ksort($this->hooks[$name]);
             }
+
+            $args = func_get_args();
+            array_shift($args);
+
             foreach ($this->hooks[$name] as $priority) {
                 if (!empty($priority)) {
                     foreach ($priority as $callable) {
-                        call_user_func($callable, $hookArg);
+                        call_user_func_array($callable, $args);
                     }
                 }
             }
@@ -123,7 +130,7 @@ class EventManager implements EventManagerInterface
      */
     public function applyChain($name, $hookArg = null)
     {
-        $hooks = $this->app->getHooks();
+        $hooks = $this->getHooks();
 
         if (!isset($hooks[$name])) {
             $hooks[$name] = [[]];
