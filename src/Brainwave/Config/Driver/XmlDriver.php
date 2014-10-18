@@ -50,7 +50,7 @@ class XmlDriver implements DriverInterface
     }
 
     /**
-     * Loads a xML file and gets its' contents as an array
+     * Loads a XML file and gets its' contents as an array
      *
      * @param  string $filename
      * @param  string $group
@@ -60,6 +60,7 @@ class XmlDriver implements DriverInterface
     {
         if ($this->files->exists($filename)) {
             $config = simplexml_load_file($filename);
+            $config = unserialize(serialize(json_decode(json_encode((array) $config), 1)));
         }
 
         $groupConfig = [];
@@ -68,10 +69,9 @@ class XmlDriver implements DriverInterface
             foreach ($config as $key => $value) {
                 $groupConfig["{$group}::{$key}"] = $value;
             }
-            $config = $groupConfig;
         }
 
-        return $config;
+        return ($group === null) ? $config : $groupConfig;
     }
 
     /**
@@ -82,7 +82,7 @@ class XmlDriver implements DriverInterface
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.php(\.dist)?$#', $filename);
+        return (bool) preg_match('#\.xml(\.dist)?$#', $filename);
     }
 
     /**
@@ -109,7 +109,7 @@ class XmlDriver implements DriverInterface
      * @param  void $xml    \SimpleXMLElement
      * @return string       data
      */
-    protected function arrayToXml($data, &$xml)
+    protected function arrayToXml($data, \SimpleXMLElement &$xml)
     {
         foreach ($data as $key => $value) {
             if (is_array($value)) {

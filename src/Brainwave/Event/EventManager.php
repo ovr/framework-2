@@ -160,6 +160,7 @@ class EventManager implements EventManagerInterface
 
     /**
      * Alias for self::applyChain()
+     *
      * @param string $event Event name
      * @param array  $args  Array of arguments to pass to callback
      * @return mixed|void

@@ -40,7 +40,7 @@ class FilesystemServiceProvider implements ServiceProviderInterface
             return new Filesystem();
         };
 
-        $this->registerFlysystem();
+        $this->registerFlysystem($app);
     }
 
     /**
@@ -48,18 +48,18 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFlysystem()
+    protected function registerFlysystem(Container $app)
     {
-        $this->registerFactory();
+        $this->registerFactory($app);
 
-        $this->registerManager();
+        $this->registerManager($app);
 
-        $this->app['filesystem.disk'] = function () {
-            return $this->app['filesystem']->disk($this->app['settings']['filesystems::default']);
+        $app['filesystem.disk'] = function () {
+            return $app['filesystem']->disk($app['settings']['filesystems::default']);
         };
 
-        $this->app['filesystem.cloud'] = function () {
-            return $this->app['filesystem']->disk($this->app['settings']['filesystems::cloud']);
+        $app['filesystem.cloud'] = function () {
+            return $app['filesystem']->disk($app['settings']['filesystems::cloud']);
         };
     }
 
@@ -68,9 +68,9 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFactory()
+    protected function registerFactory(Container $app)
     {
-        $this->app['filesystem.factory'] = function () {
+        $app['filesystem.factory'] = function () {
             return new Factory();
         };
     }
@@ -80,10 +80,10 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerManager()
+    protected function registerManager(Container $app)
     {
-        $this->app['filesystem'] = function () {
-            return new FilesystemManager($this->app, $app['filesystem.factory']);
+        $app['filesystem'] = function ($app) {
+            return new FilesystemManager($app, $app['filesystem.factory']);
         };
     }
 }

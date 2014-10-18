@@ -164,7 +164,7 @@ class Router implements RouterInterface
 
         if ($save === true) {
             $this->matchedRoutes = $matchedRoutes;
-            $this->routeParams = array_merge($this->routeParams, $route->getParams());
+            $this->routeParams = array_merge($this->routeParams, $this->routing->getParams());
         }
 
         return $matchedRoutes;

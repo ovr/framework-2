@@ -20,8 +20,8 @@ namespace Brainwave\Filesystem;
 
 use \Pimple\Container;
 use \League\Flysystem\Filesystem as Flysystem;
-use \League\Flysystem\AdapterInterface as Adapter;
-use \Brainwave\Filesystem\Adapters\ConnectionFactory as Factory;
+use \League\Flysystem\AdapterInterface;
+use \Brainwave\Filesystem\Adapters\ConnectionFactory;
 use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
 
 /**
@@ -32,8 +32,8 @@ use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
  * @since   0.9.3-dev
  *
  */
-class FilesystemManager implements FilesystemManagerInterface {
-
+class FilesystemManager implements FilesystemManagerInterface
+{
     /**
      * The application instance.
      *
@@ -62,7 +62,7 @@ class FilesystemManager implements FilesystemManagerInterface {
      * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory  $factory
      * @return void
      */
-    public function __construct(Container $app, Factory $factory)
+    public function __construct(Container $app, ConnectionFactory $factory)
     {
         $this->app = $app;
         $this->factory = $factory;
@@ -111,7 +111,7 @@ class FilesystemManager implements FilesystemManagerInterface {
      * @param  \League\Flysystem\AdapterInterface  $adapter
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
-    protected function adapt(Adapter $adapter)
+    protected function adapt(AdapterInterface $adapter)
     {
         return new FilesystemAdapter(new Flysystem($adapter));
     }

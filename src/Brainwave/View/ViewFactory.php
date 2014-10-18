@@ -18,7 +18,7 @@ namespace Brainwave\View;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
 use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\PhpEngine;
 use \Brainwave\View\Engines\JsonEngine;
@@ -39,58 +39,67 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 {
     /**
      * Workbanch
-     * @var \Brainwave\Workbanch\Workbanch
+     *
+     * @var \Pimple\Container
      */
     protected $app;
 
     /**
      * The engine implementation.
+     *
      * @var \Brainwave\View\Engines\EngineInterface
      */
     protected $engine;
 
     /**
-     * viewFactoryResolver
+     * ViewFactoryResolver
+     *
      * @var \Closure
      */
     protected $viewFactoryResolver;
 
     /**
      * Debug
+     *
      * @var string
      */
     protected $debug;
 
     /**
      * Register a view extension.
+     *
      * @var array
      */
     protected $extensions;
 
     /**
      * All registered custom engines
+     *
      * @var array
      */
     protected $customEngines = [];
 
     /**
      * Resolve the engine instance
+     *
      * @var \Brainwave\View\Engines\EngineResolver
      */
     protected $engineResolver;
 
     /**
      * View data
+     *
      * @var array
      */
     protected $viewData = [];
 
     /**
      * Constructor
-     * @param  \Brainwave\Workbench\Workbench  $app
+     *
+     * @param  \Pimple\Container  $app
      * @param  \Closure   $factory
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $app)
     {
         //App
         $this->app = $app;
@@ -117,6 +126,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get registered extensions.
+     *
      * @return array
      */
     protected function getExtensions()
@@ -125,7 +135,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     }
 
     /**
-     * Register all data
+     * Register all data.
+     *
      * @return items
      */
     protected function registerItems()
@@ -141,6 +152,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the engine resolver instance.
+     *
      * @return void
      */
     protected function registerEngineResolver()
@@ -173,6 +185,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the PHP engine implementation.
+     *
      * @param  \Brainwave\View\Engines\EngineResolver  $resolver
      * @return void
      */
@@ -185,6 +198,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register the Json engine implementation.
+     *
      * @param  \Brainwave\View\Engines\EngineResolver  $resolver
      * @return void
      */
@@ -197,6 +211,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Register custom engine implementation.
+     *
      * @param $engineName
      * @param $engineClass
      * @param \Brainwave\View\Engines\EngineResolver $resolver
@@ -212,6 +227,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Display template
+     *
      * This method echoes the rendered template to the current output buffer
      * @param  string $template Pathname of template file relative to templates directory
      * @api
@@ -226,9 +242,9 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      *
      * This method returns the rendered template. This is useful if you need to capture
      * a rendered template into a variable for futher processing.
+     *
      * @var    string $template Pathname of template file relative to templates directory
-     * @return string           The rendered template
-     * @api
+     * @return static|string    The rendered template
      */
     public function fetch($engine = 'php', $template = null, array $data = [])
     {
@@ -237,6 +253,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get the evaluated contents of the view.
+     *
      * @var    string $template Pathname of template file relative to templates directory
      * @return string
      */
@@ -278,6 +295,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Add a piece of data to the view.
+     *
      * @param  string|array  $key
      * @param  mixed   $value
      * @return \Brainwave\View\ViewFactory
@@ -348,6 +366,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * EngineResolver
+     *
      * @param EngineResolver $resolver new instance of EngineResolver
      */
     protected function engineResolver(EngineResolver $resolver)
@@ -366,6 +385,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Share a piece of data across all views.
+     *
      * @param mixed $name
      * @param mixed $data the data
      * @return self
@@ -385,6 +405,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Dynamically bind parameters to the view.
+     *
      * @param  string  $method
      * @param  array   $parameters
      * @return \Brainwave\View\ViewFactory
@@ -401,6 +422,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Get a piece of data from the view.
+     *
      * @return mixed
      */
     public function &__get($key)
@@ -410,6 +432,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Set a piece of data on the view.
+     *
      * @param  string  $key
      * @param  mixed   $value
      * @return void
@@ -421,6 +444,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Check if a piece of data is bound to the view.
+     *
      * @param  string  $key
      * @return bool
      */
@@ -431,6 +455,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
 
     /**
      * Remove a piece of bound data from the view.
+     *
      * @param  string  $key
      * @return bool
      */

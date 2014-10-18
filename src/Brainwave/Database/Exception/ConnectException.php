@@ -46,6 +46,13 @@ class ConnectException extends PDOException
     protected $bindings;
 
     /**
+     * Instance of \Exception
+     *
+     * @var \Exception
+     */
+    protected $previous;
+
+    /**
      * Create a new query exception instance.
      *
      * @param  string  $sql

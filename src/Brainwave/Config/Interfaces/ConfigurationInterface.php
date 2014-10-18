@@ -29,10 +29,4 @@ namespace Brainwave\Config\Interfaces;
 interface ConfigurationInterface extends \ArrayAccess
 {
     public function setArray(array $values);
-
-    /**
-     * As we can't extend multiple interfaces, we need to mimic \IteratorAggregate
-     * @return \ArrayIterator
-     */
-    public function getIterator();
 }

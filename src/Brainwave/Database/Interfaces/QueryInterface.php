@@ -46,7 +46,7 @@ interface QueryInterface
      * @param  string          $table   The table name
      * @param  array           $join    Table relativity for table joining.
      *                                  Ignore it if no table joining required
-     * @param  string/array    $columns The target columns of data will be fetched
+     * @param  string|array    $columns The target columns of data will be fetched
      * @param  array           $where   The WHERE clause to filter records
      * @return array
      */
@@ -57,7 +57,7 @@ interface QueryInterface
      *
      * @param  string $table The table name
      * @param  array  $datas The data that will be inserted into table.
-     * @return number        The last insert id
+     * @return mixed
      */
     public function insert($table, $datas);
 
@@ -84,7 +84,7 @@ interface QueryInterface
      * Replace old data into new one
      *
      * @param  string        $table   The table name
-     * @param  string/array  $columns The target columns of data will be replaced
+     * @param  string|array  $columns The target columns of data will be replaced
      * @param  string        $search  The value being searched for
      * @param  string        $replace The replacement value that replaces found search values
      * @param  array         $where   The WHERE clause to filter records
@@ -96,11 +96,11 @@ interface QueryInterface
      * Get only one record from table
      *
      * @param  string       $table   The table name
-     * @param  string/array $columns The target columns of data will be fetch
+     * @param  string|array $columns The target columns of data will be fetch
      * @param  array        $where   The WHERE clause to filter records
-     * @return string/array          Return the data of the column
+     * @return string|array          Return the data of the column
      */
-    public function get($table, $columns = null, $where = null);
+    public function get($table, $columns, array $where);
 
     /**
      * Determine whether the target data existed

@@ -52,7 +52,7 @@ class Connection implements ConnectionInterface
     /**
      * The cache manager instance.
      *
-     * @var \Brainwave\Cache\CacheManager
+     * @var \Brainwave\Cache\CacheManager|\Closure
      */
     protected $cache;
 
@@ -139,7 +139,7 @@ class Connection implements ConnectionInterface
         PDO $pdo,
         $database = '',
         $tablePrefix = '',
-        array $config = array()
+        array $config = []
     ) {
         $this->pdo = $pdo;
 
@@ -169,7 +169,7 @@ class Connection implements ConnectionInterface
      * Get alias for table
      *
      * @param  string $table
-     * @return string
+     * @return string|array
      */
     public function getAlias($table)
     {
@@ -625,7 +625,7 @@ class Connection implements ConnectionInterface
      *
      * @param  string  $query
      * @param  array   $bindings
-     * @param  $time
+     * @param  double  $time
      * @return void
      */
     public function logQuery($query, $bindings, $time = null)
@@ -739,7 +739,7 @@ class Connection implements ConnectionInterface
     /**
      * Get the cache manager instance.
      *
-     * @return \Brainwave\Cache\CacheManager
+     * @return \Brainwave\Cache\CacheManager|\Closure
      */
     public function getCacheManager()
     {

@@ -230,14 +230,4 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
 
         return $merged;
     }
-
-    /**
-     * Get an ArrayIterator for the stored items
-     *
-     * @return ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->items);
-    }
 }

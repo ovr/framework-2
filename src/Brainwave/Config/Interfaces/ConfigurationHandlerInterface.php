@@ -26,7 +26,7 @@ namespace Brainwave\Config\Interfaces;
  * @since   0.8.0-dev
  *
  */
-interface ConfigurationHandlerInterface extends \ArrayAccess, \IteratorAggregate
+interface ConfigurationHandlerInterface extends \ArrayAccess
 {
 
 }

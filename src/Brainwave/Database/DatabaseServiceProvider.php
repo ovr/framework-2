@@ -45,8 +45,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
                 return 'Database is frozen.';
             };
         } else {
-
-            $this->registerConnectionFactory();
+            $this->registerConnectionFactory($app);
 
             // The database manager is used to resolve various connections, since multiple
             // connections might be managed. It also implements the connection resolver
@@ -79,13 +78,12 @@ class DatabaseServiceProvider implements ServiceProviderInterface
         }
     }
 
-    protected function registerConnectionFactory()
+    protected function registerConnectionFactory($app)
     {
-        $app = $this->app;
         // The connection factory is used to create the actual connection instances on
         // the database. We will inject the factory into the manager so that it may
         // make the connections while they are actually needed and not of before.
-        $this->app['db.factory'] = function ($app) {
+        $app['db.factory'] = function ($app) {
             return new ConnectionFactory($app);
         };
     }

@@ -73,10 +73,9 @@ class YamlDriver implements DriverInterface
             foreach ($config as $key => $value) {
                 $groupConfig["{$group}::{$key}"] = $value;
             }
-            $config = $groupConfig;
         }
 
-        return $config;
+        return ($group === null) ? $config : $groupConfig;
     }
 
     /**

@@ -248,11 +248,11 @@ class Workbench extends Container
         $this['middleware'] = [$this];
 
         // StaticalProxy
-        $this['statical.resolver'] = function ($c) {
+        $this['statical.resolver'] = function () {
             return new StaticalProxyResolver();
         };
 
-        $this['alias'] = function ($c) {
+        $this['alias'] = function () {
             return new AliasLoader();
         };
     }
@@ -277,8 +277,8 @@ class Workbench extends Container
     /**
      * Registers a service provider.
      *
-     * @param ServiceProviderInterface $provider A ServiceProviderInterface instance
-     * @param array                    $values   An array of values that customizes the provider
+     * @param \Pimple\ServiceProviderInterface $provider A ServiceProviderInterface instance
+     * @param array                            $values   An array of values that customizes the provider
      *
      * @return Application
      */
@@ -291,7 +291,7 @@ class Workbench extends Container
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by the developer's application logics.
-        if ($this->booted) {
+        if ($this->booted && $provider instanceof BootableProviderInterface) {
             $provider->boot();
         }
     }
@@ -515,7 +515,7 @@ class Workbench extends Container
     public function getControllersRoutes()
     {
         $route = [];
-        $controllers = $this->controllerFactory->getControllers();
+        $controllers = $this['controllers.factory']->getControllers();
         foreach ($controllers as $controller) {
             $route[] = $controller->getRouteName();
         }
@@ -966,7 +966,7 @@ class Workbench extends Container
      */
     public function setRequestForConsoleEnvironment()
     {
-        $this->runningInConsole();
+        return $this->runningInConsole();
     }
 
     /**

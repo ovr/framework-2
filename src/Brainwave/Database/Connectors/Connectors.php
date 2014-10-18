@@ -52,7 +52,7 @@ class Connectors
      */
     public function getOptions(array $config)
     {
-        $options = Arr::arrayGet($config, 'options', array());
+        $options = Arr::arrayGet($config, 'options', []);
 
         return array_diff_key($this->options, $options) + $options;
     }

@@ -19,7 +19,7 @@ namespace Brainwave\Cache\Tag;
  */
 
 use \Carbon\Carbon;
-use \Brainwave\Cache\TagSet;
+use \Brainwave\Cache\Tag\TagSet;
 use \Brainwave\Cache\Interfaces\CacheManagerInterface;
 use \Brainwave\Cache\Tag\Interfaces\TaggedCacheInterface;
 
@@ -33,11 +33,10 @@ use \Brainwave\Cache\Tag\Interfaces\TaggedCacheInterface;
  */
 class TaggedCache implements TaggedCacheInterface
 {
-
     /**
      * The cache store implementation.
      *
-     * @var \Brainwave\Cache\CacheManagerInterface
+     * @var \Brainwave\Cache\Interfaces\CacheManagerInterface
      */
     protected $store;
 
@@ -52,7 +51,7 @@ class TaggedCache implements TaggedCacheInterface
      * Create a new tagged cache instance.
      *
      * @param  \Brainwave\Cache\Interfaces\CacheManagerInterface  $store
-     * @param  \Brainwave\Cache\TagSet  $tags
+     * @param  \Brainwave\Cache\Tag\TagSet  $tags
      * @return void
      */
     public function __construct(CacheManagerInterface $store, TagSet $tags)

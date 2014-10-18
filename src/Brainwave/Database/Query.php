@@ -73,7 +73,7 @@ class Query implements QueryInterface
      * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
      * @return void
      */
-    public function __construct($connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
         $this->connection->setQueryGrammar(new Builder($this->connection));
@@ -95,15 +95,15 @@ class Query implements QueryInterface
     {
         return $this->connection->run($query, $bindings, function () use ($query, $bindings, $driverOptions) {
 
-            $driverOptions = array_filter($driverOptions);
-            $bindings = array_filter($bindings);
+            $options = array_filter($driverOptions);
+            $prepare = array_filter($bindings);
 
             $con = $this->connection;
 
-            $statement = $con->getPdo()->prepare($query, $driverOptions);
+            $statement = $con->getPdo()->prepare($query, $options);
 
-            if (!empty($bindings)) {
-                $statement->execute($con->prepareBindings($bindings));
+            if (!empty($prepare)) {
+                $statement->execute($con->prepareBindings($prepare));
             }
 
             return $statement;
@@ -139,7 +139,7 @@ class Query implements QueryInterface
      * @param  string          $table   The table name
      * @param  array           $join    Table relativity for table joining.
      *                                  Ignore it if no table joining required
-     * @param  string/array    $columns The target columns of data will be fetched
+     * @param  string|array    $columns The target columns of data will be fetched
      * @param  array           $where   The WHERE clause to filter records
      * @param  string          $return
      * @return array
@@ -162,13 +162,13 @@ class Query implements QueryInterface
      *
      * @param  string $table The table name
      * @param  mixed  $datas The data that will be inserted into table.
-     * @return number        The last insert id
+     * @return mixed
      */
     public function insert($table, $datas)
     {
         // Check indexed or associative array
         if (!isset($datas[0])) {
-            $datas = array($datas);
+            $datas = [$datas];
         }
 
         foreach ($datas as $data) {
@@ -205,7 +205,7 @@ class Query implements QueryInterface
                         break;
 
                     case 'object':
-                        $values[] = "{$column} = {$value->query}";
+                        $values[] = "{$columns} = {$value->query}";
                         break;
                 }
             }
@@ -302,7 +302,7 @@ class Query implements QueryInterface
      * Replace old data into new one
      *
      * @param  string        $table   The table name
-     * @param  string/array  $columns The target columns of data will be replaced
+     * @param  string|array  $columns The target columns of data will be replaced
      * @param  string        $search  The value being searched for
      * @param  string        $replace The replacement value that replaces found search values
      * @param  array         $where   The WHERE clause to filter records
@@ -352,11 +352,11 @@ class Query implements QueryInterface
      * Get only one record from table
      *
      * @param  string       $table   The table name
-     * @param  string/array $columns The target columns of data will be fetch
+     * @param  string|array $columns The target columns of data will be fetch
      * @param  array        $where   The WHERE clause to filter records
-     * @return string/array          Return the data of the column
+     * @return string|array          Return the data of the column
      */
-    public function get($table, $columns = null, $where = null)
+    public function get($table, $columns, array $where)
     {
         if (!isset($where)) {
             $where = [];
@@ -486,7 +486,7 @@ class Query implements QueryInterface
      * @param  mixed  $columns
      * @param  array  $where
      * @param  mixed  $columnFunc
-     * @return string
+     * @return array
      */
     protected function selectContext($table, $join, $columns = null, $where = null, $columnFunc = null)
     {
@@ -517,7 +517,7 @@ class Query implements QueryInterface
                         }
                     }
 
-                    $tableJoin[] = "{$joinArray[$match[2]]} JOIN {$this->grammar->wrapValue($match[3])} {$relation}";
+                    $tableJoin[] = "{$this->joinArray[$match[2]]} JOIN {$this->grammar->wrapValue($match[3])} {$relation}";
                 }
             }
 

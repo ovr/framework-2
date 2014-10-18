@@ -95,7 +95,7 @@ class WhereClause
                     $condition = strtolower($condition);
                     $condition = ucwords($condition);
 
-                    $whereClause .= $this->{'where'.$condition}($where, $whereClause);
+                    $whereClause .= $this->{'where'.$condition}($where[$condition], $whereClause);
                 }
             }
         } elseif ($where !== null) {
@@ -147,7 +147,8 @@ class WhereClause
      */
     protected function whereGroup(array $array, $whereClause)
     {
-        return ' GROUP BY '.$this->query->wrapColumn($where['GROUP']);
+        $group =$this->query->wrapColumn($array);
+        return " GROUP BY {$group}";
     }
 
     /**
@@ -166,7 +167,7 @@ class WhereClause
                 isset($array[1]) &&
                 is_array($array[1])
             ) {
-                return " ORDER BY FIELD({$this->columnQuote($array[0])}, {$this->query->wrapArray($array[1])})";
+                return " ORDER BY FIELD({$this->query->wrapColumn($array[0])}, {$this->query->wrapArray($array[1])})";
             } else {
                 $stack = [];
 
@@ -226,7 +227,7 @@ class WhereClause
      *
      * @param  array  $array
      * @param  string $whereClause
-     * @return string
+     * @return array
      */
     protected function whereLike($array, $whereClause)
     {
@@ -235,9 +236,9 @@ class WhereClause
             $arrayAND = $array['AND'];
             $clauseWrap = [];
 
-            if ($isOR = isset($arrayOR) || isset($arrayAND)) {
-                $connector = $isOR ? 'OR' : 'AND';
-                $array = $isOR ? $arrayOR : $arrayAND;
+            if (isset($arrayOR) || isset($arrayAND)) {
+                $connector = $arrayOR ? 'OR' : 'AND';
+                $array = $arrayOR ? $arrayOR : $arrayAND;
             } else {
                 $connector = 'AND';
             }
@@ -310,9 +311,9 @@ class WhereClause
                     if ($match[4] === '!') {
                         $wheres[] = $this->whereDataImplodeSwitch($column, $value, $type, $key, true);
                     } else {
-                        if ($match[4] === '<>' || $columnNot = $match[4] === '><') {
+                        if ($match[4] === '<>' || $match[4] === '><') {
                             if ($type === 'array') {
-                                if ($columnNot) {
+                                if ($match[4] === '><') {
                                     $column .= ' NOT';
                                 }
 

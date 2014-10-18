@@ -51,10 +51,12 @@ class JsonDriver implements DriverInterface
 
     /**
      * Loads a JSON file and gets its' contents as an array
+     *
      * @param  string $filename
+     * @param  string $group
      * @return array            config data
      */
-    public function load($filename)
+    public function load($filename, $group = null)
     {
         $config = $this->parseJson($filename);
 
@@ -65,11 +67,20 @@ class JsonDriver implements DriverInterface
             );
         }
 
-        return $config ?: [];
+        $groupConfig = [];
+
+        if ($group !== null) {
+            foreach ($config as $key => $value) {
+                $groupConfig["{$group}::{$key}"] = $value;
+            }
+        }
+
+        return ($group === null) ? $config : $groupConfig;
     }
 
     /**
      * Checking if file ist supported
+     *
      * @param  string $filename
      * @return mixed
      */
@@ -80,6 +91,7 @@ class JsonDriver implements DriverInterface
 
     /**
      * Parse the json file
+     *
      * @param  string $filename
      * @return array
      */
@@ -91,6 +103,7 @@ class JsonDriver implements DriverInterface
 
     /**
      * Reporting all json erros
+     *
      * @param  mixed $code all json errors
      * @return mixed
      */
@@ -109,6 +122,7 @@ class JsonDriver implements DriverInterface
 
     /**
      * Format a config file for saving.
+     *
      * @param  array  $data config data
      * @return string data export
      */

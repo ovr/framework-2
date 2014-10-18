@@ -96,7 +96,6 @@ class ConnectionFactory
         $pdo = $this->createConnector($config)->connect($config);
 
         return $this->createConnection(
-            $config['driver'],
             $pdo,
             $config['dbname'],
             $config['prefix'],
@@ -149,7 +148,6 @@ class ConnectionFactory
                 break;
             default:
                 throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");
-                break;
         }
 
         $this->container["db.connector.{$config['driver']}"] = function ($connector) {
@@ -162,7 +160,6 @@ class ConnectionFactory
     /**
      * Create a new connection instance.
      *
-     * @param  string   $driver
      * @param  \PDO     $connection
      * @param  string   $database
      * @param  string   $prefix
@@ -172,7 +169,6 @@ class ConnectionFactory
      * @throws \InvalidArgumentException
      */
     protected function createConnection(
-        $driver,
         \PDO $connection,
         $database,
         $prefix = '',

@@ -89,8 +89,6 @@ class FileLoader implements LoaderInterface
      */
     public function load($file, $group = null, $environment = null, $namespace = null)
     {
-        $items = [];
-
         $path = $this->getPath($namespace);
 
         // Determine if the given file exists.
@@ -178,7 +176,7 @@ class FileLoader implements LoaderInterface
 
         $this->exists[$key] = $file;
 
-        return $this->exists;
+        return $this;
     }
 
     /**
@@ -335,32 +333,26 @@ class FileLoader implements LoaderInterface
         switch ($ext) {
             case 'php':
                 $driver = new PhpDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
 
             case 'json':
                 $driver = new JsonDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
 
             case 'ini':
                 $driver = new IniDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
 
             case 'xml':
                 $driver = new XmlDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
 
             case 'yaml':
                 $driver = new YamlDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
 
             case 'toml':
                 $driver = new TomlDriver($this->getFilesystem());
-                $driver->load($path);
                 break;
             default:
                 throw new \RuntimeException(

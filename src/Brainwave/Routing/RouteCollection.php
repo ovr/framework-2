@@ -228,9 +228,9 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Determine if a route in the array matches the request.
      *
-     * @param  array  $routes
-     * @param  \Brainwave\http\Request  $request
-     * @param  bool  $includingMethod
+     * @param  array                          $routes
+     * @param  \Brainwave\http\Request        $request
+     * @param  bool                           $includingMethod
      * @return \Brainwave\Routing\Route|null
      */
     protected function check(array $routes, Request $request, $includingMethod = true)

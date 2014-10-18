@@ -37,6 +37,6 @@ class Trans extends StaticalProxyManager
 
     public function get($orig, $language = false, $replacements = null)
     {
-        return self::$app->getTranslation($orig, $language, $replacements);
+        return self::$app['translator']->getTranslation($orig, $language, $replacements);
     }
 }

@@ -59,7 +59,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorInterface
 
         $options = $this->getOptions($config);
 
-        $connection = $this->createConnection($dsn, $config, $options);
+        $connection = $this->createConnection($dsn, $config, $this->options);
 
         $charset = $config['charset'];
 

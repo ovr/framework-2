@@ -41,7 +41,7 @@ interface ConnectionInterface
      * Get alias for table
      *
      * @param  string $table
-     * @return string
+     * @return string|array
      */
     public function getAlias($table);
 
@@ -234,7 +234,7 @@ interface ConnectionInterface
     /**
      * Get the cache manager instance.
      *
-     * @return \Brainwave\Cache\CacheManager
+     * @return \Brainwave\Cache\CacheManager|\Closure
      */
     public function getCacheManager();
 

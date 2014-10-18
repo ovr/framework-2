@@ -98,7 +98,7 @@ class Builder
      * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
      * @return void
      */
-    public function __construct($connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
@@ -165,7 +165,7 @@ class Builder
      * Wrap a array value
      *
      * @param  array $array
-     * @return string
+     * @return array
      */
     public function wrapArray(array $array)
     {
@@ -197,8 +197,8 @@ class Builder
     /**
      * [columnPush description]
      *
-     * @param  string/array $columns
-     * @return string
+     * @param  string|array $columns
+     * @return array
      */
     public function columnPush($columns)
     {
@@ -248,7 +248,8 @@ class Builder
      */
     protected function getCache()
     {
-        $cache = $this->connection->getCacheManager()->driver($this->cacheDriver);
+        $connection = $this->connection;
+        $cache = $connection->getCacheManager()->driver($this->cacheDriver);
 
         return $this->cacheTags ? $cache->tags($this->cacheTags) : $cache;
     }
@@ -282,7 +283,7 @@ class Builder
     {
         $name = $this->connection->getName();
         //TODO
-        return md5($name.$this->toSql().serialize($this->getBindings()));
+        //return md5($name.$this->toSql().serialize($this->getBindings()));
     }
 
     /**

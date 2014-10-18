@@ -68,7 +68,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * Get the contents of a file.
      *
      * @param  string  $path
-     * @return string
+     * @return false|array
      *
      * @throws \Brainwave\Filesystem\Exception\FileNotFoundException;
      */
@@ -126,7 +126,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      *
      * @param  string  $path
      * @param  string  $data
-     * @return int
+     * @return boolean
      */
     public function prepend($path, $data)
     {
@@ -138,7 +138,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      *
      * @param  string  $path
      * @param  string  $data
-     * @return int
+     * @return boolean
      */
     public function append($path, $data)
     {
@@ -149,7 +149,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * Delete the file at a given path.
      *
      * @param  string|array  $paths
-     * @return bool
+     * @return boolean
      */
     public function delete($paths)
     {
@@ -192,7 +192,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * Get the file size of a given file.
      *
      * @param  string  $path
-     * @return int
+     * @return false|array
      */
     public function size($path)
     {
@@ -203,7 +203,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * Get the file's last modification time.
      *
      * @param  string  $path
-     * @return int
+     * @return false|array
      */
     public function lastModified($path)
     {

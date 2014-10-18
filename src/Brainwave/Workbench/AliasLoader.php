@@ -54,7 +54,7 @@ class AliasLoader
      *
      * @param  array  $aliases
      */
-    private function __construct($aliases)
+    private function __construct(array $aliases = [])
     {
         $this->aliases = $aliases;
     }

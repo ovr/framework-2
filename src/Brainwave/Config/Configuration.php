@@ -24,7 +24,9 @@ use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
 
 /**
  * Configuration
- * Uses a ConfigurationHandler class to parse configuration data, accessed as an array.
+ *
+ * Uses a ConfigurationHandler class to parse configuration data,
+ * accessed as an array.
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -47,13 +49,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     protected $loader;
 
     /**
-     * Storage array of values
-     *
-     * @var array
-     */
-    protected $values = [];
-
-    /**
      * Config folder path
      *
      * @var string
@@ -67,7 +62,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
     {
-        $this->handler = $handler;
+        $this->setHandler($handler);
         $this->loader = $loader;
     }
 
@@ -79,6 +74,16 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     public function setArray(array $values)
     {
         $this->handler->setArray($values);
+    }
+
+    /**
+     * Set a configuration handler and provide it some defaults
+     *
+     * @param \Brainwave\Config\Interfaces\ConfigurationHandlerInterface $handler
+     */
+    public function setHandler(ConfigurationHandlerInterface $handler)
+    {
+        $this->handler = $handler;
     }
 
     /**
@@ -195,6 +200,18 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     }
 
     /**
+     * Call a method from the handler
+     *
+     * @param  string $method
+     * @param  array $params
+     * @return mixed
+     */
+    public function callHandlerMethod($method, array $params = array())
+    {
+        return call_user_func_array(array($this->handler, $method), $params);
+    }
+
+    /**
      * Get a value
      *
      * @param  string $key
@@ -245,6 +262,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->items);
+        return new \ArrayIterator($this->handler->getAllNested());
     }
 }

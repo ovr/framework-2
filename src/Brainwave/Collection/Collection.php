@@ -693,7 +693,7 @@ class Collection implements
     public function toArray()
     {
         return array_map(function ($value) {
-            return $value instanceof \Arrayable ? $value->toArray() : $value;
+            return $value instanceof ArrayableInterface ? $value->toArray() : $value;
 
         }, $this->data);
     }
@@ -815,17 +815,29 @@ class Collection implements
     /**
      * Concatenate values of a given key as a string.
      *
-     * @param  string  $value
+     * @param  mixed  $value
      * @param  string  $glue
      * @return string
      */
     public function implode($value, $glue = null)
     {
         if (is_null($glue)) {
-            return implode($this->lists($value));
+            return $this->lists($value);
         }
 
         return implode($glue, $this->lists($value));
+    }
+
+    /**
+     * Reduce the collection to a single value.
+     *
+     * @param  callable  $callback
+     * @param  mixed     $initial
+     * @return mixed
+     */
+    public function reduce(callable $callback, $initial = null)
+    {
+        return array_reduce($this->data, $callback, $initial);
     }
 
     /**
@@ -925,7 +937,7 @@ class Collection implements
     {
         if ($items instanceof Collection) {
             $items = $items->all();
-        } elseif ($items instanceof \Arrayable) {
+        } elseif ($items instanceof ArrayableInterface) {
             $items = $items->toArray();
         }
 
