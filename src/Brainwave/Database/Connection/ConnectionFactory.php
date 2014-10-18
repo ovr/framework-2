@@ -64,7 +64,7 @@ class ConnectionFactory
      *
      * @param  array   $config
      * @param  string  $name
-     * @return \Illuminate\Database\Connection
+     * @return Connection
      */
     public function make(array $config, $name = null)
     {
@@ -89,7 +89,7 @@ class ConnectionFactory
      * Create a single database connection instance.
      *
      * @param  array  $config
-     * @return \Illuminate\Database\Connection
+     * @return Connection
      */
     protected function createSingleConnection(array $config)
     {
@@ -164,7 +164,7 @@ class ConnectionFactory
      * @param  string   $database
      * @param  string   $prefix
      * @param  array    $config
-     * @return \Brainwave\Database\Connection
+     * @return Connection
      *
      * @throws \InvalidArgumentException
      */

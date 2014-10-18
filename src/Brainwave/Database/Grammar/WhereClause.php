@@ -227,7 +227,7 @@ class WhereClause
      *
      * @param  array  $array
      * @param  string $whereClause
-     * @return array
+     * @return string|null
      */
     protected function whereLike($array, $whereClause)
     {
@@ -320,7 +320,7 @@ class WhereClause
                                 if (is_numeric($value[0]) && is_numeric($value[1])) {
                                     $wheres[] = "({$column} BETWEEN {$value[0]} AND {$value[1]})";
                                 } else {
-                                    $wheres[] = "({$column} BETWEEN {$this->query->wrapValue($value[0])} AND 
+                                    $wheres[] = "({$column} BETWEEN {$this->query->wrapValue($value[0])} AND
                                         {$this->query->wrapValue($value[1])})";
                                 }
                             }

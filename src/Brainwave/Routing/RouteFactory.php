@@ -51,7 +51,6 @@ class RouteFactory
     /**
      * Constructor
      * @param  \Brainwave\Workbench\Workbench  $app
-     * @param  \Closure   $factory
      */
     public function __construct(Workbench $app, \Closure $resolver)
     {
@@ -234,7 +233,7 @@ class RouteFactory
      *
      * @param  string $callable
      * @throws \InvalidArgumentException
-     * @return array
+     * @return string[]
      */
     protected function parseCallable($callable)
     {
@@ -266,7 +265,7 @@ class RouteFactory
         }
 
         throw new \InvalidArgumentException(
-            "The specified '{$service}' route handler is an undefined service or 
+            "The specified '{$service}' route handler is an undefined service or
             the controller could not be instantiated."
         );
     }

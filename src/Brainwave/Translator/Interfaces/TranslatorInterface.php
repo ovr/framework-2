@@ -28,15 +28,35 @@ namespace Brainwave\Translator\Interfaces;
  */
 interface TranslatorInterface
 {
+    /**
+     * @param string $language
+     *
+     * @return void
+     */
     public function setTranslations(array $info, $language, $merge = false);
 
     public function getTranslations($language);
 
+    /**
+     * @param string $translation
+     * @param string $language
+     *
+     * @return \Brainwave\Translator\TranslatorManager
+     */
     public function setTranslation($orig, $translation, $language);
 
+    /**
+     * @return string
+     */
     public function getTranslation($orig, $language = false);
 
+    /**
+     * @return string
+     */
     public function getLocale();
 
+    /**
+     * @return \Brainwave\Translator\TranslatorManager
+     */
     public function setLocale($defaultLang);
 }

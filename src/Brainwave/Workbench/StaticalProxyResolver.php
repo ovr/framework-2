@@ -49,7 +49,7 @@ class StaticalProxyResolver
     /**
      * [getFacadeNameFromInput description]
      *
-     * @param  [type] $facadeName [description]
+     * @param  string $facadeName [description]
      * @return [type]             [description]
      */
     public function getFacadeNameFromInput($facadeName)

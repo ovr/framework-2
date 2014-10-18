@@ -57,7 +57,7 @@ interface QueryInterface
      *
      * @param  string $table The table name
      * @param  array  $datas The data that will be inserted into table.
-     * @return mixed
+     * @return integer
      */
     public function insert($table, $datas);
 
@@ -67,7 +67,7 @@ interface QueryInterface
      * @param  string $table The table name
      * @param  array  $data  The data that will be modified
      * @param  array  $where The WHERE clause to filter record
-     * @return number        The number of rows affected
+     * @return integer        The number of rows affected
      */
     public function update($table, $data, $where = null);
 
@@ -76,7 +76,7 @@ interface QueryInterface
      *
      * @param  string $table The table name
      * @param  array  $where The WHERE clause to filter records
-     * @return number        The number of rows affected
+     * @return integer        The number of rows affected
      */
     public function delete($table, $where);
 
@@ -88,7 +88,7 @@ interface QueryInterface
      * @param  string        $search  The value being searched for
      * @param  string        $replace The replacement value that replaces found search values
      * @param  array         $where   The WHERE clause to filter records
-     * @return nummber                The number of rows affected
+     * @return integer                The number of rows affected
      */
     public function replace($table, $columns, $search = null, $replace = null, $where = null);
 
@@ -119,7 +119,7 @@ interface QueryInterface
      * @param  array   $join   Table relativity for table joining
      * @param  string  $column The target column will be counted
      * @param  array   $where  The WHERE clause to filter records
-     * @return number          The number of rows
+     * @return integer          The number of rows
      */
     public function count($table, $join = null, $column = null, $where = null);
 
@@ -152,7 +152,7 @@ interface QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The average number of the column
+     * @return integer         The average number of the column
      */
     public function avg($table, $join, $column = '*', $where = null);
 
@@ -163,7 +163,7 @@ interface QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The total number of the column
+     * @return integer         The total number of the column
      */
     public function sum($table, $join, $column = '*', $where = null);
 }

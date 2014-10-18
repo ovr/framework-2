@@ -179,7 +179,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      *
      * @param  string  $from
      * @param  string  $to
-     * @return bool
+     * @return boolean|null
      */
     public function move($from, $to)
     {

@@ -75,7 +75,7 @@ class PhpDriver implements DriverInterface
      * Checking if file ist supported
      *
      * @param  string $filename
-     * @return mixed
+     * @return boolean
      */
     public function supports($filename)
     {

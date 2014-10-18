@@ -170,7 +170,7 @@ class CryptHash
     *
     * @param string $hash		The hash to check the string against.
     *
-    * @return bool				Returns true on match.
+    * @return boolean|null				Returns true on match.
     */
     public function check($str, $hash)
     {
@@ -274,8 +274,8 @@ class CryptHash
 
     /**
      * [phpassHash description]
-     * @param  [type] $password [description]
-     * @param  [type] $setting  [description]
+     * @param  string $password [description]
+     * @param  string $setting  [description]
      * @param  string $method   [description]
      * @return [type]           [description]
      */
@@ -300,8 +300,8 @@ class CryptHash
 
     /**
      * [b64Encode description]
-     * @param  [type] $input [description]
-     * @param  [type] $count [description]
+     * @param  string $input [description]
+     * @param  integer $count [description]
      * @return [type]        [description]
      */
     private function b64Encode($input, $count)
@@ -340,7 +340,7 @@ class CryptHash
 
     /**
      * Returns Crypt class
-     * @param  CryptHash $cryptHash \Brainwave\Crypt\Crypt
+     * @param  CryptHash $crypt \Brainwave\Crypt\Crypt
      * @return \Brainwave\Crypt\CryptHash
      */
     public function crypt(Crypt $crypt)

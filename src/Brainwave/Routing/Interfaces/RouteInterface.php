@@ -28,53 +28,114 @@ namespace Brainwave\Routing\Interfaces;
  */
 interface RouteInterface
 {
+    /**
+     * @return void
+     */
     public static function setDefaultConditions(array $defaultConditions);
 
     public static function getDefaultConditions();
 
+    /**
+     * @return string
+     */
     public function getPattern();
 
+    /**
+     * @param string $pattern
+     *
+     * @return \Brainwave\Routing\Route
+     */
     public function setPattern($pattern);
 
     public function getCallable();
 
+    /**
+     * @return void
+     */
     public function setCallable($callable);
 
     public function getConditions();
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function setConditions(array $conditions);
 
+    /**
+     * @return string
+     */
     public function getName();
 
+    /**
+     * @param string $name
+     *
+     * @return \Brainwave\Routing\Route
+     */
     public function setName($name);
 
     public function getParams();
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function setParams(array $params);
 
+    /**
+     * @return string
+     */
     public function getParam($index);
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function setParam($index, $value);
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function setHttpMethods();
 
     public function getHttpMethods();
 
+    /**
+     * @return void
+     */
     public function appendHttpMethods();
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function via();
 
+    /**
+     * @return boolean
+     */
     public function supportsHttpMethod($method);
 
     public function getMiddleware();
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function setMiddleware($middleware);
 
+    /**
+     * @return boolean
+     */
     public function matches($resourceUri);
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function name($name);
 
+    /**
+     * @return \Brainwave\Routing\Route
+     */
     public function conditions(array $conditions);
 
+    /**
+     * @return boolean
+     */
     public function dispatch();
 }

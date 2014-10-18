@@ -81,7 +81,6 @@ class Redirector
      *
      * Redirects to a specific named route
      *
-     * @param string    $url        The route name
      * @param array     $params     Associative array of URL parameters and replacement values
      */
     public function redirectTo($route, $params = [], $status = 302)

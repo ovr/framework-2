@@ -48,7 +48,7 @@ abstract class Middleware implements MiddlewareInterface
      * This method injects the primary Brainwave Application instance into
      * this middleware.
      *
-     * @param  \Brainwave\Workbench\Workbench $Application
+     * @param  \Brainwave\Workbench\Workbench $application
      */
     final public function setApplication($application)
     {

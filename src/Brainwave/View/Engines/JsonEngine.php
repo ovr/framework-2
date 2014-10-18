@@ -51,8 +51,8 @@ class JsonEngine implements EnginesInterface
 
     /**
      *
-     * @param void $app        \Brainwave\Workbench\Workbench
-     * @param array $collection
+     * @param Workbench $app        \Brainwave\Workbench\Workbench
+     * @param \Brainwave\View\ViewFactory $collection
      */
     public function __construct(Workbench $app, $collection)
     {
@@ -93,7 +93,7 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given status.
-     * @param  string  $status
+     * @param  integer  $status
      * @param  array   $data
      * @return string
      */

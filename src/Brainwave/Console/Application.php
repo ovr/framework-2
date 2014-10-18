@@ -51,7 +51,6 @@ class Application
 
     }
 
-
     protected static function registerCommandStartInfo($command)
     {
     }

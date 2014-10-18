@@ -79,7 +79,6 @@ class PhpEngine implements EnginesInterface
         // an exception is thrown. This prevents any partial views from leaking.
         ob_start();
 
-
         try {
             require_once $path;
             // Return temporary output buffer content, destroy output buffer

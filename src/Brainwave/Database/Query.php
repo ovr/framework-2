@@ -141,7 +141,6 @@ class Query implements QueryInterface
      *                                  Ignore it if no table joining required
      * @param  string|array    $columns The target columns of data will be fetched
      * @param  array           $where   The WHERE clause to filter records
-     * @param  string          $return
      * @return array
      */
     public function select($table, $join, $columns = null, $where = null)
@@ -162,7 +161,7 @@ class Query implements QueryInterface
      *
      * @param  string $table The table name
      * @param  mixed  $datas The data that will be inserted into table.
-     * @return mixed
+     * @return integer
      */
     public function insert($table, $datas)
     {
@@ -214,7 +213,7 @@ class Query implements QueryInterface
             $col = implode(', ', $columns);
             $val = implode($values, ', ');
 
-            $query = "INSERT INTO 
+            $query = "INSERT INTO
                 {$this->grammar->wrapValue($table)} ({$col}) VALUES ({$val})";
         }
 
@@ -227,7 +226,7 @@ class Query implements QueryInterface
      * @param  string $table The table name
      * @param  array  $data  The data that will be modified
      * @param  array  $where The WHERE clause to filter record
-     * @return number        The number of rows affected
+     * @return integer        The number of rows affected
      */
     public function update($table, $data, $where = null)
     {
@@ -238,7 +237,7 @@ class Query implements QueryInterface
 
             if (isset($match[3])) {
                 if (is_numeric($value)) {
-                    $fields[] = "{$this->grammar->wrapColumn($match[1])} = 
+                    $fields[] = "{$this->grammar->wrapColumn($match[1])} =
                     {$this->grammar->wrapColumn($match[1])} {$match[3]} {$value}";
                 }
             } else {
@@ -254,7 +253,7 @@ class Query implements QueryInterface
                         preg_match("/\(JSON\)\s*([\w]+)/i", $key, $column_match);
 
                         if (isset($column_match[0])) {
-                            $fields[] = "{$this->grammar->wrapColumn($column_match[1])} = 
+                            $fields[] = "{$this->grammar->wrapColumn($column_match[1])} =
                             {$this->grammar->wrapValue(json_encode($value))}";
                         } else {
                             $fields[] = "{$column} = {$this->grammar->wrapValue(serialize($value))}";
@@ -286,13 +285,13 @@ class Query implements QueryInterface
      *
      * @param  string $table The table name
      * @param  array  $where The WHERE clause to filter records
-     * @return number        The number of rows affected
+     * @return integer        The number of rows affected
      */
     public function delete($table, $where)
     {
         return $this->connection->affectingStatement(
-            "DELETE FROM 
-            {$this->grammar->wrapValue($this->grammar->getTablePrefix().$table)} 
+            "DELETE FROM
+            {$this->grammar->wrapValue($this->grammar->getTablePrefix().$table)}
             {$this->where->where($where)}",
             $this->getBindings()
         );
@@ -306,7 +305,7 @@ class Query implements QueryInterface
      * @param  string        $search  The value being searched for
      * @param  string        $replace The replacement value that replaces found search values
      * @param  array         $where   The WHERE clause to filter records
-     * @return nummber                The number of rows affected
+     * @return integer                The number of rows affected
      */
     public function replace($table, $columns, $search = null, $replace = null, $where = null)
     {
@@ -337,7 +336,7 @@ class Query implements QueryInterface
                 $where = $replace;
             } else {
                 $replaceQuery = "{$columns} = REPLACE({$this->grammar->wrapColumn($columns)},
-                    {$this->grammar->wrapValue($search)}, 
+                    {$this->grammar->wrapValue($search)},
                     {$this->grammar->wrapValue($replace)})";
             }
         }
@@ -396,7 +395,7 @@ class Query implements QueryInterface
      * @param  array   $join   Table relativity for table joining
      * @param  string  $column The target column will be counted
      * @param  array   $where  The WHERE clause to filter records
-     * @return number          The number of rows
+     * @return integer          The number of rows
      */
     public function count($table, $join = null, $column = null, $where = null)
     {
@@ -451,7 +450,7 @@ class Query implements QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The average number of the column
+     * @return integer         The average number of the column
      */
     public function avg($table, $join, $column = null, $where = null)
     {
@@ -468,7 +467,7 @@ class Query implements QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The total number of the column
+     * @return integer         The total number of the column
      */
     public function sum($table, $join, $column = null, $where = null)
     {
@@ -486,7 +485,7 @@ class Query implements QueryInterface
      * @param  mixed  $columns
      * @param  array  $where
      * @param  mixed  $columnFunc
-     * @return array
+     * @return string
      */
     protected function selectContext($table, $join, $columns = null, $where = null, $columnFunc = null)
     {
@@ -512,7 +511,7 @@ class Query implements QueryInterface
                             $relation = 'USING (`'.implode($relation, '`, `').'`)';
                         // For ['column1' => 'column2']
                         } else {
-                            $relation = "ON {$table} {$this->grammar->wrapValue(key($relation))} = 
+                            $relation = "ON {$table} {$this->grammar->wrapValue(key($relation))} =
                             {$this->grammar->wrapValue($match[3])} {$this->grammar->wrapValue(current($relation))}";
                         }
                     }

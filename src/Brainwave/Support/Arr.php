@@ -35,7 +35,7 @@ class Arr
      *
      * @param  array   $array
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  string   $value
      * @return array
      */
     public static function arrayAdd($array, $key, $value)
@@ -117,7 +117,7 @@ class Arr
      * Get all of the given array except for a specified array of items.
      *
      * @param  array  $array
-     * @param  array  $keys
+     * @param  string[]  $keys
      * @return array
      */
     public static function arrayExcept($array, $keys)
@@ -153,7 +153,7 @@ class Arr
      * Return the first element in an array passing a given truth test.
      *
      * @param  array    $array
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @param  mixed    $default
      * @return mixed
      */
@@ -536,7 +536,7 @@ class Arr
     /**
      * Return the given object. Useful for chaining.
      *
-     * @param  mixed  $object
+     * @param  \Brainwave\Environment\EnvironmentDetector  $object
      * @return mixed
      */
     public static function with($object)

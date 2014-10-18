@@ -190,7 +190,7 @@ class CacheManager
     /**
      * Create an instance of the APC cache driver.
      *
-     * @return \Brainwave\Cache\Driver\ApcCache
+     * @return Repository
      */
     protected function createApcDriver()
     {
@@ -200,7 +200,7 @@ class CacheManager
     /**
      * Create an instance of the array cache driver.
      *
-     * @return \Brainwave\Cache\Driver\ArrayCache
+     * @return Repository
      */
     protected function createArrayDriver()
     {
@@ -211,7 +211,7 @@ class CacheManager
      * Create an instance of the file cache driver.
      *
      * @param array $config
-     * @return \Brainwave\Cache\Driver\FileCache
+     * @return Repository
      */
     protected function createFileDriver(array $config = [])
     {
@@ -228,7 +228,7 @@ class CacheManager
      * Create an instance of the Memcached cache driver.
      *
      * @param array $config
-     * @return \Brainwave\Cache\Driver\MemcachedCache
+     * @return Repository
      */
     protected function createMemcachedDriver(array $config = [])
     {
@@ -247,7 +247,7 @@ class CacheManager
      * Create an instance of the Memcache cache driver.
      *
      * @param array $config
-     * @return \Brainwave\Cache\Driver\MemcacheCache
+     * @return Repository
      */
     protected function createMemcacheDriver(array $config = [])
     {
@@ -266,7 +266,7 @@ class CacheManager
      * Create an instance of the Redis cache driver.
      *
      * @param array $config
-     * @return \Brainwave\Cache\Driver\RedisCache
+     * @return Repository
      */
     protected function createRedisDriver(array $config = [])
     {
@@ -296,7 +296,7 @@ class CacheManager
     /**
      * Create an instance of the Null cache driver.
      *
-     * @return \Brainwave\Cache\Driver\NullCache
+     * @return Repository
      */
     protected function createNullDriver()
     {
@@ -306,7 +306,7 @@ class CacheManager
     /**
      * Create an instance of the WinCache cache driver.
      *
-     * @return \Brainwave\Cache\Driver\WinCacheCache
+     * @return Repository
      */
     protected function createWincacheDriver()
     {
@@ -316,13 +316,12 @@ class CacheManager
     /**
      * Create an instance of the XCache cache driver.
      *
-     * @return \Brainwave\Cache\Driver\XCacheCache
+     * @return Repository
      */
     protected function createXcacheDriver()
     {
         return $this->repository(new XCacheCache($this->getPrefix()));
     }
-
 
     /**
      * Get the cache "prefix" value.
