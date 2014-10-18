@@ -70,7 +70,7 @@ class FileLoader implements LoaderInterface
      *
      * @param  \Brainwave\Filesystem\Filesystem  $files
      * @param  string  $defaultPath
-     * @return void
+     * @return FileLoader
      */
     public function __construct(Filesystem $files, $defaultPath)
     {
@@ -227,6 +227,7 @@ class FileLoader implements LoaderInterface
      * @param  string  $env
      * @param  string  $package
      * @param  string  $group
+     * @param string $namespace
      * @return string
      */
     protected function getPackagePath($env, $package, $group, $file, $namespace = null)
@@ -279,7 +280,7 @@ class FileLoader implements LoaderInterface
      * Sensibly merge configuration arrays.
      *
      * @param  dynamic array
-     * @return array
+     * @return string
      */
     protected function configMerge()
     {

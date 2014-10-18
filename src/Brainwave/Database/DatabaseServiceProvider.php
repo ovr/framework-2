@@ -78,6 +78,9 @@ class DatabaseServiceProvider implements ServiceProviderInterface
         }
     }
 
+    /**
+     * @param Container $app
+     */
     protected function registerConnectionFactory($app)
     {
         // The connection factory is used to create the actual connection instances on

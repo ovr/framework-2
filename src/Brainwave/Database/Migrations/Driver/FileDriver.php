@@ -71,7 +71,7 @@ class FileDriver implements DriverInterface
      * Up
      *
      * @param Migration $migration
-     * @return AdapterInterface
+     * @return null|FileDriver
      */
     public function up(Migration $migration)
     {
@@ -92,7 +92,7 @@ class FileDriver implements DriverInterface
      * Down
      *
      * @param Migration $migration
-     * @return AdapterInterface
+     * @return null|FileDriver
      */
     public function down(Migration $migration)
     {
@@ -122,7 +122,7 @@ class FileDriver implements DriverInterface
     /**
      * Create Schema
      *
-     * @return AdapterInterface
+     * @return FileDriver
      */
     public function createSchema()
     {

@@ -158,7 +158,7 @@ class Connection implements ConnectionInterface
      *
      * @param  string $table table name
      * @param  string $alias alias name
-     * @return bool
+     * @return boolean|null
      */
     public function setAlias($table, $alias)
     {

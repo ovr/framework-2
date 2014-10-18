@@ -30,5 +30,8 @@ use \Brainwave\Collection\Interfaces\CollectionInterface;
  */
 interface HeadersInterface extends CollectionInterface
 {
+    /**
+     * @return string
+     */
     public function normalizeKey($key);
 }

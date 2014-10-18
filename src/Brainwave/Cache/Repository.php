@@ -214,7 +214,7 @@ class Repository implements ArrayAccess
     /**
      * Get the cache driver implementation.
      *
-     * @return \Brainwave\Cache\driverInterface
+     * @return DriverInterface
      */
     public function getdriver()
     {

@@ -130,7 +130,7 @@ class PdoDriver implements DriverInterface
     /**
      * Create Schema
      *
-     * @return DBAL
+     * @return PdoDriver
      */
     public function createSchema()
     {

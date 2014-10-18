@@ -28,5 +28,5 @@ namespace Brainwave\Security;
  */
 class Manager
 {
-    
+
 }

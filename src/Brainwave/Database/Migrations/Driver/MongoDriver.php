@@ -118,7 +118,7 @@ class MongoDriver implements DriverInterface
     /**
      * Create Schema
      *
-     * @return DBAL
+     * @return MongoDriver
      */
     public function createSchema()
     {

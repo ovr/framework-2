@@ -42,6 +42,7 @@ interface CookieInterface
      *                              HTTPS connection to/from the client
      * @param  bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      * @api
+     * @return void
      */
     public function set(
         $name,
@@ -62,6 +63,7 @@ interface CookieInterface
      * @param  string  $domain
      * @param  bool    $secure
      * @param  bool    $httpOnly
+     * @return void
      */
     public function forever(
         $name,
@@ -110,6 +112,7 @@ interface CookieInterface
      *                          HTTPS connection from the client
      * @param  bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      * @api
+     * @return void
      */
     public function delete(
         $name,

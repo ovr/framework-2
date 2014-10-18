@@ -137,7 +137,7 @@ class Route implements RouteInterface
      * Constructor
      *
      * @param string $pattern       The URL pattern
-     * @param mixed  $callable      Anything that returns `true` for `is_callable()`
+     * @param null|callable  $callable      Anything that returns `true` for `is_callable()`
      * @param bool   $caseSensitive Whether or not this route should be matched in a case-sensitive manner
      * @param bool   $escapePattern If false, the route pattern is considered as a RegExp pattern,
      *
@@ -164,7 +164,6 @@ class Route implements RouteInterface
     /**
      * Set default route conditions for all Routing
      *
-     * @param  array $defaultConditions
      * @api
      */
     public static function setDefaultConditions(array $conditions = [])
@@ -271,7 +270,7 @@ class Route implements RouteInterface
     /**
      * Get route callable
      *
-     * @return mixed
+     * @return callable
      * @api
      */
     public function getCallable()
@@ -386,7 +385,7 @@ class Route implements RouteInterface
     /**
      * Get route name (this may be null if not set)
      *
-     * @return string|null
+     * @return string
      * @api
      */
     public function getName()
@@ -474,7 +473,7 @@ class Route implements RouteInterface
      *
      * @param  string                    $index     Name of URL parameter
      * @param  mixed                     $value     The new parameter value
-     * @return void
+     * @return Route
      * @throws \InvalidArgumentException            If route parameter does not exist at index
      * @api
      */

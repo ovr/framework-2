@@ -92,9 +92,6 @@ class Router implements RouterInterface
     /**
      * Get any matched route params
      *
-     * @param   string|null  $name the param name in the route pattern,
-     *                             if null, return all the matched route param as array,
-     *                             return null if the $key doesn't exist
      * @return  string|array
      */
     public function getParam($key = false)
@@ -144,7 +141,6 @@ class Router implements RouterInterface
      *
      * @param  string             $httpMethod  The HTTP request method
      * @param  string             $resourceUri The resource URI
-     * @param  bool               $reload      Should matching routes be re-parsed?
      * @return array[\Brainwave\Interfaces\RouteInterface]
      * @api
      */
@@ -193,7 +189,7 @@ class Router implements RouterInterface
     /**
      * Return array of methods avaliable for the current pattern
      * @param  string               $pattern      The pattern to match against
-     * @return array
+     * @return string[]
      */
     public function getMethodsAvailable($pattern)
     {

@@ -38,7 +38,7 @@ interface DriverInterface
     /**
      * Fetch a stored variable from the cache
      *
-     * @param mixed $key The key used to store the value
+     * @param string $key The key used to store the value
      * @return mixed The stored variable
      */
     public function get($key);
@@ -63,9 +63,9 @@ interface DriverInterface
     /**
      * Store variable in the cache
      *
-     * @param mixed $key The key to use to set the value
+     * @param string $key The key to use to set the value
      * @param mixed $value The variable to set
-     * @param int $ttl The expiration time.
+     * @param integer $minutes
      */
     public function set($key, $value, $minutes);
 
@@ -73,7 +73,7 @@ interface DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return int|bool
      */
     public function increment($key, $value = 1);
@@ -82,7 +82,7 @@ interface DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return int|bool
      */
     public function decrement($key, $value = 1);

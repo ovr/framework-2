@@ -161,7 +161,7 @@ interface ConnectionInterface
      *
      * @param  string  $query
      * @param  array   $bindings
-     * @param  $time
+     * @param  double $time
      * @return void
      */
     public function logQuery($query, $bindings, $time = null);
@@ -241,7 +241,7 @@ interface ConnectionInterface
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Brainwave\Cache\CacheManager|\Closure  $cache
+     * @param  \Closure  $cache
      * @return void
      */
     public function setCacheManager($cache);

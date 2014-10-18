@@ -58,7 +58,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Constructor
      *
-     * @param mixed $handler
+     * @param ConfigurationHandlerInterface $handler
      */
     public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
     {
@@ -258,7 +258,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Get an ArrayIterator for the stored items
      *
-     * @return ArrayIterator
+     * @return \ArrayIterator
      */
     public function getIterator()
     {

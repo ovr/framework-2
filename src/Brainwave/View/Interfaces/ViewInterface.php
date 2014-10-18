@@ -28,7 +28,17 @@ namespace Brainwave\View\Interfaces;
  */
 interface ViewInterface
 {
+    /**
+     * @param string|null $template
+     *
+     * @return void
+     */
     public function make($engine, $template, array $data = []);
 
+    /**
+     * @param |null $template
+     *
+     * @return string
+     */
     public function fetch($engine, $template, array $data = []);
 }

@@ -124,7 +124,7 @@ class TaggedCache implements TaggedCacheInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return void
      */
     public function increment($key, $value = 1)
@@ -136,7 +136,7 @@ class TaggedCache implements TaggedCacheInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  mixed   $value
+     * @param  integer   $value
      * @return void
      */
     public function decrement($key, $value = 1)

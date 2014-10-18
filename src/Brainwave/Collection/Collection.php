@@ -381,7 +381,7 @@ class Collection implements
     /**
      * Push an item onto the end of the collection.
      *
-     * @param  mixed  $value
+     * @param  Collection  $value
      * @return void
      */
     public function push($value)
@@ -722,7 +722,7 @@ class Collection implements
     /**
      * Encrypt set
      *
-     * @param  \Brainwave\Interfaces\CryptInterface $crypt
+     * @param  CryptInterface $crypt
      * @return void
      * @api
      */
@@ -736,7 +736,7 @@ class Collection implements
     /**
      * Decrypt set
      *
-     * @param  \Brainwave\Interfaces\CryptInterface $crypt
+     * @param  CryptInterface $crypt
      * @return void
      * @api
      */
@@ -832,7 +832,7 @@ class Collection implements
      * Reduce the collection to a single value.
      *
      * @param  callable  $callback
-     * @param  mixed     $initial
+     * @param  integer     $initial
      * @return mixed
      */
     public function reduce(callable $callback, $initial = null)
@@ -910,7 +910,7 @@ class Collection implements
      * Remove a piece of bound data from the view.
      *
      * @param  string  $key
-     * @return bool
+     * @return boolean|null
      */
     public function __unset($key)
     {

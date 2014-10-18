@@ -165,7 +165,7 @@ class Builder
      * Wrap a array value
      *
      * @param  array $array
-     * @return array
+     * @return string
      */
     public function wrapArray(array $array)
     {
@@ -198,7 +198,7 @@ class Builder
      * [columnPush description]
      *
      * @param  string|array $columns
-     * @return array
+     * @return string
      */
     public function columnPush($columns)
     {
