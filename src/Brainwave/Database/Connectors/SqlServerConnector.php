@@ -23,14 +23,14 @@ use \Brainwave\Database\Connectors\Connectors;
 use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
- * GoogleCloudConnector
+ * SqlServerConnector
  *
  * @package Narrowspark/Database
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class GoogleCloudConnector extends Connectors implements ConnectorInterface
+class SqlServerConnector extends Connectors implements ConnectorInterface
 {
     /**
      * The PDO connection options.

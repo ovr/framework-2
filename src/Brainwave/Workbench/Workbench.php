@@ -124,62 +124,42 @@ class Workbench extends Container
     protected $config = [
         'app' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'app'
         ],
         'http' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'http'
         ],
         'mail' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'mail'
         ],
         'cache' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'cache'
         ],
         'services' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'services'
         ],
         'session' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'session'
         ],
         'cookies' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'cookies'
         ],
         'view' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'view'
         ],
         'autoload' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'autoload'
         ],
         'database' => [
             'ext' => 'php',
-            'namespace' => null,
-            'env' => null,
             'group' => 'database'
         ],
     ];
@@ -223,8 +203,8 @@ class Workbench extends Container
             $this['settings']->bind(
                 $file.'.'.$setting['ext'],
                 $setting['group'],
-                $setting['env'],
-                $setting['namespace']
+                null,
+                null
             );
         }
 
@@ -535,7 +515,7 @@ class Workbench extends Container
     public function getControllersRoutes()
     {
         $route = [];
-        $controllers = $this->controller_factory->getControllers();
+        $controllers = $this->controllerFactory->getControllers();
         foreach ($controllers as $controller) {
             $route[] = $controller->getRouteName();
         }

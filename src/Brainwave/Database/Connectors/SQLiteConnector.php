@@ -22,14 +22,14 @@ use \Brainwave\Database\Connectors\Connectors;
 use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
- * GoogleCloudConnector
+ * SQLiteConnector
  *
  * @package Narrowspark/Database
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class GoogleCloudConnector extends Connectors implements ConnectorInterface
+class SQLiteConnector extends Connectors implements ConnectorInterface
 {
     /**
      * Establish a database connection.
