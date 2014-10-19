@@ -34,6 +34,7 @@ interface ExceptionDisplayerInterface
     /**
      * @param Workbench $app Brainwave\Workbench\Workbench
      * @param string    $charset language
+     * @return null|\Brainwave\Exception\Displayer\WhoopsDisplayer
      */
     public function __construct(Workbench $app, $charset);
 

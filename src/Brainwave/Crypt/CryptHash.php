@@ -340,7 +340,7 @@ class CryptHash
 
     /**
      * Returns Crypt class
-     * @param  CryptHash $crypt \Brainwave\Crypt\Crypt
+     * @param  Crypt $crypt \Brainwave\Crypt\Crypt
      * @return \Brainwave\Crypt\CryptHash
      */
     public function crypt(Crypt $crypt)

@@ -144,6 +144,9 @@ interface RequestInterface
      */
     public function isJson();
 
+    /**
+     * @return string
+     */
     public function json($key = null, $default = null);
 
     /**
@@ -151,6 +154,9 @@ interface RequestInterface
      */
     public function isPost();
 
+    /**
+     * @return string
+     */
     public function post($key = null, $default = null);
 
     /**
@@ -158,6 +164,9 @@ interface RequestInterface
      */
     public function isPut();
 
+    /**
+     * @return string
+     */
     public function put($key = null, $default = null);
 
     /**
@@ -165,6 +174,9 @@ interface RequestInterface
      */
     public function isPatch();
 
+    /**
+     * @return string
+     */
     public function patch($key = null, $default = null);
 
     /**
@@ -172,6 +184,9 @@ interface RequestInterface
      */
     public function isDelete();
 
+    /**
+     * @return string
+     */
     public function delete($key = null, $default = null);
 
     /**

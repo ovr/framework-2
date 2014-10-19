@@ -64,7 +64,7 @@ class StaticalProxyResolver
     /**
      * [isFacade description]
      *
-     * @param  [type]  $facade [description]
+     * @param  string  $facade [description]
      * @return boolean         [description]
      */
     public function isFacade($facade)
@@ -79,7 +79,7 @@ class StaticalProxyResolver
     /**
      * [isUppercase description]
      *
-     * @param  [type]  $string [description]
+     * @param  string  $string [description]
      * @return boolean         [description]
      */
     private function isUppercase($string)
