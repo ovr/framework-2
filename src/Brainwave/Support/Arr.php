@@ -537,7 +537,7 @@ class Arr
      * Return the given object. Useful for chaining.
      *
      * @param  \Brainwave\Environment\EnvironmentDetector  $object
-     * @return mixed
+     * @return \Brainwave\Environment\EnvironmentDetector
      */
     public static function with($object)
     {

@@ -535,7 +535,7 @@ class Request implements RequestInterface
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
-     * @return array|mixed|null
+     * @return string
      * @throws \RuntimeException If environment input is not available
      * @api
      */
@@ -599,7 +599,7 @@ class Request implements RequestInterface
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
-     * @return array|mixed|null
+     * @return string
      * @api
      */
     public function put($key = null, $default = null)
@@ -612,7 +612,7 @@ class Request implements RequestInterface
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
-     * @return array|mixed|null
+     * @return string
      * @api
      */
     public function patch($key = null, $default = null)
@@ -625,7 +625,7 @@ class Request implements RequestInterface
      *
      * @param  string           $key
      * @param  mixed            $default Default return value when key does not exist
-     * @return array|mixed|null
+     * @return string
      * @api
      */
     public function delete($key = null, $default = null)
