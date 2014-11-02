@@ -32,7 +32,6 @@ use \Brainwave\Cookie\CookieJar;
 use \Brainwave\Workbench\AliasLoader;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
-use \Brainwave\Environment\Environment;
 use \Brainwave\Workbench\Exception\Stop;
 use \Brainwave\Workbench\Exception\Pass;
 use \Brainwave\Exception\ExceptionHandler;
@@ -43,12 +42,14 @@ use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
 use \Brainwave\Workbench\StaticalProxyManager;
 use \Brainwave\Workbench\StaticalProxyResolver;
-use \Brainwave\Environment\EnvironmentDetector;
+use \Brainwave\Workbench\Environment\Environment;
+use \Brainwave\Exception\ExceptionServiceProvider;
 use \Brainwave\Translator\TranslatorServiceProvider;
 use \Brainwave\Http\Exception\NotFoundHttpException;
 use \Brainwave\Routing\Controller\ControllerCollection;
-use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
 use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
+use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
+use \Brainwave\Workbench\Environment\EnvironmentServiceProvider;
 
 /**
  * Workbench
@@ -57,7 +58,6 @@ use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
- * @property Environment    $environment
  * @property Response       $response
  * @property Request        $request
  * @property Router         $router
@@ -188,6 +188,9 @@ class Workbench extends Container
         // Not Found
         $this['notFound'] = null;
 
+        // Environment
+        $this->register(new EnvironmentServiceProvider());
+
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
         // so that they have the consistent naming convention inside the container.
@@ -208,16 +211,14 @@ class Workbench extends Container
             );
         }
 
-        // Environment
-        $this['environment'] = function ($c) {
-            return new Environment($_SERVER);
-        };
-
         // Request
-        $this->register(new RequestServiceProvider(), []);
+        $this->register(new RequestServiceProvider());
 
         // Response
-        $this->register(new ResponseServiceProvider(), []);
+        $this->register(new ResponseServiceProvider());
+
+        // Exception handler
+        $this->register(new ExceptionServiceProvider());
 
         // Translator
         $this->register(new TranslatorServiceProvider(), ['translator.path' => static::$paths['path.config']]);
@@ -233,11 +234,6 @@ class Workbench extends Container
                 );
             }
         }
-
-        // Exception handler
-        $this['exception'] = function ($c) {
-            return new ExceptionHandler($this, $c['settings']->get('app::charset', 'en'));
-        };
 
         // Register providers
         foreach ($this['settings']['services::providers'] as $provider => $arr) {
@@ -292,7 +288,7 @@ class Workbench extends Container
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by the developer's application logics.
         if ($this->booted && $provider instanceof BootableProviderInterface) {
-            $provider->boot();
+            $provider->boot($this);
         }
     }
 
@@ -380,29 +376,54 @@ class Workbench extends Container
     }
 
     /**
-     * Get or check the current application environment.
+     * Mounts controllers under the given route prefix.
      *
-     * @param  dynamic
-     * @return string
+     * @param string                      $prefix      The route prefix
+     * @param ControllerCollection|
+     *        ControllerProviderInterface $controllers A ControllerCollection or a ControllerProviderInterface instance
+     *
+     * @return Application
+     *
+     * @throws \LogicException
      */
-    public function environment()
+    public function mount($prefix, $controllers)
     {
-        if (count(func_get_args()) > 0) {
-            return in_array($this['env'], func_get_args());
-        } else {
-            return $this['env'];
+        if ($controller instanceof ControllerProviderInterface) {
+            $controller = $controller->connect($this->app);
+
+            if (!$controllers instanceof ControllerCollection) {
+                throw new \LogicException(
+                    'The "connect" method of the ControllerProviderInterface must return a ControllerCollection.'
+                );
+            }
         }
+
+        if (!$controller instanceof ControllerCollection) {
+            throw new \LogicException(
+                'The "mount" method takes either a ControllerCollection or a ControllerProviderInterface instance.'
+            );
+        }
+
+        $this->app['controllers']->mount($prefix, $controllers);
+
+        return $this;
     }
 
     /**
-     * Detect the application's current environment.
+     * Get controllers route
      *
-     * @param  array|string  $envs
-     * @return string
+     * @return Route
+     * @api
      */
-    public function detectEnvironment($envs)
+    public function getControllersRoutes()
     {
-        return $this['env'] = Arr::with(new EnvironmentDetector())->detect($envs);
+        $route = [];
+        $controllers = $this->app['controllers']->getControllers();
+        foreach ($controllers as $controller) {
+            $route[] = $controller->getRouteName();
+        }
+
+        return $route;
     }
 
     /**
@@ -413,26 +434,6 @@ class Workbench extends Container
     public function isLocal()
     {
         return $this['env'] = 'local';
-    }
-
-    /**
-     * Determine if we are running unit tests.
-     *
-     * @return string
-     */
-    public function runningUnitTests()
-    {
-        return $this['env'] = 'testing';
-    }
-
-    /**
-     * Determine if we are running console.
-     *
-     * @return string
-     */
-    public function runningInConsole()
-    {
-        return $this['env'] = 'console';
     }
 
     /**
@@ -458,36 +459,6 @@ class Workbench extends Container
     }
 
     /**
-     * Mounts controllers under the given route prefix.
-     *
-     * @return Application
-     */
-    public function mount()
-    {
-        $args = func_get_args();
-
-        $prefix = '';
-        $controller = $args[0];
-
-        if (count($args) > 1) {
-            $prefix = array_shift($args);
-            $controller = array_pop($args);
-        }
-
-        if ($controller instanceof ControllerProviderInterface) {
-            $controller = $controller->connect($this);
-        }
-
-        if (!$controller instanceof ControllerCollection) {
-            throw new \LogicException(
-                'The "mount" method takes either a ControllerCollection or a ControllerProviderInterface instance.'
-            );
-        }
-
-        $controller->flush($prefix);
-    }
-
-    /**
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
@@ -508,23 +479,8 @@ class Workbench extends Container
     }
 
     /**
-     * Get controllers route
-     * @return Route
-     * @api
-     */
-    public function getControllersRoutes()
-    {
-        $route = [];
-        $controllers = $this['controllers.factory']->getControllers();
-        foreach ($controllers as $controller) {
-            $route[] = $controller->getRouteName();
-        }
-
-        return $route;
-    }
-
-    /**
      * Set the object context ($this) for dispatch callables
+     *
      * @param object $context The object context ($this) in which
      */
     public function setDispatchContext($context)
@@ -966,6 +922,7 @@ class Workbench extends Container
      */
     public function setRequestForConsoleEnvironment()
     {
+        //TODO
         return $this->runningInConsole();
     }
 
@@ -999,6 +956,44 @@ class Workbench extends Container
         $this->finalize();
 
         $this['events']->applyHook('after');
+    }
+
+    /**
+     * Finalize send response
+     *
+     * This method sends the response object
+     */
+    protected function finalize()
+    {
+        if (!$this->booted) {
+            $this->boot();
+        }
+        $this->boot($this);
+
+        // Set header for OPTIONS and all other routes
+        if ($this['router']->getCurrentRoute()) {
+            $this['response']->setHeader(
+                'Access-Control-Allow-Methods',
+                implode(
+                    ", ",
+                    $this['router']->getMethodsAvailable(
+                        $this['router']->getCurrentRoute()->getPattern()
+                    )
+                )
+            );
+        }
+
+        if (!$this->responded) {
+            $this->responded = true;
+
+            // Encrypt CookieJar
+            if ($this['settings']['cookie::encrypt']) {
+                $this['response']->encryptCookies($this['crypt']);
+            }
+
+            // Send response
+            $this['response']->finalize($this['request'])->send();
+        }
     }
 
     /**
@@ -1123,30 +1118,6 @@ class Workbench extends Container
     public function call()
     {
         $this->dispatchRequest($this['request'], $this['response']);
-    }
-
-    /**
-     * Finalize send response
-     *
-     * This method sends the response object
-     */
-    protected function finalize()
-    {
-        if (!$this->booted) {
-            $this->boot();
-        }
-
-        if (!$this->responded) {
-            $this->responded = true;
-
-            // Encrypt CookieJar
-            if ($this['settings']['cookie::encrypt']) {
-                $this['response']->encryptCookies($this['crypt']);
-            }
-
-            // Send response
-            $this['response']->finalize($this['request'])->send();
-        }
     }
 
     /**

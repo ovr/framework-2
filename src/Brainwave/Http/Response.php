@@ -170,10 +170,6 @@ class Response implements ResponseInterface
         $this->write($body);
     }
 
-    /*******************************************************************************
-     * Response Header
-     ******************************************************************************/
-
     /**
      * Get HTTP protocol version
      *
@@ -316,10 +312,6 @@ class Response implements ResponseInterface
         $this->cookies->encrypt($crypt);
     }
 
-    /*******************************************************************************
-     * Response Body
-     ******************************************************************************/
-
     /**
      * Get response body
      *
@@ -368,10 +360,6 @@ class Response implements ResponseInterface
     {
         return $this->body->getSize();
     }
-
-    /*******************************************************************************
-     * Response Helpers
-     ******************************************************************************/
 
     /**
      * Finalize response for delivery to client

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Environment\Interfaces;
+namespace Brainwave\Workbench\Environment\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework

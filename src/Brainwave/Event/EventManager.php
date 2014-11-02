@@ -139,9 +139,10 @@ class EventManager implements EventManagerInterface
             if (count($hooks[$name]) > 1) {
                 ksort($hooks[$name]);
             }
+
             foreach ($hooks[$name] as $priority) {
                 if (!empty($priority)) {
-                    foreach ($variable as $key => $value) {
+                    foreach ($priority as $callable) {
                         $v = call_user_func($callable, $hookArg);
                         if ($v !== null) {
                             return $v;

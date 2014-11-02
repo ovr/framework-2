@@ -91,7 +91,7 @@ class Cookie implements CookieInterface
 
     public function session($value)
     {
-        # code...
+        //TODO
     }
 
     /**

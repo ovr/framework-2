@@ -36,22 +36,6 @@ interface TaggedCacheInterface
     public function flush();
 
     /**
-     * Delete an item
-     *
-     * @param mixed $key The key of the item to delete.
-     * @return bool Returns TRUE on success or FALSE on failure.
-     */
-    public function delete($key);
-
-    /**
-     * Checks if APC key exists
-     *
-     * @param mixed $key The key of the item to retrieve.
-     * @return bool Returns TRUE if the key exists, otherwise FALSE.
-     */
-    public function exists($key);
-
-    /**
      * Fetch a stored variable from the cache
      *
      * @param mixed $key The key used to store the value

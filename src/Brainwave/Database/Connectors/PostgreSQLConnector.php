@@ -57,9 +57,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorInterface
         // set the default character set on the connections to UTF-8 by default.
         $dsn = $this->getDsn($config);
 
-        $options = $this->getOptions($config);
-
-        $connection = $this->createConnection($dsn, $config, $this->options);
+        $connection = $this->createConnection($dsn, $config, $this->getOptions($config));
 
         $charset = $config['charset'];
 

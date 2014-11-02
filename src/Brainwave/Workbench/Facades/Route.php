@@ -37,51 +37,52 @@ class Route extends StaticalProxyManager
 
     public static function map()
     {
-        return call_user_func_array([self::$app['route.factory'], 'map'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'map'], func_get_args());
     }
 
     public static function get()
     {
-        return call_user_func_array([self::$app['route.factory'], 'get'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'get'], func_get_args());
     }
 
     public static function post()
     {
-        return call_user_func_array([self::$app['route.factory'], 'post'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'post'], func_get_args());
     }
 
     public static function put()
     {
-        return call_user_func_array([self::$app['route.factory'], 'put'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'put'], func_get_args());
     }
 
     public static function patch()
     {
-        return call_user_func_array([self::$app['route.factory'], 'patch'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'patch'], func_get_args());
     }
 
     public static function delete()
     {
-        return call_user_func_array([self::$app['route.factory'], 'delete'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'delete'], func_get_args());
     }
 
     public static function options()
     {
-        return call_user_func_array([self::$app['route.factory'], 'options'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'options'], func_get_args());
     }
 
     public static function group()
     {
-        return call_user_func_array([self::$app['route.factory'], 'group'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'group'], func_get_args());
     }
 
     public static function any()
     {
-        return call_user_func_array([self::$app['route.factory'], 'any'], func_get_args());
+        return call_user_func_array([self::$app['route'], 'any'], func_get_args());
     }
 
     public static function pattern(array $array)
     {
-        \app\Routing\Route::setDefaultConditions($array);
+        $route = self::$app['route'];
+        $route::setDefaultConditions($array);
     }
 }

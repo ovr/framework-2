@@ -12,3 +12,4 @@ build/
 .*.sw*
 .*.un~
 .buildpath
+.idea

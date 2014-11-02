@@ -43,7 +43,7 @@ interface LoaderInterface
      * @param  string  $namespace
      * @param  string  $environment
      * @param  string  $group
-     * @return bool
+     * @return bool|array
      */
     public function exists($file, $group = null, $environment = null, $namespace = null);
 

@@ -66,7 +66,7 @@ class NullCache extends TaggableStore implements DriverInterface
      * @param  int     $minutes
      * @return void
      */
-    public function store($key, $value, $minutes)
+    public function set($key, $value, $minutes)
     {
         //
     }

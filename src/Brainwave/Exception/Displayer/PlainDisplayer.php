@@ -18,7 +18,7 @@ namespace Brainwave\Exception\Displayer;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
 use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
 
 /**
@@ -32,8 +32,9 @@ use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
 class PlainDisplayer implements ExceptionDisplayerInterface
 {
     /**
-     * [$app description]
-     * @var [type]
+     * App
+     *
+     * @var \Pimple\Container
      */
     protected $app;
 
@@ -44,17 +45,23 @@ class PlainDisplayer implements ExceptionDisplayerInterface
     private $charset;
 
     /**
-     * @param Workbench $app Brainwave\Workbench\Workbench
+     * 
+     *
+     * @param Container $app \Pimple\Container
      * @param string    $charset language
+     * @param boolen    $console
      */
-    public function __construct(Workbench $app, $charset)
+    public function __construct(Container $app, $charset, $console)
     {
         $this->app = $app;
         $this->charset = strtolower($charset);
     }
 
     /**
-     * Error handler
+     * Show Exception
+     *
+     * @param  string $exception [description]
+     * @return void
      */
     public function display($exception = '')
     {
@@ -66,7 +73,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
         $header = 'The application could not run because of the following error:';
         $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app::footer', 'narrowspark');
 
-        if ($exception instanceof \Exception) {
+        if ($exception instanceof \Exception || $exception instanceof \ErrorException) {
             $code = $exception->getCode();
             $message = $exception->getMessage();
             $file = $exception->getFile();
@@ -134,7 +141,7 @@ EOF;
      * @param  string $css     The css of the HTML template
      * @return string
      */
-    public function decorate($title, $header, $content, $footer, $css = '', $js = '')
+    public function decorate($title, $header, $content, $footer = '', $css = '', $js = '')
     {
         $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app['settings']->get('app::footer', 'narrowspark');
 

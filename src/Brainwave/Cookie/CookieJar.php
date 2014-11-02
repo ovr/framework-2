@@ -159,7 +159,7 @@ class CookieJar extends Collection implements CookiesJarInterface
      *
      * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
      * @param string                                      $name
-     * @param string                                      $value
+     * @param string|array                                $value
      * @api
      */
     public function setHeader(HeadersInterface $headers, $name, $value)

@@ -178,7 +178,7 @@ class Arr
      */
     public static function arrayLast($array, $callback, $default = null)
     {
-        return arrayFirst(array_reverse($array), $callback, $default);
+        return self::arrayFirst(array_reverse($array), $callback, $default);
     }
 
     /**
@@ -536,8 +536,8 @@ class Arr
     /**
      * Return the given object. Useful for chaining.
      *
-     * @param  \Brainwave\Environment\EnvironmentDetector  $object
-     * @return \Brainwave\Environment\EnvironmentDetector
+     * @param  $object
+     * @return void
      */
     public static function with($object)
     {

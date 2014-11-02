@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Environment;
+namespace Brainwave\Workbench\Environment;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,8 +18,10 @@ namespace Brainwave\Environment;
  *
  */
 
+use \Pimple\Container;
 use \Brainwave\Collection\Collection;
-use \Brainwave\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Workbench\Environment\EnvironmentDetector;
+use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
 
 /**
  * Environment
@@ -55,10 +57,14 @@ class Environment extends Collection implements EnvironmentInterface
 
     /**
      * Constructor, will parse an array for environment information if present
-     * @param array $environment
+     *
+     * @param Container $app
+     * @param array     $environment
      */
-    public function __construct($environment = null)
+    public function __construct(Container $app, $environment = null)
     {
+        $this->app = $app;
+
         if (!is_null($environment)) {
             $this->parse($environment);
         }
@@ -94,5 +100,53 @@ class Environment extends Collection implements EnvironmentInterface
         $settings = array_merge($this->mocked, $settings);
 
         $this->parse($settings);
+    }
+
+    /**
+     * Get or check the current application environment.
+     *
+     * @param  dynamic
+     * @return string
+     */
+    public function environment()
+    {
+        if (count(func_get_args()) > 0) {
+            return in_array($this->app['env'], func_get_args());
+        }
+
+        return $this->app['env'];
+    }
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param  array|string  $envs
+     * @return string
+     */
+    public function detectEnvironment($envs)
+    {
+        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
+
+        return $this->app['env'] = $this->app['environment.detector']->detect($envs, $args);
+    }
+
+    /**
+     * Determine if we are running unit tests.
+     *
+     * @return string
+     */
+    public function runningUnitTests()
+    {
+        return $this->app['env'] = 'testing';
+    }
+
+    /**
+     * Determine if we are running console.
+     *
+     * @return string
+     */
+    public function runningInConsole()
+    {
+        return php_sapi_name() === 'cli';
     }
 }

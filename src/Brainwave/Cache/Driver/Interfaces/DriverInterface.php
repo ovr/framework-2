@@ -83,7 +83,7 @@ interface DriverInterface
      *
      * @param  string  $key
      * @param  integer   $value
-     * @return int|bool
+     * @return int|double
      */
     public function decrement($key, $value = 1);
 

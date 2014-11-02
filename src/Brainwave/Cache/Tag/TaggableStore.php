@@ -18,8 +18,8 @@ namespace Brainwave\Cache\Tag;
  *
  */
 
-use \Brainwave\Cache\TagSet;
-use \Brainwave\Cache\TaggedCache;
+use \Brainwave\Cache\Tag\TagSet;
+use \Brainwave\Cache\Tag\TaggedCache;
 
 /**
  * TaggableStore

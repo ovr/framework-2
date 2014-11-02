@@ -33,42 +33,47 @@ class JsonEngine implements EnginesInterface
 {
     /**
      * Set Path
+     *
      * @var string
      */
     protected $status;
 
     /**
      * App
+     *
      * @var \Brainwave\Workbanch\Workbanch
      */
     protected $app;
 
     /**
      * Json data
+     *
      * @var array
      */
-    protected $collection;
+    protected $factory;
 
     /**
+     * Construct
      *
-     * @param Workbench $app        \Brainwave\Workbench\Workbench
-     * @param \Brainwave\View\ViewFactory $collection
+     * @param \Brainwave\Workbench\Workbench $app
+     * @param \Brainwave\View\ViewFactory    $factory
      */
-    public function __construct(Workbench $app, $collection)
+    public function __construct(Workbench $app, ViewFactory $factory)
     {
         $this->app = $app;
-        $this->collection = $collection;
+        $this->factory = $factory;
     }
 
     /**
      * Get the evaluated contents of the view.
+     *
      * @param  array   $data
      * @return string
      */
     public function get(array $data = [])
     {
-        if ($data['options'] === $options = $this->app['settings']['http::json.option']) {
-            $options;
+        if ($data['options'] === $this->app['settings']['http::json.option']) {
+            $options = $this->app['settings']['http::json.option'];
         } else {
             $options = $data['options'];
         }
@@ -82,6 +87,7 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Set path
+     *
      * @param string $path
      * @return $this \Brainwave\View\Engines
      */
@@ -93,6 +99,7 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given status.
+     *
      * @param  integer  $status
      * @param  array   $data
      * @return string
@@ -100,10 +107,10 @@ class JsonEngine implements EnginesInterface
     protected function evaluateStatus($status = 200, array $data = [], $option = 0)
     {
         $app = $this->app;
-        $collection = $this->collection;
+        $factory = $this->factory;
 
         //append error bool
-        if (!$collection->has('error')) {
+        if (!$factory->has('error')) {
             $data['error'] = false;
         } elseif ($status == 404 || $status == 500) {
             $data['error'] = true;
@@ -161,6 +168,7 @@ class JsonEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
+     *
      * @param  \Exception  $e
      * @return void
      * @throws $e

@@ -24,7 +24,7 @@ use \GuzzleHttp\Stream\StreamInterface;
 use \Brainwave\Http\Interfaces\HeadersInterface;
 use \Brainwave\Http\Interfaces\RequestInterface;
 use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
-use \Brainwave\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
 
 /**
  * HTTP Request
@@ -64,7 +64,7 @@ class Request implements RequestInterface
     /**
      * Application environment
      *
-     * @var \Brainwave\Environment\Interfaces\EnvironmentInterface
+     * @var \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface
      */
     protected $env;
 
@@ -113,10 +113,10 @@ class Request implements RequestInterface
     /**
      * Constructor
      *
-     * @param \Brainwave\Environment\Interfaces\EnvironmentInterface  $env
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param CookiesJarInterface $cookies
-     * @param string                                 $body
+     * @param EnvironmentInterface  $env
+     * @param HeadersInterface      $headers
+     * @param CookiesJarInterface   $cookies
+     * @param string                $body
      * @api
      */
     public function __construct(

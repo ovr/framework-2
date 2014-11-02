@@ -36,7 +36,7 @@ interface ViewInterface
     public function make($engine, $template, array $data = []);
 
     /**
-     * @param |null $template
+     * @param null $template
      *
      * @return string
      */

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception\Interfaces;
+namespace Brainwave\Workbench\Environment;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,27 +19,28 @@ namespace Brainwave\Exception\Interfaces;
  */
 
 use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\Workbench\Environment\Environment;
+use \Brainwave\Workbench\Environment\EnvironmentDetector;
 
 /**
- * ExceptionDisplayerInterface
+ * EnvironmentServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.3-dev
  *
  */
-interface ExceptionDisplayerInterface
+class EnvironmentServiceProvider implements ServiceProviderInterface
 {
-    /**
-     * @param Container $app
-     * @param string    $charset language
-     */
-    public function __construct(Container $app, $charset, $console);
+    public function register(Container $app)
+    {
+        $app['environment.detector'] = function () {
+            return new EnvironmentDetector();
+        };
 
-    /**
-     * Display the given exception to the user.
-     *
-     * @param  \Exception  $exception
-     */
-    public function display($exception);
+        $app['environment'] = function ($app) {
+            return new Environment($app);
+        };
+    }
 }

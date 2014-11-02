@@ -18,11 +18,9 @@ namespace Brainwave\Exception;
  *
  */
 
+use \Pimple\Container;
 use \Brainwave\Routing\Route;
-use \Brainwave\Workbench\Workbench;
 use \Brainwave\Workbench\Exception\Stop;
-use \Brainwave\Exception\Displayer\PlainDisplayer;
-use \Brainwave\Exception\Displayer\WhoopsDisplayer;
 use \Brainwave\Exception\Exception\FatalErrorException as FatalError;
 
 /**
@@ -36,16 +34,11 @@ use \Brainwave\Exception\Exception\FatalErrorException as FatalError;
 class ExceptionHandler
 {
     /**
-     * Brainwave
-     * @var void
+     * Container
+     *
+     * @var \Pimple\Container
      */
     private $app;
-
-    /**
-     * Set the editor
-     * @var string
-     */
-    protected $whoopsEditor = 'sublime';
 
     /**
      * All of the register exception handlers.
@@ -53,15 +46,14 @@ class ExceptionHandler
      */
     protected $handlers = [];
 
-    public function __construct(Workbench $app, $charset)
+    /**
+     * [__construct description]
+     *
+     * @param Container $app     [description]
+     */
+    public function __construct(Container $app)
     {
         $this->app = $app;
-
-        $this->plainDisplayer(new PlainDisplayer($app, strtolower($charset)));
-
-        if (class_exists('\Whoops\Run')) {
-            $this->whoopsDisplayer(new WhoopsDisplayer($app, strtolower($charset)));
-        }
     }
 
     /**
@@ -75,7 +67,7 @@ class ExceptionHandler
 
         $this->registerExceptionHandler();
 
-        if ($this->app['env'] != 'testing') {
+        if ($this->app['env'] !== 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -188,12 +180,12 @@ class ExceptionHandler
 EOF;
         $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app::footer', 'narrowspark');
 
-        return $this->app['displayer.plain']->decorate(
+        return $this->app['exception.plain']->decorate(
             $title,
             $header,
             $content,
             $footer,
-            $this->app['displayer.plain']->getStylesheet('pageNotFound')
+            $this->app['exception.plain']->getStylesheet('pageNotFound')
         );
     }
 
@@ -275,7 +267,7 @@ EOF;
             // If this handler returns a "non-null" response, we will return it so it will
             // get sent back to the browsers. Once the handler returns a valid response
             // we will cease iterating through them and calling these other handlers.
-            if (isset($response) && ! is_null($response)) {
+            if (isset($response) && !is_null($response)) {
                 return $response;
             }
         }
@@ -295,7 +287,7 @@ EOF;
         ob_start();
 
         if (is_array($this->app['error'])) {
-            call_user_func_array([new $this->app['error'][0], $this->app['error'][1]], array($argument));
+            call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
         } elseif (is_callable($this->app['error'])) {
             call_user_func($this->app['error'], [$argument]);
         } else {
@@ -320,10 +312,9 @@ EOF;
             $settings->get('app::mode', 'production') === 'testing' &&
             $settings->get('app::debug', false) === true
         ) {
-
-            ($settings['app::exception.handler'] == 'whoops') ?
-            $ext = $this->app['displayer.whoops']->display($exception) :
-            $ext = $this->app['displayer.plain']->display($exception);
+            ($settings['app::exception.handler'] === 'whoops') ?
+            $ext = $this->app['exception.debug']->display($exception) :
+            $ext = $this->app['exception.plain']->display($exception);
         } else {
             $ext = $this->noException($exception);
         }
@@ -340,9 +331,7 @@ EOF;
     protected function noException($exception)
     {
         //Log error
-        if (class_exists('\Monolog\Logger')) {
-            $this->app['logger']->addRecord('error', $exception);
-        }
+        $this->app['logger']->addRecord('error', $exception);
 
         //Set error status
         $this->app['response']->setStatus(503);
@@ -428,7 +417,7 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer, $css = '', $js = '')
     {
-        return $this->app['displayer.plain']->decorate($title, $header, $content, $footer, $css, $js);
+        return $this->app['exception.plain']->decorate($title, $header, $content, $footer, $css, $js);
     }
 
     /**
@@ -437,30 +426,16 @@ EOF;
     */
     public function getStylesheet($mode = 'exception')
     {
-        return $this->app['displayer.plain']->getStylesheet($mode);
-    }
-
-   /**
-    * Instance of PlainDisplayer
-    *
-    * @param type PlainDisplayer $displayer
-    * @return self
-    */
-    protected function plainDisplayer(PlainDisplayer $displayer)
-    {
-        $this->app['displayer.plain'] = $displayer;
-        return $this;
+        return $this->app['exception.plain']->getStylesheet($mode);
     }
 
     /**
-    * Instance of WhoopsDisplayer
-    *
-    * @param type WhoopsDisplayer $displayer
-    * @return self
-    */
-    protected function whoopsDisplayer(WhoopsDisplayer $displayer)
+     * Determine if we are running in the console.
+     *
+     * @return bool
+     */
+    public function runningInConsole()
     {
-        $this->app['displayer.whoops'] = $displayer;
-        return $this;
+        return php_sapi_name() == 'cli';
     }
 }

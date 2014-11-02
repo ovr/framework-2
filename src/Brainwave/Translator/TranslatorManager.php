@@ -199,9 +199,9 @@ class TranslatorManager implements TranslatorInterface
      * Get the translation for a given string.
      *
      * @param  String         $orig     The original string.
-     * @param  boolean|String $language The language that the translation is written in. (e.g. 'en').
+     * @param  Boolean|String $language The language that the translation is written in. (e.g. 'en').
      *
-     * @return String The translated string.
+     * @return String|False The translated string.
      */
     public function getTranslation($orig, $language = false, $replacements = null)
     {

@@ -95,7 +95,7 @@ class RedisCache extends TaggableStore implements DriverInterface
     {
         $options = array_filter($options);
 
-        if (!empty(parameters)) {
+        if (!empty($parameters)) {
             $redis = Client($parameters);
         } elseif (!empty($parameters) && !empty($options)) {
             $redis = Client($parameters, $options);
@@ -113,7 +113,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      * @param  string  $prefix
      * @return DriverInterface
      */
-    public function __construct(Client $redis, $prefix = '')
+    public function __construct(Client $redis, $prefix = '', $connection = 'default')
     {
         $this->redis = $redis;
         $this->connection = $connection;
@@ -194,7 +194,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      */
     public function forget($key)
     {
-        return $this->connection->del($this->prefix.$key);
+        return $this->connection()->del($this->prefix.$key);
     }
 
     /**
@@ -204,7 +204,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      */
     public function flush()
     {
-        return $this->connection->flushDB();
+        return $this->connection()->flushDB();
     }
 
     /**

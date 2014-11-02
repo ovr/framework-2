@@ -18,6 +18,8 @@ namespace Brainwave\Support;
  *
  */
 
+use \Patchwork\Utf8;
+
 /**
  * Str
  *
@@ -36,7 +38,7 @@ class Str
      */
     public static function ascii($value)
     {
-        return \Patchwork\Utf8::toAscii($value);
+        return Utf8::toAscii($value);
     }
 
     /**

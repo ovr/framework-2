@@ -132,7 +132,7 @@ class FileLoader implements LoaderInterface
      * @param  string  $namespace
      * @param  string  $environment
      * @param  string  $group
-     * @return bool
+     * @return bool|array
      */
     public function exists($file, $group = null, $environment = null, $namespace = null)
     {
@@ -190,7 +190,7 @@ class FileLoader implements LoaderInterface
      */
     public function cascadePackage(
         $file,
-        $package = null,
+        $packages = null,
         $group = null,
         $env = null,
         $items = null,
@@ -359,7 +359,6 @@ class FileLoader implements LoaderInterface
                 throw new \RuntimeException(
                     sprintf("Unable to find the right driver for '%s'", $ext)
                 );
-                break;
         }
 
         if ($driver->supports($path)) {

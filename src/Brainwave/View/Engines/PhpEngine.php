@@ -38,6 +38,7 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view.
+     *
      * @param  array   $data
      * @return string
      */
@@ -48,6 +49,7 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Set path
+     *
      * @param string $path
      * @return $this \Brainwave\View\Engines
      */
@@ -59,6 +61,7 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given path.
+     *
      * @param  string  $path
      * @param  array   $data
      * @return string
@@ -93,6 +96,7 @@ class PhpEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
+     *
      * @param  \Exception  $e
      * @return void
      * @throws $e

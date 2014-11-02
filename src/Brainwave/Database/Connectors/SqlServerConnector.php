@@ -52,9 +52,7 @@ class SqlServerConnector extends Connectors implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        $options = $this->getOptions($config);
-
-        return $this->createConnection($this->getDsn($config), $config, $this->options);
+        return $this->createConnection($this->getDsn($config), $config, $this->getOptions($config));
     }
 
     /**

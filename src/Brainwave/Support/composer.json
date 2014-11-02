@@ -16,7 +16,8 @@
     "require": {
         "php": ">=5.4.0",
         "jeremeamia/superclosure": "~1.0",
-        "patchwork/utf8": "1.1.*"
+        "patchwork/utf8": "1.1.*",
+        "league/fractal": "0.10.*@dev"
     },
     "autoload": {
         "psr-4": {

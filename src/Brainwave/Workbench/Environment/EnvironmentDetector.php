@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Environment;
+namespace Brainwave\Workbench\Environment;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -28,15 +28,19 @@ namespace Brainwave\Environment;
  */
 class EnvironmentDetector
 {
-
     /**
      * Detect the application's current environment.
      *
      * @param  array|string  $environments
+     * @param  array|null  $consoleArgs
      * @return string
      */
-    public function detect($environments)
+    public function detect($environments, $consoleArgs = null)
     {
+        if ($consoleArgs) {
+            return $this->detectConsoleEnvironment($environments, $consoleArgs);
+        }
+
         return $this->detectWebEnvironment($environments);
     }
 
@@ -67,6 +71,38 @@ class EnvironmentDetector
         }
 
         return 'production';
+    }
+
+    /**
+     * Set the application environment from command-line arguments.
+     *
+     * @param  mixed   $environments
+     * @param  array  $args
+     * @return string
+     */
+    protected function detectConsoleEnvironment($environments, array $args)
+    {
+        // First we will check if an environment argument was passed via console arguments
+        // and if it was that automatically overrides as the environment. Otherwise, we
+        // will check the environment as a "web" request like a typical HTTP request.
+        if (!is_null($value = $this->getEnvironmentArgument($args))) {
+            return head(array_slice(explode('=', $value), 1));
+        }
+
+        return $this->detectWebEnvironment($environments);
+    }
+
+    /**
+     * Get the environment argument from the console.
+     *
+     * @param  array  $args
+     * @return string|null
+     */
+    protected function getEnvironmentArgument(array $args)
+    {
+        return array_first($args, function ($k, $v) {
+            return starts_with($v, '--env');
+        });
     }
 
     /**

@@ -67,6 +67,28 @@ class ConfigurationHandler implements ConfigurationHandlerInterface
     }
 
     /**
+     * Set Separator
+     *
+     * @param string $separator
+     */
+    public function setSeparator($separator)
+    {
+        $this->separator = $separator;
+
+        return $this;
+    }
+
+    /**
+     * Get Separator
+     *
+     * @return string
+     */
+    public function getSeparator()
+    {
+        $this->separator;
+    }
+
+    /**
      * Get all values as nested array
      *
      * @return array

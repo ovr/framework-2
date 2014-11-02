@@ -185,9 +185,20 @@ class Repository implements ArrayAccess
             return $value;
         }
 
-        $this->forever($key, $value = $callback());
+        $this->remember($key, 0, $value = $callback());
 
         return $value;
+    }
+
+    /**
+     * Remove an item from the cache.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function forget($key)
+    {
+        return $this->store->forget($key);
     }
 
     /**

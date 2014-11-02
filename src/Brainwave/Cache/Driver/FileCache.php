@@ -35,7 +35,7 @@ class FileCache implements DriverInterface
     /**
      * The Brainwave Filesystem instance.
      *
-     * @var \Brainwave\Support\Filesystem\Interfaces\FilesystemInterface
+     * @var \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     protected $files;
 

@@ -18,7 +18,7 @@ namespace Brainwave\Workbench\Interfaces;
  *
  */
 
-use \Pimple\Container;
+use \Brainwave\Workbench\Workbench;
 
 /**
  * View Interface
@@ -36,7 +36,8 @@ interface BootableProviderInterface
      * This method is called after all services are registered
      * and should be used for "dynamic" configuration (whenever
      * a service must be requested).
+     *
      * @return void
      */
-    public function boot(Container $app);
+    public function boot(Workbench $app);
 }

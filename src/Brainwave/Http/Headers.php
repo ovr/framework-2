@@ -20,7 +20,7 @@ namespace Brainwave\Http;
 
 use \Brainwave\Collection\Collection;
 use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
 
 /**
  * Headers
