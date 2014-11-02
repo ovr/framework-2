@@ -1,6 +1,5 @@
 /vendor
 composer.phar
-composer.lock
 Thumbs.db
 ftpsync.settings
 sftp-config.json
