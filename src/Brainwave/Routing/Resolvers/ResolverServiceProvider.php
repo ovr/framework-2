@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Resolvers;
+namespace Brainwave\Routing\Resolvers;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -20,9 +20,9 @@ namespace Brainwave\Resolvers;
 
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Resolvers\CallableResolver;
-use \Brainwave\Resolvers\ContainerResolver;
-use \Brainwave\Resolvers\DependencyResolver;
+use \Brainwave\Routing\Resolvers\CallableResolver;
+use \Brainwave\Routing\Resolvers\ContainerResolver;
+use \Brainwave\Routing\Resolvers\DependencyResolver;
 
 /**
  * ResolverServiceProvider

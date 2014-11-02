@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Resolvers\Interfaces;
+namespace Brainwave\Routing\Resolvers\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework

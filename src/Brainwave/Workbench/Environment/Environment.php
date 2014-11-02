@@ -127,7 +127,7 @@ class Environment extends Collection implements EnvironmentInterface
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 
-        return $this->app['env'] = $this->app['environment.detector']->detect($envs, $args);
+        return $this->app['env'] = $this->detect($envs, $args);
     }
 
     /**
@@ -148,5 +148,148 @@ class Environment extends Collection implements EnvironmentInterface
     public function runningInConsole()
     {
         return php_sapi_name() === 'cli';
+    }
+
+    /**
+     * Determine if the name matches the machine name.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function isMachine($name)
+    {
+        return str_is($name, gethostname());
+    }
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param  array|string  $environments
+     * @param  array|null  $consoleArgs
+     * @return string
+     */
+    public function detect($environments, $consoleArgs = null)
+    {
+        if ($consoleArgs) {
+            return $this->detectConsoleEnvironment($environments, $consoleArgs);
+        }
+
+        return $this->detectWebEnvironment($environments);
+    }
+
+    /**
+     * Returns true when the runtime used is HHVM or
+     * the runtime used is PHP + Xdebug.
+     *
+     * @return boolean
+     */
+    public function canCollectCodeCoverage()
+    {
+        return $this->isHHVM() || $this->hasXdebug();
+    }
+
+    /**
+     * Returns the running php/HHVM version
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        if ($this->isHHVM()) {
+            return HHVM_VERSION;
+        } else {
+            return PHP_VERSION;
+        }
+    }
+
+    /**
+     * Returns true when the runtime used is PHP and Xdebug is loaded.
+     *
+     * @return boolean
+     */
+    public function hasXdebug()
+    {
+        return $this->isPHP() && extension_loaded('xdebug');
+    }
+
+    /**
+     * Returns true when the runtime used is HHVM.
+     *
+     * @return boolean
+     */
+    public function isHHVM()
+    {
+        return defined('HHVM_VERSION');
+    }
+
+    /**
+     * Returns true when the runtime used is PHP.
+     *
+     * @return boolean
+     */
+    public function isPHP()
+    {
+        return !$this->isHHVM();
+    }
+
+    /**
+     * Set the application environment for a web request.
+     *
+     * @param  array|string  $environments
+     * @return string
+     */
+    protected function detectWebEnvironment($environments)
+    {
+        // If the given environment is just a Closure, we will defer the environment check
+        // to the Closure the developer has provided, which allows them to totally swap
+        // the webs environment detection logic with their own custom Closure's code.
+        if ($environments instanceof \Closure) {
+            return call_user_func($environments);
+        }
+
+        foreach ($environments as $environment => $hosts) {
+            // To determine the current environment, we'll simply iterate through the possible
+            // environments and look for the host that matches the host for this request we
+            // are currently processing here, then return back these environment's names.
+            foreach ((array) $hosts as $host) {
+                if ($this->isMachine($host)) {
+                    return $environment;
+                }
+            }
+        }
+
+        return 'production';
+    }
+
+    /**
+     * Set the application environment from command-line arguments.
+     *
+     * @param  mixed   $environments
+     * @param  array  $args
+     * @return string
+     */
+    protected function detectConsoleEnvironment($environments, array $args)
+    {
+        // First we will check if an environment argument was passed via console arguments
+        // and if it was that automatically overrides as the environment. Otherwise, we
+        // will check the environment as a "web" request like a typical HTTP request.
+        if (!is_null($value = $this->getEnvironmentArgument($args))) {
+            return head(array_slice(explode('=', $value), 1));
+        }
+
+        return $this->detectWebEnvironment($environments);
+    }
+
+    /**
+     * Get the environment argument from the console.
+     *
+     * @param  array  $args
+     * @return string|null
+     */
+    protected function getEnvironmentArgument(array $args)
+    {
+        return array_first($args, function ($k, $v) {
+            return starts_with($v, '--env');
+        });
     }
 }

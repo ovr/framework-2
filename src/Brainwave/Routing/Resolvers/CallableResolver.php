@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Resolvers;
+namespace Brainwave\Routing\Resolvers;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,34 +18,18 @@ namespace Brainwave\Resolvers;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Resolvers\Interfaces\CallableResolverInterface;
+use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
 
 /**
- * DependencyResolver
+ * CallableResolver
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class DependencyResolver implements CallableResolverInterface
+class CallableResolver implements CallableResolverInterface
 {
-    /**
-     * Application Brainwave\Workbench\Workbench
-     * @var bool
-     */
-    private $app;
-
-    /**
-     * Set Application
-     * @param $app Brainwave\Workbench\Workbench
-     */
-    public function __construct(Workbench $app)
-    {
-        $this->app = $app;
-    }
-
     /**
      * [build description]
      * @param  [type] $callable [description]
@@ -53,17 +37,26 @@ class DependencyResolver implements CallableResolverInterface
      */
     public function build($callable)
     {
-        if (is_string($callable) &&
-            preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        $matches = [];
 
-            $service = $matches[1];
+        if (is_string($callable) &&
+            preg_match(
+                '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!',
+                $callable,
+                $matches
+            )
+        ) {
+            $class = $matches[1];
             $method = $matches[2];
 
-            if (!isset($this->app[$service])) {
-                throw new \InvalidArgumentException('Route key does not exist in Workbench');
-            }
+            $callable = function () use ($class, $method) {
+                static $obj = null;
+                if ($obj === null) {
+                    $obj = new $class;
+                }
 
-            $callable =  [$this->app[$service],$method];
+                return call_user_func_array(array($obj, $method), func_get_args());
+            };
         }
 
         if (!is_callable($callable)) {

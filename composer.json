@@ -27,7 +27,6 @@
         "league/flysystem": "~0.5.6",
         "league/fractal": "0.10.*@dev",
         "vlucas/phpdotenv": "1.0.*@dev",
-        "sebastian/environment": "1.0.*",
         "jeremeamia/superclosure": "~1.0.1",
         "swiftmailer/swiftmailer": "~5.2",
         "classpreloader/classpreloader": "1.1.*"

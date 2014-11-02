@@ -18,40 +18,59 @@ namespace Brainwave\Routing\Controller;
  *
  */
 
-use \Brainwave\Http\Request;
-use \Brainwave\Routing\Route;
-use \Brainwave\Routing\Router;
+use \Pimple\Container;
+use \Brainwave\Routing\RouteCollection;
 use \Brainwave\Routing\Controller\Controller;
+use \Brainwave\Routing\Controller\ControllerCollection;
 
 /**
  * ControllerCollection
  *
- * Builds Brainwave controllers.
- *
- * It acts as a staging area for routes. You are able to set the route name
- * until flush() is called, at which point all controllers are frozen and
- * converted to a RouteCollection.
- *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.3-dev
  *
  */
-class ControllerCollection
+class ControllerCollection extends RouteCollection
 {
+    /**
+     * All registred controllers
+     *
+     * @var array
+     */
     protected $controllers = [];
-    protected $defaultRoute;
+
+    /**
+     * Router instance
+     *
+     * @var \Brainwave\Routing\Router
+     */
     protected $defaultRouter;
 
     /**
-     * Constructor.
+     * Controller route prefix
+     *
+     * @var string
      */
-    public function __construct(Route $defaultRoute, Router $defaultRouter)
+    protected $prefix;
+
+    /**
+     * ControllerCollection
+     *
+     * @param Container $app
+     */
+    public function __construct(Container $app)
     {
-        $this->defaultRoute = $defaultRoute;
-        $this->defaultRouter = $defaultRouter;
+        parent::__construct($app);
+
+        $this->defaultRouter = $app['router'];
     }
 
+    /**
+     * Get all controllers
+     *
+     * @return array
+     */
     public function getControllers()
     {
         return $this->controllers;
@@ -62,21 +81,11 @@ class ControllerCollection
      *
      * You can optionally specify HTTP methods that should be matched.
      *
-     *
      * @return \Brainwave\Routing\Controller\Controller
      */
     public function match($args)
     {
-        $pattern = array_shift($args);
-        $to = array_pop($args);
-
-        $route = clone $this->defaultRoute;
-        $route->setPattern($pattern);
-        $route->setCallable($to);
-
-        if (count($args) > 0) {
-            $route->setMiddleware($args);
-        }
+        $route = parent::match($args);
 
         $this->controllers[] = $controller = new Controller($route);
 
@@ -84,97 +93,23 @@ class ControllerCollection
     }
 
     /**
-     * Add route without HTTP method
-     * @return Controller
+     * Mounts controllers under the given route prefix.
+     *
+     * @param string               $prefix      The route prefix
+     * @param ControllerCollection $controllers A ControllerCollection instance
      */
-    public function map()
+    public function mount($prefix, ControllerCollection $controllers)
     {
-        $args = func_get_args();
-        return $this->match($args);
-    }
+        $controllers->prefix = $prefix;
 
-    /**
-     * Add GET route
-     * @return Route
-     * @api
-     */
-    public function get()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_GET, Request::METHOD_HEAD);
-    }
-
-    /**
-     * Add POST route
-     * @return Route
-     * @api
-     */
-    public function post()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_POST);
-    }
-
-    /**
-     * Add PUT route
-     * @return Route
-     * @api
-     */
-    public function put()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_PUT);
-    }
-
-    /**
-     * Add PATCH route
-     * @return Route
-     * @api
-     */
-    public function patch()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_PATCH);
-    }
-
-    /**
-     * Add DELETE route
-     * @return Route
-     * @api
-     */
-    public function delete()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_DELETE);
-    }
-
-    /**
-     * Add OPTIONS route
-     * @return Route
-     * @api
-     */
-    public function options()
-    {
-        $args = func_get_args();
-        return $this->match($args)->via(Request::METHOD_OPTIONS);
-    }
-
-    /**
-     * Add route for any HTTP method
-     * @return Route
-     * @api
-     */
-    public function any()
-    {
-        $args = func_get_args();
-
-        return $this->match($args)->via("ANY");
+        $this->controllers[] = $controllers;
     }
 
     /**
      * Persists and freezes staged controllers.
      *
      * @param string $prefix
+     * @return RouteCollection A RouteCollection instance
      */
     public function flush($prefix = '')
     {
@@ -186,5 +121,37 @@ class ControllerCollection
 
             $this->defaultRouter->map($controller->getRoute());
         }
+    }
+
+    /**
+     * Call Route functions and controller function
+     *
+     * @param  string $method
+     * @param  array $arguments
+     * @return RouteCollection A RouteCollection instance
+     */
+    public function __call($method, array $arguments)
+    {
+        $defaultRoute = $this->app['routes.factory'];
+
+        if (!method_exists($defaultRoute, $method)) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'Method "%s::%s" does not exist.',
+                    get_class($defaultRoute),
+                    $method
+                )
+            );
+        }
+
+        call_user_func_array(array($defaultRoute, $method), $arguments);
+
+        foreach ($this->controllers as $controller) {
+            if ($controller instanceof Controller) {
+                call_user_func_array(array($controller, $method), $arguments);
+            }
+        }
+
+        return $this;
     }
 }

@@ -507,7 +507,8 @@ class Workbench extends Container
      * registered and is callable, it is invoked and sends a 404 HTTP Response
      * whose body is the output of the Not Found handler.
      *
-     * @param  mixed $callable Anything that returns true for is_callable()
+     * @param mixed $callable Anything that returns true for is_callable()
+     *
      * @api
      */
     public function notFound($callable = null)
@@ -551,6 +552,7 @@ class Workbench extends Container
      *
      * @param  int                       $time  The last modified UNIX timestamp
      * @throws \InvalidArgumentException        If provided timestamp is not an integer
+     *
      * @api
      */
     public function lastModified($time)
@@ -582,6 +584,7 @@ class Workbench extends Container
      * @param  string                    $value The etag value
      * @param  string                    $type  The type of etag to create; either "strong" or "weak"
      * @throws \InvalidArgumentException        If provided type is invalid
+     *
      * @api
      */
     public function etag($value, $type = 'strong')
@@ -617,8 +620,9 @@ class Workbench extends Container
      * if the resource has not changed. The `Expires` header should be used in
      * conjunction with the `etag()` or `lastModified()` methods above.
      *
-     * @param string|int    $time   If string, a time to be parsed by `strtotime()`;
-     *                              If int, a UNIX timestamp;
+     * @param string|int $time If string, a time to be parsed by `strtotime()`;
+     *                         If int, a UNIX timestamp;
+     *
      * @api
      */
     public function expires($time)
@@ -637,6 +641,7 @@ class Workbench extends Container
      *
      * @return string
      * @throws \RuntimeException If $_SERVER[SCRIPT_FILENAME] is not available
+     *
      * @api
      */
     public function root()
@@ -658,6 +663,7 @@ class Workbench extends Container
      * and the response will be sent as is to the HTTP client.
      *
      * @throws Stop
+     *
      * @api
      */
     public function stop()
@@ -672,7 +678,8 @@ class Workbench extends Container
      * specific status and body to the HTTP client. This may send any
      * type of response: info, success, redirect, client error, or server error.
      *
-     * @param  int    $status  The HTTP response status
+     * @param int $status The HTTP response status
+     *
      * @api
      */
     public function halt($status, $message = '')
@@ -690,6 +697,7 @@ class Workbench extends Container
      * If no subsequent matching Routing are found, a 404 response will be sent to the client.
      *
      * @throws Pass
+     *
      * @api
      */
     public function pass()
@@ -700,6 +708,7 @@ class Workbench extends Container
     /**
      * Set the HTTP response Content-Type
      * @param  string $type The Content-Type for the Response (ie. text/html)
+     *
      * @api
      */
     public function contentType($type)
@@ -710,6 +719,7 @@ class Workbench extends Container
     /**
      * Set the HTTP response status code
      * @param  int $code The HTTP response status code
+     *
      * @api
      */
     public function status($code)
@@ -722,15 +732,16 @@ class Workbench extends Container
      *
      * This method streams a local or remote file to the client
      *
-     * @param  string $file        The URI of the file, can be local or remote
-     * @param  string $contentType Optional content type of the stream,
-     *         if not specified Brainwave will attempt to get this
+     * @param string $file        The URI of the file, can be local or remote
+     * @param string $contentType Optional content type of the stream,
+     *                            if not specified Brainwave will attempt to get this
      * @api
      */
     public function sendFile($file, $contentType = false)
     {
         $fp = fopen($file, "r");
         $this['response']->setBody(new Stream($fp));
+
         if ($contentType) {
             $this['response']->setHeader("Content-Type", $contentType);
         } else {
@@ -773,8 +784,8 @@ class Workbench extends Container
      *
      * This method streams a process to a client
      *
-     * @param  string $command     The command to run
-     * @param  string $contentType Optional content type of the stream
+     * @param string $command     The command to run
+     * @param string $contentType Optional content type of the stream
      * @api
      */
     public function sendProcess($command, $contentType = "text/plain")
@@ -793,11 +804,11 @@ class Workbench extends Container
      */
     public function setDownload($filename = false)
     {
-        $h = "attachment;";
+        $download = "attachment;";
         if ($filename) {
-            $h .= "filename='" . $filename . "'";
+            $download .= "filename='" . $filename . "'";
         }
-        $this['response']->setHeader("Content-Disposition", $h);
+        $this['response']->setHeader("Content-Disposition", $download);
     }
 
     /**
@@ -806,7 +817,7 @@ class Workbench extends Container
      * This method prepends new middleware to the application middleware stack.
      * The argument must be an instance that subclasses Brainwave Middleware.
      *
-     * @param  Middleware
+     * @param Middleware
      * @api
      */
     public function middleware(Middleware $newMiddleware)
@@ -999,8 +1010,7 @@ class Workbench extends Container
     /**
      * Shutdown The Application
      *
-     * @return Flush the output buffer.
-     *         Turns off exception handling
+     * @return Flush the output buffer. Turns off exception handling
      */
     public function shutdown()
     {
@@ -1021,8 +1031,8 @@ class Workbench extends Container
      * The provided Request and Response objects are updated by reference. There is no
      * value returned by this method.
      *
-     * @param  Request  Request request instance
-     * @param  Response Response response instance
+     * @param Request  Request request instance
+     * @param Response Response response instance
      */
     protected function dispatchRequest(Request $request, Response $response)
     {
@@ -1164,6 +1174,7 @@ class Workbench extends Container
 
     /**
      * Gets a parameter or an object.
+     *
      * @param string $id The unique identifier for the parameter or object
      * @return mixed The value of the parameter or an object
      */
@@ -1174,6 +1185,7 @@ class Workbench extends Container
 
     /**
      * Sets a parameter or an object.
+     *
      * @param string           $id    The unique identifier for the parameter or object
      * @param mixed            $value The value of the parameter or a closure to define an object
      * @return Workbench
@@ -1186,6 +1198,7 @@ class Workbench extends Container
 
     /**
      * Checks if a parameter or an object is set.
+     *
      * @param string $id The unique identifier for the parameter or object
      * @return Boolean
      */
@@ -1196,6 +1209,7 @@ class Workbench extends Container
 
     /**
      * Description
+     *
      * @param Unsets a parameter or an object.
      * @return string $id The unique identifier for the parameter or object
      */

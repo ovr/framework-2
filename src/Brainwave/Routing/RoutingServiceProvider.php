@@ -21,6 +21,7 @@ namespace Brainwave\Routing;
 use \Pimple\Container;
 use \Brainwave\Routing\Router;
 use \Brainwave\Routing\Redirector;
+use \Brainwave\Workbench\Workbench;
 use \Brainwave\Routing\RouteFactory;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;
@@ -42,11 +43,13 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
     public function register(Container $app)
     {
         $this->app = $app;
+
         $this->registerRouter();
-        $this->registerRouteResolver();
+        $this->registerRedirector();
+        $this->registerControllers();
         $this->registerRouteFactory();
         $this->registerUrlGenerator();
-        $this->registerRedirector();
+        $this->registerRouteResolver();
         $this->registerControllersFactory();
     }
 
@@ -57,8 +60,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouter()
     {
-        $this->app['router'] = function ($c) {
-            return new Router();
+        $this->app['router'] = function ($app) {
+            return new Router($app);
         };
     }
 
@@ -87,7 +90,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
     protected function registerRedirector()
     {
         $this->app['redirect'] = function ($app) {
-            return new Redirector($app['url']);
+            return new Redirector($app['url'], $app);
         };
     }
 
@@ -98,11 +101,11 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteResolver()
     {
-        $this->app['route.resolver'] = function ($c) {
+        $this->app['routes.resolver'] = function ($app) {
             $options = [
-                'routeClass'    => $c['settings']->get('http::route.class', null),
-                'caseSensitive' => $c['settings']->get('http::route.case_sensitive', true),
-                'routeEscape'   => $c['settings']->get('http::route.escape ', false)
+                'routeClass'    => $app['settings']['http::route.class'],
+                'caseSensitive' => $app['settings']['http::route.case_sensitive'],
+                'routeEscape'   => $app['settings']['http::route.escape']
             ];
 
             return function ($pattern, $callable) use ($options) {
@@ -123,8 +126,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteFactory()
     {
-        $this->app['route.factory'] = function ($c) {
-            return new RouteFactory($c, $c['route.resolver']);
+        $this->app['routes.factory'] = function ($app) {
+            return new RouteFactory($app, $app['routes.resolver'], $app['controller.factory']);
         };
     }
 
@@ -135,8 +138,22 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerControllersFactory()
     {
-        $this->app['controllers.factory'] = function ($c) {
-            return new ControllerCollection($c['route.resolver'], $c['router']);
+        $this->app['controller.factory'] = function ($class) {
+            return function ($class) {
+                return new $class;
+            };
+        };
+    }
+
+    /**
+     * Register Controllers service.
+     *
+     * @return void
+     */
+    protected function registerControllers()
+    {
+        $this->app['controllers'] = function ($app) {
+            return new ControllerCollection($app);
         };
     }
 
@@ -148,7 +165,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      * all of the routes now and return the application to the callers.
      *
     */
-    public function boot(Container $app)
+    public function boot(Workbench $app)
     {
         $app['files']->getRequire($app::$paths['path'].'/Http/routes.php');
     }

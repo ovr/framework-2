@@ -227,9 +227,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
                 'Charset'          => $request->getContentCharset(),
                 'Locale'           => $request->getContentCharset() ?: '<none>',
                 'Route Class'      => $app['settings']['http::route.class'],
-                //'Route Name'       => $app['route']->getName() ?: '<none>',
-                //'Route Pattern'    => $app['route']->getPattern() ?: '<none>',
-                //'Route Middleware' => $app['route']->getMiddleware() ?: '<none>',
                 'Application Class'=> get_class($app)
             ]);
 

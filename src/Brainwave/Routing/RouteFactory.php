@@ -18,8 +18,9 @@ namespace Brainwave\Routing;
  *
  */
 
+use \Pimple\Container;
 use \Brainwave\Http\Request;
-use \Brainwave\Workbench\Workbench;
+use \Brainwave\Routing\Controller\ControllerDispatcher;
 
 /**
  * RouteFactory
@@ -33,224 +34,96 @@ class RouteFactory
 {
     /**
      * The application instance
-     * @var \Brainwave\Workbench\Workbench
+     *
+     * @var \Pimple\Container
      */
     protected $app;
 
     /**
      * Route factory callable
+     *
      * @var \Closure
      */
-    protected $resolver;
+    protected $routeResolver;
 
     /**
-     * @var integer Counts the number of available routes.
+     * Controller factory callable
+     *
+     * @var \Closure
      */
-    private $routeCount = 0;
+    protected $controllerResolver;
 
     /**
-     * Constructor
-     * @param  \Brainwave\Workbench\Workbench  $app
+     * RouteFactory
+     *
+     * @param Container $app
+     * @param Closure   $routeResolver
+     * @param Closure   $controllerResolver
      */
-    public function __construct(Workbench $app, \Closure $resolver)
+    public function __construct(Container $app, \Closure $routeResolver, \Closure $controllerResolver)
     {
         $this->app = $app;
-        $this->resolver = $resolver;
+        $this->routeResolver = $routeResolver;
+        $this->controllerResolver = $controllerResolver;
     }
 
     /**
      * Create a new Route instance
+     *
      * @param string $pattern
      * @param mixed $callable
      * @return \Brainwave\Routing\Interfaces\RouteInterface
      */
     public function make($pattern, $callable)
     {
-        if (is_string($callable)) {
-            $callable = $this->resolveHandlerCallback($callable);
+        if ($this->referenceToController($callable)) {
+            $callable = $this->makeControllerCallback($callable);
         }
 
-        return call_user_func($this->resolver, $pattern, $callable);
+        return call_user_func($this->routeResolver, $pattern, $callable);
     }
 
     /**
-     * Add GET|POST|PUT|PATCH|DELETE route
+     * Determine if the callable is a reference to a controller.
      *
-     * Adds a new route to the router with associated callable. This
-     * route will only be invoked when the HTTP request's method matches
-     * this route's method.
-     *
-     * ARGUMENTS:
-     *
-     * First:       string  The URL pattern (REQUIRED)
-     * In-Between:  mixed   Anything that returns TRUE for `is_callable` (OPTIONAL)
-     * Last:        mixed   Anything that returns TRUE for `is_callable` (REQUIRED)
-     *
-     * The first argument is required and must always be the
-     * route pattern (ie. '/books/:id').
-     *
-     * The last argument is required and must always be the callable object
-     * to be invoked when the route matches an HTTP request.
-     *
-     * You may also provide an unlimited number of in-between arguments;
-     * each interior argument must be callable and will be invoked in the
-     * order specified before the route's callable is invoked.
-     *
-     * USAGE:
-     *
-     * Route::get('/foo'[, middleware, middleware, ...], callable);
-     *
-     * @param  array
-     * @return Route
+     * @param string    $callable
+     * @return bool
      */
-    protected function mapRoute($args)
+    protected function referenceToController($callable)
     {
-        $pattern = array_shift($args);
-        $callable = $this->app['resolver']->build(array_pop($args));
-
-        $route = $this->make($pattern, $callable);
-
-        $this->routeCount++;
-        $route->setName((string)$this->routeCount);
-
-        $this->app['router']->map($route);
-        if (count($args) > 0) {
-            $route->setMiddleware($args);
+        if (is_callable($callable)) {
+            return false;
         }
 
-        return $route;
+        $pattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+
+        return is_string($callable) && preg_match($pattern, $callable);
     }
 
     /**
-     * Add route without HTTP method
-     * @return Route
-     */
-    public function map()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args);
-    }
-
-    /**
-     * Add GET route
-     * @return Route
-     * @api
-     */
-    public function get()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_GET, Request::METHOD_HEAD);
-    }
-
-    /**
-     * Add POST route
-     * @return Route
-     * @api
-     */
-    public function post()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_POST);
-    }
-
-    /**
-     * Add PUT route
-     * @return Route
-     * @api
-     */
-    public function put()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_PUT);
-    }
-
-    /**
-     * Add PATCH route
-     * @return Route
-     * @api
-     */
-    public function patch()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_PATCH);
-    }
-
-    /**
-     * Add DELETE route
-     * @return Route
-     * @api
-     */
-    public function delete()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_DELETE);
-    }
-
-    /**
-     * Add OPTIONS route
-     * @return Route
-     * @api
-     */
-    public function options()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via(Request::METHOD_OPTIONS);
-    }
-
-    /**
-     * Add route for any HTTP method
-     * @return Route
-     * @api
-     */
-    public function any()
-    {
-        $args = func_get_args();
-        return $this->mapRoute($args)->via("ANY");
-    }
-
-    /**
-     * Define a callback that uses a given service name or class name
+     * Define a callback that uses a given reference to a service or class name
      *
      * @param  string $callable
      * @return \Closure
      */
-    protected function resolveHandlerCallback($callable)
+    protected function makeControllerCallback($callable)
     {
-        list($service, $method) = $this->parseCallable($callable);
+        list($service, $method) = explode(':', $callable, 2);
         $factory = $this;
 
-        return function () use ($factory, $service, $method) {
-
-            $handler = $factory->resolveHandlerInstance($service);
-
-            $args = func_get_args();
-
-            return call_user_func_array(array($handler, $method), $args);
-        };
+        return new ControllerDispatcher(function () use ($factory, $service) {
+            return $factory->resolveControllerInstance($service);
+        }, $method);
     }
 
     /**
-     *
-     * @param  string $callable
-     * @throws \InvalidArgumentException
-     * @return string[]
-     */
-    protected function parseCallable($callable)
-    {
-        if (!preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
-            throw new \InvalidArgumentException("Invalid callable '{$callable}' specified.");
-        }
-
-        return [$matches[1], $matches[2]];
-    }
-
-    /**
+     * Resolve the controller instance used by the route to handle the request
      *
      * @param  string $service
      * @throws \InvalidArgumentException
      * @return mixed
      */
-    protected function resolveHandlerInstance($service)
+    protected function resolveControllerInstance($service)
     {
         if (isset($this->app[$service])) {
             return $this->app[$service];
@@ -258,15 +131,12 @@ class RouteFactory
 
         if (class_exists($service)) {
             try {
-                return new $service;
+                return call_user_func($this->controllerResolver, $service);
             } catch (\Exception $e) {
-
+                throw new \InvalidArgumentException("The controller '$service' could not be instantiated.");
             }
         }
 
-        throw new \InvalidArgumentException(
-            "The specified '{$service}' route handler is an undefined service or
-            the controller could not be instantiated."
-        );
+        throw new \InvalidArgumentException("The controller reference '$service' is undefined.");
     }
 }

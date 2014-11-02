@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Workbench\Environment;
+namespace Brainwave\Workbench\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,25 +18,26 @@ namespace Brainwave\Workbench\Environment;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Workbench\Environment\Environment;
-use \Brainwave\Workbench\Environment\EnvironmentDetector;
+use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
- * EnvironmentServiceProvider
+ * Route
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.3-dev
+ * @since   0.9.1-dev
  *
  */
-class EnvironmentServiceProvider implements ServiceProviderInterface
+class Router extends StaticalProxyManager
 {
-    public function register(Container $app)
+    protected static function getFacadeAccessor()
     {
-        $app['environment'] = function ($app) {
-            return new Environment($app, $_SERVER);
-        };
+        return 'router';
+    }
+
+    public static function pattern(array $array)
+    {
+        $route = self::$app['route'];
+        $route::setDefaultConditions($array);
     }
 }

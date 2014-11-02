@@ -29,34 +29,54 @@ namespace Brainwave\Translator\Interfaces;
 interface TranslatorInterface
 {
     /**
-     * @param string $language
+     * Provide an array of information to use as translation data
+     * for a provided language.
      *
-     * @return void
+     * @param array   $info     The array of information to use.
+     * @param String  $language The language that the translations are written in. (e.g. 'en').
+     * @param Boolean $merge    True or false depending on whether the array should be
+     *                          merged with existing data for this language if there is any.
      */
     public function setTranslations(array $info, $language, $merge = false);
 
+    /**
+     * Get all translation information for a given language.
+     *
+     * @param  String $language The name of language that this information is made up of.
+     * @return array            The language that the translations are written in. (e.g. 'en').
+     */
     public function getTranslations($language);
 
     /**
-     * @param string $translation
-     * @param string $language
+     * Set the translation of a given term or phrase within a given language.
      *
-     * @return \Brainwave\Translator\TranslatorManager
+     * @param String $orig        The original string.
+     * @param String $translation The translation.
+     * @param String $language    The language that the translation is written in. (e.g. 'en').
      */
     public function setTranslation($orig, $translation, $language);
 
     /**
-     * @return string
+     * Get all translation information for a given language.
+     *
+     * @param  String $language The name of language that this information is made up of.
+     * @return array            The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslation($orig, $language = false);
 
     /**
-     * @return string
+     * Gets the string dictating the default language to translate into. (e.g. 'en').
+     *
+     * @return String
      */
     public function getLocale();
 
     /**
-     * @return \Brainwave\Translator\TranslatorManager
+     * Sets the string dictating the default language to translate into. (e.g. 'en').
+     *
+     * @param String $defaultLang A string representing the default language to translate into. (e.g. 'en').
+     *
+     * @return self
      */
     public function setLocale($defaultLang);
 }

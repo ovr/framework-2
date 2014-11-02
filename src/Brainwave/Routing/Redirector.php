@@ -18,7 +18,7 @@ namespace Brainwave\Routing;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Pimple\Container;
 use \Brainwave\Routing\UrlGenerator;
 
 /**
@@ -34,7 +34,7 @@ class Redirector
     /**
      * Application instance
      *
-     * @var \Brainwave\Workbench\Workbench $app
+     * @var Container $app
      */
     protected $app;
 
@@ -48,10 +48,11 @@ class Redirector
     /**
      * Create a new Redirector instance.
      *
-     * @param  \Brainwave\Routing\UrlGenerator  $generator
+     * @param  UrlGenerator $generator
+     * @param  Container    $app
      * @return void
      */
-    public function __construct(UrlGenerator $generator, Workbench $app)
+    public function __construct(UrlGenerator $generator, Container $app)
     {
         $this->generator = $generator;
         $this->app = $app;
@@ -98,7 +99,24 @@ class Redirector
      */
     public function urlFor($name, $params = [])
     {
-        return $this->app['request']->getScriptName() . $this['router']->urlFor($name, $params);
+        return $this->app['request']->getScriptName().$this['router']->urlFor($name, $params);
+    }
+
+    /**
+     * TODO
+     *
+     * @param  [type]  $path     [description]
+     * @param  boolean $absolute [description]
+     * @return [type]            [description]
+     */
+    public function url($path = null, $absolute = false)
+    {
+        $url = pathinfo($_SERVER["PHP_SELF"], PATHINFO_DIRNAME) . "/" . $path;
+        $url = preg_replace("/\/\/+/", "/", $url);
+        if ($absolute) {
+            $url = "http://" . $_SERVER["SERVER_NAME"] . $url;
+        }
+        return $url;
     }
 
     /**
@@ -108,13 +126,11 @@ class Redirector
      * specific status and body to the HTTP client. This may send any
      * type of response: info, success, redirect, client error, or server error.
      *
-     * @param  int    $status  The HTTP response status
+     * @param int $status  The HTTP response status
      * @api
      */
     public function halt($status, $message = '')
     {
-        $this->setStatus($status);
-        $this->write($message, true);
-        $this->stop();
+        $this->app->halt($status, $message = '');
     }
 }

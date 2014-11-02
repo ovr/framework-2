@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Resolvers;
+namespace Brainwave\Routing\Resolvers;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,7 +19,7 @@ namespace Brainwave\Resolvers;
  */
 
 use \Brainwave\Workbench\Workbench;
-use \Brainwave\Resolvers\Interfaces\CallableResolverInterface;
+use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
 
 /**
  * AppResolver
@@ -33,12 +33,14 @@ class AppResolver implements CallableResolverInterface
 {
     /**
      * Application Brainwave\Workbench\Workbench
+     *
      * @var bool
      */
     private $app;
 
     /**
      * Set Application
+     *
      * @param $app Brainwave\Workbench\Workbench
      */
     public function __construct(Workbench $app)
@@ -48,6 +50,7 @@ class AppResolver implements CallableResolverInterface
 
     /**
      * [build description]
+     *
      * @param  [type] $callable [description]
      * @return [type]           [description]
      */

@@ -18,38 +18,55 @@ namespace Brainwave\Resolvers;
  *
  */
 
-use \Brainwave\Resolvers\Interfaces\CallableResolverInterface;
+use \Brainwave\Workbench\Workbench;
+use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
 
 /**
- * CallableResolver
+ * DependencyResolver
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class CallableResolver implements CallableResolverInterface
+class DependencyResolver implements CallableResolverInterface
 {
     /**
+     * Application Brainwave\Workbench\Workbench
+     *
+     * @var bool
+     */
+    private $app;
+
+    /**
+     * Set Application
+     *
+     * @param $app Brainwave\Workbench\Workbench
+     */
+    public function __construct(Workbench $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
      * [build description]
+     *
      * @param  [type] $callable [description]
      * @return [type]           [description]
      */
     public function build($callable)
     {
-        $matches = [];
+        if (is_string($callable) &&
+            preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
 
-        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
-            $class = $matches[1];
+            $service = $matches[1];
             $method = $matches[2];
 
-            $callable = function () use ($class, $method) {
-                static $obj = null;
-                if ($obj === null) {
-                    $obj = new $class;
-                }
-                return call_user_func_array(array($obj, $method), func_get_args());
-            };
+            if (!isset($this->app[$service])) {
+                throw new \InvalidArgumentException('Route key does not exist in Workbench');
+            }
+
+            $callable =  [$this->app[$service],$method];
         }
 
         if (!is_callable($callable)) {

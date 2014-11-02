@@ -451,7 +451,6 @@ class TranslatorManager implements TranslatorInterface
     /**
      * Check if lang is valid
      *
-     *
      * @param string|boolean $checkLang
      * @return boolean|null or InvalidArgumentException
      */

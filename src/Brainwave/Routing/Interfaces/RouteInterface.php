@@ -52,7 +52,7 @@ interface RouteInterface
     /**
      * @return void
      */
-    public function setCallable($callable);
+    public function setCallable(callable $callable);
 
     public function getConditions();
 

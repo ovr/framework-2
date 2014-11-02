@@ -26,8 +26,6 @@ use \Brainwave\Routing\Exception\ControllerFrozenException;
  *
  * A wrapper for a controller, mapped to a route.
  *
- * __call() forwards method-calls to Route, but returns instance of Controller
- * listing Route's methods below, so that IDEs know they are valid
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
@@ -90,23 +88,6 @@ class Controller
         return $this;
     }
 
-    public function __call($method, $arguments)
-    {
-        if (!method_exists($this->route, $method)) {
-            throw new \BadMethodCallException(
-                sprintf(
-                    'Method "%s::%s" does not exist.',
-                    get_class($this->route),
-                    $method
-                )
-            );
-        }
-
-        call_user_func_array(array($this->route, $method), $arguments);
-
-        return $this;
-    }
-
     /**
      * Freezes the controller.
      *
@@ -130,5 +111,30 @@ class Controller
         $routeName = preg_replace('/[^a-z0-9A-Z_()+:\/.]+/', '', $routeName);
 
         return $routeName;
+    }
+
+    /**
+     * Forwards method-calls to Route, but returns instance of Controller
+     * listing Route's methods below, so that IDEs know they are valid
+     *
+     * @param  string $method
+     * @param  array  $arguments
+     * @return \Brainwave\Routing\Interfaces\RouteInterface
+     */
+    public function __call($method, $arguments)
+    {
+        if (!method_exists($this->route, $method)) {
+            throw new \BadMethodCallException(
+                sprintf(
+                    'Method "%s::%s" does not exist.',
+                    get_class($this->route),
+                    $method
+                )
+            );
+        }
+
+        call_user_func_array(array($this->route, $method), $arguments);
+
+        return $this;
     }
 }

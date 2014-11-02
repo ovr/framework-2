@@ -18,6 +18,8 @@ namespace Brainwave\Routing;
  *
  */
 
+use \Pimple\Container;
+use \Brainwave\Http\Request;
 use \Brainwave\Routing\Route;
 use \Brainwave\Routing\Interfaces\RouterInterface;
 use \Brainwave\Routing\Interfaces\RouteInterface;
@@ -32,72 +34,89 @@ use \Brainwave\Routing\Interfaces\RouteInterface;
  */
 class Router implements RouterInterface
 {
-     /**
+    /**
+     * Container instance
+     *
+     * @var \Pimple\Container
+     */
+    protected $app;
+
+    /**
      * The current (most recently dispatched) route
+     *
      * @var Route
      */
     protected $currentRoute;
 
     /**
      * All route objects, numerically indexed
+     *
      * @var array[\Brainwave\Routing\Interfaces\RouteInterface]
      */
-    protected $routing;
+    protected $routes;
 
     /**
      * Named route objects, indexed by route name
+     *
      * @var array[\Brainwave\Routing\Interfaces\RouteInterface]
      */
-    protected $namedRouting;
+    protected $namedRoutes;
 
     /**
-     * Route objects that match the request URI
+     * Route objects that addRoute the request URI
+     *
      * @var array[\Brainwave\Routing\Interfaces\RouteInterface]
      */
-    protected $matchedRouting;
-
-    /**
-     * @var string Current Base URI
-     */
-    protected $currentBaseUri = '';
-
-    /**
-     * @var array Current stack of middleware
-     */
-    protected $currentMiddleware;
+    protected $addRouteedRoutes;
 
     /**
      * Cached urls: store and reuse already generated urls
+     *
      * @var array
      */
     protected $cachedUrls;
 
     /**
-     * all params of the matched route
+     * Route groups
+     * @var array
+     */
+    protected $routeGroups;
+
+    /**
+     * All params of the addRouteed route
+     *
      * @var array
      */
     protected $routeParams;
 
     /**
+     * @var integer Counts the number of available routes.
+     */
+    private $routeCount = 0;
+
+    /**
      * Constructor
+     *
      * @api
      */
-    public function __construct()
+    public function __construct(Container $app)
     {
-        $this->routing = [];
-        $this->currentMiddleware = [];
+        $this->app = $app;
+
+        $this->routes = [];
+        $this->routeGroups = [];
         $this->routeParams = [];
     }
 
     /**
-     * Get any matched route params
+     * Get any addRouteed route params
      *
-     * @return  string|array
+     * @return  string
      */
     public function getParam($key = false)
     {
         if ($key === false) {
-            return $this->routeParams;
+            return $this->getParams();
         }
 
         if (array_key_exists($key, $this->routeParams)) {
@@ -108,11 +127,21 @@ class Router implements RouterInterface
     }
 
     /**
+     * Get any route params
+     *
+     * @return  array
+     */
+    public function getParams()
+    {
+        return $this->routeParams;
+    }
+
+    /**
      * Get current route
      *
      * This method will return the current \Brainwave\Routing\Route object. If a route
-     * has not been dispatched, but route matching has been completed, the
-     * first matching \Brainwave\Routing\Route object will be returned. If route matching
+     * has not been dispatched, but route addRouteing has been completed, the
+     * first addRouteing \Brainwave\Routing\Route object will be returned. If route addRouteing
      * has not completed, null will be returned.
      *
      * @return RouteInterface|null
@@ -124,18 +153,18 @@ class Router implements RouterInterface
             return $this->currentRoute;
         }
 
-        if (is_array($this->matchedRouting) && count($this->matchedRouting) > 0) {
-            return $this->matchedRouting[0];
+        if (is_array($this->addRouteedRoutes) && count($this->addRouteedRoutes) > 0) {
+            return $this->addRouteedRoutes[0];
         }
 
         return null;
     }
 
     /**
-     * Get route objects that match a given HTTP method and URI
+     * Get route objects that addRoute a given HTTP method and URI
      *
      * This method is responsible for finding and returning all \Brainwave\Interfaces\RouteInterface
-     * objects that match a given HTTP method and URI. Brainwave uses this method to
+     * objects that addRoute a given HTTP method and URI. Brainwave uses this method to
      * determine which \Brainwave\Interfaces\RouteInterface objects are candidates to be
      * dispatched for the current HTTP request.
      *
@@ -144,41 +173,42 @@ class Router implements RouterInterface
      * @return array[\Brainwave\Interfaces\RouteInterface]
      * @api
      */
-    public function getMatchedRoutes($httpMethod, $resourceUri, $save = true)
+    public function getaddRouteedRoutes($httpMethod, $resourceUri, $save = true)
     {
-        $matchedRoutes = [];
+        $addRouteedRoutes = [];
 
-        foreach ($this->routing as $route) {
+        foreach ($this->routes as $route) {
             if (!$route->supportsHttpMethod($httpMethod) && !$route->supportsHttpMethod("ANY")) {
                 continue;
             }
 
-            if ($route->matches($resourceUri)) {
-                $matchedRoutes[] = $route;
+            if ($route->addRoutees($resourceUri)) {
+                $addRouteedRoutes[] = $route;
             }
         }
 
         if ($save === true) {
-            $this->matchedRoutes = $matchedRoutes;
-            $this->routeParams = array_merge($this->routeParams, $this->routing->getParams());
+            $this->addRouteedRoutes = $addRouteedRoutes;
+            $this->routeParams = array_merge($this->routeParams, $route->getParams());
         }
 
-        return $matchedRoutes;
+        return $addRouteedRoutes;
     }
 
     /**
-     * Return all route objects that match the given URI
-     * @param  string               $pattern      The pattern to match against
+     * Return all route objects that addRoute the given URI
+     *
+     * @param  string                          $pattern The pattern to addRoute against
      * @return array[\Brainwave\Routing\Route]
      */
     public function getAllRoutes($pattern = null)
     {
         if (null === $pattern) {
-            return $this->routing;
+            return $this->routes;
         } else {
             $routes = [];
-            foreach ($this->routing as $route) {
-                if ($route->getPattern() == $pattern) {
+            foreach ($this->routes as $route) {
+                if ($route->getPattern() === $pattern) {
                     $routes[] = $route;
                 }
             }
@@ -188,7 +218,8 @@ class Router implements RouterInterface
 
     /**
      * Return array of methods avaliable for the current pattern
-     * @param  string               $pattern      The pattern to match against
+     *
+     * @param  string   $pattern The pattern to addRoute against
      * @return string[]
      */
     public function getMethodsAvailable($pattern)
@@ -203,6 +234,177 @@ class Router implements RouterInterface
     }
 
     /**
+     * Add GET|POST|PUT|PATCH|DELETE route
+     *
+     * Adds a new route to the router with associated callable. This
+     * route will only be invoked when the HTTP request's method addRoutees
+     * this route's method.
+     *
+     * ARGUMENTS:
+     *
+     * First:       string  The URL pattern (REQUIRED)
+     * In-Between:  mixed   Anything that returns TRUE for `is_callable` (OPTIONAL)
+     * Last:        mixed   Anything that returns TRUE for `is_callable` (REQUIRED)
+     *
+     * The first argument is required and must always be the
+     * route pattern (ie. '/books/:id').
+     *
+     * The last argument is required and must always be the callable object
+     * to be invoked when the route addRoutees an HTTP request.
+     *
+     * You may also provide an unlimited number of in-between arguments;
+     * each interior argument must be callable and will be invoked in the
+     * order specified before the route's callable is invoked.
+     *
+     * USAGE:
+     *
+     * Route::get('/foo'[, middleware, middleware, ...], callable);
+     *
+     * @param  array
+     * @return Route
+     */
+    protected function addRoute($args)
+    {
+        $pattern = array_shift($args);
+        $callable = $this->app['resolver']->build(array_pop($args));
+
+        $route = $this->app['routes.factory']->make($pattern, $callable);
+
+        $this->routeCount++;
+        $route->setName((string)$this->routeCount);
+
+        $this->map($route);
+
+        if (count($args) > 0) {
+            $route->setMiddleware($args);
+        }
+
+        return $route;
+    }
+
+    /**
+     * Add GET route
+     *
+     * @return Route
+     * @api
+     */
+    public function get()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_GET, Request::METHOD_HEAD);
+    }
+
+    /**
+     * Add POST route
+     *
+     * @return Route
+     * @api
+     */
+    public function post()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_POST);
+    }
+
+    /**
+     * Add PUT route
+     *
+     * @return Route
+     * @api
+     */
+    public function put()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_PUT);
+    }
+
+    /**
+     * Add PATCH route
+     *
+     * @return Route
+     * @api
+     */
+    public function patch()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_PATCH);
+    }
+
+    /**
+     * Add DELETE route
+     *
+     * @return Route
+     * @api
+     */
+    public function delete()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_DELETE);
+    }
+
+    /**
+     * Add OPTIONS route
+     *
+     * @return Route
+     * @api
+     */
+    public function options()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via(Request::METHOD_OPTIONS);
+    }
+
+    /**
+     * Route Groups
+     *
+     * This method accepts a route pattern and a callback. All route
+     * declarations in the callback will be prepended by the group(s)
+     * that it is in.
+     *
+     * Accepts the same parameters as a standard route so:
+     * (pattern, middleware1, middleware2, ..., $callback)
+     *
+     * @api
+     */
+    public function group()
+    {
+        $args = func_get_args();
+        $pattern = array_shift($args);
+
+        $callable = $this->app['resolver']->build(array_pop($args));
+        $this->app['router']->pushGroup($pattern, $args);
+
+        if (is_callable($callable)) {
+            call_user_func($callable);
+        }
+
+        $this->app['router']->popGroup();
+    }
+
+    /**
+     * Add route without HTTP method
+     *
+     * @return Route
+     */
+    public function match()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args);
+    }
+
+    /**
+     * Add route for any HTTP method
+     *
+     * @return Route
+     * @api
+     */
+    public function any()
+    {
+        $args = func_get_args();
+        return $this->addRoute($args)->via("ANY");
+    }
+
+    /**
      * Add a route
      *
      * This method registers a RouteInterface object with the router.
@@ -212,19 +414,42 @@ class Router implements RouterInterface
      */
     public function map(RouteInterface $route)
     {
-        $route->setPattern($this->currentBaseUri . $route->getPattern());
-        $this->routing[] = $route;
+        list($groupPattern, $groupMiddleware) = $this->processGroups();
+        $route->setPattern($groupPattern . $route->getPattern());
+        $this->routes[] = $route;
 
-        foreach ($this->currentMiddleware as $middleware) {
+        foreach ($groupMiddleware as $middleware) {
             $route->setMiddleware($middleware);
         }
     }
 
     /**
+     * Process route groups
+     *
+     * A helper method for processing the group's pattern and middleware.
+     *
+     * @return array An array with the elements: pattern, middlewareArr
+     */
+    protected function processGroups()
+    {
+        $pattern = "";
+        $middleware = [];
+        foreach ($this->routeGroups as $group) {
+            $k = key($group);
+            $pattern .= $k;
+            if (is_array($group[$k])) {
+                $middleware = array_merge($middleware, $group[$k]);
+            }
+        }
+        return [$pattern, $middleware];
+    }
+
+    /**
      * Get URL for named route
+     *
      * @param  string            $name   The name of the route
      * @param  array             $params Associative array of URL parameter names and replacement values.
-     *                                   Unmatched parameters will be used to build the query string.
+     *                                   UnaddRouteed parameters will be used to build the query string.
      * @return string                    The URL for the given route populated with provided replacement values
      * @throws \RuntimeException         If named route not found
      * @api
@@ -245,14 +470,14 @@ class Router implements RouterInterface
 
         foreach ($params as $key => $value) {
             $search = '#:' . preg_quote($key, '#') . '\?(?!\w)#';
-            if (preg_match($search, $url)) {
+            if (preg_addRoute($search, $url)) {
                 $url = preg_replace($search, $value, $url);
                 unset($params[$key]);
             }
         }
 
         //Remove remnants of unpopulated, trailing optional pattern segments, escaped special characters
-        $url = preg_replace('#\(/?:.\)|\(|\)|\\\\#', '', $url);
+        $url = preg_replace('#\(/?:[^)]+\)+|\(|\)|\\\\#', '', $url);
 
         // Leftovers are added as url query string
         if ($params) {
@@ -266,6 +491,7 @@ class Router implements RouterInterface
 
     /**
      * Add named route
+     *
      * @param  string               $name   The route name
      * @param  RouteInterface       $route  The route object
      * @throws \RuntimeException    If a named route already exists with the same name
@@ -276,54 +502,57 @@ class Router implements RouterInterface
         if ($this->hasNamedRoute($name)) {
             throw new \RuntimeException('Named route already exists with name: ' . $name);
         }
-        $this->namedRouting[(string) $name] = $route;
+        $this->namedRoutes[(string) $name] = $route;
     }
 
     /**
      * Has named route
+     *
      * @param  string $name The route name
      * @return bool
      * @api
      */
     public function hasNamedRoute($name)
     {
-        $this->getNamedRouting();
+        $this->getnamedRoutes();
 
-        return isset($this->namedRouting[(string) $name]);
+        return isset($this->namedRoutes[(string) $name]);
     }
 
     /**
      * Get named route
-     * @param  string                               $name
+     *
+     * @param  string              $name
      * @return RouteInterface|null
      * @api
      */
     public function getNamedRoute($name)
     {
-        $this->getNamedRouting();
+        $this->getnamedRoutes();
         if ($this->hasNamedRoute($name)) {
-            return $this->namedRouting[(string) $name];
+            return $this->namedRoutes[(string) $name];
         }
 
         return null;
     }
 
     /**
-     * Get external iterator for named Routing
+     * Get external iterator for named routes
+     *
      * @return \ArrayIterator
      * @api
      */
     public function getNamedRoutes()
     {
-        if (is_null($this->namedRouting)) {
-            $this->namedRouting = [];
-            foreach ($this->routing as $route) {
+        if (is_null($this->namedRoutes)) {
+            $this->namedRoutes = [];
+            foreach ($this->routes as $route) {
                 if ($route->getName() !== null) {
                     $this->addNamedRoute($route->getName(), $route);
                 }
             }
         }
 
-        return new \ArrayIterator($this->namedRouting);
+        return new \ArrayIterator($this->namedRoutes);
     }
 }

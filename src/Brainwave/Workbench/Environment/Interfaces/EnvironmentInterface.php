@@ -37,4 +37,21 @@ interface EnvironmentInterface
      * @return void
      */
     public function mock(array $settings = []);
+
+    /**
+     * Detect the application's current environment.
+     *
+     * @param  array|string  $environments
+     * @param  array|null  $consoleArgs
+     * @return string
+     */
+    public function detect($environments, $consoleArgs = null);
+
+    /**
+     * Determine if the name matches the machine name.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public function isMachine($name);
 }

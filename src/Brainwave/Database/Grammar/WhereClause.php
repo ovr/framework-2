@@ -304,38 +304,51 @@ class WhereClause
                 "({$this->innerConjunct($value, ' ' . $relationMatch[1], $conjunctor)})";
 
             } else {
-                preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<)\])?/i', $key, $match);
+                preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<|\!?~)\])?/i', $key, $match);
                 $column = $this->query->wrapValue($match[2]);
 
                 if (isset($match[4])) {
                     if ($match[4] === '!') {
                         $wheres[] = $this->whereDataImplodeSwitch($column, $value, $type, $key, true);
-                    } else {
-                        if ($match[4] === '<>' || $match[4] === '><') {
-                            if ($type === 'array') {
-                                if ($match[4] === '><') {
-                                    $column .= ' NOT';
-                                }
-
-                                if (is_numeric($value[0]) && is_numeric($value[1])) {
-                                    $wheres[] = "({$column} BETWEEN {$value[0]} AND {$value[1]})";
-                                } else {
-                                    $wheres[] = "({$column} BETWEEN {$this->query->wrapValue($value[0])} AND
-                                        {$this->query->wrapValue($value[1])})";
-                                }
+                    }
+                    if ($match[4] === '<>' || $match[4] === '><') {
+                        if ($type === 'array') {
+                            if ($match[4] === '><') {
+                                $column .= ' NOT';
                             }
-                        } else {
-                            if (is_numeric($value)) {
-                                $wheres[] = "{$column} {$match[4]} {$value}";
+
+                            if (is_numeric($value[0]) && is_numeric($value[1])) {
+                                $wheres[] = "({$column} BETWEEN {$value[0]} AND {$value[1]})";
                             } else {
-                                if ($datetime = strtotime($value)) {
-                                    $date = date($this->query->getDateFormat(), $datetime);
-                                    $wheres[] = "{$column} {$match[4]} {$this->query->wrapValue($date)}";
-                                } else {
-                                    if (strpos($key, '#') === 0) {
-                                        $wheres[] =
-                                        "{$column} {$match[4]} {$this->query->wrapFunctionName($key, $value)}";
-                                    }
+                                $wheres[] = "({$column} BETWEEN {$this->query->wrapValue($value[0])} AND
+                                    {$this->query->wrapValue($value[1])})";
+                            }
+                        }
+                    }
+
+                    if ($operator === '~' && $type === 'string' || $operator === '!~' && $type === 'string') {
+                        if ($operator == '!~') {
+                            $column .= ' NOT';
+                        }
+
+                        if (preg_match('/^[^%].+[^%]$/', $value)) {
+                            $value = '%' . $value . '%';
+                        }
+
+                        $wheres[] = $column . ' LIKE ' . $this->fn_quote($key, $value);
+                    }
+
+                    if (in_array($operator, array('>', '>=', '<', '<='))) {
+                        if (is_numeric($value)) {
+                            $wheres[] = "{$column} {$match[4]} {$value}";
+                        } else {
+                            if ($datetime = strtotime($value)) {
+                                $date = date($this->query->getDateFormat(), $datetime);
+                                $wheres[] = "{$column} {$match[4]} {$this->query->wrapValue($date)}";
+                            } else {
+                                if (strpos($key, '#') === 0) {
+                                    $wheres[] =
+                                    "{$column} {$match[4]} {$this->query->wrapFunctionName($key, $value)}";
                                 }
                             }
                         }
@@ -350,7 +363,7 @@ class WhereClause
             }
         }
 
-        return implode($conjunctor . ' ', $wheres);
+        return implode($conjunctor.' ', $wheres);
     }
 
     /**
