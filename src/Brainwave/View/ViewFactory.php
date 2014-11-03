@@ -19,6 +19,7 @@ namespace Brainwave\View;
  */
 
 use \Pimple\Container;
+use \Brainwave\Support\Str;
 use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\PhpEngine;
 use \Brainwave\View\Engines\JsonEngine;
@@ -114,7 +115,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
         //Set extension
         $this->extensions = (
             !is_null($this->app['settings']->get('view::extensions', null))) ?
-            $this->app['settings']->get('view::extensions', null) : '.php';
+            $this->app['settings']['view::extensions'] : '.php';
 
         //
         $this->registerEngineResolver();
@@ -141,7 +142,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
     protected function registerItems()
     {
         if ($this->app['settings']->get('view::items', null) !== null) {
-            $data = array_merge($this->app['settings']->get('view::items', null), $this->gatherData());
+            $data = array_merge($this->app['settings']['view::items'], $this->gatherData());
         } else {
             $data = $this->gatherData();
         }
@@ -254,20 +255,20 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      * Get the evaluated contents of the view.
      *
      * @var    string $template Pathname of template file relative to templates directory
-     * @param string $template
+     * @param  string $template
      * @return string
      */
     protected function render($engine = 'php', $template = null, array $data = [])
     {
         $this->with($data);
 
-        if (is_string($template) && $engine == 'php' && $engine != 'json') {
+        if (is_string($template) && $engine === 'php' && $engine !== 'json') {
 
             $explodeTemplate = explode('::', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
                 foreach ($this->app['settings']->get('view::template.paths', []) as $pathName => $path) {
-                    if (trim($explodeTemplate[0]) == $pathName) {
+                    if (trim($explodeTemplate[0]) === $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
@@ -275,7 +276,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
             } else {
-                $path = $this->app['settings']->get('view::default.template.path', null).
+                $path = $this->app['settings']['view::default.template.path'].
                         $template.
                         $this->getExtensions();
             }
@@ -338,8 +339,8 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             $explodeTemplate = explode('::', $view, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']->get('view::template.paths', []) as $pathName => $path) {
-                    if (trim($explodeTemplate[0]) == $pathName) {
+                foreach ($this->app['settings']['view::template.paths'] as $pathName => $path) {
+                    if (trim($explodeTemplate[0]) === $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
@@ -347,10 +348,11 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
             } else {
-                $path = $this->app['settings']->get('view::default.template.path', null).
+                $path = $this->app['settings']['view::default.template.path'].
                         $template.
                         $this->getExtensions();
             }
+
             if (!is_file($path)) {
                 throw new \InvalidArgumentException(
                     "Cannot render template `$path` because the template does not exist.
@@ -413,7 +415,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
      */
     public function __call($method, $parameters)
     {
-        if (starts_with($method, 'with')) {
+        if (Str::startsWith($method, 'with')) {
             return $this->with(snake_case(substr($method, 4)), $parameters[0]);
         }
 

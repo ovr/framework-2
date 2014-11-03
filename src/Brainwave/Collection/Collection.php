@@ -18,6 +18,7 @@ namespace Brainwave\Collection;
  *
  */
 
+use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Crypt\Interfaces\CryptInterface;
 use \Brainwave\Support\Interfaces\JsonableInterface;
@@ -213,10 +214,10 @@ class Collection implements
     public function first(\Closure $callback = null, $default = null)
     {
         if (is_null($callback)) {
-            return count($this->data) > 0 ? reset($this->data) : null;
+            return count($this->data) > 0 ? Arr::head($this->data) : null;
         }
 
-        return array_first($this->data, $callback, $default);
+        return Arr::arrayFirst($this->data, $callback, $default);
     }
 
     /**
@@ -268,7 +269,7 @@ class Collection implements
      */
     public function lists($value, $key = null)
     {
-        return array_pluck($this->data, $value, $key);
+        return Arr::arrayPluck($this->data, $value, $key);
     }
 
     /**
@@ -334,7 +335,7 @@ class Collection implements
             return $groupBy($value, $key);
         }
 
-        return data_get($value, $groupBy);
+        return Arr::dataGet($value, $groupBy);
     }
 
     /**
@@ -348,7 +349,7 @@ class Collection implements
         $results = [];
 
         foreach ($this->data as $item) {
-            $key = data_get($item, $keyBy);
+            $key = Arr::dataGet($item, $keyBy);
 
             $results[$key] = $item;
         }
@@ -419,7 +420,7 @@ class Collection implements
      */
     public function pull($key, $default = null)
     {
-        return array_pull($this->data, $key, $default);
+        return Arr::arrayPull($this->data, $key, $default);
     }
 
     /**
@@ -661,7 +662,7 @@ class Collection implements
     }
 
     /**
-     * Reset the keys on the underlying array.
+     * Arr::head the keys on the underlying array.
      *
      * @return static
      */
@@ -681,7 +682,7 @@ class Collection implements
     protected function valueRetriever($value)
     {
         return function ($item) use ($value) {
-            return data_get($item, $value);
+            return Arr::dataGet($item, $value);
         };
     }
 

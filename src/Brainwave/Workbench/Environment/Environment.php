@@ -19,6 +19,8 @@ namespace Brainwave\Workbench\Environment;
  */
 
 use \Pimple\Container;
+use \Brainwave\Support\Str;
+use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Workbench\Environment\EnvironmentDetector;
 use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
@@ -158,7 +160,7 @@ class Environment extends Collection implements EnvironmentInterface
      */
     public function isMachine($name)
     {
-        return str_is($name, gethostname());
+        return Str::is($name, gethostname());
     }
 
     /**
@@ -274,7 +276,7 @@ class Environment extends Collection implements EnvironmentInterface
         // and if it was that automatically overrides as the environment. Otherwise, we
         // will check the environment as a "web" request like a typical HTTP request.
         if (!is_null($value = $this->getEnvironmentArgument($args))) {
-            return head(array_slice(explode('=', $value), 1));
+            return reset(array_slice(explode('=', $value), 1));
         }
 
         return $this->detectWebEnvironment($environments);
@@ -288,8 +290,8 @@ class Environment extends Collection implements EnvironmentInterface
      */
     protected function getEnvironmentArgument(array $args)
     {
-        return array_first($args, function ($k, $v) {
-            return starts_with($v, '--env');
+        return Arr::arrayFirst($args, function ($k, $v) {
+            return Str::startsWith($v, '--env');
         });
     }
 }

@@ -304,7 +304,7 @@ class Arr
     {
         $value = arrayGet($array, $key);
 
-        array_forget($array, $key);
+        self::arrayForget($array, $key);
 
         return $value;
     }
@@ -451,13 +451,29 @@ class Arr
      */
     public static function dataGet($target, $key, $default = null)
     {
-        if (is_array($target)) {
-            return arrayGet($target, $key, $default);
-        } elseif (is_object($target)) {
-            return object_get($target, $key, $default);
-        } else {
-            throw new \InvalidArgumentException("Array or object must be passed to data_get.");
+        if (is_null($key)) {
+            return $target;
         }
+
+        foreach (explode('.', $key) as $segment) {
+            if (is_array($target)) {
+                if (!array_key_exists($segment, $target)) {
+                    return self::value($default);
+                }
+
+                $target = $target[$segment];
+            } elseif (is_object($target)) {
+                if (!isset($target->{$segment})) {
+                    return self::value($default);
+                }
+
+                $target = $target->{$segment};
+            } else {
+                return self::value($default);
+            }
+        }
+
+        return $target;
     }
 
     /**
