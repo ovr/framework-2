@@ -18,6 +18,7 @@ namespace Brainwave\Database;
  *
  */
 
+use \Brainwave\Log\MonologWriter;
 use \Brainwave\Database\Grammar\Builder;
 use \Brainwave\Database\Grammar\whereClause;
 use \Brainwave\Database\Interfaces\QueryInterface;
@@ -60,6 +61,9 @@ class Query implements QueryInterface
      */
     protected $bindings = [];
 
+    /**
+     *
+     */
     protected $joinArray = [
         '>' => 'LEFT',
         '<' => 'RIGHT',
@@ -68,17 +72,26 @@ class Query implements QueryInterface
     ];
 
     /**
+     *
+     * @var \Brainwave\Log\MonologWriter
+     */
+    protected $logger;
+
+    /**
      * Create a new query instance.
      *
      * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  \Brainwave\Log\MonologWriter                                   $logger
      * @return void
      */
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(ConnectionInterface $connection; MonologWriter $logger = null)
     {
         $this->connection = $connection;
         $this->connection->setQueryGrammar(new Builder($this->connection));
         $this->grammar = $this->connection->getQueryGrammar();
         $this->where = new whereClause($this->grammar);
+
+        $this->logger = $logger;
     }
 
     /**
