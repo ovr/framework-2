@@ -18,7 +18,6 @@ namespace Brainwave\Log;
  *
  */
 
-use \BadMethodCallException;
 use \Monolog\Logger as MonologLogger;
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\RotatingFileHandler;
@@ -70,14 +69,14 @@ class MonologWriter
      * @var array
      */
     protected $levels = [
-        'debug',
-        'info',
-        'notice',
-        'warning',
-        'error',
-        'critical',
-        'alert',
-        'emergency',
+        'debug'     => MonologLogger::DEBUG,
+        'info'      => MonologLogger::INFO,
+        'notice'    => MonologLogger::NOTICE,
+        'warning'   => MonologLogger::WARNING,
+        'error'     => MonologLogger::ERROR,
+        'critical'  => MonologLogger::CRITICAL,
+        'alert'     => MonologLogger::ALERT,
+        'emergency' => MonologLogger::EMERGENCY
     ];
 
     /**
@@ -109,16 +108,16 @@ class MonologWriter
      * @var array
      */
     protected $formatter = [
-        'Line',
-        'Html',
-        'Normalizer',
-        'Scalar',
-        'Json',
-        'Wildfire',
-        'Chrome',
-        'Gelf',
-        'Logstash',
-        'Elastica'
+        'Line'       => 'LineFormatter',
+        'Html'       => 'HtmlFormatter',
+        'Normalizer' => 'NormalizerFormatter',
+        'Scalar'     => 'ScalarFormatter',
+        'Json'       => 'JsonFormatter',
+        'Wildfire'   => 'WildfireFormatter',
+        'Chrome'     => 'ChromePHPFormatter',
+        'Gelf'       => 'GelfFormatter',
+        'Logstash'   => 'LogstashFormatter',
+        'Elastica'   => 'ElasticaFormatter'
     ];
 
     /**
@@ -270,35 +269,11 @@ class MonologWriter
      */
     protected function parseLevel($level)
     {
-        switch ($level)
-        {
-            case 'debug':
-                return MonologLogger::DEBUG;
-
-            case 'info':
-                return MonologLogger::INFO;
-
-            case 'notice':
-                return MonologLogger::NOTICE;
-
-            case 'warning':
-                return MonologLogger::WARNING;
-
-            case 'error':
-                return MonologLogger::ERROR;
-
-            case 'critical':
-                return MonologLogger::CRITICAL;
-
-            case 'alert':
-                return MonologLogger::ALERT;
-
-            case 'emergency':
-                return MonologLogger::EMERGENCY;
-
-            default:
-                throw new \InvalidArgumentException("Invalid log level.");
+        if (isset($this->levels[$level])) {
+            return $this->levels[$level];
         }
+
+        throw new \InvalidArgumentException("Invalid log level.");
     }
 
     /**
@@ -312,41 +287,11 @@ class MonologWriter
      */
     protected function parseFormatter($formatter, $formatterInput = '')
     {
-        switch ($formatter)
-        {
-            case 'Line':
-                return new LineFormatter($formatterInput);
-
-            case 'Html':
-                return new HtmlFormatter($formatterInput);
-
-            case 'Normalizer':
-                return new NormalizerFormatter($formatterInput);
-
-            case 'Scalar':
-                return new ScalarFormatter($formatterInput);
-
-            case 'Json':
-                return new JsonFormatter($formatterInput);
-
-            case 'Wildfire':
-                return new WildfireFormatter($formatterInput);
-
-            case 'Chrome':
-                return new ChromePHPFormatter($formatterInput);
-
-            case 'Gelf':
-                return new GelfFormatter($formatterInput);
-
-            case 'Logstash':
-                return new LogstashFormatter($formatterInput);
-
-            case 'Elastica':
-                return new ElasticaFormatter($formatterInput);
-
-            default:
-                throw new \InvalidArgumentException("Invalid formatter.");
+        if (isset($this->formatter[$formatter])) {
+            return new $this->formatter[$formatter]($formatterInput);
         }
+
+        throw new \InvalidArgumentException("Invalid formatter.");
     }
 
     /**
@@ -473,7 +418,7 @@ class MonologWriter
      * @param  array   $parameters
      * @return mixed
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      */
     public function __call($method, $parameters)
     {
@@ -488,7 +433,7 @@ class MonologWriter
             return $this->callMonolog($method, $parameters);
         }
 
-        throw new BadMethodCallException("Method [$method] does not exist.");
+        throw new \BadMethodCallException("Method [$method] does not exist.");
     }
 
     /**
