@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Exception;
+namespace Brainwave\Contracts\Support;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,17 +18,21 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as CacheExceptionInterface;
-
 /**
- * CacheException
+ * Jsonable
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class CacheException extends \Exception implements CacheExceptionInterface
+interface Jsonable
 {
-
+    /**
+     * Convert the object to its JSON representation.
+     *
+     * @param  int  $options
+     * @return string
+     */
+    public function toJson($options = 0);
 }

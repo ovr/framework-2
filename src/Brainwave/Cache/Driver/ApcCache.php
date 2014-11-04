@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Tag\TaggableStore;
+use \Brainwave\Cache\Store\TaggableStore;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 
 /**

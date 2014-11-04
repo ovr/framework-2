@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Exception;
+namespace Brainwave\Config;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,17 +18,23 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as CacheExceptionInterface;
+use \Brainwave\Support\Arr;
+use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
 
 /**
- * CacheException
+ * GetOptionHandler
+ * 
+ * Allows for easy processing of command-line arguments
+ * It is a more powerful, object-oriented alternative to PHP's
+ * built-in getopt() function.
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.3-dev
  *
  */
-class CacheException extends \Exception implements CacheExceptionInterface
+class GetOptionHandler implements
+    \Countable,
+    ConfigurationHandlerInterface
 {
-
 }

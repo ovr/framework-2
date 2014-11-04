@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Exception;
+namespace Brainwave\Contracts\Http;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,17 +18,27 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as CacheExceptionInterface;
-
 /**
- * CacheException
+ * HttpException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class CacheException extends \Exception implements CacheExceptionInterface
+interface HttpException
 {
+    /**
+     * Returns the status code.
+     *
+     * @return integer An HTTP response status code
+     */
+    public function getStatusCode();
 
+    /**
+     * Returns response headers.
+     *
+     * @return array Response headers
+     */
+    public function getHeaders();
 }

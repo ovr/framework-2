@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Exception;
+namespace Brainwave\Contracts\Middleware;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,17 +18,34 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as CacheExceptionInterface;
+use \Brainwave\Contracts\Application;
 
 /**
- * CacheException
+ * Middleware
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class CacheException extends \Exception implements CacheExceptionInterface
+interface Middleware
 {
+    /**
+     * @return void
+     */
+    public function setApplication(Application $application);
 
+    /**
+     * @return \Brainwave\Workbench\Workbench
+     */
+    public function getApplication();
+
+    /**
+     * @return void
+     */
+    public function setNextMiddleware($nextMiddleware);
+
+    public function getNextMiddleware();
+
+    public function call();
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Exception;
+namespace Brainwave\Contracts\View;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,17 +18,27 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as CacheExceptionInterface;
-
 /**
- * CacheException
+ * Engines
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class CacheException extends \Exception implements CacheExceptionInterface
+interface Engines
 {
+   /**
+    * Get the evaluated contents of the view.
+    * @param  array   $data
+    * @return string
+    */
+    public function get(array $data = []);
 
+   /**
+    * Set path
+    * @param string $path
+    * @return $this \Brainwave\View\Engines
+    */
+    public function set($path);
 }

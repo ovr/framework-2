@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Cache\Psr\Cache\InvalidArgumentException as InvalidArgumentExceptionInterface;
+use \Brainwave\Contracts\Cache\InvalidArgumentException as InvalidArgumentExceptionInterface;
 
 /**
  * InvalidArgumentException
