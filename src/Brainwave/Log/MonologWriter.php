@@ -85,21 +85,19 @@ class MonologWriter
      * @var array
      */
     protected $handler = [
-        'Stream',
-        'RotatingFile',
-        'Syslog',
-        'ErrorLog',
-        'FirePHP',
-        'ChromePHP',
-        'Socket',
-        'Amqp',
-        'Gelf',
-        'Cube',
-        'Raven',
-        'ZendMonitor',
-        'NewRelic',
-        'Loggly',
-        'SyslogUdp'
+        'Stream'        => 'StreamHandler',
+        'RotatingFile'  => 'RotatingFileHandler',
+        'FirePHP'       => 'FirePHPHandler',
+        'ChromePHP'     => 'ChromePHPHandler',
+        'Socket'        => 'SocketHandler',
+        'Amqp'          => 'AmqpHandler',
+        'Gelf'          => 'GelfHandler',
+        'Cube'          => 'CubeHandler',
+        'Raven'         => 'RavenHandler',
+        'ZendMonitor'   => 'ZendMonitorHandler',
+        'NewRelic'      => 'NewRelicHandler',
+        'Loggly'        => 'LogglyHandler',
+        'SyslogUdp'     => 'SyslogUdpHandler'
     ];
 
     /**
@@ -295,66 +293,38 @@ class MonologWriter
     }
 
     /**
-     * Parse the formatter into a Monolog constant.
+     * Parse the handler into a Monolog constant.
      *
      * @return int
      *
      * @throws \InvalidArgumentException
      */
-    protected function parseHandler($handler, $path, $level = '')
+    protected function parseHandler($handler, $path = '', $level = '')
     {
-        switch ($handler)
-        {
-            case 'Stream':
-                return $this->monolog->pushHandler(new StreamHandler($path, $level));
+        if (isset($this->handler[$handler])) {
 
-            case 'RotatingFile':
-                return $this->monolog->pushHandler(new RotatingFileHandler($path, $level));
+            if ($handler === 'Socket') {
+                $socket = new $this->handler[$handler]($path);
+                $socket->setPersistent(true);
+                return $this->monolog->pushHandler($socket, $level);
+            }
 
-            case 'FirePHP':
-                return $this->monolog->pushHandler(new FirePHPHandler($path, $level));
-
-            case 'ChromePHP':
-                return $this->monolog->pushHandler(new ChromePHPHandler($path, $level));
-
-            case 'Socket':
-                $handler = new SocketHandler($path);
-                $handler->setPersistent(true);
-                return $this->monolog->pushHandler($handler, $level);
-
-            case 'Amqp':
-                return $this->monolog->pushHandler(new AmqpHandler($path, $level));
-
-            case 'Gelf':
-                return $this->monolog->pushHandler(new GelfHandler($path, $level));
-
-            case 'Cube':
-                return $this->monolog->pushHandler(new CubeHandler($path, $level));
-
-            case 'Raven':
-                return $this->monolog->pushHandler(new RavenHandler($path, $level));
-
-            case 'ZendMonitor':
-                return $this->monolog->pushHandler(new ZendMonitorHandler($path, $level));
-
-            case 'NewRelic':
-                return $this->monolog->pushHandler(new NewRelicHandler($path, $level));
-
-            case 'Loggly':
-                return $this->monolog->pushHandler(new LogglyHandler($path, $level));
-
-            case 'SyslogUdp':
-                return $this->monolog->pushHandler(new SyslogUdpHandler($path, $level));
-
-            default:
-                if (is_object($handler)) {
-                    return $this->monolog->pushHandler($handler);
-                } else {
-                    throw new \InvalidArgumentException("Invalid formatter.");
-                }
+            return $this->monolog->pushHandler(new $this->handler[$handler]($path, $level));
         }
+
+        if (is_object($handler)) {
+            return $this->monolog->pushHandler($handler, $level);
+        }
+
+        throw new \InvalidArgumentException("Invalid handler.");
     }
 
+    /**
+     * [addRecord description]
+     *
+     * @param [type] $level [description]
+     * @param [type] $value [description]
+     */
     public function addRecord($level, $value)
     {
         switch ($level)
