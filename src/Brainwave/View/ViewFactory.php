@@ -24,9 +24,9 @@ use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\PhpEngine;
 use \Brainwave\View\Engines\JsonEngine;
 use \Brainwave\View\Engines\EngineResolver;
-use \Brainwave\View\Interfaces\ViewInterface;
-use \Brainwave\View\Interfaces\ViewFactoryInterface;
-use \Brainwave\Support\Interfaces\ArrayableInterface;
+use \Brainwave\Contracts\View\View as ViewContracts;
+use \Brainwave\Contracts\View\Factory as FactoryContracts;
+use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
 /**
  * ViewFactory
@@ -36,7 +36,7 @@ use \Brainwave\Support\Interfaces\ArrayableInterface;
  * @since   0.8.0-dev
  *
  */
-class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterface
+class ViewFactory extends Collection implements ViewContracts, FactoryContracts
 {
     /**
      * Workbanch
@@ -147,7 +147,7 @@ class ViewFactory extends Collection implements ViewInterface, ViewFactoryInterf
             $data = $this->gatherData();
         }
 
-        return $data instanceof ArrayableInterface ? $data->toArray() : $data;
+        return $data instanceof ArrayableContracts ? $data->toArray() : $data;
     }
 
     /**

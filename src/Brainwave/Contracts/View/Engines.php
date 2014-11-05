@@ -28,17 +28,17 @@ namespace Brainwave\Contracts\View;
  */
 interface Engines
 {
-   /**
-    * Get the evaluated contents of the view.
-    * @param  array   $data
-    * @return string
-    */
-    public function get(array $data = []);
+    /**
+     * Get the evaluated contents of the view.
+     * @param  array   $data
+     * @return string
+     */
+     public function get(array $data = []);
 
-   /**
-    * Set path
-    * @param string $path
-    * @return $this \Brainwave\View\Engines
-    */
-    public function set($path);
+    /**
+     * Set path
+     * @param string $path
+     * @return $this \Brainwave\View\Engines
+     */
+     public function set($path);
 }
