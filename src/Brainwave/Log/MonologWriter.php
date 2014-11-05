@@ -18,7 +18,6 @@ namespace Brainwave\Log;
  *
  */
 
-use \BadMethodCallException;
 use \Monolog\Logger as MonologLogger;
 use \Monolog\Handler\StreamHandler;
 use \Monolog\Handler\RotatingFileHandler;
@@ -70,14 +69,14 @@ class MonologWriter
      * @var array
      */
     protected $levels = [
-        'debug',
-        'info',
-        'notice',
-        'warning',
-        'error',
-        'critical',
-        'alert',
-        'emergency',
+        'debug'     => MonologLogger::DEBUG,
+        'info'      => MonologLogger::INFO,
+        'notice'    => MonologLogger::NOTICE,
+        'warning'   => MonologLogger::WARNING,
+        'error'     => MonologLogger::ERROR,
+        'critical'  => MonologLogger::CRITICAL,
+        'alert'     => MonologLogger::ALERT,
+        'emergency' => MonologLogger::EMERGENCY
     ];
 
     /**
@@ -86,21 +85,19 @@ class MonologWriter
      * @var array
      */
     protected $handler = [
-        'Stream',
-        'RotatingFile',
-        'Syslog',
-        'ErrorLog',
-        'FirePHP',
-        'ChromePHP',
-        'Socket',
-        'Amqp',
-        'Gelf',
-        'Cube',
-        'Raven',
-        'ZendMonitor',
-        'NewRelic',
-        'Loggly',
-        'SyslogUdp'
+        'Stream'        => 'StreamHandler',
+        'RotatingFile'  => 'RotatingFileHandler',
+        'FirePHP'       => 'FirePHPHandler',
+        'ChromePHP'     => 'ChromePHPHandler',
+        'Socket'        => 'SocketHandler',
+        'Amqp'          => 'AmqpHandler',
+        'Gelf'          => 'GelfHandler',
+        'Cube'          => 'CubeHandler',
+        'Raven'         => 'RavenHandler',
+        'ZendMonitor'   => 'ZendMonitorHandler',
+        'NewRelic'      => 'NewRelicHandler',
+        'Loggly'        => 'LogglyHandler',
+        'SyslogUdp'     => 'SyslogUdpHandler'
     ];
 
     /**
@@ -109,16 +106,16 @@ class MonologWriter
      * @var array
      */
     protected $formatter = [
-        'Line',
-        'Html',
-        'Normalizer',
-        'Scalar',
-        'Json',
-        'Wildfire',
-        'Chrome',
-        'Gelf',
-        'Logstash',
-        'Elastica'
+        'Line'       => 'LineFormatter',
+        'Html'       => 'HtmlFormatter',
+        'Normalizer' => 'NormalizerFormatter',
+        'Scalar'     => 'ScalarFormatter',
+        'Json'       => 'JsonFormatter',
+        'Wildfire'   => 'WildfireFormatter',
+        'Chrome'     => 'ChromePHPFormatter',
+        'Gelf'       => 'GelfFormatter',
+        'Logstash'   => 'LogstashFormatter',
+        'Elastica'   => 'ElasticaFormatter'
     ];
 
     /**
@@ -270,35 +267,11 @@ class MonologWriter
      */
     protected function parseLevel($level)
     {
-        switch ($level)
-        {
-            case 'debug':
-                return MonologLogger::DEBUG;
-
-            case 'info':
-                return MonologLogger::INFO;
-
-            case 'notice':
-                return MonologLogger::NOTICE;
-
-            case 'warning':
-                return MonologLogger::WARNING;
-
-            case 'error':
-                return MonologLogger::ERROR;
-
-            case 'critical':
-                return MonologLogger::CRITICAL;
-
-            case 'alert':
-                return MonologLogger::ALERT;
-
-            case 'emergency':
-                return MonologLogger::EMERGENCY;
-
-            default:
-                throw new \InvalidArgumentException("Invalid log level.");
+        if (isset($this->levels[$level])) {
+            return $this->levels[$level];
         }
+
+        throw new \InvalidArgumentException("Invalid log level.");
     }
 
     /**
@@ -312,104 +285,46 @@ class MonologWriter
      */
     protected function parseFormatter($formatter, $formatterInput = '')
     {
-        switch ($formatter)
-        {
-            case 'Line':
-                return new LineFormatter($formatterInput);
-
-            case 'Html':
-                return new HtmlFormatter($formatterInput);
-
-            case 'Normalizer':
-                return new NormalizerFormatter($formatterInput);
-
-            case 'Scalar':
-                return new ScalarFormatter($formatterInput);
-
-            case 'Json':
-                return new JsonFormatter($formatterInput);
-
-            case 'Wildfire':
-                return new WildfireFormatter($formatterInput);
-
-            case 'Chrome':
-                return new ChromePHPFormatter($formatterInput);
-
-            case 'Gelf':
-                return new GelfFormatter($formatterInput);
-
-            case 'Logstash':
-                return new LogstashFormatter($formatterInput);
-
-            case 'Elastica':
-                return new ElasticaFormatter($formatterInput);
-
-            default:
-                throw new \InvalidArgumentException("Invalid formatter.");
+        if (isset($this->formatter[$formatter])) {
+            return new $this->formatter[$formatter]($formatterInput);
         }
+
+        throw new \InvalidArgumentException("Invalid formatter.");
     }
 
     /**
-     * Parse the formatter into a Monolog constant.
+     * Parse the handler into a Monolog constant.
      *
      * @return int
      *
      * @throws \InvalidArgumentException
      */
-    protected function parseHandler($handler, $path, $level = '')
+    protected function parseHandler($handler, $path = '', $level = '')
     {
-        switch ($handler)
-        {
-            case 'Stream':
-                return $this->monolog->pushHandler(new StreamHandler($path, $level));
+        if (isset($this->handler[$handler])) {
 
-            case 'RotatingFile':
-                return $this->monolog->pushHandler(new RotatingFileHandler($path, $level));
+            if ($handler === 'Socket') {
+                $socket = new $this->handler[$handler]($path);
+                $socket->setPersistent(true);
+                return $this->monolog->pushHandler($socket, $level);
+            }
 
-            case 'FirePHP':
-                return $this->monolog->pushHandler(new FirePHPHandler($path, $level));
-
-            case 'ChromePHP':
-                return $this->monolog->pushHandler(new ChromePHPHandler($path, $level));
-
-            case 'Socket':
-                $handler = new SocketHandler($path);
-                $handler->setPersistent(true);
-                return $this->monolog->pushHandler($handler, $level);
-
-            case 'Amqp':
-                return $this->monolog->pushHandler(new AmqpHandler($path, $level));
-
-            case 'Gelf':
-                return $this->monolog->pushHandler(new GelfHandler($path, $level));
-
-            case 'Cube':
-                return $this->monolog->pushHandler(new CubeHandler($path, $level));
-
-            case 'Raven':
-                return $this->monolog->pushHandler(new RavenHandler($path, $level));
-
-            case 'ZendMonitor':
-                return $this->monolog->pushHandler(new ZendMonitorHandler($path, $level));
-
-            case 'NewRelic':
-                return $this->monolog->pushHandler(new NewRelicHandler($path, $level));
-
-            case 'Loggly':
-                return $this->monolog->pushHandler(new LogglyHandler($path, $level));
-
-            case 'SyslogUdp':
-                return $this->monolog->pushHandler(new SyslogUdpHandler($path, $level));
-
-            default:
-                if (is_object($handler)) {
-                    return $this->monolog->pushHandler($handler);
-                } else {
-                    throw new \InvalidArgumentException("Invalid formatter.");
-                }
+            return $this->monolog->pushHandler(new $this->handler[$handler]($path, $level));
         }
+
+        if (is_object($handler)) {
+            return $this->monolog->pushHandler($handler, $level);
+        }
+
+        throw new \InvalidArgumentException("Invalid handler.");
     }
 
+    /**
+     * [addRecord description]
+     *
+     * @param [type] $level [description]
+     * @param [type] $value [description]
+     */
     public function addRecord($level, $value)
     {
         switch ($level)
@@ -473,7 +388,7 @@ class MonologWriter
      * @param  array   $parameters
      * @return mixed
      *
-     * @throws BadMethodCallException
+     * @throws \BadMethodCallException
      */
     public function __call($method, $parameters)
     {
@@ -488,7 +403,7 @@ class MonologWriter
             return $this->callMonolog($method, $parameters);
         }
 
-        throw new BadMethodCallException("Method [$method] does not exist.");
+        throw new \BadMethodCallException("Method [$method] does not exist.");
     }
 
     /**
