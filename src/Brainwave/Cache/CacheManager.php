@@ -29,9 +29,10 @@ use \Brainwave\Cache\Driver\XCacheCache;
 use \Brainwave\Cache\Driver\WinCacheCache;
 use \Brainwave\Cache\Driver\MemcacheCache;
 use \Brainwave\Cache\Driver\MemcachedCache;
-use \Brainwave\Cache\Exception\CacheException;
+use \Brainwave\Contracts\Cache\CacheException;
 use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
-use \Brainwave\Cache\Exception\InvalidArgumentException;
+use \Brainwave\Contracts\Cache\InvalidArgumentException;
+use \Brainwave\Contracts\Cache\Factory as FactoryContract;
 
 /**
  * CacheManager
@@ -41,7 +42,7 @@ use \Brainwave\Cache\Exception\InvalidArgumentException;
  * @since   0.8.0-dev
  *
  */
-class CacheManager
+class CacheManager implements FactoryContract
 {
     /**
      * The application instance.
@@ -51,35 +52,36 @@ class CacheManager
     protected $app;
 
     /**
-     * [$supportedDriver description]
-     * @var [type]
+     * All supported drivers
+     *
+     * @var array
      */
-    protected $supportedDriver;
+    protected $supportedDriverss;
 
     /**
      * The array of created "drivers".
      *
      * @var array
      */
-    protected $drivers = array();
+    protected $drivers = [];
 
     /**
      * The registered custom driver creators.
      *
      * @var array
      */
-    protected $customCreators = array();
+    protected $customCreators = [];
 
     /**
      * Constructor.
      *
      * @param \Pimple\Container  $app
-     * @param array $supportedDriver The list of available drivers, key=driver name, value=driver class
+     * @param array $supportedDrivers The list of available drivers, key=driver name, value=driver class
      */
-    public function __construct(Container $app, array $supportedDriver)
+    public function __construct(Container $app, array $supportedDrivers = [])
     {
         $this->app = $app;
-        $this->supportedDriver = $supportedDriver;
+        $this->supportedDrivers = $supportedDrivers;
     }
 
     /**
@@ -184,7 +186,7 @@ class CacheManager
      */
     public function driverExists($driver)
     {
-        return isset($this->supportedDriver[$driver]);
+        return isset($this->supportedDrivers[$driver]);
     }
 
     /**
