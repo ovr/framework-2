@@ -8,7 +8,7 @@ namespace Brainwave\Cache;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,11 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
-use \Closure;
-use \DateTime;
-use \ArrayAccess;
 use \Carbon\Carbon;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Contracts\Cache\Factory as CacheContract;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * Repository
@@ -32,7 +30,7 @@ use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
  * @since   0.9.2-dev
  *
  */
-class Repository implements ArrayAccess
+class Repository implements CacheContract, \ArrayAccess
 {
     /**
      * The cache driver implementation.
@@ -48,14 +46,19 @@ class Repository implements ArrayAccess
      */
     protected $default = 60;
 
+    /**
+     * Cache driver supported
+     *
+     * @var boolen
+     */
     protected static $supported;
 
     /**
      * Create a new cache repository instance.
      *
-     * @param  \Brainwave\Cache\Driver\Interfaces\DriverInterface  $driver
+     * @param AdapterContract $driver
      */
-    public function __construct(DriverInterface $driver = null)
+    public function __construct(AdapterContract $driver = null)
     {
         $this->driver = $driver;
         self::$supported = $driver::isSupported();
@@ -155,7 +158,7 @@ class Repository implements ArrayAccess
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback)
+    public function remember($key, $minutes, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -176,7 +179,7 @@ class Repository implements ArrayAccess
      * @param  \Closure  $callback
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback)
+    public function rememberForever($key, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -285,7 +288,7 @@ class Repository implements ArrayAccess
      */
     protected function getMinutes($duration)
     {
-        if ($duration instanceof DateTime) {
+        if ($duration instanceof \DateTime) {
             $fromNow = Carbon::instance($duration)->diffInMinutes();
 
             return $fromNow > 0 ? $fromNow : null;

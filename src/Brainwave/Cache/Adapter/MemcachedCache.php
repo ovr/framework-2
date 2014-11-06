@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,26 +18,25 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Memcache;
-use \Brainwave\Cache\Tag\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Cache\Store\TaggableStore;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
- * MemcacheCache
+ * MemcachedCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class MemcacheCache extends TaggableStore implements DriverInterface
+class MemcachedCache extends TaggableStore implements AdapterContract
 {
     /**
-     * The Memcache instance.
+     * The Memcached instance.
      *
-     * @var Memcache
+     * @var \Memcached
      */
-    private $memcache;
+    protected $memcached;
 
     /**
      * A string that should be prepended to keys.
@@ -53,23 +52,23 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      */
     public static function isSupported()
     {
-        return extension_loaded('memcache');
+        return extension_loaded('memcached');
     }
 
     /**
-     * Create a new Memcache connection.
+     * Create a new Memcached connection.
      *
      * @param  array  $servers
-     * @return \Memcache
+     * @return \Memcached
      *
      * @throws \RuntimeException
      */
     public static function connect(array $servers)
     {
-        $memcached = static::getMemcache();
+        $memcached = static::getMemcached();
 
         // For each server in the array, we'll just extract the configuration and add
-        // the server to the Memcache connection. Once we have added all of these
+        // the server to the Memcached connection. Once we have added all of these
         // servers we'll verify the connection is successful and return it back.
         foreach ($servers as $server) {
             $memcached->addServer(
@@ -80,28 +79,32 @@ class MemcacheCache extends TaggableStore implements DriverInterface
         }
 
         if ($memcached->getVersion() === false) {
-            throw new \RuntimeException("Could not establish Memcache connection.");
+            throw new \RuntimeException("Could not establish Memcached connection.");
         }
 
         return $memcached;
     }
 
     /**
-     * Get a new Memcache instance.
+     * Get a new Memcached instance.
      *
-     * @return \Memcache
+     * @return \Memcached
      */
-    protected static function getMemcache()
+    protected static function getMemcached()
     {
-        return new Memcache;
+        return new \Memcached;
     }
 
     /**
-     * {@inheritdoc}
+     * Create a new Memcached store.
+     *
+     * @param  \Memcached  $memcached
+     * @param  string      $prefix
+     * @return AdapterContract
      */
-    public function __construct(Memcache $memcache, $prefix = '')
+    public function __construct($memcached, $prefix = '')
     {
-        $this->memcache = $memcache;
+        $this->memcached = $memcached;
         $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
     }
 
@@ -113,7 +116,11 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      */
     public function get($key)
     {
-        return $this->memcache->get($this->prefix.$key);
+        $value = $this->memcached->get($this->prefix.$key);
+
+        if ($this->memcached->getResultCode() == 0) {
+            return $value;
+        }
     }
 
     /**
@@ -122,11 +129,11 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      * @param  string  $key
      * @param  mixed   $value
      * @param  int     $minutes
-     * @return boolean
+     * @return void
      */
     public function set($key, $value, $minutes)
     {
-        return $this->memcache->set($this->prefix.$key, $value, $minutes * 60);
+        $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
@@ -138,7 +145,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      */
     public function increment($key, $value = 1)
     {
-        return $this->memcache->increment($this->prefix.$key, $value);
+        return $this->memcached->increment($this->prefix.$key, $value);
     }
 
     /**
@@ -150,7 +157,7 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      */
     public function decrement($key, $value = 1)
     {
-        return $this->memcache->decrement($this->prefix.$key, $value);
+        return $this->memcached->decrement($this->prefix.$key, $value);
     }
 
     /**
@@ -158,32 +165,32 @@ class MemcacheCache extends TaggableStore implements DriverInterface
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @return boolean
+     * @return void
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        return $this->store($key, $value, 0);
     }
 
     /**
      * Remove an item from the cache.
      *
      * @param  string  $key
-     * @return boolean
+     * @return void
      */
     public function forget($key)
     {
-        return $this->memcache->delete($this->prefix.$key);
+        $this->memcached->delete($this->prefix.$key);
     }
 
     /**
      * Remove all items from the cache.
      *
-     * @return boolean
+     * @return void
      */
     public function flush()
     {
-        return $this->memcache->flush();
+        $this->memcached->flush();
     }
 
     /**

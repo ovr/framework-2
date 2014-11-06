@@ -19,14 +19,14 @@ namespace Brainwave\Contracts\Cache;
  */
 
 /**
- * Store
+ * Adapter
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Store
+interface Adapter
 {
     /**
      * Invalidate all items in the cache

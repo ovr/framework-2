@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,8 @@ namespace Brainwave\Cache\Driver;
  */
 
 use \Predis\Client as Client;
-use \Brainwave\Cache\Tag\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Cache\Store\TaggableStore;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * RedisCache
@@ -30,7 +30,7 @@ use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
  * @since   0.8.0-dev
  *
  */
-class RedisCache extends TaggableStore implements DriverInterface
+class RedisCache extends TaggableStore implements AdapterContract
 {
     /**
      * A string that should be prepended to keys.
@@ -96,11 +96,11 @@ class RedisCache extends TaggableStore implements DriverInterface
         $options = array_filter($options);
 
         if (!empty($parameters)) {
-            $redis = Client($parameters);
+            $redis = new Client($parameters);
         } elseif (!empty($parameters) && !empty($options)) {
-            $redis = Client($parameters, $options);
+            $redis = new Client($parameters, $options);
         } else {
-            $redis = Client();
+            $redis = new Client();
         }
 
         return new $redis;
@@ -111,7 +111,8 @@ class RedisCache extends TaggableStore implements DriverInterface
      *
      * @param \Redis   $redis
      * @param  string  $prefix
-     * @return DriverInterface
+     *
+     * @return AdapterContract
      */
     public function __construct(Client $redis, $prefix = '', $connection = 'default')
     {
@@ -123,7 +124,8 @@ class RedisCache extends TaggableStore implements DriverInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -139,6 +141,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      * @param  string  $key
      * @param  mixed   $value
      * @param  int     $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
@@ -153,6 +156,7 @@ class RedisCache extends TaggableStore implements DriverInterface
      *
      * @param  string  $key
      * @param  integer   $value
+     *
      * @return int|bool
      */
     public function increment($key, $value = 1)
@@ -164,7 +168,8 @@ class RedisCache extends TaggableStore implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int|bool
      */
     public function decrement($key, $value = 1)
@@ -175,8 +180,9 @@ class RedisCache extends TaggableStore implements DriverInterface
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
@@ -189,7 +195,8 @@ class RedisCache extends TaggableStore implements DriverInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return void
      */
     public function forget($key)
@@ -220,7 +227,8 @@ class RedisCache extends TaggableStore implements DriverInterface
     /**
      * Set the connection name to be used.
      *
-     * @param  string  $connection
+     * @param  string $connection
+     *
      * @return void
      */
     public function setConnection($connection)

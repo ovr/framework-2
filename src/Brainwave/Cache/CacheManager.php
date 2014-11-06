@@ -8,7 +8,7 @@ namespace Brainwave\Cache;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,18 +20,18 @@ namespace Brainwave\Cache;
 
 use \Pimple\Container;
 use \Brainwave\Cache\Repository;
-use \Brainwave\Cache\Driver\ApcCache;
-use \Brainwave\Cache\Driver\NullCache;
-use \Brainwave\Cache\Driver\FileCache;
-use \Brainwave\Cache\Driver\ArrayCache;
-use \Brainwave\Cache\Driver\RedisCache;
-use \Brainwave\Cache\Driver\XCacheCache;
-use \Brainwave\Cache\Driver\WinCacheCache;
-use \Brainwave\Cache\Driver\MemcacheCache;
-use \Brainwave\Cache\Driver\MemcachedCache;
+use \Brainwave\Cache\Adapter\ApcCache;
+use \Brainwave\Cache\Adapter\NullCache;
+use \Brainwave\Cache\Adapter\FileCache;
+use \Brainwave\Cache\Adapter\ArrayCache;
+use \Brainwave\Cache\Adapter\RedisCache;
+use \Brainwave\Cache\Adapter\XCacheCache;
+use \Brainwave\Cache\Adapter\WinCacheCache;
+use \Brainwave\Cache\Adapter\MemcacheCache;
+use \Brainwave\Cache\Adapter\MemcachedCache;
 use \Brainwave\Contracts\Cache\CacheException;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 use \Brainwave\Contracts\Cache\InvalidArgumentException;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use \Brainwave\Contracts\Cache\Factory as FactoryContract;
 
 /**
@@ -87,10 +87,11 @@ class CacheManager implements FactoryContract
     /**
      * Builder.
      *
-     * @param string $driver The cache driver to use
-     * @return \Brainwave\Cache\Driver\Interfaces\DriverInterface
+     * @param  string $driver The cache driver to use
+     *
+     * @return AdapterContract
      */
-    public function driver($driver, array $options = [])
+    public function driver(AdapterContract $driver, array $options = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
@@ -349,10 +350,10 @@ class CacheManager implements FactoryContract
     /**
      * Create a new cache repository with the given implementation.
      *
-     * @param  \Brainwave\Cache\Driver\Interfaces\DriverInterface  $Cache
+     * @param  AdapterContract  $Cache
      * @return \Brainwave\Cache\Repository
      */
-    protected function repository(DriverInterface $Cache)
+    protected function repository(AdapterContract $Cache)
     {
         return new Repository($Cache);
     }

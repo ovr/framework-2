@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Store;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,8 +20,8 @@ namespace Brainwave\Cache\Store;
 
 use \Carbon\Carbon;
 use \Brainwave\Cache\Store\TagSet;
-use \Brainwave\Contracts\Cache\Store as StoreContract;
 use \Brainwave\Contracts\Cache\Factory as FactoryContract;
+use \Brainwave\Cache\Store\Interfaces\StoreInterface as StoreContract;
 
 /**
  * TaggedCache
@@ -50,8 +50,9 @@ class TaggedCache implements StoreContract
     /**
      * Create a new tagged cache instance.
      *
-     * @param  FactoryContract              $store
-     * @param  \Brainwave\Cache\Store\TagSet  $tags
+     * @param  FactoryContract               $store
+     * @param  \Brainwave\Cache\Store\TagSet $tags
+     *
      * @return void
      */
     public function __construct(FactoryContract $store, TagSet $tags)
@@ -64,6 +65,7 @@ class TaggedCache implements StoreContract
      * Determine if an item exists in the cache.
      *
      * @param  string  $key
+     *
      * @return bool
      */
     public function has($key)
@@ -74,8 +76,9 @@ class TaggedCache implements StoreContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
@@ -88,9 +91,10 @@ class TaggedCache implements StoreContract
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  string        $key
+     * @param  mixed         $value
+     * @param  \DateTime|int $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
@@ -105,9 +109,10 @@ class TaggedCache implements StoreContract
     /**
      * Store an item in the cache if the key does not exist.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  string        $key
+     * @param  mixed         $value
+     * @param  \DateTime|int $minutes
+     *
      * @return bool
      */
     public function add($key, $value, $minutes)
@@ -124,7 +129,8 @@ class TaggedCache implements StoreContract
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return void
      */
     public function increment($key, $value = 1)
@@ -136,7 +142,8 @@ class TaggedCache implements StoreContract
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return void
      */
     public function decrement($key, $value = 1)
@@ -147,8 +154,9 @@ class TaggedCache implements StoreContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
@@ -159,7 +167,8 @@ class TaggedCache implements StoreContract
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function forget($key)
@@ -180,9 +189,10 @@ class TaggedCache implements StoreContract
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string  $key
-     * @param  \DateTime|int  $minutes
-     * @param  \Closure  $callback
+     * @param  string        $key
+     * @param  \DateTime|int $minutes
+     * @param  \Closure      $callback
+     *
      * @return mixed
      */
     public function remember($key, $minutes, \Closure $callback)
@@ -202,8 +212,9 @@ class TaggedCache implements StoreContract
     /**
      * Get an item from the cache, or store the default value forever.
      *
-     * @param  string    $key
-     * @param  \Closure  $callback
+     * @param  string   $key
+     * @param  \Closure $callback
+     *
      * @return mixed
      */
     public function rememberForever($key, \Closure $callback)
@@ -223,7 +234,8 @@ class TaggedCache implements StoreContract
     /**
      * Get a fully qualified key for a tagged item.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return string
      */
     public function taggedItemKey($key)
@@ -244,7 +256,8 @@ class TaggedCache implements StoreContract
     /**
      * Calculate the number of minutes with the given duration.
      *
-     * @param  \DateTime|int  $duration
+     * @param  \DateTime|int $duration
+     *
      * @return int|null
      */
     protected function getMinutes($duration)

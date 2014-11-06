@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,26 +18,25 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Memcached;
-use \Brainwave\Cache\Tag\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Cache\Store\TaggableStore;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
- * MemcachedCache
+ * MemcacheCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class MemcachedCache extends TaggableStore implements DriverInterface
+class MemcacheCache extends TaggableStore implements AdapterContract
 {
     /**
-     * The Memcached instance.
+     * The Memcache instance.
      *
-     * @var \Memcached
+     * @var Memcache
      */
-    protected $memcached;
+    private $memcache;
 
     /**
      * A string that should be prepended to keys.
@@ -53,23 +52,23 @@ class MemcachedCache extends TaggableStore implements DriverInterface
      */
     public static function isSupported()
     {
-        return extension_loaded('memcached');
+        return extension_loaded('memcache');
     }
 
     /**
-     * Create a new Memcached connection.
+     * Create a new Memcache connection.
      *
      * @param  array  $servers
-     * @return \Memcached
+     * @return \Memcache
      *
      * @throws \RuntimeException
      */
     public static function connect(array $servers)
     {
-        $memcached = static::getMemcached();
+        $memcached = static::getMemcache();
 
         // For each server in the array, we'll just extract the configuration and add
-        // the server to the Memcached connection. Once we have added all of these
+        // the server to the Memcache connection. Once we have added all of these
         // servers we'll verify the connection is successful and return it back.
         foreach ($servers as $server) {
             $memcached->addServer(
@@ -80,118 +79,119 @@ class MemcachedCache extends TaggableStore implements DriverInterface
         }
 
         if ($memcached->getVersion() === false) {
-            throw new \RuntimeException("Could not establish Memcached connection.");
+            throw new \RuntimeException("Could not establish Memcache connection.");
         }
 
         return $memcached;
     }
 
     /**
-     * Get a new Memcached instance.
+     * Get a new Memcache instance.
      *
-     * @return \Memcached
+     * @return \Memcache
      */
-    protected static function getMemcached()
+    protected static function getMemcache()
     {
-        return new Memcached;
+        return new \Memcache;
     }
 
     /**
-     * Create a new Memcached store.
+     * Create a new file cache store instance.
      *
-     * @param  \Memcached  $memcached
-     * @param  string      $prefix
-     * @return DriverInterface
+     * @param \Memcache $memcache
+     * @param string    $prefix
      */
-    public function __construct($memcached, $prefix = '')
+    public function __construct(Memcache $memcache, $prefix = '')
     {
-        $this->memcached = $memcached;
+        $this->memcache = $memcache;
         $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
     {
-        $value = $this->memcached->get($this->prefix.$key);
-
-        if ($this->memcached->getResultCode() == 0) {
-            return $value;
-        }
+        return $this->memcache->get($this->prefix.$key);
     }
 
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
-     * @return void
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
+     * @return boolean
      */
     public function set($key, $value, $minutes)
     {
-        $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+        return $this->memcache->set($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return integer
      */
     public function increment($key, $value = 1)
     {
-        return $this->memcached->increment($this->prefix.$key, $value);
+        return $this->memcache->increment($this->prefix.$key, $value);
     }
 
     /**
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return integer
      */
     public function decrement($key, $value = 1)
     {
-        return $this->memcached->decrement($this->prefix.$key, $value);
+        return $this->memcache->decrement($this->prefix.$key, $value);
     }
 
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @return void
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return boolean
      */
     public function forever($key, $value)
     {
-        return $this->store($key, $value, 0);
+        return $this->set($key, $value, 0);
     }
 
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
-     * @return void
+     * @param  string $key
+     *
+     * @return boolean
      */
     public function forget($key)
     {
-        $this->memcached->delete($this->prefix.$key);
+        return $this->memcache->delete($this->prefix.$key);
     }
 
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return boolean
      */
     public function flush()
     {
-        $this->memcached->flush();
+        return $this->memcache->flush();
     }
 
     /**

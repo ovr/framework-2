@@ -1,4 +1,5 @@
-<?php namespace Brainwave\Cache\Driver;
+<?php
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -7,7 +8,7 @@
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,24 +18,25 @@
  *
  */
 
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Cache\Store\TaggableStore;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
- * ArrayCache
+ * XcacheCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class ArrayCache implements DriverInterface
+class XcacheCache extends TaggableStore implements AdapterContract
 {
     /**
-     * The array of stored values.
+     * A string that should be prepended to keys.
      *
-     * @var array $storage
+     * @var string
      */
-    private $storage = [];
+    protected $prefix;
 
     /**
      * Check if the cache driver is supported
@@ -43,19 +45,34 @@ class ArrayCache implements DriverInterface
      */
     public static function isSupported()
     {
-        return true;
+        return extension_loaded('xcache');
+    }
+
+    /**
+     * Create a new WinCache store.
+     *
+     * @param  string $prefix
+     *
+     * @return AdapterContract
+     */
+    public function __construct($prefix = '')
+    {
+        $this->prefix = $prefix;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
     {
-        if (array_key_exists($key, $this->storage)) {
-            return $this->storage[$key];
+        $value = xcache_get($this->prefix.$key);
+
+        if (isset($value)) {
+            return $value;
         }
     }
 
@@ -65,62 +82,63 @@ class ArrayCache implements DriverInterface
      * @param  string  $key
      * @param  mixed   $value
      * @param  int     $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
     {
-        $this->storage[$key] = $value;
+        xcache_set($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function increment($key, $value = 1)
     {
-        $this->storage[$key] = $this->storage[$key] + $value;
-
-        return $this->storage[$key];
+        return xcache_inc($this->prefix.$key, $value);
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function decrement($key, $value = 1)
     {
-        $this->storage[$key] = $this->storage[$key] - $value;
-
-        return $this->storage[$key];
+        return xcache_dec($this->prefix.$key, $value);
     }
 
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        return $this->store($key, $value, 0);
     }
 
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return void
      */
     public function forget($key)
     {
-        unset($this->storage[$key]);
+        xcache_unset($this->prefix.$key);
     }
 
     /**
@@ -130,7 +148,7 @@ class ArrayCache implements DriverInterface
      */
     public function flush()
     {
-        $this->storage = array();
+        xcache_clear_cache(XC_TYPE_VAR);
     }
 
     /**
@@ -140,6 +158,6 @@ class ArrayCache implements DriverInterface
      */
     public function getPrefix()
     {
-        return '';
+        return $this->prefix;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,25 +19,18 @@ namespace Brainwave\Cache\Driver;
  */
 
 use \Brainwave\Cache\Store\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
- * ApcCache
+ * WincacheCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.2-dev
  *
  */
-class ApcCache extends TaggableStore implements DriverInterface
+class WincacheCache extends TaggableStore implements AdapterContract
 {
-    /**
-     * Indicates if APCu is supported.
-     *
-     * @var bool
-     */
-    protected $apcu = false;
-
     /**
      * A string that should be prepended to keys.
      *
@@ -46,38 +39,37 @@ class ApcCache extends TaggableStore implements DriverInterface
     protected $prefix;
 
     /**
-     * Create a new APC store.
-     *
-     * @param  string  $prefix
-     * @return DriverInterface
-     */
-    public function __construct($prefix = '')
-    {
-        $this->apcu = function_exists('apcu_fetch');
-        $this->prefix = $prefix;
-    }
-
-    /**
      * Check if the cache driver is supported
      *
      * @return bool Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
-        return extension_loaded('apc') ? extension_loaded('apc') : function_exists('apcu_fetch');
+        return extension_loaded('wincache');
+    }
+
+    /**
+     * Create a new WinCache store.
+     *
+     * @param  string $prefix
+     *
+     * @return AdapterContract
+     */
+    public function __construct($prefix = '')
+    {
+        $this->prefix = $prefix;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
     {
-        $value = $this->apcu ?
-        apcu_fetch($this->prefix.$key) :
-        apc_fetch($this->prefix.$key);
+        $value = wincache_ucache_get($this->prefix.$key);
 
         if ($value !== false) {
             return $value;
@@ -87,52 +79,50 @@ class ApcCache extends TaggableStore implements DriverInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
-     * @return array|bool
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
+     * @return void
      */
     public function set($key, $value, $minutes)
     {
-        return $this->apcu ?
-        apcu_store($this->prefix.$key, $value, $minutes * 60) :
-        apc_store($this->prefix.$key, $value, $minutes * 60);
+        wincache_ucache_set($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int|bool
      */
     public function increment($key, $value = 1)
     {
-        return $this->apcu ?
-        apcu_inc($this->prefix.$key, $value) :
-        apc_inc($this->prefix.$key, $value);
+        return wincache_ucache_inc($this->prefix.$key, $value);
     }
 
     /**
-     * Decrement the value of an item in the cache.
+     * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int|bool
      */
     public function decrement($key, $value = 1)
     {
-        return $this->apcu ?
-        apcu_dec($this->prefix.$key, $value) :
-        apc_dec($this->prefix.$key, $value);
+        return wincache_ucache_dec($this->prefix.$key, $value);
     }
 
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @return array|bool
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return void
      */
     public function forever($key, $value)
     {
@@ -142,14 +132,13 @@ class ApcCache extends TaggableStore implements DriverInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
-     * @return array|bool
+     * @param  string $key
+     *
+     * @return void
      */
-    protected function forget($key)
+    public function forget($key)
     {
-        return $this->apcu ?
-        apcu_delete($this->prefix.$key) :
-        apc_delete($this->prefix.$key);
+        wincache_ucache_delete($this->prefix.$key);
     }
 
     /**
@@ -159,7 +148,7 @@ class ApcCache extends TaggableStore implements DriverInterface
      */
     public function flush()
     {
-        $this->apcu ? apcu_clear_cache() : apc_clear_cache('user');
+        wincache_ucache_clear();
     }
 
     /**

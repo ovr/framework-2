@@ -1,4 +1,5 @@
-<?php namespace Brainwave\Cache\Driver;
+<?php
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -7,7 +8,7 @@
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,8 +18,8 @@
  *
  */
 
-use \Brainwave\Cache\Tag\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Cache\Store\TaggableStore;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * NullCache
@@ -28,7 +29,7 @@ use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
  * @since   0.9.2-dev
  *
  */
-class NullCache extends TaggableStore implements DriverInterface
+class NullCache extends TaggableStore implements AdapterContract
 {
     /**
      * The array of stored values.
@@ -50,7 +51,8 @@ class NullCache extends TaggableStore implements DriverInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -61,9 +63,10 @@ class NullCache extends TaggableStore implements DriverInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
@@ -75,7 +78,8 @@ class NullCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function increment($key, $value = 1)
@@ -87,7 +91,8 @@ class NullCache extends TaggableStore implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function decrement($key, $value = 1)
@@ -98,8 +103,9 @@ class NullCache extends TaggableStore implements DriverInterface
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
@@ -110,7 +116,8 @@ class NullCache extends TaggableStore implements DriverInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return void
      */
     public function forget($key)

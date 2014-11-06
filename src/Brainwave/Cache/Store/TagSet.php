@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Store;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -48,8 +48,9 @@ class TagSet
     /**
      * Create a new TagSet instance.
      *
-     * @param  FactoryContract  $store
-     * @param  array            $names
+     * @param  FactoryContract $store
+     * @param  array           $names
+     *
      * @return void
      */
     public function __construct(FactoryContract $store, array $names = array())
@@ -71,7 +72,8 @@ class TagSet
     /**
      * Get the unique tag identifier for a given tag.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return string
      */
     public function tagId($name)
@@ -102,7 +104,8 @@ class TagSet
     /**
      * Reset the tag and return the new tag identifier
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return string
      */
     public function resetTag($name)
@@ -116,6 +119,7 @@ class TagSet
      * Get the tag identifier key for a given tag.
      *
      * @param  string  $name
+     *
      * @return string
      */
     public function tagKey($name)

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,8 @@ namespace Brainwave\Cache\Driver;
  */
 
 use \Brainwave\Support\Arr;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
 use \Brainwave\Filesystem\Interfaces\FilesystemInterface;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * FileCache
@@ -30,12 +30,12 @@ use \Brainwave\Filesystem\Interfaces\FilesystemInterface;
  * @since   0.9.2-dev
  *
  */
-class FileCache implements DriverInterface
+class FileCache implements AdapterContract
 {
     /**
      * The Brainwave Filesystem instance.
      *
-     * @var \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @var FilesystemInterface
      */
     protected $files;
 
@@ -59,9 +59,10 @@ class FileCache implements DriverInterface
     /**
      * Create a new file cache store instance.
      *
-     * @param  \Brainwave\Filesystem\Interfaces\FilesystemInterface  $files
-     * @param  string  $directory
-     * @return DriverInterface
+     * @param  FilesystemInterface $files
+     * @param  string              $directory
+     *
+     * @return AdapterContract
      */
     public function __construct(FilesystemInterface $files, $directory)
     {
@@ -72,7 +73,8 @@ class FileCache implements DriverInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -83,7 +85,8 @@ class FileCache implements DriverInterface
     /**
      * Retrieve an item and expiry time from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return array
      */
     protected function getPayload($key)
@@ -125,9 +128,10 @@ class FileCache implements DriverInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
@@ -142,7 +146,8 @@ class FileCache implements DriverInterface
     /**
      * Create the file cache directory if necessary.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return void
      */
     protected function createCacheDirectory($path)
@@ -158,7 +163,8 @@ class FileCache implements DriverInterface
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function increment($key, $value = 1)
@@ -176,7 +182,8 @@ class FileCache implements DriverInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function decrement($key, $value = 1)
@@ -187,8 +194,9 @@ class FileCache implements DriverInterface
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
@@ -199,7 +207,8 @@ class FileCache implements DriverInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return void
      */
     public function forget($key)
@@ -226,7 +235,8 @@ class FileCache implements DriverInterface
     /**
      * Get the full path for the given cache key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return string
      */
     protected function path($key)
@@ -239,7 +249,8 @@ class FileCache implements DriverInterface
     /**
      * Get the expiration time based on the given minutes.
      *
-     * @param  int  $minutes
+     * @param  int $minutes
+     *
      * @return int
      */
     protected function expiration($minutes)

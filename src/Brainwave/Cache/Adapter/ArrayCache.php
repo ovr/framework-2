@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache\Driver;
+namespace Brainwave\Cache\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Cache\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,25 +18,24 @@ namespace Brainwave\Cache\Driver;
  *
  */
 
-use \Brainwave\Cache\Tag\TaggableStore;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
- * XcacheCache
+ * ArrayCache
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.2-dev
  *
  */
-class XcacheCache extends TaggableStore implements DriverInterface
+class ArrayCache implements AdapterContract
 {
     /**
-     * A string that should be prepended to keys.
+     * The array of stored values.
      *
-     * @var string
+     * @var array $storage
      */
-    protected $prefix;
+    private $storage = [];
 
     /**
      * Check if the cache driver is supported
@@ -45,94 +44,90 @@ class XcacheCache extends TaggableStore implements DriverInterface
      */
     public static function isSupported()
     {
-        return extension_loaded('xcache');
-    }
-
-    /**
-     * Create a new WinCache store.
-     *
-     * @param  string  $prefix
-     * @return DriverInterface
-     */
-    public function __construct($prefix = '')
-    {
-        $this->prefix = $prefix;
+        return true;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
     {
-        $value = xcache_get($this->prefix.$key);
-
-        if (isset($value))
-        {
-            return $value;
+        if (array_key_exists($key, $this->storage)) {
+            return $this->storage[$key];
         }
     }
 
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
     {
-        xcache_set($this->prefix.$key, $value, $minutes * 60);
+        $this->storage[$key] = $value;
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function increment($key, $value = 1)
     {
-        return xcache_inc($this->prefix.$key, $value);
+        $this->storage[$key] = $this->storage[$key] + $value;
+
+        return $this->storage[$key];
     }
 
     /**
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
+     *
      * @return int
      */
     public function decrement($key, $value = 1)
     {
-        return xcache_dec($this->prefix.$key, $value);
+        $this->storage[$key] = $this->storage[$key] - $value;
+
+        return $this->storage[$key];
     }
 
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function forever($key, $value)
     {
-        return $this->store($key, $value, 0);
+        return $this->set($key, $value, 0);
     }
 
     /**
      * Remove an item from the cache.
      *
      * @param  string  $key
+     *
      * @return void
      */
     public function forget($key)
     {
-        xcache_unset($this->prefix.$key);
+        unset($this->storage[$key]);
     }
 
     /**
@@ -142,7 +137,7 @@ class XcacheCache extends TaggableStore implements DriverInterface
      */
     public function flush()
     {
-        xcache_clear_cache(XC_TYPE_VAR);
+        $this->storage = array();
     }
 
     /**
@@ -152,6 +147,6 @@ class XcacheCache extends TaggableStore implements DriverInterface
      */
     public function getPrefix()
     {
-        return $this->prefix;
+        return '';
     }
 }
