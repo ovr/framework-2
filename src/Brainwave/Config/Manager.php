@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,11 +19,11 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Config\FileLoader;
-use \Brainwave\Config\Interfaces\ConfigurationInterface;
-use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
+use \Brainwave\Contract\Config\Manager as ManagerContract;
+use \Brainwave\Contract\Config\Repository as RepositoryContract;
 
 /**
- * Configuration
+ * Manager
  *
  * Uses a ConfigurationHandler class to parse configuration data,
  * accessed as an array.
@@ -32,14 +32,14 @@ use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  */
-class Configuration implements ConfigurationInterface, \IteratorAggregate
+class Manager implements ManagerContract, \IteratorAggregate
 {
     /**
      * Handler for Configuration values
      *
      * @var mixed
      */
-    protected $handler;
+    protected $repository;
 
      /**
      * Fileloader instance
@@ -58,42 +58,42 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     /**
      * Constructor
      *
-     * @param ConfigurationHandlerInterface $handler
+     * @param RepositoryContract $repository
      */
-    public function __construct(ConfigurationHandlerInterface $handler, FileLoader $loader)
+    public function __construct(RepositoryContract $repository, FileLoader $loader)
     {
-        $this->setHandler($handler);
+        $this->setHandler($repository);
         $this->loader = $loader;
     }
 
     /**
-     * Set Brainwave's defaults using the handler
+     * Set Brainwave's defaults using the repository
      *
      * @param array $values
      */
     public function setArray(array $values)
     {
-        $this->handler->setArray($values);
+        $this->repository->setArray($values);
     }
 
     /**
-     * Set a configuration handler and provide it some defaults
+     * Set a configuration repository and provide it some defaults
      *
-     * @param \Brainwave\Config\Interfaces\ConfigurationHandlerInterface $handler
+     * @param RepositoryContract $repository
      */
-    public function setHandler(ConfigurationHandlerInterface $handler)
+    public function setHandler(RepositoryContract $repository)
     {
-        $this->handler = $handler;
+        $this->repository = $repository;
     }
 
     /**
-     * Get the configuration handler for access
+     * Get the configuration repository for access
      *
-     * @return \Brainwave\Config\Interfaces\ConfigurationHandlerInterface
+     * @return RepositoryContract
      */
     public function getHandler()
     {
-        return $this->handler;
+        return $this->repository;
     }
 
     /**
@@ -155,14 +155,16 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      *
      * @param  string $key
      *
-     * @return mixed       The value of a setting
+     * @return mixed  The value of a setting
      */
     public function get($key, $default)
     {
-        if (is_null($this->handler[$key])) {
+        if (is_null($this->repository[$key])) {
             return $default;
         } else {
-            return is_callable($this->handler[$key]) ? call_user_func($this->handler[$key]) : $this->handler[$key];
+            return is_callable($this->repository[$key]) ?
+            call_user_func($this->repository[$key]) :
+            $this->repository[$key];
         }
     }
 
@@ -170,11 +172,11 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      * Set a value
      *
      * @param  string $key
-     * @param  mixed $value
+     * @param  mixed  $value
      */
     public function set($key, $value)
     {
-        $this->handler[$key] = $value;
+        $this->repository[$key] = $value;
     }
 
     /**
@@ -200,15 +202,15 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
     }
 
     /**
-     * Call a method from the handler
+     * Call a method from repository
      *
      * @param  string $method
-     * @param  array $params
+     * @param  array  $params
      * @return mixed
      */
-    public function callHandlerMethod($method, array $params = array())
+    public function __call($method, array $params = array())
     {
-        return call_user_func_array(array($this->handler, $method), $params);
+        return call_user_func_array(array($this->repository, $method), $params);
     }
 
     /**
@@ -219,18 +221,18 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function offsetGet($key)
     {
-        return $this->handler[$key];
+        return $this->repository[$key];
     }
 
     /**
      * Set a value
      *
      * @param  string $key
-     * @param  mixed $value
+     * @param  mixed  $value
      */
     public function offsetSet($key, $value)
     {
-        $this->handler[$key] = $value;
+        $this->repository[$key] = $value;
     }
 
     /**
@@ -242,7 +244,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function offsetExists($key)
     {
-        return isset($this->handler[$key]);
+        return isset($this->repository[$key]);
     }
 
     /**
@@ -252,7 +254,7 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function offsetUnset($key)
     {
-        unset($this->handler[$key]);
+        unset($this->repository[$key]);
     }
 
     /**
@@ -262,6 +264,6 @@ class Configuration implements ConfigurationInterface, \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->handler->getAllNested());
+        return new \ArrayIterator($this->repository->getAllNested());
     }
 }

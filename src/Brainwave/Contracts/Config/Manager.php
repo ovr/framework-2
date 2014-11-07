@@ -19,43 +19,55 @@ namespace Brainwave\Contracts\Config;
  */
 
 /**
- * Loader
+ * Manager
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Loader
+interface Manager extends \ArrayAccess
 {
     /**
-     * Load the given configuration group.
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
-     * @return array
-     */
-    public function load($file, $group = null, $environment = null, $namespace = null);
-
-    /**
-     * Determine if the given file exists.
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
-     * @return bool|array
-     */
-    public function exists($file, $group = null, $environment = null, $namespace = null);
-
-    /**
-     * Apply any cascades to an array of package options.
+     * Set Brainwave's defaults using the handler
      *
-     * @param  string  $env
-     * @param  string  $package
-     * @param  string  $group
-     * @param  array   $items
-     * @return array
+     * @param array $values
      */
-    public function cascadePackage($file, $package, $group, $env, $items, $namespace = 'packages');
+    public function setArray(array $values);
+
+    /**
+     * Load the given configuration group.
+     *
+     * @param  string  $file
+     * @param  string  $namespace
+     * @param  string  $environment
+     * @param  string  $group
+     *
+     * @return void
+     */
+
+    /**
+     * Determine if the given configuration value exists.
+     *
+     * @param  string  $key
+     * @return bool
+     */
+    public function has($key);
+
+    /**
+     * Get a value
+     *
+     * @param  string $key
+     *
+     * @return mixed       The value of a setting
+     */
+    public function get($key, $default);
+
+    /**
+     * Set a value
+     *
+     * @param  string $key
+     * @param  mixed $value
+     */
+    public function set($key, $value);
 }

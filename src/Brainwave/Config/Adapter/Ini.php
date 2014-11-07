@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Driver;
+namespace Brainwave\Config\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,17 +19,17 @@ namespace Brainwave\Config\Driver;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\Driver\Interfaces\DriverInterface;
+use \Brainwave\Contracts\Config\Adapter as ConfigContract;
 
 /**
- * Xml Driver
+ * Ini
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class XmlDriver implements DriverInterface
+class Ini implements ConfigContract
 {
     /**
      * The filesystem instance.
@@ -50,7 +50,7 @@ class XmlDriver implements DriverInterface
     }
 
     /**
-     * Loads a XML file and gets its' contents as an array
+     * Loads a INI file and gets its' contents as an array
      *
      * @param  string $filename
      * @param  string $group
@@ -59,8 +59,9 @@ class XmlDriver implements DriverInterface
     public function load($filename, $group = null)
     {
         if ($this->files->exists($filename)) {
-            $config = simplexml_load_file($filename);
-            $config = unserialize(serialize(json_decode(json_encode((array) $config), 1)));
+            $config = parse_ini_file($filename, true);
+        } else {
+            throw new \Exception("INI file dont exists: ".$filename);
         }
 
         $groupConfig = [];
@@ -82,44 +83,45 @@ class XmlDriver implements DriverInterface
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.xml(\.dist)?$#', $filename);
+        return (bool) preg_match('#\.ini(\.dist)?$#', $filename);
     }
 
     /**
      * Format a config file for saving.
      *
      * @param  array     $data config data
-     * @return string data export
      */
     public function format(array $data)
     {
-        // creating object of SimpleXMLElement
-        $xml = new \SimpleXMLElement("<?xml version=\"1.0\"?><config></config>");
-
-        // function call to convert array to xml
-        $this->arrayToXml($data, $xml);
-
-        return $xml->asXML();
+        $this->iniFormat((array) $data);
     }
 
     /**
-     * Defination to convert array to xml [NOT IMPLEMENTED]
+     * Format a ini config file.
      *
-     * @param  array $data  config data
-     * @param  \SimpleXMLElement $xml    \SimpleXMLElement
-     * @return string       data
+     * @param  array  $data   config data
+     * @param  array  $parent data
+     * @return string data export
      */
-    protected function arrayToXml($data, \SimpleXMLElement &$xml)
+    private function iniFormat(array $data, array $parent = [])
     {
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                $key = is_numeric($key) ? "item$key" : $key;
-                $subnode = $xml->addChild("$key");
-                array_to_xml($value, $subnode);
+        $out = '';
+
+        foreach ($data as $k => $v) {
+            if (is_array($v)) {
+                //subsection case
+                //merge all the sections into one array...
+                $sec = array_merge($parent, $k);
+                //add section information to the output
+                $out .= '[' . join('.', $sec) . ']' . PHP_EOL;
+                //recursively traverse deeper
+                $out .= $this->iniFormat($v, $sec);
             } else {
-                $key = is_numeric($key) ? "item$key" : $key;
-                $xml->addChild("$key", "$value");
+                //plain key->value case
+                $out .= "$k=$v" . PHP_EOL;
             }
         }
+
+        return $out;
     }
 }

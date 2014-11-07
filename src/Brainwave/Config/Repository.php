@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,10 +19,11 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Support\Arr;
-use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
+use \Brainwave\Contract\Config\Repository as RepositoryContract;
 
 /**
- * ConfigurationHandler
+ * Repository
+ *
  * A default Configuration class which provides app configuration values stored as nested arrays,
  * which can be accessed and stored using dot separated keys.
  *
@@ -31,7 +32,7 @@ use \Brainwave\Config\Interfaces\ConfigurationHandlerInterface;
  * @since   0.8.0-dev
  *
  */
-class ConfigurationHandler implements ConfigurationHandlerInterface
+class Repository implements RepositoryContract
 {
     /**
      * Cache of previously parsed keys

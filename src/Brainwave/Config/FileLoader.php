@@ -8,7 +8,7 @@ namespace Brainwave\Config;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,16 +19,16 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\Driver\PhpDriver;
-use \Brainwave\Config\Driver\IniDriver;
-use \Brainwave\Config\Driver\XmlDriver;
-use \Brainwave\Config\Driver\JsonDriver;
-use \Brainwave\Config\Driver\YamlDriver;
-use \Brainwave\Config\Driver\TomlDriver;
+use \Brainwave\Config\Driver\Php as PhpAdapter;
+use \Brainwave\Config\Driver\Ini as IniAdapter;
+use \Brainwave\Config\Driver\Xml as XmlAdapter;
+use \Brainwave\Config\Driver\Json as JsonAdapter;
+use \Brainwave\Config\Driver\Yaml as YamlAdapter;
+use \Brainwave\Config\Driver\Toml as TomlAdapter;
 use \Brainwave\Config\Interfaces\LoaderInterface;
 
 /**
- * File Loader
+ * FileLoader
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -64,6 +64,16 @@ class FileLoader implements LoaderInterface
      * @var array
      */
     protected $exists = [];
+
+
+    protected $adapter = [
+        'php'  => 'PhpAdapter',
+        'ini'  => 'IniAdapter',
+        'xml'  => 'XmlAdapter',
+        'json' => 'JsonAdapter',
+        'yaml' => 'YamlAdapter',
+        'toml' => 'TomlAdapter',
+    ];
 
     /**
      * Create a new file configuration loader.
@@ -331,38 +341,17 @@ class FileLoader implements LoaderInterface
      */
     protected function driver($ext, $path)
     {
-        switch ($ext) {
-            case 'php':
-                $driver = new PhpDriver($this->getFilesystem());
-                break;
-
-            case 'json':
-                $driver = new JsonDriver($this->getFilesystem());
-                break;
-
-            case 'ini':
-                $driver = new IniDriver($this->getFilesystem());
-                break;
-
-            case 'xml':
-                $driver = new XmlDriver($this->getFilesystem());
-                break;
-
-            case 'yaml':
-                $driver = new YamlDriver($this->getFilesystem());
-                break;
-
-            case 'toml':
-                $driver = new TomlDriver($this->getFilesystem());
-                break;
-            default:
-                throw new \RuntimeException(
-                    sprintf("Unable to find the right driver for '%s'", $ext)
-                );
+        if (isset($this->adapter[$ext])) {
+            $driver = new $this->adapter[$ext]($this->getFilesystem());
         }
 
         if ($driver->supports($path)) {
             return $driver;
         }
+
+        throw new \RuntimeException(
+            sprintf("Unable to find the right driver for '%s'", $ext)
+        );
+
     }
 }

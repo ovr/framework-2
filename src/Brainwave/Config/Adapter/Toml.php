@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Driver;
+namespace Brainwave\Config\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Config\Driver;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,19 +18,19 @@ namespace Brainwave\Config\Driver;
  *
  */
 
-use Symfony\Component\Yaml\Yaml;
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\Driver\Interfaces\DriverInterface;
+use Yosymfony\Toml\Toml as TomlManager;
+use \Brainwave\Contracts\Config\Adapter as ConfigContract;
 
 /**
- * Yaml Driver
+ * Toml
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class YamlDriver implements DriverInterface
+class Toml implements ConfigContract
 {
     /**
      * The filesystem instance.
@@ -51,7 +51,7 @@ class YamlDriver implements DriverInterface
     }
 
     /**
-     * Loads a YAML file and gets its' contents as an array
+     * Loads a TOML file and gets its' contents as an array
      *
      * @param  string $filename
      * @param  string $group
@@ -59,12 +59,12 @@ class YamlDriver implements DriverInterface
      */
     public function load($filename, $group = null)
     {
-        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
-            throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
+        if (!class_exists('Yosymfony\\Toml\\Toml;')) {
+            throw new \RuntimeException('Unable to read toml, the Toml Parser is not installed.');
         }
 
         if ($this->files->exists($filename)) {
-            $config = Yaml::parse($filename);
+            $config = TomlManager::Parse($filename);
         }
 
         $groupConfig = [];
@@ -86,17 +86,17 @@ class YamlDriver implements DriverInterface
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.ya?ml(\.dist)?$#', $filename);
+        return (bool) preg_match('#\.toml(\.dist)?$#', $filename);
     }
 
     /**
-     * Format a config file for saving.
+     * Format a config file for saving. [NOT IMPLEMENTED]
      *
-     * @param  array  $data config data
+     * @param  array     $data config data
      * @return string data export
      */
     public function format(array $data)
     {
-        return Yaml::dump($data);
+        throw new \Exception('Toml export is not available');
     }
 }

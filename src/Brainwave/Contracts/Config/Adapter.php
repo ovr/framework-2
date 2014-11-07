@@ -19,14 +19,14 @@ namespace Brainwave\Contracts\Config;
  */
 
 /**
- * Driver
+ * Adapter
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Driver
+interface Adapter
 {
     /**
      * Loads a file and gets its' contents as an array
