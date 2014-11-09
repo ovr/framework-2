@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Crypt;
+namespace Brainwave\Encrypter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Crypt;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,28 +19,31 @@ namespace Brainwave\Crypt;
  */
 
 use \Brainwave\Support\Arr;
-use \Brainwave\Crypt\CryptRand;
-use \Brainwave\Crypt\CryptHash;
-use \Brainwave\Crypt\Interfaces\CryptInterface;
+use \Brainwave\Encrypter\Generator;
+use \Brainwave\Encrypter\CryptHash;
+use \Brainwave\Contracts\Encrypter as EncrypterContract;
 
 /**
- * Crypt
+ * Encrypter
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class Crypt implements CryptInterface
+class Encrypter implements EncrypterContract
 {
     /**
-     * Encryption key (should be correct length for selected cipher)
+     * Encryption key
+     * should be correct length for selected cipher
+     *
      * @var string
      */
     protected $key;
 
     /**
      * Encryption cipher
+     *
      * @var int
      * @see http://www.php.net/manual/mcrypt.ciphers.php
      */
@@ -48,6 +51,7 @@ class Crypt implements CryptInterface
 
     /**
      * Encryption mode
+     *
      * @var int
      * @see http://www.php.net/manual/mcrypt.constants.php
      */
@@ -55,51 +59,52 @@ class Crypt implements CryptInterface
 
     /**
      * [$padding description]
+     *
      * @var boolean
      */
     protected $padding = false;
 
     /**
      * CryptRand
+     *
      * @var CryptRand
      */
     protected $cryptRand;
 
     /**
      * CryptHash
+     *
      * @var CryptHash
      */
     protected $cryptHash;
 
     /**
      * Password Hash Type Identification (Identify Hashes)
+     *
+     * @var string
      */
     const HASH_TYPE = 'sha256';
 
     /**
      * Constructor
+     *
      * @param  string $key    Encryption key
      * @param  int    $cipher Encryption algorithm
      * @param  int    $mode   Encryption mode
-     * @api
      */
     public function __construct($key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'ctr')
     {
         $this->checkRequirements();
 
-        $this->key = $key;
+        $this->key  = $key;
         $this->algo = $cipher;
         $this->mode = $mode;
-
-        //ini CryptRand class
-        $this->cryptRand(new CryptRand());
-        //ini CryptRand class
-        $this->cryptHash(new CryptHash($this, $this->cryptRand));
     }
 
     /**
      * Encrypt data returning a JSON encoded array safe for storage in a database
      * or file. The array has the following structure before it is encoded:
+     *
      * [
      *   'cdata' => 'Encrypted data, Base 64 encoded',
      *   'iv'    => 'Base64 encoded IV',
@@ -108,14 +113,11 @@ class Crypt implements CryptInterface
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param mixed $data
-     *   Data to encrypt.
+     * @param  mixed  $data Data to encrypt.
+     * @param  string $key  Key to encrypt data with.
      *
-     * @param string $key
-     *   Key to encrypt data with.
-     *
-     * @return string
-     *   Serialized array containing the encrypted data along with some meta data.
+     * @return string       Serialized array containing the encrypted data
+     *                      along with some meta data.
      */
     public function encrypt($data, $key = null)
     {
@@ -176,7 +178,7 @@ class Crypt implements CryptInterface
      * Strip PKCS7 padding and decrypt
      * data encrypted by encrypt().
      *
-     * @param string $data  JSON string containing the encrypted data and meta information in the
+     * @param  string $data JSON string containing the encrypted data and meta information in the
      *                      excact format as returned by encrypt().
      *
      * @return mixed        Decrypted data in it's original form.
@@ -231,10 +233,13 @@ class Crypt implements CryptInterface
 
     /**
      * Validate encryption key based on valid key sizes for selected cipher and cipher mode
-     * @param  string                    $key    Encryption key
-     * @param  resource                  $module Encryption module
+     *
+     * @param  string            $key    Encryption key
+     * @param  resource          $module Encryption module
+     *
      * @return void
-     * @throws \InvalidArgumentException         If key size is invalid for selected cipher
+     *
+     * @throws \InvalidArgumentException If key size is invalid for selected cipher
      */
     protected function validateKeyLength($key, $module)
     {
@@ -261,6 +266,7 @@ class Crypt implements CryptInterface
 
     /**
      * Check the mcrypt PHP extension is loaded
+     *
      * @throws \RuntimeException If the mcrypt PHP extension is missing
      */
     protected function checkRequirements()
@@ -275,12 +281,14 @@ class Crypt implements CryptInterface
 
     /**
     * Implement PBKDF2 as described in RFC 2898.
-    * @param string $password               Password to protect.
-    * @param string $salt                   Salt.
-    * @param integer $count                 Iteration count.
-    * @param integer $dkLen                 Derived key length.
-    * @param string $hash_algo              A hash algorithm.
-    * @return string                        Derived key.
+    *
+    * @param string  $password  Password to protect.
+    * @param string  $salt      Salt.
+    * @param integer $count     Iteration count.
+    * @param integer $dkLen     Derived key length.
+    * @param string  $hash_algo A hash algorithm.
+    *
+    * @return string            Derived key.
     */
     public function pbkdf2($password, $salt, $count, $dkLen, $hash_algo = 'sha256')
     {
@@ -317,9 +325,10 @@ class Crypt implements CryptInterface
      * PKCS7 padding adds bytes with the same value that the number of bytes that are added.
      * @see http://tools.ietf.org/html/rfc5652#section-6.3
      *
-     * @param integer $block            Block size.
-     * @param string $data              Data to pad.
-     * @return string                   Padded data.
+     * @param  integer $block Block size.
+     * @param  string  $data  Data to pad.
+     *
+     * @return string         Padded data.
      */
     public function pad($block, $data)
     {
@@ -332,9 +341,10 @@ class Crypt implements CryptInterface
     /**
      * Strip PKCS7-padding.
      *
-     * @param integer $block        Block size.
-     * @param string $data          Padded data.
-     * @return string               Original data.
+     * @param  integer $block Block size.
+     * @param  string  $data  Padded data.
+     *
+     * @return string         Original data.
      */
     public function stripPadding($block, $data)
     {
@@ -350,7 +360,7 @@ class Crypt implements CryptInterface
     /**
      * Returns a unique identifier.
      *
-     * @return string     Returns a unique identifier.
+     * @return string Returns a unique identifier.
      */
     public function genUid()
     {
@@ -361,45 +371,5 @@ class Crypt implements CryptInterface
         $str .= '-' . substr($hex, 32, 8);
         $str .= '-' . substr($hex, 40, 24);
         return $str;
-    }
-
-    /**
-     * Return CryptHash
-     * @return \Brainwave\Crypt\CryptHash
-     */
-    public function hash()
-    {
-        return $this->cryptHash;
-    }
-
-    /**
-     * Return CryptRand
-     * @return \Brainwave\Crypt\CryptRand
-     */
-    public function rand()
-    {
-        return $this->cryptRand;
-    }
-
-    /**
-     * Returns CryptRand class
-     * @param  CryptRand $cryptRand \Brainwave\Crypt\CryptRand
-     * @return \Brainwave\Crypt\Crypt
-     */
-    public function cryptRand(CryptRand $cryptRand)
-    {
-        $this->cryptRand = $cryptRand;
-        return $this;
-    }
-
-    /**
-     * Returns CryptHash class
-     * @param  CryptHash $cryptHash \Brainwave\Crypt\CryptHash
-     * @return \Brainwave\Crypt\Crypt
-     */
-    public function cryptHash(CryptHash $cryptHash)
-    {
-        $this->cryptHash = $cryptHash;
-        return $this;
     }
 }

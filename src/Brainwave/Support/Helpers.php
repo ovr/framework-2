@@ -31,7 +31,7 @@ class Helpers
     /**
      * Escape HTML entities in a string.
      *
-     * @param  string  $value
+     * @param  string $value
      * @return string
      */
     public static function e($value)
@@ -42,7 +42,7 @@ class Helpers
     /**
      * Get the root Facade application instance.
      *
-     * @param  string  $make
+     * @param  string $make
      * @return mixed
      */
     public static function app($make = null)
@@ -57,7 +57,7 @@ class Helpers
     /**
      * Get the path to the application folder.
      *
-     * @param  string  $path
+     * @param  string $path
      * @return string
      */
     public static function appPath($path = '')
@@ -68,8 +68,8 @@ class Helpers
     /**
      * Get the path to the storage folder.
      *
-     * @param   string  $path
-     * @return  string
+     * @param  string $path
+     * @return string
      */
     public static function storagePath($path = '')
     {
@@ -79,7 +79,7 @@ class Helpers
     /**
      * Get the class "basename" of the given object / class.
      *
-     * @param  string|object  $class
+     * @param  string|object $class
      * @return string
      */
     public static function classBasename($class)
@@ -92,9 +92,9 @@ class Helpers
     /**
      * Replace a given value in the string sequentially with an array.
      *
-     * @param  string  $search
-     * @param  array   $replace
-     * @param  string  $subject
+     * @param  string $search
+     * @param  array  $replace
+     * @param  string $subject
      * @return string
      */
     public static function strReplaceArray($search, array $replace, $subject)
@@ -109,7 +109,7 @@ class Helpers
     /**
      * Returns all traits used by a class, it's subclasses and trait of their traits
      *
-     * @param  string  $class
+     * @param  string $class
      * @return array
      */
     public static function classUsesRecursive($class)
@@ -131,14 +131,10 @@ class Helpers
      * Based on code by Anthony Ferrara.
      * @see http://blog.ircmaxell.com/2012/12/seven-ways-to-screw-up-bcrypt.html
      *
-     * @param string $safe
-     *   The internal (safe) value to be checked
+     * @param string $safe The internal (safe) value to be checked
+     * @param string $user The user submitted (unsafe) value
      *
-     * @param string $user
-     *   The user submitted (unsafe) value
-     *
-     * @return boolean
-     *   True if the two strings are identical.
+     * @return boolean True if the two strings are identical.
      */
     public static function timingSafe($safe, $user)
     {

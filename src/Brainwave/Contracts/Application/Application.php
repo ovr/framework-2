@@ -18,6 +18,8 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
+use \Pimple\ServiceProviderInterface;
+
 /**
  * Application Interface
  *
@@ -28,5 +30,50 @@ namespace Brainwave\Contracts\Application;
  */
 interface Application
 {
+    /**
+     * Get the version number of the application.
+     *
+     * @return string
+     */
+    public function version();
 
+    /**
+     * Determine if the application is currently down for maintenance.
+     *
+     * @return bool
+     */
+    public function isDownForMaintenance();
+
+    /**
+     * Registers a service provider.
+     *
+     * @param \Pimple\ServiceProviderInterface $provider A ServiceProviderInterface instance
+     * @param array                            $values   An array of values that customizes the provider
+     *
+     * @return \Pimple\ServiceProviderInterface
+     */
+    public function register(ServiceProviderInterface $provider, array $values = []);
+
+    /**
+     * Boot the application's service providers.
+     *
+     * @return void
+     */
+    public function boot();
+
+    /**
+     * Register a new boot listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booting($callback);
+
+    /**
+     * Register a new "booted" listener.
+     *
+     * @param  mixed  $callback
+     * @return void
+     */
+    public function booted($callback);
 }

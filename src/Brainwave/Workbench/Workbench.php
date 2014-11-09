@@ -50,6 +50,7 @@ use \Brainwave\Routing\Controller\ControllerCollection;
 use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
 use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
 use \Brainwave\Workbench\Environment\EnvironmentServiceProvider;
+use \Brainwave\Contracts\Application\Application as ApplicationContract;
 
 /**
  * Workbench
@@ -62,7 +63,7 @@ use \Brainwave\Workbench\Environment\EnvironmentServiceProvider;
  * @property Request        $request
  * @property Router         $router
  */
-class Workbench extends Container
+class Workbench extends Container implements ApplicationContract
 {
     /**
      * @const string
@@ -74,7 +75,7 @@ class Workbench extends Container
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.9.3-dev';
+    const BRAINWAVE_VERSION = '0.9.4-dev';
 
     /**
      * Has the app response been sent to the client?
@@ -476,6 +477,16 @@ class Workbench extends Container
         }
 
         return $this[$abstract];
+    }
+
+    /**
+     * Get the version number of the application.
+     *
+     * @return string
+     */
+    public function version()
+    {
+        return self::BRAINWAVE_VERSION;
     }
 
     /**
@@ -999,7 +1010,7 @@ class Workbench extends Container
 
             // Encrypt CookieJar
             if ($this['settings']['cookie::encrypt']) {
-                $this['response']->encryptCookies($this['crypt']);
+                $this['response']->encryptCookies($this['encrypter']);
             }
 
             // Send response

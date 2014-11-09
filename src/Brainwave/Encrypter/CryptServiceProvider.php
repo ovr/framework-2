@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Crypt;
+namespace Brainwave\Encrypter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Crypt;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,7 @@ namespace Brainwave\Crypt;
  */
 
 use \Pimple\Container;
-use \Brainwave\Crypt\Crypt;
+use \Brainwave\Encrypter\Encrypter;
 use \Pimple\ServiceProviderInterface;
 
 /**
@@ -30,16 +30,35 @@ use \Pimple\ServiceProviderInterface;
  * @since   0.8.0-dev
  *
  */
-class CryptServiceProvider implements ServiceProviderInterface
+class EncrypterServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['crypt'] = function ($app) {
-            return new Crypt(
-                $app['settings']->get('app::crypt.key', '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'),
+        $app['encrypter'] = function ($app) {
+            return new Encrypter(
+                $app['settings']->get(
+                    'app::crypt.key',
+                    '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
+                ),
                 $app['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
                 $app['settings']->get('app::crypt.mode', 'ctr')
             );
+        };
+
+        $this->registerHashGenerator($app);
+    }
+
+    protected function registerHashGenerator($app)
+    {
+        $app['encrypter.hash'] = function ($app) {
+            # code...
+        };
+    }
+
+    protected function registerRandGenerator($app)
+    {
+        $app['encrypter.rand'] = function ($app) {
+            # code...
         };
     }
 }

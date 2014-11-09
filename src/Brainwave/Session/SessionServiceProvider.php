@@ -41,7 +41,7 @@ class SessionServiceProvider implements ServiceProviderInterface
         $app['session'] = function ($app) {
             $session = new SessionManager(
                 new SegmentFactory,
-                new CsrfTokenFactory($app['crypt']),
+                new CsrfTokenFactory($app['encrypter']),
                 new Str,
                 $_COOKIE,
                 $app['deleteCookie']

@@ -107,13 +107,21 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Get or check the current application environment.
      *
-     * @param  dynamic
+     * @param  mixed
      * @return string
      */
     public function environment()
     {
-        if (count(func_get_args()) > 0) {
-            return in_array($this->app['env'], func_get_args());
+        if (func_num_args() > 0) {
+            $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
+
+            foreach ($patterns as $pattern) {
+                if (str_is($pattern, $this['env'])) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         return $this->app['env'];

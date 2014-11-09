@@ -47,7 +47,7 @@ class RequestServiceProvider implements ServiceProviderInterface
             $CookieJar = new CookieJar($headers);
 
             if ($app['settings']->get('cookies::encrypt', false) ===  true) {
-                $CookieJar->decrypt($app['crypt']);
+                $CookieJar->decrypt($app['encrypter']);
             }
 
             return new Request($environment, $headers, $CookieJar);
