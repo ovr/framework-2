@@ -22,6 +22,7 @@ use \Pimple\Container;
 use \Brainwave\Encrypter\Encrypter;
 use \RandomLib\Factory as RandomLib;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Encrypter\HashGenerator;
 
 /**
  * CryptServiceProvider
@@ -36,7 +37,6 @@ class EncrypterServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $this->registerRandGenerator($app);
-        $this->registerHashGenerator($app);
 
         $app['encrypter'] = function ($app) {
             return new Encrypter(
@@ -56,7 +56,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
     protected function registerHashGenerator($app)
     {
         $app['encrypter.hash'] = function ($app) {
-            # code...
+            return new HashGenerator($app['encrypter'], $app['encrypter.rand']);
         };
     }
 

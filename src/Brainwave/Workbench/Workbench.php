@@ -990,6 +990,7 @@ class Workbench extends Container implements ApplicationContract
         if (!$this->booted) {
             $this->boot();
         }
+
         $this->boot($this);
 
         // Set header for OPTIONS and all other routes
