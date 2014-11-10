@@ -19,8 +19,7 @@ namespace Brainwave\Encrypter;
  */
 
 use \Brainwave\Support\Arr;
-use \Brainwave\Encrypter\Generator;
-use \Brainwave\Encrypter\CryptHash;
+use \RandomLib\Factory as RandomLib;
 use \Brainwave\Contracts\Encrypter as EncrypterContract;
 
 /**
@@ -72,13 +71,6 @@ class Encrypter implements EncrypterContract
     protected $cryptRand;
 
     /**
-     * CryptHash
-     *
-     * @var CryptHash
-     */
-    protected $cryptHash;
-
-    /**
      * Password Hash Type Identification (Identify Hashes)
      *
      * @var string
@@ -88,17 +80,18 @@ class Encrypter implements EncrypterContract
     /**
      * Constructor
      *
-     * @param  string $key    Encryption key
-     * @param  int    $cipher Encryption algorithm
-     * @param  int    $mode   Encryption mode
+     * @param  RandomLib $randomLib
+     * @param  string    $key    Encryption key
+     * @param  int       $cipher Encryption algorithm
+     * @param  int       $mode   Encryption mode
      */
-    public function __construct($key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'ctr')
+    public function __construct(RandomLib $randomLib, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'ctr')
     {
-        $this->checkRequirements();
-
         $this->key  = $key;
         $this->algo = $cipher;
         $this->mode = $mode;
+
+        $this->randomLib  = $randomLib;
     }
 
     /**
@@ -261,21 +254,6 @@ class Encrypter implements EncrypterContract
                     $keySizeMax
                 ));
             }
-        }
-    }
-
-    /**
-     * Check the mcrypt PHP extension is loaded
-     *
-     * @throws \RuntimeException If the mcrypt PHP extension is missing
-     */
-    protected function checkRequirements()
-    {
-        if (extension_loaded('mcrypt') === false) {
-            throw new \RuntimeException(sprintf(
-                'The PHP mcrypt extension must be installed to use the %s encryption class.',
-                __CLASS__
-            ));
         }
     }
 

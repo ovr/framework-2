@@ -28,15 +28,20 @@ namespace Brainwave\Crypt;
  */
 class Generator
 {
-    public $charset = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    /**
+     * Charset
+     *
+     * @var string
+     */
+    protected $charset = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
     /**
-    * Generate pseudorandom bytes.
-    *
-    * @param  integer $len
-    *
-    * @return string
-    */
+     * Generate pseudorandom bytes.
+     *
+     * @param  integer $len
+     *
+     * @return string
+     */
     public function bytes($len)
     {
 
@@ -72,13 +77,13 @@ class Generator
     }
 
     /**
-    * Generate a random integer.
-    *
-    * @param  integer $min
-    * @param  integer $max
-    *
-    * @return integer
-    */
+     * Generate a random integer.
+     *
+     * @param  integer $min
+     * @param  integer $max
+     *
+     * @return integer
+     */
     public function int($min, $max)
     {
         $delta = $max-$min;
@@ -96,13 +101,13 @@ class Generator
     }
 
     /**
-    * Generate a random string.
-    *
-    * @param  integer $len
-    * @param  string  $charset
-    *
-    * @return string
-    */
+     * Generate a random string.
+     *
+     * @param  integer $len
+     * @param  string  $charset
+     *
+     * @return string
+     */
     public function str($len, $charset = null)
     {
         if (is_null($charset)) {
@@ -120,25 +125,25 @@ class Generator
     }
 
     /**
-    * Return random hexadecimal data.
-    *
-    * @param  integer $len
-    *
-    * @return string
-    */
+     * Return random hexadecimal data.
+     *
+     * @param  integer $len
+     *
+     * @return string
+     */
     public function hex($len)
     {
         return bin2hex($this->bytes($len));
     }
 
     /**
-    * Return one or more random random keys from an array.
-    *
-    * @param  array   $array Input array.
-    * @param  integer $num   Number of keys to pick.
-    *
-    * @return mixed          String with the key, or array containing multiple keys.
-    */
+     * Return one or more random random keys from an array.
+     *
+     * @param  array   $array Input array.
+     * @param  integer $num   Number of keys to pick.
+     *
+     * @return mixed          String with the key, or array containing multiple keys.
+     */
     public function arrayRand($array, $num = 1)
     {
         $keys = array_keys($array);
@@ -156,10 +161,10 @@ class Generator
     }
 
     /**
-    * Return a random boolean.
-    *
-    * @return boolean
-    */
+     * Return a random boolean.
+     *
+     * @return boolean
+     */
     public function bool()
     {
         $byte = $this->bytes(1);

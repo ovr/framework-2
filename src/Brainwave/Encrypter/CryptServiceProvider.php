@@ -20,6 +20,7 @@ namespace Brainwave\Encrypter;
 
 use \Pimple\Container;
 use \Brainwave\Encrypter\Encrypter;
+use \RandomLib\Factory as RandomLib;
 use \Pimple\ServiceProviderInterface;
 
 /**
@@ -34,8 +35,12 @@ class EncrypterServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $this->registerRandGenerator($app);
+        $this->registerHashGenerator($app);
+
         $app['encrypter'] = function ($app) {
             return new Encrypter(
+                $app['encrypter.rand'],
                 $app['settings']->get(
                     'app::crypt.key',
                     '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
@@ -58,7 +63,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
     protected function registerRandGenerator($app)
     {
         $app['encrypter.rand'] = function ($app) {
-            # code...
+            return new RandomLib();
         };
     }
 }
