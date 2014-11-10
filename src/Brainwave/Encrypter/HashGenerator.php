@@ -126,7 +126,7 @@ class HashGenerator
      */
     public function __construct(Encrypter $crypt, RandomLib $randomLib)
     {
-        $this->crypt         = $crypt;
+        $this->crypt     = $crypt;
         $this->randomLib = $randomLib;
     }
 

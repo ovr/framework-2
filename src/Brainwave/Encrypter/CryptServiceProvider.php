@@ -36,6 +36,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $this->registerRand($app);
         $this->registerRandGenerator($app);
 
         $app['encrypter'] = function ($app) {
@@ -60,10 +61,26 @@ class EncrypterServiceProvider implements ServiceProviderInterface
         };
     }
 
-    protected function registerRandGenerator($app)
+    protected function registerRand($app)
     {
         $app['encrypter.rand'] = function ($app) {
             return new RandomLib();
+        };
+    }
+
+    protected function registerRandGenerator($app)
+    {
+        $app['encrypter.rand.generator'] = function ($app) {
+            $generatorStrength = ucfirst(
+                $app['settings']->get(
+                    'app::crypt.generator.strength',
+                    'Medium'
+                )
+            );
+
+            $generator = "get{$generatorStrength}StrengthGenerator";
+
+            return $app['encrypter.rand']->$generator();
         };
     }
 }
