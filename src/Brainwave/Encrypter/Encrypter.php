@@ -41,20 +41,35 @@ class Encrypter implements EncrypterContract
     protected $key;
 
     /**
-     * Encryption cipher
+     * The algorithm used for encryption.
      *
-     * @var int
+     * @var string
      * @see http://www.php.net/manual/mcrypt.ciphers.php
      */
-    protected $algo = 'rijndael-256';
+    protected $cipher = MCRYPT_RIJNDAEL_256;
 
     /**
-     * Encryption mode
+     * Encryption modes
      *
      * @var int
      * @see http://www.php.net/manual/mcrypt.constants.php
      */
-    protected $mode = 'ctr';
+    protected $supportedModes = [
+        'cbc',
+        'ecb',
+        'ofb',
+        'nofb',
+        'cfb',
+        'ctr',
+        'stream',
+    ];
+
+    /**
+     * The mode used for encryption.
+     *
+     * @var string
+     */
+    protected $mode = 'cbc';
 
     /**
      * [$padding description]
@@ -71,13 +86,6 @@ class Encrypter implements EncrypterContract
     protected $randomLib;
 
     /**
-     * Password Hash Type Identification (Identify Hashes)
-     *
-     * @var string
-     */
-    const HASH_TYPE = 'sha256';
-
-    /**
      * Constructor
      *
      * @param  RandomLib $randomLib
@@ -85,13 +93,16 @@ class Encrypter implements EncrypterContract
      * @param  int       $cipher    Encryption algorithm
      * @param  int       $mode      Encryption mode
      */
-    public function __construct(RandomLib $randomLib, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'ctr')
+    public function __construct(RandomLib $randomLib, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
     {
-        $this->key  = $key;
-        $this->algo = $cipher;
-        $this->mode = $mode;
+        $this->key       = $key;
+        $this->cipher    = $cipher;
 
-        $this->randomLib  = $randomLib;
+        if (isset($this->supportedModes[$mode])) {
+            $this->mode  = $mode;
+        }
+
+        $this->randomLib = $randomLib;
     }
 
     /**
@@ -120,13 +131,13 @@ class Encrypter implements EncrypterContract
         }
 
         // Make sure both algorithm and mode are either block or non-block.
-        $isBlockCipher = mcrypt_module_is_blockalgorithm($this->algo);
+        $isBlockCipher = mcrypt_module_is_blockalgorithm($this->cipher);
         $isBlockMode   = mcrypt_module_is_blockalgorithmmode($this->mode);
         if ($isBlockCipher !== $isBlockMode) {
             throw new \RuntimeException('You can not mix block and non-block ciphers and modes');
         }
 
-        $module = mcrypt_module_open($this->algo, '', $this->mode, '');
+        $module = mcrypt_module_open($this->cipher, '', $this->mode, '');
 
         // Validate key length
         $this->validateKeyLength($key, $module);
@@ -153,7 +164,7 @@ class Encrypter implements EncrypterContract
         }
 
         // Algorithm used to encrypt.
-        $encrypted['algo']  = $this->algo;
+        $encrypted['algo']  = $this->cipher;
         // Algorithm mode.
         $encrypted['mode']  = $this->mode;
         // Initialization vector, just a bunch of randomness.
@@ -259,16 +270,16 @@ class Encrypter implements EncrypterContract
     }
 
     /**
-    * Implement PBKDF2 as described in RFC 2898.
-    *
-    * @param string  $password  Password to protect.
-    * @param string  $salt      Salt.
-    * @param integer $count     Iteration count.
-    * @param integer $dkLen     Derived key length.
-    * @param string  $hashalgo A hash algorithm.
-    *
-    * @return string            Derived key.
-    */
+     * Implement PBKDF2 as described in RFC 2898.
+     *
+     * @param string  $password  Password to protect.
+     * @param string  $salt      Salt.
+     * @param integer $count     Iteration count.
+     * @param integer $dkLen     Derived key length.
+     * @param string  $hashalgo A hash algorithm.
+     *
+     * @return string            Derived key.
+     */
     public function pbkdf2($password, $salt, $count, $dkLen, $hashalgo = 'sha256')
     {
         // Hash length.
@@ -353,5 +364,37 @@ class Encrypter implements EncrypterContract
         $str .= '-' . substr($hex, 40, 24);
 
         return $str;
+    }
+
+    /**
+     * Set the encryption key.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
+    }
+    /**
+     * Set the encryption cipher.
+     *
+     * @param  string  $cipher
+     * @return void
+     */
+    public function setCipher($cipher)
+    {
+        $this->cipher = $cipher;
+    }
+
+    /**
+     * Set the encryption mode.
+     *
+     * @param  string  $mode
+     * @return void
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
     }
 }

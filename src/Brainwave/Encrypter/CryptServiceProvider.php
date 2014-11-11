@@ -47,7 +47,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
                     '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
                 ),
                 $app['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
-                $app['settings']->get('app::crypt.mode', 'ctr')
+                $app['settings']->get('app::crypt.mode', 'cbc')
             );
         };
 
