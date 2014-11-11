@@ -41,7 +41,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
 
         $app['encrypter'] = function ($app) {
             return new Encrypter(
-                $app['encrypter.rand'],
+                $app['encrypter.rand.generator'],
                 $app['settings']->get(
                     'app::crypt.key',
                     '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
@@ -57,7 +57,7 @@ class EncrypterServiceProvider implements ServiceProviderInterface
     protected function registerHashGenerator($app)
     {
         $app['encrypter.hash'] = function ($app) {
-            return new HashGenerator($app['encrypter'], $app['encrypter.rand']);
+            return new HashGenerator($app['encrypter'], $app['encrypter.rand.generator']);
         };
     }
 

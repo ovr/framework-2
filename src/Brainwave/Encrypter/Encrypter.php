@@ -64,11 +64,11 @@ class Encrypter implements EncrypterContract
     protected $padding = false;
 
     /**
-     * CryptRand
+     * RandomLib instance
      *
-     * @var CryptRand
+     * @var RandomLib
      */
-    protected $cryptRand;
+    protected $randomLib;
 
     /**
      * Password Hash Type Identification (Identify Hashes)
@@ -81,9 +81,9 @@ class Encrypter implements EncrypterContract
      * Constructor
      *
      * @param  RandomLib $randomLib
-     * @param  string    $key    Encryption key
-     * @param  int       $cipher Encryption algorithm
-     * @param  int       $mode   Encryption mode
+     * @param  string    $key       Encryption key
+     * @param  int       $cipher    Encryption algorithm
+     * @param  int       $mode      Encryption mode
      */
     public function __construct(RandomLib $randomLib, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'ctr')
     {
@@ -120,19 +120,19 @@ class Encrypter implements EncrypterContract
         }
 
         // Make sure both algorithm and mode are either block or non-block.
-        $isBlockCipher = mcrypt_module_is_block_algorithm($this->_algo);
-        $isBlockMode   = mcrypt_module_is_block_algorithm_mode($this->_mode);
+        $isBlockCipher = mcrypt_module_is_blockalgorithm($this->algo);
+        $isBlockMode   = mcrypt_module_is_blockalgorithmmode($this->mode);
         if ($isBlockCipher !== $isBlockMode) {
             throw new \RuntimeException('You can not mix block and non-block ciphers and modes');
         }
 
-        $module = mcrypt_module_open($this->_algo, '', $this->_mode, '');
+        $module = mcrypt_module_open($this->algo, '', $this->mode, '');
 
         // Validate key length
         $this->validateKeyLength($key, $module);
 
         // Create IV.
-        $iv = $this->cryptRand->bytes(mcrypt_enc_get_iv_size($module));
+        $iv = $this->randomLib->generate(mcrypt_enc_get_iv_size($module));
 
         // Init mcrypt.
         mcrypt_generic_init($module, $key, $iv);
@@ -141,7 +141,7 @@ class Encrypter implements EncrypterContract
         $serializedData = serialize($data);
 
         // Enable padding of data if block cipher moode.
-        if (mcrypt_module_is_block_algorithm_mode($this->mode) === true) {
+        if (mcrypt_module_is_blockalgorithmmode($this->mode) === true) {
             $this->padding = true;
         }
 
@@ -200,7 +200,7 @@ class Encrypter implements EncrypterContract
         // Everything looks good so far. Let's continue.
         $module = mcrypt_module_open($data['algo'], '', $data['mode'], '');
 
-        // Validate key
+        // Validate key.
         $this->validateKeyLength($this->key, $module);
 
         $block = mcrypt_enc_get_block_size($module);
@@ -240,6 +240,7 @@ class Encrypter implements EncrypterContract
         $keySizeMin = 1;
         $keySizeMax = mcrypt_enc_get_key_size($module);
         $validKeySizes = mcrypt_enc_get_supported_key_sizes($module);
+
         if ($validKeySizes) {
             if (!in_array($keySize, $validKeySizes)) {
                 throw new \InvalidArgumentException(
@@ -264,14 +265,14 @@ class Encrypter implements EncrypterContract
     * @param string  $salt      Salt.
     * @param integer $count     Iteration count.
     * @param integer $dkLen     Derived key length.
-    * @param string  $hash_algo A hash algorithm.
+    * @param string  $hashalgo A hash algorithm.
     *
     * @return string            Derived key.
     */
-    public function pbkdf2($password, $salt, $count, $dkLen, $hash_algo = 'sha256')
+    public function pbkdf2($password, $salt, $count, $dkLen, $hashalgo = 'sha256')
     {
         // Hash length.
-        $hLen          = strlen(hash($hash_algo, null, true));
+        $hLen          = strlen(hash($hashalgo, null, true));
         // Length in blocks of derived key.
         $length        = ceil($dkLen / $hLen);
         // Derived key.
@@ -284,15 +285,16 @@ class Encrypter implements EncrypterContract
 
         for ($block = 1; $block<=$length; $block ++) {
             // Initial hash for this block.
-            $ini_block = $hash_block = hash_hmac($hash_algo, $salt . pack('N', $block), $password, true);
+            $ini_block = $hash_block = hash_hmac($hashalgo, $salt . pack('N', $block), $password, true);
             // Do block iterations.
             for ($i = 1; $i<$count; $i ++) {
                 // XOR iteration.
-                $ini_block ^= ($hash_block = hash_hmac($hash_algo, $hash_block, $password, true));
+                $ini_block ^= ($hash_block = hash_hmac($hashalgo, $hash_block, $password, true));
             }
             // Append iterated block.
             $derived_key .= $ini_block;
         }
+
         // Returned derived key.
         return substr($derived_key, 0, $dkLen);
     }
@@ -332,6 +334,7 @@ class Encrypter implements EncrypterContract
         if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $data)) {
             return substr($data, 0, -$pad);
         }
+
         return $data;
     }
 
@@ -342,12 +345,13 @@ class Encrypter implements EncrypterContract
      */
     public function genUid()
     {
-        $hex = bin2hex($this->cryptRand->Bytes(32));
+        $hex = bin2hex($this->randomLib->generate(32));
         $str = substr($hex, 0, 16);
         $str .= '-' . substr($hex, 16, 8);
         $str .= '-' . substr($hex, 24, 8);
         $str .= '-' . substr($hex, 32, 8);
         $str .= '-' . substr($hex, 40, 24);
+
         return $str;
     }
 }

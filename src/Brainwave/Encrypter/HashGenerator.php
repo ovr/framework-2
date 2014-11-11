@@ -103,9 +103,9 @@ class HashGenerator
     protected $crypt;
 
     /**
-     * Rand generator
+     * RandomLib instance
      *
-     * @var RandGenerator
+     * @var RandomLib
      */
     protected $randomLib;
 
@@ -181,7 +181,7 @@ class HashGenerator
      */
     private function makePbkdf2($str)
     {
-        $salt = $this->randomLib->bytes(64);
+        $salt = $this->randomLib->generate(64);
 
         if (function_exists('hash_pbkdf2')) {
             $pbkdf2 = hash_pbkdf2($this->pbkdf2Prf, $str, $salt, $this->pbkdf2C, $this->pbkdf2DkLen);
@@ -214,7 +214,7 @@ class HashGenerator
      */
     private function makeBcrypt($str)
     {
-        $saltRnd = $this->randomLib->str(22, $this->charsets['itoa64']);
+        $saltRnd = $this->randomLib->generateString(22, $this->charsets['itoa64']);
         $salt = sprintf('%s%s$%s', $this->registeredMethods['bcrypt'], $this->bcryptCost, $saltRnd);
 
         return crypt($str, $salt);
@@ -231,7 +231,7 @@ class HashGenerator
     {
         $setting  = $this->registeredMethods['drupal'];
         $setting .= $this->charsets['itoa64'][$this->drupalCount];
-        $setting .= $this->b64Encode($this->randomLib->bytes(6), 6);
+        $setting .= $this->b64Encode($this->randomLib->generate(6), 6);
 
         return substr($this->phpassHash($str, $setting), 0, $this->drupalHashLen);
     }
@@ -246,7 +246,7 @@ class HashGenerator
      */
     private function makeSha($str, $method = 'sha512')
     {
-        $saltRnd = $this->randomLib->str(16, $this->charsets['itoa64']);
+        $saltRnd = $this->randomLib->generateString(16, $this->charsets['itoa64']);
         $salt    = sprintf(
             '%srounds=%s$%s',
             $this->registeredMethods[$method],
