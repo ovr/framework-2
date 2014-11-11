@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Event;
+namespace Brainwave\Contracts\Events;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,14 +19,14 @@ namespace Brainwave\Contracts\Event;
  */
 
 /**
- * EventManager
+ * Dispatcher
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface EventManager
+interface Dispatcher
 {
     /**
      * Hock an event

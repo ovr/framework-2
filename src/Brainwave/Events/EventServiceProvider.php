@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Event;
+namespace Brainwave\Events;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Event;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,8 @@ namespace Brainwave\Event;
  */
 
 use \Pimple\Container;
-use \Brainwave\Event\EventManager;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Events\Dispatcher;
 
 /**
  * EventServiceProvider
@@ -35,7 +35,7 @@ class EventServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app['events'] = function ($app) {
-            return new EventManager($app);
+            return new Dispatcher($app);
         };
     }
 }

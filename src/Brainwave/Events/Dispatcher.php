@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Event;
+namespace Brainwave\Events;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Event;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,27 +18,29 @@ namespace Brainwave\Event;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Event\Interfaces\EventManagerInterface;
+use \Pimple\Container;
+use \Brainwave\Contracts\Events\Dispatcher as EventsContract;
 
 /**
- * EventManager
+ * Manager
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class EventManager implements EventManagerInterface
+class Dispatcher implements EventsContract
 {
     /**
-     * Workbench
-     * @var \Brainwave\Workbench\Workbench
+     * Pimple container
+     *
+     * @var \Pimple\Container
      */
     protected $app;
 
     /**
      * Application hooks
+     *
      * @var array
      */
     protected $hooks = array(
@@ -51,24 +53,27 @@ class EventManager implements EventManagerInterface
     );
 
     /**
-     * @param var Workbench $app
+     * Manager
+     *
+     * @param var Container $app
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
     }
 
     /**
      * Assign hook
-     * @param  callable  $callable A callable object
-     * @param  int    $priority The hook priority; 0 = high, 10 = low
-     * @api
+     *
+     * @param  callable $callable A callable object
+     * @param  int      $priority The hook priority; 0 = high, 10 = low
      */
     public function hook($event, callable $callable, $priority = 10)
     {
         if (!isset($this->hooks[$event])) {
             $this->hooks[$event] = [[]];
         }
+
         if (is_callable($callable)) {
             $this->hooks[$event][(int) $priority][] = $callable;
         }
@@ -78,21 +83,23 @@ class EventManager implements EventManagerInterface
      * Alias for self::hook()
      *
      * @param             $event
-     * @param callable     callable $callback
+     * @param callable    $callback
      * @param int         $priority
+     *
      */
     public function addEventListener($event, callable $callback, $priority = 10)
     {
         $this->hook($event, $callback, $priority);
     }
 
-   /**
+    /**
      * Invoke hook
      *
-     * @param  string $name The hook name
-     * @param  mixed  ...   (Optional) Argument(s) for hooked functions,
-     *                      can specify multiple arguments
-     * @api
+     * @param  string $name    The hook name
+     * @param  mixed  $hookArg (Optional) Argument(s) for hooked functions,
+     *                         can specify multiple arguments.
+     *
+     * @return mixed|void
      */
     public function applyHook($name, $hookArg = null)
     {
@@ -124,7 +131,9 @@ class EventManager implements EventManagerInterface
      * the first callback to return a non-null value will be returned
      *
      * @param string $name the hook name
-     * @param mixed $hookArg (Optional) Argument for hooked functions
+     * @param mixed $hookArg (Optional) Argument for hooked functions,
+     *                       can specify multiple arguments.
+     *
      * @return mixed|void
      */
     public function applyChain($name, $hookArg = null)
@@ -153,6 +162,15 @@ class EventManager implements EventManagerInterface
         }
     }
 
+    /**
+     * Alias for self::applyHook()
+     *
+     * @param  string $name    the hook name
+     * @param  mixed  $hookArg (Optional) Argument for hooked functions,
+     *                         can specify multiple arguments.
+     *
+     * @return mixed|void
+     */
     public function trigger($name, $hookArg = null)
     {
         $this->applyHook($name, $hookArg);
@@ -163,6 +181,7 @@ class EventManager implements EventManagerInterface
      *
      * @param string $event Event name
      * @param array  $args  Array of arguments to pass to callback
+     *
      * @return mixed|void
      */
     public function triggerChain($event, array $args = [])
@@ -179,8 +198,8 @@ class EventManager implements EventManagerInterface
      * keys are hook names and whose values are arrays of listeners.
      *
      * @param  string     $name A hook name (Optional)
+     *
      * @return array|null
-     * @api
      */
     public function getHooks($name = null)
     {
@@ -199,7 +218,6 @@ class EventManager implements EventManagerInterface
      * to that hook will be cleared.
      *
      * @param  string $name A hook name (Optional)
-     * @api
      */
     public function clearHooks($name = null)
     {
