@@ -21,25 +21,19 @@ namespace Brainwave\Contracts\Exception;
 use \Pimple\Container;
 
 /**
- * ExceptionDisplayer
+ * Adapter
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface ExceptionDisplayer
+interface Adapter
 {
-    /**
-     * @param Container $app
-     * @param string    $charset language
-     */
-    public function __construct(Container $app, $charset, $console);
-
     /**
      * Display the given exception to the user.
      *
-     * @param  \Exception  $exception
+     * @param \Exception $exception
      */
-    public function display($exception);
+    public function display(\Exception $exception);
 }

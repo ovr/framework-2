@@ -197,8 +197,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Retrieves info on the Silex environment and ships it off
+     * Retrieves info on the Narrowspark environment and ships it off
      * to the PrettyPageHandler's data tables:
+     *
      * This works by adding a new handler to the stack that runs
      * before the error page, retrieving the shared page handler
      * instance, and working with it to add new data tables
@@ -208,11 +209,6 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     protected function registerPrettyWhoopsHandlerInfo()
     {
         $this->app['whoops.handler.info'] = function ($app) {
-            // Retrieves info on the Brainwave environment and ships it off
-            // to the PrettyPageHandler's data tables:
-            // This works by adding a new handler to the stack that runs
-            // before the error page, retrieving the shared page handler
-            // instance, and working with it to add new data tables
             try {
                 $request = $app['request'];
             } catch (\RuntimeException $e) {
@@ -223,14 +219,14 @@ class ExceptionServiceProvider implements ServiceProviderInterface
 
             $app['whoops.handler']->setPageTitle("We're all going to be fired!");
 
-            $app['whoops.handler']->addDataTable('Brainwave Application', [
+            $app['whoops.handler']->addDataTable('Narrowspark Application', [
                 'Charset'          => $request->getContentCharset(),
                 'Locale'           => $request->getContentCharset() ?: '<none>',
                 'Route Class'      => $app['settings']['http::route.class'],
                 'Application Class'=> get_class($app)
             ]);
 
-            $app['whoops.handler']->addDataTable('Brainwave Application (Request)', [
+            $app['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
                 'Base URL'    => $request->getUrl(),
                 'URI'         => $request->getScriptName(),
                 'Request URI' => $request->getPathInfo(),
