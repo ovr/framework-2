@@ -22,7 +22,7 @@ use \Pimple\Container;
 use \Brainwave\Encrypter\Encrypter;
 use \RandomLib\Factory as RandomLib;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Encrypter\HashGenerator;
+use \Brainwave\Encrypter\Generator as HashGenerator;
 
 /**
  * CryptServiceProvider

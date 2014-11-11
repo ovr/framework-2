@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Crypt;
+namespace Brainwave\Encrypter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,18 +19,19 @@ namespace Brainwave\Crypt;
  */
 
 use \Brainwave\Support\Helpers;
-use \Brainwave\Encrypter\Encrypter;
 use \RandomLib\Factory as RandomLib;
+use \Brainwave\Contracts\Encrypter as EncrypterContract;
+use \Brainwave\Contracts\Encrypter\Generator as HashContract;
 
 /**
- * HashGenerator
+ * Generator
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class HashGenerator
+class Generator implements HashContract
 {
     /**
      * All registered methods
@@ -96,9 +97,9 @@ class HashGenerator
     public $drupalCount = 15;
 
     /**
-     * Encrypter
+     * EncrypterContract
      *
-     * @var \Brainwave\Encrypter\Encrypter
+     * @var EncrypterContract
      */
     protected $crypt;
 
@@ -121,10 +122,10 @@ class HashGenerator
     /**
      * HashGenerator
      *
-     * @param Encrypter     $crypt
-     * @param RandGenerator $randomLib
+     * @param EncrypterContract $crypt
+     * @param RandGenerator     $randomLib
      */
-    public function __construct(Encrypter $crypt, RandomLib $randomLib)
+    public function __construct(EncrypterContract $crypt, RandomLib $randomLib)
     {
         $this->crypt     = $crypt;
         $this->randomLib = $randomLib;
