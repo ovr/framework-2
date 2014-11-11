@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Log;
+namespace Brainwave\Contracts\Encrypter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,32 +18,15 @@ namespace Brainwave\Log;
  *
  */
 
-use \Monolog\Logger;
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Log\Writer as MonologWriter;
-
 /**
- * LoggerServiceProvider
+ * DecryptException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class LoggerServiceProvider implements ServiceProviderInterface
+class DecryptException extends \RuntimeException
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register(Container $app)
-    {
-        $app['logger'] = function ($app) {
-            return new MonologWriter(
-                new Logger($app['env'])
-            );
-        };
-    }
+
 }

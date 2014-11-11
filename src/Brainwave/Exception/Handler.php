@@ -8,7 +8,7 @@ namespace Brainwave\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,8 +20,9 @@ namespace Brainwave\Exception;
 
 use \Pimple\Container;
 use \Brainwave\Routing\Route;
-use \Brainwave\Workbench\Exception\Stop;
-use \Brainwave\Exception\Exception\FatalErrorException as FatalError;
+use \Psr\Log\LoggerInterface;
+use \Brainwave\Exception\Exception\Stop;
+use \Brainwave\Contracts\Exception\FatalErrorException as FatalError;
 
 /**
  * ExceptionHandler
@@ -31,33 +32,70 @@ use \Brainwave\Exception\Exception\FatalErrorException as FatalError;
  * @since   0.8.0-dev
  *
  */
-class ExceptionHandler
+class Handler
 {
     /**
-     * Container
+     * The container repository implementation.
      *
      * @var \Pimple\Container
      */
-    private $app;
+    protected $app;
+
+    /**
+     * The log implementation.
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $log;
+
+    /**
+     * Template setting
+     *
+     * @var array
+     */
+    protected $template = [];
 
     /**
      * All of the register exception handlers.
+     *
      * @var array
      */
     protected $handlers = [];
 
     /**
-     * [__construct description]
+     * Indicates if the application is in debug mode.
      *
-     * @param Container $app     [description]
+     * @var bool
      */
-    public function __construct(Container $app)
+    protected $debug;
+
+    /**
+     * Create a new exception handler instance.
+     *
+     * @param \Pimple\Container        $app
+     * @param \Psr\Log\LoggerInterface $log
+     */
+    public function __construct(Container $app, LoggerInterface $log, $debug = true)
     {
-        $this->app = $app;
+        $this->app   = $app;
+        $this->log   = $log;
+        $this->debug = $debug;
     }
 
     /**
-     * Register the exception / error handlers for the application.
+     * Report or log an exception.
+     *
+     * @param  \Exception  $e
+     * @return void
+     */
+    public function report(\Exception $e)
+    {
+        $this->log->error((string) $e);
+    }
+
+    /**
+     * Register the exception /
+     * error handlers for the application.
      *
      * @return void
      */
@@ -70,6 +108,16 @@ class ExceptionHandler
         if ($this->app['env'] !== 'testing') {
             $this->registerShutdownHandler();
         }
+    }
+
+    /**
+     * Unregister the PHP error handler.
+     *
+     * @return void
+     */
+    public function unregister()
+    {
+        restore_error_handler();
     }
 
     /**
@@ -102,16 +150,8 @@ class ExceptionHandler
     }
 
     /**
-     * Unregister the PHP error handler.
-     * @return void
-     */
-    public function unregister()
-    {
-        restore_error_handler();
-    }
-
-    /**
      * Handle the PHP shutdown event.
+     *
      * @return void
      */
     public function handleShutdown()
@@ -154,42 +194,6 @@ class ExceptionHandler
     }
 
     /**
-     * Not found handter
-     * @return type
-     */
-    public function pageNotFound()
-    {
-        $this->app->contentType('text/html');
-
-        $this->app['response']->setStatus(404);
-        $title = '404 Error';
-        $header = 'Sorry, the page you are looking for could not be found.';
-        $link = $this->app['request']->getScriptName();
-        $content = <<<EOF
-<div>
-    <i class="fa fa-circle-o"></i>
-    <span>
-        The page you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.
-        <br/>
-        If all else fails, you can visit our home page at the link below.
-    </span>
-</div>
-<div>
-    <i class="fa fa-circle-o"></i><a href="$link/">Visit the Home Page</a>
-</div>
-EOF;
-        $footer = 'Copyright &copy; ' . date('Y') . $this->app['settings']->get('app::footer', 'narrowspark');
-
-        return $this->app['exception.plain']->decorate(
-            $title,
-            $header,
-            $content,
-            $footer,
-            $this->app['exception.plain']->getStylesheet('pageNotFound')
-        );
-    }
-
-    /**
      * Error Handler
      *
      * This method defines or invokes the application-wide Error handler.
@@ -211,9 +215,12 @@ EOF;
      * into an output buffer and sent as the body of a 500 HTTP Response.
      *
      * @param  mixed $argument A callable or an exception
-     * @api
+     *
+     * @return void
+     *
+     * @throws \Brainwave\Exception\Exception\Stop
      */
-    public function error($argument = null)
+    public function error($argument)
     {
         if ($argument instanceof \Closure) {
             //Register error handler
@@ -231,18 +238,58 @@ EOF;
             }
 
             array_unshift($this->handlers, $argument);
-        } else {
-            //Invoke error handler
-            $this->app['response']->setStatus(500);
-            $this->app['response']->write($this->handleException($argument), true);
-            $this->app->stop();
         }
+
+        //Invoke error handler
+        $this->app['response']->setStatus(500);
+        $this->app['response']->write($this->handleException($argument), true);
+
+        throw new Stop();
+    }
+
+    /**
+     * Not found handter
+     *
+     * @return type
+     */
+    public function pageNotFound()
+    {
+        $this->app->contentType('text/html');
+        $this->app['response']->setStatus(404);
+
+        $link    = $this->app['request']->getScriptName();
+        $content = <<<EOF
+<div>
+    <i class="fa fa-circle-o"></i>
+    <span>
+        The page you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.
+        <br/>
+        If all else fails, you can visit our home page at the link below.
+    </span>
+</div>
+<div>
+    <i class="fa fa-circle-o"></i><a href="$link/">Visit the Home Page</a>
+</div>
+EOF;
+
+        $templateSettings = $this->getTemplate();
+        $this->app['view']->make(
+            $templateSettings['404.engine'],
+            $templateSettings['404.template'],
+            [
+                'title' => '404 Error',
+                'header' => 'Sorry, the page you are looking for could not be found.',
+                'content' => $content,
+                'footer' => 'Copyright &copy;'.date('Y').' narrowspark'
+            ]
+        );
     }
 
     /**
      * Handle the given exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
+     *
      * @return void
      */
     protected function callCustomHandlers($exception)
@@ -261,25 +308,43 @@ EOF;
             try {
                 $response = $handler($exception, $code, $fromConsole);
             } catch (\Exception $e) {
-                $response = $this->displayException($e);
+                $response = $this->formatException($e);
             }
 
             // If this handler returns a "non-null" response, we will return it so it will
             // get sent back to the browsers. Once the handler returns a valid response
             // we will cease iterating through them and calling these other handlers.
-            if (isset($response) && !is_null($response)) {
+            if (isset($response) && $response !== null) {
                 return $response;
             }
         }
     }
 
     /**
+     * Format an exception thrown by a handler.
+     *
+     * @param  \Exception  $e
+     * @return string
+     */
+    protected function formatException(\Exception $e)
+    {
+        if ($this->debug) {
+            $location = $e->getMessage().' in '.$e->getFile().':'.$e->getLine();
+            return 'Error in exception handler: '.$location;
+        }
+
+        return 'Error in exception handler.';
+    }
+
+
+    /**
      * Call error handler
      *
      * This will invoke the custom or default error handler
-     * and RETURN its output.
+     * and return its output.
      *
      * @param  Exception|null $argument
+     *
      * @return string
      */
     public function handleException($argument = null)
@@ -290,9 +355,9 @@ EOF;
             call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
         } elseif (is_callable($this->app['error'])) {
             call_user_func($this->app['error'], [$argument]);
-        } else {
-            return $this->displayException($argument);
         }
+
+        return $this->displayException($argument);
 
         ob_get_clean();
     }
@@ -300,7 +365,8 @@ EOF;
     /**
      * Display the given exception to the user.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
+     *
      * @return void
      */
     protected function displayException(\Exception $exception)
@@ -326,17 +392,15 @@ EOF;
      * Logs Exception if debug is false
      *
      * @param  \Exception  $exception
+     *
      * @return void
      */
-    protected function noException($exception)
+    protected function noException(\Exception $exception)
     {
         //Log error
-        $this->app['logger']->addRecord('error', $exception);
-
-        //Set error status
+        $this->report($exception);
         $this->app['response']->setStatus(503);
-        $title = '503 Error';
-        $header = 'Egad!';
+
         $content = <<<EOF
 <div>
     <i class="fa fa-circle-o"></i>
@@ -351,14 +415,17 @@ EOF;
     </span>
 </div>
 EOF;
-        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app::footer', 'narrowspark');
 
-        return $this->app['displayer.plain']->decorate(
-            $title,
-            $header,
-            $content,
-            $footer,
-            $this->app['displayer.plain']->getStylesheet('pageNotFound')
+        $templateSettings = $this->getTemplate();
+        $this->app['view']->make(
+            $templateSettings['503.engine'],
+            $templateSettings['503.template'],
+            [
+                'title'   => '404 Error',
+                'header'  => 'Egad!',
+                'content' => $content,
+                'footer'  => 'Copyright &copy;'.date('Y').' narrowspark'
+            ]
         );
     }
 
@@ -392,7 +459,8 @@ EOF;
      *
      * @param  \ReflectionFunction  $reflection
      * @param  \Exception  $exception
-     * @return bool
+     *
+     * @return boolen
      */
     protected function hints(\ReflectionFunction $reflection, $exception)
     {
@@ -404,38 +472,42 @@ EOF;
     }
 
     /**
-     * Generate brainwave template markup
+     * Set template for exception
      *
-     * This method accepts a title, header, content, footer and css to generate an HTML document layout.
+     * @param string $type   template type
+     * @param string $engine render engine
+     * @param string $path   template path
      *
-     * @param  string $title   The title of the HTML template
-     * @param  string $header  The header title of the HTML template
-     * @param  string $content The body content of the HTML template
-     * @param  string $footer  The footer of the HTML template
-     * @param  string $css     The css of the HTML template
-     * @return string
+     * @return boolen
      */
-    public function decorate($title, $header, $content, $footer, $css = '', $js = '')
+    public function setTemplate($type, $engine, $path)
     {
-        return $this->app['exception.plain']->decorate($title, $header, $content, $footer, $css, $js);
+        $this->template = [
+            "{$type}.engine" => $engine,
+            "{$type}.path"   => $path,
+        ];
+
+        return $this;
     }
 
     /**
-    * [getStylesheet description]
-    * @return [type] [description]
-    */
-    public function getStylesheet($mode = 'exception')
+     * Get template for exception
+     *
+     * @return array
+     */
+    public function getTemplate()
     {
-        return $this->app['exception.plain']->getStylesheet($mode);
+        return $this->template;
     }
 
     /**
-     * Determine if we are running in the console.
+     * Set the debug level for the handler.
      *
-     * @return bool
+     * @param  bool  $debug
+     * @return void
      */
-    public function runningInConsole()
+    public function setDebug($debug)
     {
-        return php_sapi_name() == 'cli';
+        $this->debug = $debug;
     }
 }

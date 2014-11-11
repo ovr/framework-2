@@ -8,7 +8,7 @@ namespace Brainwave\Log;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -47,14 +47,14 @@ use \Brainwave\Support\Interfaces\JsonableInterface;
 use \Brainwave\Support\Interfaces\ArrayableInterface;
 
 /**
- * MonologWriter
+ * Writer
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class MonologWriter
+class Writer
 {
     /**
      * The Monolog logger instance.
@@ -322,8 +322,8 @@ class MonologWriter
     /**
      * [addRecord description]
      *
-     * @param [type] $level [description]
-     * @param [type] $value [description]
+     * @param string $level monolog log level
+     * @param string $value log text
      */
     public function addRecord($level, $value)
     {
@@ -395,8 +395,6 @@ class MonologWriter
         if (in_array($method, $this->levels)) {
 
             $this->formatParameters($parameters);
-
-            call_user_func_array([$this, 'fireLogEvent'], array_merge([$method], $parameters));
 
             $method = 'add'.ucfirst($method);
 
