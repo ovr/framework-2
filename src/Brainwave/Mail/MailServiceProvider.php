@@ -8,7 +8,7 @@ namespace Brainwave\Mail;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -21,23 +21,25 @@ namespace Brainwave\Mail;
 use \Swift_Mailer;
 use \Swift_Message;
 use \Pimple\Container;
+use \Aws\Ses\SesClient;
 use \Swift_SmtpTransport;
 use \Swift_MailTransport;
 use \Swift_SendmailTransport;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Mail\Transport\LogTransport;
-use \Brainwave\Mail\Transport\MailgunTransport;
-use \Brainwave\Mail\Transport\MandrillTransport;
+use \Brainwave\Mail\Transport\Log as LogTransport;
+use \Brainwave\Mail\Transport\Ses as SesTransport;
+use \Brainwave\Mail\Transport\Mailgun as MailgunTransport;
+use \Brainwave\Mail\Transport\Mandrill as MandrillTransport;
 
 /**
- * LoggerServiceProvider
+ * MailServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class LoggerServiceProvider implements ServiceProviderInterface
+class MailServiceProvider implements ServiceProviderInterface
 {
     protected $app;
 
@@ -98,6 +100,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      *
      * @throws \InvalidArgumentException
@@ -121,6 +124,9 @@ class LoggerServiceProvider implements ServiceProviderInterface
             case 'mandrill':
                 return $this->registerMandrillTransport($config);
 
+            case 'ses':
+                return $this->registerSesTransport($config);
+
             case 'log':
                 return $this->registerLogTransport($config);
 
@@ -133,6 +139,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the SMTP Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerSmtpTransport($config)
@@ -149,7 +156,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
 
             // switch between ssl, tls and normal
 
-            if ($this->app['settings']['mail::entcryption'] == 'ssl') {
+            if ($this->app['settings']['mail::entcryption'] === 'ssl') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -158,7 +165,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption'] == 'tls') {
+            } elseif ($this->app['settings']['mail::entcryption'] === 'tls') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -167,7 +174,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption'] == 0) {
+            } elseif ($this->app['settings']['mail::entcryption'] === 0) {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -182,9 +189,28 @@ class LoggerServiceProvider implements ServiceProviderInterface
     }
 
     /**
+     * Register the SES Swift Transport instance.
+     *
+     * @param  array  $config
+     *
+     * @return void
+     */
+    protected function registerSesTransport($config)
+    {
+        $ses = $this->app['config']->get('mail::ses', array());
+
+        $this->app['ses.transport'] = function() use ($ses) {
+            $sesClient = SesClient::factory($ses);
+
+            return new SesTransport($sesClient);
+        };
+    }
+
+    /**
      * Register the Sendmail Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerSendmailTransport($config)
@@ -198,6 +224,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the Mail Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerMailTransport($config)
@@ -211,6 +238,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the Mailgun Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerMailgunTransport($config)
@@ -226,6 +254,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the Mandrill Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerMandrillTransport($config)
@@ -241,6 +270,7 @@ class LoggerServiceProvider implements ServiceProviderInterface
      * Register the "Log" Swift Transport instance.
      *
      * @param  array  $config
+     *
      * @return void
      */
     protected function registerLogTransport($config)

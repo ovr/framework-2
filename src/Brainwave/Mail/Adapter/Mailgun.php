@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Mail;
+namespace Brainwave\Mail\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -21,35 +21,52 @@ namespace Brainwave\Mail;
 use \Swift_Transport;
 use \GuzzleHttp\Client;
 use \Swift_Mime_Message;
+use \GuzzleHttp\Post\PostFile;
 use \Swift_Events_EventListener;
 
 /**
- * LoggerServiceProvider
+ * Mailgun
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.1-dev
  *
  */
-class MandrillTransport implements Swift_Transport
+class Mailgun implements Swift_Transport
 {
-
     /**
-     * The Mandrill API key.
+     * The Mailgun API key.
      *
      * @var string
      */
     protected $key;
 
     /**
-     * Create a new Mandrill transport instance.
+     * The Mailgun domain.
+     *
+     * @var string
+     */
+    protected $domain;
+
+    /**
+     * THe Mailgun API end-point.
+     *
+     * @var string
+     */
+    protected $url;
+
+    /**
+     * Create a new Mailgun transport instance.
      *
      * @param  string  $key
+     * @param  string  $domain
      * @return void
      */
-    public function __construct($key)
+    public function __construct($key, $domain)
     {
         $this->key = $key;
+        $this->domain = $domain;
+        $this->url = 'https://api.mailgun.net/v2/'.$this->domain.'/messages.mime';
     }
 
     /**
@@ -86,11 +103,10 @@ class MandrillTransport implements Swift_Transport
     {
         $client = $this->getHttpClient();
 
-        $client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', [
+        $client->post($this->url, ['auth' => ['api', $this->key],
             'body' => [
-                'key' => $this->key,
-                'raw_message' => (string) $message,
-                'async' => false,
+                'to' => $this->getTo($message),
+                'message' => new PostFile('message', (string) $message),
             ],
         ]);
     }
@@ -101,6 +117,29 @@ class MandrillTransport implements Swift_Transport
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
         //
+    }
+
+    /**
+     * Get the "to" payload field for the API request.
+     *
+     * @param  \Swift_Mime_Message  $message
+     * @return string
+     */
+    protected function getTo(Swift_Mime_Message $message)
+    {
+        $formatted = [];
+
+        $contacts = array_merge(
+            (array) $message->getTo(),
+            (array) $message->getCc(),
+            (array) $message->getBcc()
+        );
+
+        foreach ($contacts as $address => $display) {
+            $formatted[] = $display ? $display." <$address>" : $address;
+        }
+
+        return implode(',', $formatted);
     }
 
     /**
@@ -132,5 +171,26 @@ class MandrillTransport implements Swift_Transport
     public function setKey($key)
     {
         return $this->key = $key;
+    }
+
+    /**
+     * Get the domain being used by the transport.
+     *
+     * @return string
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
+
+    /**
+     * Set the domain being used by the transport.
+     *
+     * @param  string  $domain
+     * @return string
+     */
+    public function setDomain($domain)
+    {
+        return $this->domain = $domain;
     }
 }

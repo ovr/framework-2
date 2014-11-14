@@ -62,8 +62,8 @@ class Manager implements ManagerContract, \IteratorAggregate
      */
     public function __construct(RepositoryContract $repository, FileLoader $loader)
     {
-        $this->setHandler($repository);
-        $this->loader = $loader;
+        $this->repository = $repository;
+        $this->loader     = $loader;
     }
 
     /**
@@ -74,16 +74,6 @@ class Manager implements ManagerContract, \IteratorAggregate
     public function setArray(array $values)
     {
         $this->repository->setArray($values);
-    }
-
-    /**
-     * Set a configuration repository and provide it some defaults
-     *
-     * @param RepositoryContract $repository
-     */
-    public function setHandler(RepositoryContract $repository)
-    {
-        $this->repository = $repository;
     }
 
     /**
