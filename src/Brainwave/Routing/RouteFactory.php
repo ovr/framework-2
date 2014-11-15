@@ -19,7 +19,6 @@ namespace Brainwave\Routing;
  */
 
 use \Pimple\Container;
-use \Brainwave\Http\Request;
 use \Brainwave\Routing\Controller\ControllerDispatcher;
 
 /**

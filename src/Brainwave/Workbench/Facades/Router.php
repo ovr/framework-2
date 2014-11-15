@@ -21,7 +21,7 @@ namespace Brainwave\Workbench\Facades;
 use \Brainwave\Workbench\StaticalProxyManager;
 
 /**
- * Route
+ * Router
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\View\Engines\Plates;
+namespace Brainwave\View\Engines\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines\Plates;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,31 +18,33 @@ namespace Brainwave\View\Engines\Plates;
  *
  */
 
+use \Pimple\Container;
 use \League\Plates\Engine;
 use \League\Plates\Extension\URI;
 use \League\Plates\Extension\Asset;
-use \Brainwave\Workbench\Workbench;
 use \League\Plates\Template\Template;
-use \Brainwave\View\Engines\Interfaces\EnginesInterface;
+use \Brainwave\Contracts\View\Engines as EnginesContract;
 
 /**
- * PlatesEngine
+ * Plates
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class PlatesEngine implements EnginesInterface
+class Plates implements EnginesContract
 {
     /**
-     * Workbench
+     * Container
+     *
      * @var void
      */
     protected $app;
 
     /**
      * Set Path
+     *
      * @var string
      */
     protected $path;
@@ -55,16 +57,18 @@ class PlatesEngine implements EnginesInterface
 
     /**
      * All available extensions
+     *
      * @var array
      */
     protected $availableExtensions = [];
 
     /**
      * Create a new view environment instance.
-     * @param  \Brainwave\Workbench\Workbench
+     * @param  \Pimple\Container $app
+     *
      * @return void
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
 
@@ -97,7 +101,8 @@ class PlatesEngine implements EnginesInterface
 
     /**
     * Get the evaluated contents of the view.
-    * @param  array   $data
+    * @param  array $data
+    *
     * @return string
     */
     public function get(array $data = [])
@@ -107,7 +112,9 @@ class PlatesEngine implements EnginesInterface
 
    /**
     * Set path
+    *
     * @param string $path
+    *
     * @return $this \Brainwave\View\Engines
     */
     public function set($path)
@@ -118,8 +125,10 @@ class PlatesEngine implements EnginesInterface
 
     /**
      * Get the evaluated contents of the view at the given path.
-     * @param  string  $path
-     * @param  array   $data
+     *
+     * @param  string $path
+     * @param  array  $data
+     *
      * @return string
      */
     protected function evaluatePath($path, array $data)
@@ -159,11 +168,14 @@ class PlatesEngine implements EnginesInterface
 
     /**
      * Handle a view exception.
-     * @param  \Exception  $e
+     *
+     * @param  \Exception $e
+     *
      * @return void
+     *
      * @throws $e
      */
-    protected function handleViewException($e)
+    protected function handleViewException(\Exception $e)
     {
         ob_get_clean();
         throw $e;

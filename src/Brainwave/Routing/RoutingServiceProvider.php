@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -26,7 +26,7 @@ use \Brainwave\Routing\RouteFactory;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Routing\Controller\ControllerCollection;
-use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
+use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 
 /**
  * RoutingServiceProvider
@@ -36,7 +36,7 @@ use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
  * @since   0.9.1-dev
  *
  */
-class RoutingServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+class RoutingServiceProvider implements ServiceProviderInterface, BootableProviderContract
 {
     protected $app;
 

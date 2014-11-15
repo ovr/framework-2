@@ -19,8 +19,8 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Config\FileLoader;
-use \Brainwave\Contract\Config\Manager as ManagerContract;
-use \Brainwave\Contract\Config\Repository as RepositoryContract;
+use \Brainwave\Contracts\Config\Manager as ManagerContract;
+use \Brainwave\Contracts\Config\Repository as RepositoryContract;
 
 /**
  * Manager
@@ -62,8 +62,8 @@ class Manager implements ManagerContract, \IteratorAggregate
      */
     public function __construct(RepositoryContract $repository, FileLoader $loader)
     {
-        $this->repository = $repository;
-        $this->loader     = $loader;
+        $this->setHandler($repository);
+        $this->loader = $loader;
     }
 
     /**
@@ -74,6 +74,16 @@ class Manager implements ManagerContract, \IteratorAggregate
     public function setArray(array $values)
     {
         $this->repository->setArray($values);
+    }
+
+    /**
+     * Set a configuration repository and provide it some defaults
+     *
+     * @param RepositoryContract $repository
+     */
+    public function setHandler(RepositoryContract $repository)
+    {
+        $this->repository = $repository;
     }
 
     /**
@@ -99,10 +109,10 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Load the given configuration group.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param string $file
+     * @param string $namespace
+     * @param string $environment
+     * @param string $group
      *
      * @return void
      */
@@ -115,10 +125,10 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Apply any cascades to an array of package options.
      *
-     * @param  string  $package
-     * @param  string  $group
-     * @param  string  $env
-     * @param  array   $items
+     * @param string $package
+     * @param string $group
+     * @param string $env
+     * @param array  $items
      *
      * @return array
      */
@@ -130,7 +140,8 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     public function has($key)
@@ -161,8 +172,8 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Set a value
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      */
     public function set($key, $value)
     {
@@ -170,14 +181,28 @@ class Manager implements ManagerContract, \IteratorAggregate
     }
 
     /**
+     * Push a value / array in a multidimensional array
+     *
+     * @param string       $key
+     * @param string|array $items
+     */
+    public function push($key, $items)
+    {
+        array_push($this->repository[$key], $items);
+    }
+
+    /**
      * Set path to config folder
      *
-     * @param string $path
+     * @param  string $path
+     *
+     * @return self
      */
     public function addPath($path)
     {
         $this->path = $path;
         $this->loader->addDefaultPath($path);
+
         return $this;
     }
 
@@ -196,6 +221,7 @@ class Manager implements ManagerContract, \IteratorAggregate
      *
      * @param  string $method
      * @param  array  $params
+     *
      * @return mixed
      */
     public function __call($method, array $params = array())
@@ -207,6 +233,7 @@ class Manager implements ManagerContract, \IteratorAggregate
      * Get a value
      *
      * @param  string $key
+     *
      * @return mixed
      */
     public function offsetGet($key)
@@ -217,8 +244,8 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Set a value
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      */
     public function offsetSet($key, $value)
     {
@@ -240,7 +267,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Remove a value
      *
-     * @param  string $key
+     * @param string $key
      */
     public function offsetUnset($key)
     {

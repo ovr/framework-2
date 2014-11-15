@@ -25,9 +25,9 @@ use \Pimple\ServiceProviderInterface;
 use \Whoops\Handler\PlainTextHandler;
 use \Whoops\Handler\PrettyPageHandler;
 use \Whoops\Handler\JsonResponseHandler;
-use \Brainwave\Exception\Displayer\PlainDisplayer;
-use \Brainwave\Exception\Displayer\WhoopsDisplayer;
+use \Brainwave\Exception\Adapter\PlainDisplayer;
 use \Brainwave\Exception\Handler as ExceptionHandler;
+use \Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
 
 /**
  * ExceptionServiceProvider
@@ -48,7 +48,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
         $this->registerDisplayers();
 
         $app['exception'] = function ($app) {
-            return new ExceptionHandler($app, $app['logger'], $app['settings']->get('app::debug', true));
+            return new ExceptionHandler($app, $app['logger']->getMonolog(), $app['settings']->get('app::debug', true));
         };
     }
 
@@ -190,7 +190,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
         $this->app['whoops.handler'] = function ($app) {
             Arr::with($handler = new PrettyPageHandler)->setEditor('sublime');
 
-            $handler->setResourcesPath(dirname(__FILE__).DS.'WhoopsResources');
+            $handler->setResourcesPath(dirname(__FILE__).DS.'Resources');
 
             return $handler;
         };

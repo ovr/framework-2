@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,9 +19,9 @@ namespace Brainwave\Cookie;
  */
 
 use \Brainwave\Collection\Collection;
-use \Brainwave\Crypt\Interfaces\CryptInterface;
-use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
+use \Brainwave\Contracts\Http\Headers as HeadersContract;
+use \Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
+use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Cookies
@@ -43,7 +43,7 @@ use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
  * @since   0.9.1-dev
  *
  */
-class CookieJar extends Collection implements CookiesJarInterface
+class CookieJar extends Collection implements CookiesJarContract
 {
     /**
      * Default cookie settings
@@ -61,10 +61,9 @@ class CookieJar extends Collection implements CookiesJarInterface
     /**
      * Constructor, will parse headers for cookie information if present
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @api
+     * @param HeadersContract $headers
      */
-    public function __construct(HeadersInterface $headers = null)
+    public function __construct(HeadersContract $headers = null)
     {
         if (!is_null($headers)) {
             $this->data = $this->parseHeader($headers->get('Cookie', ''));
@@ -84,7 +83,6 @@ class CookieJar extends Collection implements CookiesJarInterface
      *
      * @param string $key   Cookie name
      * @param mixed  $value Cookie settings
-     * @api
      */
     public function set($key, $value)
     {
@@ -107,7 +105,6 @@ class CookieJar extends Collection implements CookiesJarInterface
      *
      * @param string $key      Cookie name
      * @param array  $settings Optional cookie settings
-     * @api
      */
     public function remove($key, $settings = [])
     {
@@ -121,10 +118,9 @@ class CookieJar extends Collection implements CookiesJarInterface
      *
      * This method iterates and encrypts data values.
      *
-     * @param \Brainwave\Crypt\Interfaces\CryptInterface $crypt
-     * @api
+     * @param EncrypterContract $crypt
      */
-    public function encrypt(CryptInterface $crypt)
+    public function encrypt(EncrypterContract $crypt)
     {
         foreach ($this as $name => $settings) {
             $settings['value'] = $crypt->encrypt($settings['value']);
@@ -135,10 +131,9 @@ class CookieJar extends Collection implements CookiesJarInterface
     /**
      * Serialize this collection of cookies into a raw HTTP header
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @api
+     * @param HeadersContract $headers
      */
-    public function setHeaders(HeadersInterface $headers)
+    public function setHeaders(HeadersContract $headers)
     {
         foreach ($this->data as $name => $settings) {
             $this->setHeader($headers, $name, $settings);
@@ -157,12 +152,11 @@ class CookieJar extends Collection implements CookiesJarInterface
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param string                                      $name
-     * @param string|array                                $value
-     * @api
+     * @param HeadersContract $headers
+     * @param string          $name
+     * @param string|array    $value
      */
-    public function setHeader(HeadersInterface $headers, $name, $value)
+    public function setHeader(HeadersContract $headers, $name, $value)
     {
         $values = [];
 
@@ -223,12 +217,11 @@ class CookieJar extends Collection implements CookiesJarInterface
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param \Brainwave\Http\Interfaces\HeadersInterface $headers
-     * @param string                                 $name
-     * @param array                                  $value
-     * @api
+     * @param HeadersContract $headers
+     * @param string          $name
+     * @param array           $value
      */
-    public function deleteHeader(HeadersInterface $headers, $name, $value = [])
+    public function deleteHeader(HeadersContract $headers, $name, $value = [])
     {
         $crumbs = ($headers->has('Set-Cookie') ? explode("\n", $headers->get('Set-Cookie')) : []);
         $cookies = [];
@@ -273,8 +266,8 @@ class CookieJar extends Collection implements CookiesJarInterface
      * and extract an associative array of cookie names and values.
      *
      * @param  string $header
+     *
      * @return array
-     * @api
      */
     public function parseHeader($header)
     {

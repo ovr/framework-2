@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Collection;
  *
  */
 
-use \Brainwave\Contracts\Crypt\Crypt;
+use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Collection
@@ -71,10 +71,10 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * @return void
      */
-    public function encrypt(Crypt $crypt);
+    public function encrypt(EncrypterContract $crypt);
 
     /**
      * @return void
      */
-    public function decrypt(Crypt $crypt);
+    public function decrypt(EncrypterContract $crypt);
 }

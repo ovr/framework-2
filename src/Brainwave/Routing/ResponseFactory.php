@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Events;
+namespace Brainwave\Routing;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,24 +18,17 @@ namespace Brainwave\Events;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Events\Dispatcher;
+use \Brainwave\Contracts\Routing\ResponseFactory as FactoryContract;
 
 /**
- * EventServiceProvider
+ * ResponseFactory
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class EventServiceProvider implements ServiceProviderInterface
+class ResponseFactory implements FactoryContract
 {
-    public function register(Container $app)
-    {
-        $app['events'] = function ($app) {
-            return new Dispatcher($app);
-        };
-    }
+
 }

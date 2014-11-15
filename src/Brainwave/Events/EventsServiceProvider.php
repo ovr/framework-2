@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Workbench\Exception;
+namespace Brainwave\Events;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Workbench\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,18 +18,24 @@ namespace Brainwave\Workbench\Exception;
  *
  */
 
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\Events\Dispatcher;
+
 /**
- * Stop
- *
- * This Exception is thrown when the Brainwave application needs to abort
- * processing and return control flow to the outer PHP script.
+ * EventsServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class Stop extends \Exception
+class EventsServiceProvider implements ServiceProviderInterface
 {
-
+    public function register(Container $app)
+    {
+        $app['events'] = function ($app) {
+            return new Dispatcher($app);
+        };
+    }
 }

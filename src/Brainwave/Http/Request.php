@@ -21,10 +21,10 @@ namespace Brainwave\Http;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Http\HeaderTrait;
 use \GuzzleHttp\Stream\StreamInterface;
-use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Http\Interfaces\RequestInterface;
-use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
-use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Contracts\Http\Headers as HeadersContract;
+use \Brainwave\Contracts\Http\Request as RequestContract;
+use \Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
+use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 
 /**
  * HTTP Request
@@ -45,7 +45,7 @@ use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
  * @since   0.8.0-dev
  *
  */
-class Request implements RequestInterface
+class Request implements RequestContract
 {
     const METHOD_HEAD = 'HEAD';
     const METHOD_GET = 'GET';
@@ -64,7 +64,7 @@ class Request implements RequestInterface
     /**
      * Application environment
      *
-     * @var \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface
+     * @var EnvironmentContract
      */
     protected $env;
 
@@ -78,14 +78,14 @@ class Request implements RequestInterface
     /**
      * Request headers
      *
-     * @var \Brainwave\Http\Interfaces\HeadersInterface
+     * @var HeadersContract
      */
     protected $headers;
 
     /**
      * Request cookies
      *
-     * @var \Brainwave\Http\Interfaces\CookiesJarInterface
+     * @var CookiesJarContract
      */
     protected $cookies;
 
@@ -113,16 +113,15 @@ class Request implements RequestInterface
     /**
      * Constructor
      *
-     * @param EnvironmentInterface  $env
-     * @param HeadersInterface      $headers
-     * @param CookiesJarInterface   $cookies
-     * @param string                $body
-     * @api
+     * @param EnvironmentContract $env
+     * @param HeadersContract     $headers
+     * @param CookiesJarContract  $cookies
+     * @param string              $body
      */
     public function __construct(
-        EnvironmentInterface $env,
-        HeadersInterface $headers,
-        CookiesJarInterface $cookies,
+        EnvironmentContract $env,
+        HeadersContract $headers,
+        CookiesJarContract $cookies,
         $body = null
     ) {
         $this->env = $env;
@@ -142,7 +141,8 @@ class Request implements RequestInterface
     /**
      * Retrieving Values From $_SERVER
      *
-     * @param  string $key   Retrieve a server variable from the request.
+     * @param  string $key Retrieve a server variable from the request.
+     *
      * @return string
      */
     public function server($key = null)
@@ -150,15 +150,10 @@ class Request implements RequestInterface
         return $_SERVER[$key];
     }
 
-    /*******************************************************************************
-     * Request Header
-     ******************************************************************************/
-
     /**
      * Get HTTP protocol version
      *
      * @return string
-     * @api
      */
     public function getProtocolVersion()
     {
@@ -169,7 +164,6 @@ class Request implements RequestInterface
      * Get HTTP method
      *
      * @return string
-     * @api
      */
     public function getMethod()
     {
@@ -182,6 +176,7 @@ class Request implements RequestInterface
             $method = strtoupper($methodOverride);
         } elseif ($method === static::METHOD_POST) {
             $customMethod = $this->post(static::METHOD_OVERRIDE, false);
+
             if ($customMethod !== false) {
                 $method = strtoupper($customMethod);
             }
@@ -194,7 +189,6 @@ class Request implements RequestInterface
      * Get original HTTP method (before method override applied)
      *
      * @return string
-     * @api
      */
     public function getOriginalMethod()
     {
@@ -205,7 +199,6 @@ class Request implements RequestInterface
      * Set HTTP method
      *
      * @param string $method
-     * @api
      */
     public function setMethod($method)
     {
@@ -213,10 +206,9 @@ class Request implements RequestInterface
     }
 
     /**
-     * Get URL (scheme host [ port if non-standard ])
+     * Get URL (scheme host [port if non-standard])
      *
      * @return string
-     * @api
      */
     public function getUrl()
     {
@@ -235,7 +227,6 @@ class Request implements RequestInterface
      * Set URL
      *
      * @param string $url
-     * @api
      */
     public function setUrl($url)
     {
@@ -248,7 +239,6 @@ class Request implements RequestInterface
      * Get cookies
      *
      * @return array
-     * @api
      */
     public function getCookies()
     {
@@ -259,7 +249,6 @@ class Request implements RequestInterface
      * Set multiple cookies
      *
      * @param array $cookies
-     * @api
      */
     public function setCookies(array $cookies)
     {
@@ -271,7 +260,6 @@ class Request implements RequestInterface
      *
      * @param  string $name
      * @return bool
-     * @api
      */
     public function hasCookie($name)
     {
@@ -283,7 +271,6 @@ class Request implements RequestInterface
      *
      * @param  string $name
      * @return string
-     * @api
      */
     public function getCookie($name)
     {
@@ -295,7 +282,6 @@ class Request implements RequestInterface
      *
      * @param string $name
      * @param string $value
-     * @api
      */
     public function setCookie($name, $value)
     {
@@ -306,22 +292,16 @@ class Request implements RequestInterface
      * Remove cookie
      *
      * @param string $name
-     * @api
      */
     public function removeCookie($name)
     {
         $this->cookies->remove($name);
     }
 
-    /*******************************************************************************
-     * Request Body
-     ******************************************************************************/
-
     /**
      * Get Body
      *
      * @return \GuzzleHttp\Stream\StreamInterface
-     * @api
      */
     public function getBody()
     {
@@ -332,23 +312,17 @@ class Request implements RequestInterface
      * Set request body
      *
      * @param \GuzzleHttp\Stream\StreamInterface $body
-     * @api
      */
     public function setBody(StreamInterface $body)
     {
         $this->bodyRaw = $body;
     }
 
-    /*******************************************************************************
-     * Request Metadata
-     ******************************************************************************/
-
     /**
      * Does this request use a given method?
      *
      * @param  string $method
      * @return bool
-     * @api
      */
     public function isMethod($method)
     {
@@ -359,7 +333,6 @@ class Request implements RequestInterface
      * Is this a GET request?
      *
      * @return bool
-     * @api
      */
     public function isGet()
     {
@@ -370,7 +343,6 @@ class Request implements RequestInterface
      * Is this a POST request?
      *
      * @return bool
-     * @api
      */
     public function isPost()
     {
@@ -381,7 +353,6 @@ class Request implements RequestInterface
      * Is this a PUT request?
      *
      * @return bool
-     * @api
      */
     public function isPut()
     {
@@ -392,7 +363,6 @@ class Request implements RequestInterface
      * Is this a PATCH request?
      *
      * @return bool
-     * @api
      */
     public function isPatch()
     {
@@ -403,7 +373,6 @@ class Request implements RequestInterface
      * Is this a DELETE request?
      *
      * @return bool
-     * @api
      */
     public function isDelete()
     {
@@ -414,7 +383,6 @@ class Request implements RequestInterface
      * Is this a HEAD request?
      *
      * @return bool
-     * @api
      */
     public function isHead()
     {
@@ -425,7 +393,6 @@ class Request implements RequestInterface
      * Is this a OPTIONS request?
      *
      * @return bool
-     * @api
      */
     public function isOptions()
     {
@@ -436,7 +403,6 @@ class Request implements RequestInterface
      * Is this an AJAX request?
      *
      * @return bool
-     * @api
      */
     public function isAjax()
     {
@@ -446,8 +412,9 @@ class Request implements RequestInterface
 
     /**
      * Is this an JSON request?
+     *
      * @return bool
-     * @api
+     *
      */
     public function isJson()
     {
@@ -458,7 +425,6 @@ class Request implements RequestInterface
      * Is this an XHR request? (alias of \Brainwave\Http\Request::isAjax)
      *
      * @return bool
-     * @api
      */
     public function isXhr()
     {
@@ -471,9 +437,9 @@ class Request implements RequestInterface
      * This method returns a union of GET and POST data as a key-value array, or the value
      * of the array key if requested; if the array key does not exist, NULL is returned.
      *
-     * @param  string           $key
+     * @param  string $key
+     *
      * @return array|mixed|null
-     * @api
      */
     public function params($key = null)
     {
@@ -494,18 +460,18 @@ class Request implements RequestInterface
      * identified by the argument does not exist, NULL is returned. If the argument is omitted,
      * all GET query parameters are returned as an array.
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return array|mixed|null
-     * @api
      */
     public function get($key = null, $default = null)
     {
         // Parse and cache query parameters
-        if (is_null($this->queryParameters) === true) {
+        if (is_null($this->queryParameters)) {
             $qs = $this->env->get('QUERY_STRING');
 
-            if (function_exists('mb_parse_str') === true) {
+            if (function_exists('mb_parse_str')) {
                 mb_parse_str($qs, $this->queryParameters); // <-- Url decodes too
             } else {
                 parse_str($qs, $this->queryParameters); // <-- Url decodes too
@@ -514,7 +480,7 @@ class Request implements RequestInterface
 
         // Fetch requested query parameter(s)
         if ($key) {
-            if (array_key_exists($key, $this->queryParameters) === true) {
+            if (array_key_exists($key, $this->queryParameters)) {
                 $returnVal = $this->queryParameters[$key];
             } else {
                 $returnVal = $default;
@@ -533,11 +499,12 @@ class Request implements RequestInterface
      * identified by the argument does not exist, NULL is returned. If the argument is omitted,
      * all json body parameters are returned as an array.
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return string
+     *
      * @throws \RuntimeException If environment input is not available
-     * @api
      */
     public function json($key = null, $default = null)
     {
@@ -557,22 +524,23 @@ class Request implements RequestInterface
      * identified by the argument does not exist, NULL is returned. If the argument is omitted,
      * all POST body parameters are returned as an array.
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return string
-     * @throws \RuntimeException         If environment input is not available
-     * @api
+     *
+     * @throws \RuntimeException If environment input is not available
      */
     public function post($key = null, $default = null)
     {
         // Parse and cache request body
-        if (is_null($this->body) === true) {
+        if (is_null($this->body)) {
             $this->body = $_POST;
 
             // Parse raw body if form-urlencoded
             if ($this->isFormData() === true) {
                 $rawBody = (string)$this->getBody();
-                if (function_exists('mb_parse_str') === true) {
+                if (function_exists('mb_parse_str')) {
                     mb_parse_str($rawBody, $this->body);
                 } else {
                     parse_str($rawBody, $this->body);
@@ -582,7 +550,7 @@ class Request implements RequestInterface
 
         // Fetch POST parameter(s)
         if ($key) {
-            if (array_key_exists($key, $this->body) === true) {
+            if (array_key_exists($key, $this->body)) {
                 $returnVal = $this->body[$key];
             } else {
                 $returnVal = $default;
@@ -597,10 +565,10 @@ class Request implements RequestInterface
     /**
      * Fetch PUT data (alias for \Brainwave\Http\Request::post)
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return string
-     * @api
      */
     public function put($key = null, $default = null)
     {
@@ -610,10 +578,10 @@ class Request implements RequestInterface
     /**
      * Fetch PATCH data (alias for \Brainwave\Http\Request::post)
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return string
-     * @api
      */
     public function patch($key = null, $default = null)
     {
@@ -623,10 +591,10 @@ class Request implements RequestInterface
     /**
      * Fetch DELETE data (alias for \Brainwave\Http\Request::post)
      *
-     * @param  string           $key
-     * @param  mixed            $default Default return value when key does not exist
+     * @param  string $key
+     * @param  mixed  $default Default return value when key does not exist
+     *
      * @return string
-     * @api
      */
     public function delete($key = null, $default = null)
     {
@@ -637,11 +605,10 @@ class Request implements RequestInterface
      * Does the Request body contain parsed form data?
      *
      * @return bool
-     * @api
      */
     public function isFormData()
     {
-        return ($this->getContentType() == '' &&
+        return ($this->getContentType() === '' &&
         $this->getOriginalMethod() === static::METHOD_POST) ||
         in_array($this->getMediaType(), self::$formDataMediaTypes);
     }
@@ -650,7 +617,6 @@ class Request implements RequestInterface
      * Get Content Type
      *
      * @return string|null
-     * @api
      */
     public function getContentType()
     {
@@ -661,7 +627,6 @@ class Request implements RequestInterface
      * Get Media Type (type/subtype within Content Type header)
      *
      * @return string|null
-     * @api
      */
     public function getMediaType()
     {
@@ -679,7 +644,6 @@ class Request implements RequestInterface
      * Get Media Type Params
      *
      * @return array
-     * @api
      */
     public function getMediaTypeParams()
     {
@@ -701,7 +665,6 @@ class Request implements RequestInterface
      * Get Content Charset
      *
      * @return string|null
-     * @api
      */
     public function getContentCharset()
     {
@@ -717,7 +680,6 @@ class Request implements RequestInterface
      * Get Content-Length
      *
      * @return int
-     * @api
      */
     public function getContentLength()
     {
@@ -728,7 +690,6 @@ class Request implements RequestInterface
      * Get Host
      *
      * @return string
-     * @api
      */
     public function getHost()
     {
@@ -750,7 +711,6 @@ class Request implements RequestInterface
      * Get Host with Port
      *
      * @return string
-     * @api
      */
     public function getHostWithPort()
     {
@@ -761,7 +721,6 @@ class Request implements RequestInterface
      * Get Port
      *
      * @return int
-     * @api
      */
     public function getPort()
     {
@@ -772,7 +731,6 @@ class Request implements RequestInterface
      * Get Scheme (https or http)
      *
      * @return string
-     * @api
      */
     public function getScheme()
     {
@@ -793,7 +751,6 @@ class Request implements RequestInterface
      * Get query string
      *
      * @return string
-     * @api
      */
     public function getQueryString()
     {
@@ -804,13 +761,13 @@ class Request implements RequestInterface
      * Get client IP address
      *
      * @return string
-     * @api
      */
     public function getClientIp()
     {
         $keys = ['HTTP_X_FORWARDED_FOR', 'CLIENT_IP', 'REMOTE_ADDR'];
+
         foreach ($keys as $key) {
-            if ($this->env->has($key) === true) {
+            if ($this->env->has($key)) {
                 return $this->env->get($key);
             }
         }
@@ -822,7 +779,6 @@ class Request implements RequestInterface
      * Get Referrer
      *
      * @return string|null
-     * @api
      */
     public function getReferrer()
     {
@@ -833,7 +789,6 @@ class Request implements RequestInterface
      * Get Referer (for those who can't spell)
      *
      * @return string|null
-     * @api
      */
     public function getReferer()
     {
@@ -844,7 +799,6 @@ class Request implements RequestInterface
      * Get User Agent
      *
      * @return string|null
-     * @api
      */
     public function getUserAgent()
     {
@@ -855,7 +809,6 @@ class Request implements RequestInterface
      * Get Script Name (physical path)
      *
      * @return string
-     * @api
      */
     public function getScriptName()
     {
@@ -868,7 +821,6 @@ class Request implements RequestInterface
      * Get Path Info (virtual path)
      *
      * @return string
-     * @api
      */
     public function getPathInfo()
     {
@@ -881,7 +833,6 @@ class Request implements RequestInterface
      * Get Path (physical path virtual path)
      *
      * @return string
-     * @api
      */
     public function getPath()
     {
@@ -895,7 +846,7 @@ class Request implements RequestInterface
      */
     protected function parsePaths()
     {
-        if (is_null($this->paths) === true) {
+        if (is_null($this->paths)) {
             // Server params
             $scriptName = $this->env->get('SCRIPT_NAME'); // <-- "/foo/index.php"
             $requestUri = $this->env->get('REQUEST_URI'); // <-- "/foo/bar?test=abc" or "/foo/index.php/bar?test=abc"
@@ -907,6 +858,7 @@ class Request implements RequestInterface
             } else {
                 $physicalPath = str_replace('\\', '', dirname($scriptName)); // <-- With rewriting
             }
+
             $scriptName = rtrim($physicalPath, '/'); // <-- Remove trailing slashes
 
             // Virtual path
@@ -926,26 +878,25 @@ class Request implements RequestInterface
      * Convert HTTP request into a string
      *
      * @return string
-     * @api
      */
     public function __toString()
     {
         // Build path with query string
         $path = $this->getPath();
-        $qs = $this->getQueryString();
-        if ($qs) {
+
+        if ($qs = $this->getQueryString()) {
             $path = sprintf('%s?%s', $path, $qs);
         }
 
         // Build headers
         $output = sprintf('%s %s %s', $this->getMethod(), $path, $this->getProtocol()) . PHP_EOL;
+
         foreach ($this->headers as $name => $value) {
             $output .= sprintf("%s: %s", $name, $value) . PHP_EOL;
         }
 
         // Build body
-        $body = (string)$this->getBody();
-        if ($body) {
+        if ($body = (string)$this->getBody()) {
             $output .= PHP_EOL . $body;
         }
 

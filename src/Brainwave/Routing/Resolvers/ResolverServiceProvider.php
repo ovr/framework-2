@@ -8,7 +8,7 @@ namespace Brainwave\Routing\Resolvers;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.7-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -47,7 +47,7 @@ class ResolverServiceProvider implements ServiceProviderInterface
                     break;
 
                 case 'ContainerResolver':
-                    return new ContainerResolver();
+                    return new ContainerResolver($app);
                     break;
 
                 case 'CallableResolver':

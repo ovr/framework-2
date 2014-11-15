@@ -8,7 +8,7 @@ namespace Brainwave\Resolvers;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,8 +18,8 @@ namespace Brainwave\Resolvers;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
+use \Pimple\Container;
+use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 
 /**
  * DependencyResolver
@@ -29,7 +29,7 @@ use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
  * @since   0.8.0-dev
  *
  */
-class DependencyResolver implements CallableResolverInterface
+class DependencyResolver implements CallableResolverContract
 {
     /**
      * Application Brainwave\Workbench\Workbench
@@ -41,9 +41,9 @@ class DependencyResolver implements CallableResolverInterface
     /**
      * Set Application
      *
-     * @param $app Brainwave\Workbench\Workbench
+     * @param $app \Pimple\Container
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
     }

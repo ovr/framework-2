@@ -8,7 +8,7 @@ namespace Brainwave\Workbench\Environment;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -23,7 +23,7 @@ use \Brainwave\Support\Str;
 use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\Workbench\Environment\EnvironmentDetector;
-use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 
 /**
  * Environment
@@ -33,10 +33,11 @@ use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
  * @since   0.8.0-dev
  *
  */
-class Environment extends Collection implements EnvironmentInterface
+class Environment extends Collection implements EnvironmentContract
 {
     /**
      * Mock data for an Environment
+     *
      * @var array
      */
     public $mocked = [
@@ -78,7 +79,8 @@ class Environment extends Collection implements EnvironmentInterface
      * This method will parse an environment array and add the data to
      * this collection
      *
-     * @param  array  $environment
+     * @param  array $environment
+     *
      * @return void
      */
     public function parse(array $environment)
@@ -130,7 +132,8 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Detect the application's current environment.
      *
-     * @param  array|string  $envs
+     * @param  array|string $envs
+     *
      * @return string
      */
     public function detectEnvironment($envs)
@@ -163,7 +166,8 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Determine if the name matches the machine name.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return bool
      */
     public function isMachine($name)
@@ -174,8 +178,9 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Detect the application's current environment.
      *
-     * @param  array|string  $environments
-     * @param  array|null  $consoleArgs
+     * @param  array|string $environments
+     * @param  array|null   $consoleArgs
+     *
      * @return string
      */
     public function detect($environments, $consoleArgs = null)
@@ -245,7 +250,8 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Set the application environment for a web request.
      *
-     * @param  array|string  $environments
+     * @param  array|string $environments
+     *
      * @return string
      */
     protected function detectWebEnvironment($environments)
@@ -274,8 +280,9 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param  mixed   $environments
-     * @param  array  $args
+     * @param  mixed $environments
+     * @param  array $args
+     *
      * @return string
      */
     protected function detectConsoleEnvironment($environments, array $args)
@@ -293,7 +300,8 @@ class Environment extends Collection implements EnvironmentInterface
     /**
      * Get the environment argument from the console.
      *
-     * @param  array  $args
+     * @param  array $args
+     *
      * @return string|null
      */
     protected function getEnvironmentArgument(array $args)

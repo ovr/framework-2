@@ -8,7 +8,7 @@ namespace Brainwave\Http\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Interfaces\HttpExceptionInterface;
+use \Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
 
 /**
  * HttpException
@@ -28,14 +28,19 @@ use \Brainwave\Http\Interfaces\HttpExceptionInterface;
  * @since   0.8.0-dev
  *
  */
-class HttpException extends \RuntimeException implements HttpExceptionInterface
+class HttpException extends \RuntimeException implements HttpExceptionContract
 {
     private $statusCode;
     private $headers;
 
     /**
-     * @param integer $statusCode
-     * @param string $message
+     * Create a new http exception instance.
+     *
+     * @param integer    $statusCode
+     * @param string     $message
+     * @param \Exception $previous
+     * @param array      $headers
+     * @param interger   $code
      */
     public function __construct(
         $statusCode,

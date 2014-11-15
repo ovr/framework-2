@@ -19,10 +19,9 @@ namespace Brainwave\Exception;
  */
 
 use \Pimple\Container;
-use \Brainwave\Routing\Route;
 use \Psr\Log\LoggerInterface;
-use \Brainwave\Exception\Exception\Stop;
 use \Brainwave\Contracts\Exception\FatalErrorException as FatalError;
+use \Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
 
 /**
  * ExceptionHandler
@@ -47,13 +46,6 @@ class Handler
      * @var \Psr\Log\LoggerInterface
      */
     protected $log;
-
-    /**
-     * Template setting
-     *
-     * @var array
-     */
-    protected $template = [];
 
     /**
      * All of the register exception handlers.
@@ -85,7 +77,8 @@ class Handler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $e
+     * @param \Exception $e
+     *
      * @return void
      */
     public function report(\Exception $e)
@@ -97,27 +90,19 @@ class Handler
      * Register the exception /
      * error handlers for the application.
      *
+     * @param  string  $environment
+     *
      * @return void
      */
-    public function register()
+    public function register($exception)
     {
         $this->registerErrorHandler();
 
         $this->registerExceptionHandler();
 
-        if ($this->app['env'] !== 'testing') {
+        if ($exception !== 'testing') {
             $this->registerShutdownHandler();
         }
-    }
-
-    /**
-     * Unregister the PHP error handler.
-     *
-     * @return void
-     */
-    public function unregister()
-    {
-        restore_error_handler();
     }
 
     /**
@@ -142,11 +127,104 @@ class Handler
 
     /**
      * Register the PHP shutdown handler.
+     *
      * @return void
      */
     protected function registerShutdownHandler()
     {
         register_shutdown_function([$this, 'handleShutdown']);
+    }
+
+    /**
+     * Unregister the PHP error handler.
+     *
+     * @return void
+     */
+    public function unregister()
+    {
+        restore_error_handler();
+    }
+
+    /**
+     * Convert errors into ErrorException objects
+     *
+     * This method catches PHP errors and converts them into ErrorException objects;
+     * these ErrorException objects are then thrown and caught by Brainwave's
+     * built-in or custom error handlers.
+     *
+     * @param  int            $level   The numeric type of the Error
+     * @param  string         $message The error message
+     * @param  string         $file    The absolute path to the affected file
+     * @param  int            $line    The line number of the error in the affected file
+     *
+     * @throws ErrorException
+     */
+    public function handleError($level, $message, $file = '', $line = 0, $context = array())
+    {
+        if ($level & error_reporting()) {
+            throw new \ErrorException($message, 0, $level, $file, $line);
+        }
+    }
+
+    /**
+     * Handle an uncaught exception.
+     *
+     * @param  \Exception  $exception
+     * @return void
+     */
+    public function handleUncaughtException($exception)
+    {
+        $this->handleException($exception)->send();
+    }
+
+    /**
+     * Handle a console exception.
+     *
+     * @param  \Exception  $exception
+     * @return void
+     */
+    public function handleConsole($exception)
+    {
+        return $this->callCustomHandlers($exception, true);
+    }
+
+    /**
+     * Handle the given exception.
+     *
+     * @param  \Exception $exception
+     *
+     * @return void
+     */
+    protected function callCustomHandlers($exception)
+    {
+        foreach ($this->handlers as $handler) {
+            // If this exception handler does not handle the given exception, we will just
+            // go the next one. A handler may type-hint an exception that it handles so
+            //  we can have more granularity on the error handling for the developer.
+            if (!$this->handlesException($handler, $exception)) {
+                continue;
+            } elseif ($exception instanceof HttpExceptionContract) {
+                $code = $exception->getStatusCode();
+            } else {
+                $code = '500';
+            }
+
+            // We will wrap this handler in a try / catch and avoid white screens of death
+            // if any exceptions are thrown from a handler itself. This way we will get
+            // at least some errors, and avoid errors with no data or not log writes.
+            try {
+                $response = $handler($exception, $code, $fromConsole);
+            } catch (\Exception $e) {
+                $response = $this->formatException($e);
+            }
+
+            // If this handler returns a "non-null" response, we will return it so it will
+            // get sent back to the browsers. Once the handler returns a valid response
+            // we will cease iterating through them and calling these other handlers.
+            if (isset($response) && $response !== null) {
+                return $response;
+            }
+        }
     }
 
     /**
@@ -173,154 +251,6 @@ class Handler
     }
 
     /**
-     * Convert errors into ErrorException objects
-     *
-     * This method catches PHP errors and converts them into ErrorException objects;
-     * these ErrorException objects are then thrown and caught by Brainwave's
-     * built-in or custom error handlers.
-     *
-     * @param  int            $level   The numeric type of the Error
-     * @param  string         $message  The error message
-     * @param  string         $file The absolute path to the affected file
-     * @param  int            $line The line number of the error in the affected file
-     *
-     * @throws ErrorException
-     */
-    public function handleError($level, $message = '', $file = '', $line = '')
-    {
-        if ($level & error_reporting()) {
-            throw new \ErrorException($message, $level, 0, $file, $line);
-        }
-    }
-
-    /**
-     * Error Handler
-     *
-     * This method defines or invokes the application-wide Error handler.
-     * There are two contexts in which this method may be invoked:
-     *
-     * 1. When declaring the handler:
-     *
-     * If the $argument parameter is callable, this
-     * method will register the callable to be invoked when an uncaught
-     * Exception is detected, or when otherwise explicitly invoked.
-     * The handler WILL NOT be invoked in this context.
-     *
-     * 2. When invoking the handler:
-     *
-     * If the $argument parameter is not callable, Brainwave assumes you want
-     * to invoke an already-registered handler. If the handler has been
-     * registered and is callable, it is invoked and passed the caught Exception
-     * as its one and only argument. The error handler's output is captured
-     * into an output buffer and sent as the body of a 500 HTTP Response.
-     *
-     * @param  mixed $argument A callable or an exception
-     *
-     * @return void
-     *
-     * @throws \Brainwave\Exception\Exception\Stop
-     */
-    public function error($argument)
-    {
-        if ($argument instanceof \Closure) {
-            //Register error handler
-            array_unshift($this->handlers, $argument);
-
-        } elseif (is_string($argument)) {
-            $argument = Route::stringToCallable($argument);
-
-            if (!$argument) {
-                try {
-                    throw new Stop();
-                } catch (Stop $e) {
-                    $this->displayException($e);
-                }
-            }
-
-            array_unshift($this->handlers, $argument);
-        }
-
-        //Invoke error handler
-        $this->app['response']->setStatus(500);
-        $this->app['response']->write($this->handleException($argument), true);
-
-        throw new Stop();
-    }
-
-    /**
-     * Not found handter
-     *
-     * @return type
-     */
-    public function pageNotFound()
-    {
-        $this->app->contentType('text/html');
-        $this->app['response']->setStatus(404);
-
-        $link    = $this->app['request']->getScriptName();
-        $content = <<<EOF
-<div>
-    <i class="fa fa-circle-o"></i>
-    <span>
-        The page you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.
-        <br/>
-        If all else fails, you can visit our home page at the link below.
-    </span>
-</div>
-<div>
-    <i class="fa fa-circle-o"></i><a href="$link/">Visit the Home Page</a>
-</div>
-EOF;
-
-        $templateSettings = $this->getTemplate();
-        $this->app['view']->make(
-            $templateSettings['404.engine'],
-            $templateSettings['404.template'],
-            [
-                'title' => '404 Error',
-                'header' => 'Sorry, the page you are looking for could not be found.',
-                'content' => $content,
-                'footer' => 'Copyright &copy;'.date('Y').' narrowspark'
-            ]
-        );
-    }
-
-    /**
-     * Handle the given exception.
-     *
-     * @param  \Exception $exception
-     *
-     * @return void
-     */
-    protected function callCustomHandlers($exception)
-    {
-        foreach ($this->handlers as $handler) {
-            // If this exception handler does not handle the given exception, we will just
-            // go the next one. A handler may type-hint an exception that it handles so
-            //  we can have more granularity on the error handling for the developer.
-            if (!$this->handlesException($handler, $exception)) {
-                continue;
-            }
-
-            // We will wrap this handler in a try / catch and avoid white screens of death
-            // if any exceptions are thrown from a handler itself. This way we will get
-            // at least some errors, and avoid errors with no data or not log writes.
-            try {
-                $response = $handler($exception, $code, $fromConsole);
-            } catch (\Exception $e) {
-                $response = $this->formatException($e);
-            }
-
-            // If this handler returns a "non-null" response, we will return it so it will
-            // get sent back to the browsers. Once the handler returns a valid response
-            // we will cease iterating through them and calling these other handlers.
-            if (isset($response) && $response !== null) {
-                return $response;
-            }
-        }
-    }
-
-    /**
      * Format an exception thrown by a handler.
      *
      * @param  \Exception  $e
@@ -336,30 +266,51 @@ EOF;
         return 'Error in exception handler.';
     }
 
+    /**
+     * Register an application error handler.
+     *
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function error(Closure $callback)
+    {
+        array_unshift($this->handlers, $callback);
+    }
 
     /**
-     * Call error handler
+     * Register an application error handler at the bottom of the stack.
      *
-     * This will invoke the custom or default error handler
-     * and return its output.
-     *
-     * @param  Exception|null $argument
-     *
-     * @return string
+     * @param  \Closure  $callback
+     * @return void
      */
-    public function handleException($argument = null)
+    public function pushError(Closure $callback)
     {
-        ob_start();
+        $this->handlers[] = $callback;
+    }
 
-        if (is_array($this->app['error'])) {
-            call_user_func_array(array(new $this->app['error'][0], $this->app['error'][1]), array($argument));
-        } elseif (is_callable($this->app['error'])) {
-            call_user_func($this->app['error'], [$argument]);
+
+    /**
+     * Handle an exception for the application.
+     *
+     * @param  \Exception $exception
+     *
+     * @return \Brainwave\Http\Response
+     */
+    public function handleException($exception)
+    {
+        $response = $this->callCustomHandlers($exception);
+
+        // If one of the custom error handlers returned a response, we will send that
+        // response back to the client after preparing it. This allows a specific
+        // type of exceptions to handled by a Closure giving great flexibility.
+        if (!is_null($response)) {
+            return $this->prepareResponse($response);
         }
 
-        return $this->displayException($argument);
-
-        ob_get_clean();
+        // If no response was sent by this custom exception handler, we will call the
+        // default exception displayer for the current application context and let
+        // it show the exception to the user / developer based on the situation.
+        return $this->displayException($exception);
     }
 
     /**
@@ -369,23 +320,19 @@ EOF;
      *
      * @return void
      */
-    protected function displayException(\Exception $exception)
+    protected function displayException($exception)
     {
         $settings = $this->app['settings'];
 
-        if ($settings->get('app::mode', 'production') === 'development' &&
-            $settings->get('app::debug', false) === true ||
-            $settings->get('app::mode', 'production') === 'testing' &&
-            $settings->get('app::debug', false) === true
+        if ($settings->get('app::mode', 'production') === 'development'||
+            $settings->get('app::mode', 'production') === 'testing'
         ) {
-            ($settings['app::exception.handler'] === 'whoops') ?
-            $ext = $this->app['exception.debug']->display($exception) :
-            $ext = $this->app['exception.plain']->display($exception);
-        } else {
-            $ext = $this->noException($exception);
+            $displayer = $this->debug ? $this->app['exception.debug'] : $this->app['exception.plain'];
+
+            return $displayer->display($exception);
         }
 
-        return $ext;
+        return $this->noException($exception);
     }
 
     /**
@@ -469,45 +416,5 @@ EOF;
         $expected = $parameters[0];
 
         return ! $expected->getClass() || $expected->getClass()->isInstance($exception);
-    }
-
-    /**
-     * Set template for exception
-     *
-     * @param string $type   template type
-     * @param string $engine render engine
-     * @param string $path   template path
-     *
-     * @return boolen
-     */
-    public function setTemplate($type, $engine, $path)
-    {
-        $this->template = [
-            "{$type}.engine" => $engine,
-            "{$type}.path"   => $path,
-        ];
-
-        return $this;
-    }
-
-    /**
-     * Get template for exception
-     *
-     * @return array
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
-     * Set the debug level for the handler.
-     *
-     * @param  bool  $debug
-     * @return void
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = $debug;
     }
 }

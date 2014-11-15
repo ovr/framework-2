@@ -52,7 +52,8 @@ class Whoops implements ExceptionAdapter
     /**
      * Show Exception
      *
-     * @param  [type] $exception
+     * @param  \Exception|\ErrorException $exception
+     *
      * @return void
      */
     public function display($exception)

@@ -47,10 +47,10 @@ use \Brainwave\Exception\ExceptionServiceProvider;
 use \Brainwave\Translator\TranslatorServiceProvider;
 use \Brainwave\Http\Exception\NotFoundHttpException;
 use \Brainwave\Routing\Controller\ControllerCollection;
-use \Brainwave\Workbench\Interfaces\BootableProviderInterface;
-use \Brainwave\Routing\Interfaces\ControllerProviderInterface;
 use \Brainwave\Workbench\Environment\EnvironmentServiceProvider;
 use \Brainwave\Contracts\Application\Application as ApplicationContract;
+use \Brainwave\Contracts\Routing\ControllerProvider as ControllerContract;
+use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 
 /**
  * Workbench
@@ -59,9 +59,6 @@ use \Brainwave\Contracts\Application\Application as ApplicationContract;
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
- * @property Response       $response
- * @property Request        $request
- * @property Router         $router
  */
 class Workbench extends Container implements ApplicationContract
 {
@@ -288,9 +285,20 @@ class Workbench extends Container implements ApplicationContract
         // If the application has already booted, we will call this boot method on
         // the provider class so it has an opportunity to do its boot logic and
         // will be ready for any usage by the developer's application logics.
-        if ($this->booted && $provider instanceof BootableProviderInterface) {
+        if ($this->booted && $provider instanceof BootableProviderContract) {
             $provider->boot($this);
         }
+    }
+
+
+    /**
+     * Determine if the application is currently down for maintenance.
+     *
+     * @return bool
+     */
+    public function isDownForMaintenance()
+    {
+        //TODO
     }
 
     /**
@@ -381,7 +389,7 @@ class Workbench extends Container implements ApplicationContract
      *
      * @param string                      $prefix      The route prefix
      * @param ControllerCollection|
-     *        ControllerProviderInterface $controllers A ControllerCollection or a ControllerProviderInterface instance
+     *        ControllerContractInterface $controllers A ControllerCollection or a ControllerContractInterface instance
      *
      * @return Application
      *
@@ -389,19 +397,19 @@ class Workbench extends Container implements ApplicationContract
      */
     public function mount($prefix, $controllers)
     {
-        if ($controller instanceof ControllerProviderInterface) {
+        if ($controller instanceof ControllerContractInterface) {
             $controller = $controller->connect($this->app);
 
             if (!$controllers instanceof ControllerCollection) {
                 throw new \LogicException(
-                    'The "connect" method of the ControllerProviderInterface must return a ControllerCollection.'
+                    'The "connect" method of the ControllerContractInterface must return a ControllerCollection.'
                 );
             }
         }
 
         if (!$controller instanceof ControllerCollection) {
             throw new \LogicException(
-                'The "mount" method takes either a ControllerCollection or a ControllerProviderInterface instance.'
+                'The "mount" method takes either a ControllerCollection or a ControllerContractInterface instance.'
             );
         }
 
@@ -811,14 +819,17 @@ class Workbench extends Container implements ApplicationContract
      * This method triggers a download in the browser
      *
      * @param  string $filename Optional filename for the download
-     * @api
+     *
+     * @return \Brainwave\Http\Response
      */
     public function setDownload($filename = false)
     {
         $download = "attachment;";
+
         if ($filename) {
             $download .= "filename='" . $filename . "'";
         }
+
         $this['response']->setHeader("Content-Disposition", $download);
     }
 
@@ -862,7 +873,7 @@ class Workbench extends Container implements ApplicationContract
             $this->booted = true;
 
             foreach ($this->providers as $provider) {
-                if ($provider instanceof BootableProviderInterface) {
+                if ($provider instanceof BootableProviderContract) {
                     $provider->boot($this);
                 }
             }
@@ -1050,14 +1061,20 @@ class Workbench extends Container implements ApplicationContract
     {
         try {
             ob_start();
+
             $this['events']->applyHook('before.router');
             $dispatched = false;
+
             $matchedRouting = $this['router']->getMatchedRoutes($request->getMethod(), $request->getPathInfo(), true);
+
             foreach ($matchedRouting as $route) {
                 try {
                     $this['events']->applyHook('before.dispatch');
+
                     $dispatched = $route->dispatch($this->dispatchContext);
+
                     $this['events']->applyHook('after.dispatch');
+
                     if ($dispatched) {
                         break;
                     }
@@ -1065,13 +1082,16 @@ class Workbench extends Container implements ApplicationContract
                     continue;
                 }
             }
+
             if (!$dispatched) {
                 $this->notFound();
             }
+
             $this['events']->applyHook('after.router');
         } catch (Stop $e) {
-
+            throw new Stop();
         }
+
         $response->write(ob_get_clean());
     }
 

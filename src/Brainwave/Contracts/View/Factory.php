@@ -42,7 +42,7 @@ interface Factory
      *
      * @return mixed
      */
-    public function &__get($key);
+    public function __get($key);
 
     /**
      * Set a piece of data on the view.

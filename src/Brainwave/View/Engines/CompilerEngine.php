@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,8 @@ namespace Brainwave\View\Engines;
  *
  */
 
-use Brainwave\View\Compilers\Interfaces\CompilerInterface;
+
+use \Brainwave\Contracts\View\Compiler as CompilerContract;
 
 /**
  * CompilerEngine
@@ -33,30 +34,36 @@ class CompilerEngine extends PhpEngine
 
     /**
      * Compiler instance.
-     * @var \Brainwave\View\Compilers\CompilerInterface
+     *
+     * @var CompilerContract
      */
     protected $compiler;
 
     /**
      * A stack of the last compiled templates.
+     *
      * @var array
      */
     protected $lastCompiled = [];
 
     /**
      * Create a view engine instance.
-     * @param  CompilerInterface  $compiler
+     *
+     * @param  CompilerContract $compiler
+     *
      * @return void
      */
-    public function __construct(CompilerInterface $compiler)
+    public function __construct(CompilerContract $compiler)
     {
         $this->compiler = $compiler;
     }
 
     /**
      * Get the evaluated contents of the view.
-     * @param  string  $path
-     * @param  array   $data
+     *
+     * @param  string $path
+     * @param  array  $data
+     *
      * @return string
      */
     public function get($path, array $data = [])
@@ -84,8 +91,11 @@ class CompilerEngine extends PhpEngine
 
     /**
      * Handle a view exception.
-     * @param  \Exception  $e
+     *
+     * @param  \Exception $e
+     *
      * @return void
+     *
      * @throws $e
      */
     protected function handleViewException($e)
@@ -97,7 +107,9 @@ class CompilerEngine extends PhpEngine
 
     /**
      * Get the exception message for an exception.
-     * @param  \Exception  $e
+     *
+     * @param  \Exception $e
+     *
      * @return string
      */
     protected function getMessage($e)
@@ -107,7 +119,8 @@ class CompilerEngine extends PhpEngine
 
     /**
      * Get the compiler implementation.
-     * @return \Brainwave\View\Compilers\CompilerInterface
+     *
+     * @return CompilerContract
      */
     public function getCompiler()
     {

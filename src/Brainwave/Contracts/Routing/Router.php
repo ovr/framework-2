@@ -18,10 +18,10 @@ namespace Brainwave\Contracts\Routing;
  *
  */
 
-use \Brainwave\Contracts\Routing\Route;
+use \Brainwave\Contracts\Routing\Route as RouteContract;
 
 /**
- * Router
+ * RouteContractr
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -31,14 +31,14 @@ use \Brainwave\Contracts\Routing\Route;
 interface Router
 {
     /**
-     * @return RouteInterface|null
+     * @return RouteContractInterface|null
      */
     public function getCurrentRoute();
 
     /**
      * @return void
      */
-    public function map(Route $route);
+    public function map(RouteContract $route);
 
     /**
      * @return string
@@ -48,7 +48,7 @@ interface Router
     /**
      * @return void
      */
-    public function addNamedRoute($name, Route $route);
+    public function addNamedRoute($name, RouteContract $route);
 
     /**
      * @return boolean
@@ -56,7 +56,7 @@ interface Router
     public function hasNamedRoute($name);
 
     /**
-     * @return RouteInterface|null
+     * @return RouteContractInterface|null
      */
     public function getNamedRoute($name);
 

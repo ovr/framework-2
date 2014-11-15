@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Routing;
  *
  */
 
-use \Brainwave\Routing\Interfaces\RouteInterface;
+use \Brainwave\Contracts\Routing\Route as RouteContract;
 
 /**
  * Route
@@ -28,7 +28,7 @@ use \Brainwave\Routing\Interfaces\RouteInterface;
  * @since   0.8.0-dev
  *
  */
-class Route implements RouteInterface
+class Route implements RouteContract
 {
     /**
      * The route pattern (e.g. "/hello/:first/:name")

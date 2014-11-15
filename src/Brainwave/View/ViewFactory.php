@@ -8,7 +8,7 @@ namespace Brainwave\View;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -21,10 +21,10 @@ namespace Brainwave\View;
 use \Pimple\Container;
 use \Brainwave\Support\Str;
 use \Brainwave\Collection\Collection;
-use \Brainwave\View\Engines\PhpEngine;
-use \Brainwave\View\Engines\JsonEngine;
 use \Brainwave\View\Engines\EngineResolver;
 use \Brainwave\Contracts\View\View as ViewContracts;
+use \Brainwave\View\Engines\Adapter\Php as PhpEngine;
+use \Brainwave\View\Engines\Adapter\Json as JsonEngine;
 use \Brainwave\Contracts\View\Factory as FactoryContracts;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
@@ -39,7 +39,7 @@ use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 class ViewFactory extends Collection implements ViewContracts, FactoryContracts
 {
     /**
-     * Workbanch
+     * Container
      *
      * @var \Pimple\Container
      */
@@ -48,7 +48,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * The engine implementation.
      *
-     * @var \Brainwave\View\Engines\EngineInterface
+     * @var \Brainwave\Contracts\View\Engines
      */
     protected $engine;
 
@@ -97,7 +97,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Constructor
      *
-     * @param  \Pimple\Container  $app
+     * @param \Pimple\Container $app
      */
     public function __construct(Container $app)
     {
@@ -168,6 +168,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
             if ($engineName === 'php' || $engineName === 'json') {
                 $this->{'register'.ucfirst($engineClass).'Engine'}($resolver);
             } elseif ($this->app['settings']->get('view::compiler', null) !== null) {
+
                 foreach ($this->app['settings']->get('view::compiler', []) as $compilerName => $compilerClass) {
                     if ($engineName === $compilerClass) {
                         $this->registercustomEngine(
@@ -177,6 +178,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
                         );
                     }
                 }
+
             } else {
                 $this->registercustomEngine($engineName, $engineClass, $resolver);
             }
@@ -186,7 +188,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Register the PHP engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver  $resolver
+     * @param  \Brainwave\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     protected function registerPhpEngine($resolver)
@@ -199,7 +202,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Register the Json engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver  $resolver
+     * @param  \Brainwave\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     protected function registerJsonEngine($resolver)
@@ -212,9 +216,10 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Register custom engine implementation.
      *
-     * @param $engineName
-     * @param $engineClass
+     * @param string                                 $engineName
+     * @param string                                 $engineClass
      * @param \Brainwave\View\Engines\EngineResolver $resolver
+     *
      * @return void
      */
     protected function registercustomEngine($engineName, $engineClass, $resolver)
@@ -229,8 +234,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      * Display template
      *
      * This method echoes the rendered template to the current output buffer
+     *
      * @param  string $template Pathname of template file relative to templates directory
-     * @api
      */
     public function make($engine = 'php', $template = null, array $data = [])
     {
@@ -244,7 +249,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      * a rendered template into a variable for futher processing.
      *
      * @var    string $template Pathname of template file relative to templates directory
-     * @return string    The rendered template
+     *
+     * @return string           The rendered template
      */
     public function fetch($engine = 'php', $template = null, array $data = [])
     {
@@ -256,6 +262,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      *
      * @var    string $template Pathname of template file relative to templates directory
      * @param  string $template
+     *
      * @return string
      */
     protected function render($engine = 'php', $template = null, array $data = [])
@@ -272,6 +279,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
+
                 $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
@@ -298,7 +306,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      * Add a piece of data to the view.
      *
      * @param  string|array  $key
-     * @param  mixed   $value
+     * @param  mixed         $value
+     *
      * @return \Brainwave\View\ViewFactory
      */
     public function with($key, $value = null)
@@ -317,9 +326,10 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Add a view instance to the view data.
      *
-     * @param  string  $key
-     * @param  string  $view
-     * @param  array   $data
+     * @param  string $key
+     * @param  string $view
+     * @param  array  $data
+     *
      * @return $this
      */
     public function nest($factory, $key, $view, array $data = [])
@@ -330,7 +340,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Determine if a given view exists.
      *
-     * @param  string  $view
+     * @param  string $view
+     *
      * @return bool
      */
     public function exists($view)
@@ -344,6 +355,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
                 }
+
                 $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
@@ -359,6 +371,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
                     Make sure your view's template directory is correct."
                 );
             }
+
         } catch (\InvalidArgumentException $e) {
             return false;
         }
@@ -378,6 +391,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
 
     /**
      * Gets a variable.
+     *
      * @return array
      */
     public function gatherData()
@@ -390,6 +404,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      *
      * @param mixed $name
      * @param mixed $data the data
+     *
      * @return self
      */
     public function share($name, $data = null)
@@ -410,7 +425,9 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      *
      * @param  string  $method
      * @param  array   $parameters
+     *
      * @return \Brainwave\View\ViewFactory
+     *
      * @throws \BadMethodCallException
      */
     public function __call($method, $parameters)
@@ -427,7 +444,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      *
      * @return mixed
      */
-    public function &__get($key)
+    public function __get($key)
     {
         return $this->viewData[$key];
     }
@@ -437,6 +454,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      *
      * @param  string  $key
      * @param  mixed   $value
+     *
      * @return void
      */
     public function __set($key, $value = null)
@@ -447,7 +465,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Check if a piece of data is bound to the view.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function __isset($key)
@@ -458,7 +477,8 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Remove a piece of bound data from the view.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return boolean|null
      */
     public function __unset($key)

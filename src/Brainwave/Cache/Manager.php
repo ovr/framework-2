@@ -35,14 +35,14 @@ use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use \Brainwave\Contracts\Cache\Factory as FactoryContract;
 
 /**
- * CacheManager
+ * Manager
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class CacheManager implements FactoryContract
+class Manager implements FactoryContract
 {
     /**
      * The application instance.

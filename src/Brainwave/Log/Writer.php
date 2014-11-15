@@ -19,32 +19,9 @@ namespace Brainwave\Log;
  */
 
 use \Monolog\Logger as MonologLogger;
-use \Monolog\Handler\StreamHandler;
-use \Monolog\Handler\RotatingFileHandler;
 use \Monolog\Handler\ErrorLogHandler;
-use \Monolog\Handler\FirePHPHandler;
-use \Monolog\Handler\ChromePHPHandler;
-use \Monolog\Handler\SocketHandler;
-use \Monolog\Handler\AmqpHandler;
-use \Monolog\Handler\GelfHandler;
-use \Monolog\Handler\CubeHandler;
-use \Monolog\Handler\RavenHandler;
-use \Monolog\Handler\ZendMonitorHandler;
-use \Monolog\Handler\NewRelicHandler;
-use \Monolog\Handler\LogglyHandler;
-use \Monolog\Handler\SyslogUdpHandler;
-use \Monolog\Formatter\LineFormatter;
-use \Monolog\Formatter\HtmlFormatter;
-use \Monolog\Formatter\NormalizerFormatter;
-use \Monolog\Formatter\ScalarFormatter;
-use \Monolog\Formatter\JsonFormatter;
-use \Monolog\Formatter\WildfireFormatter;
-use \Monolog\Formatter\ChromePHPFormatter;
-use \Monolog\Formatter\GelfFormatter;
-use \Monolog\Formatter\LogstashFormatter;
-use \Monolog\Formatter\ElasticaFormatter;
-use \Brainwave\Support\Interfaces\JsonableInterface;
-use \Brainwave\Support\Interfaces\ArrayableInterface;
+use \Brainwave\Contracts\Support\Jsonable as JsonableContract;
+use \Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 
 /**
  * Writer
@@ -85,19 +62,19 @@ class Writer
      * @var array
      */
     protected $handler = [
-        'Stream'        => 'StreamHandler',
-        'RotatingFile'  => 'RotatingFileHandler',
-        'FirePHP'       => 'FirePHPHandler',
-        'ChromePHP'     => 'ChromePHPHandler',
-        'Socket'        => 'SocketHandler',
-        'Amqp'          => 'AmqpHandler',
-        'Gelf'          => 'GelfHandler',
-        'Cube'          => 'CubeHandler',
-        'Raven'         => 'RavenHandler',
-        'ZendMonitor'   => 'ZendMonitorHandler',
-        'NewRelic'      => 'NewRelicHandler',
-        'Loggly'        => 'LogglyHandler',
-        'SyslogUdp'     => 'SyslogUdpHandler'
+        'Stream'        => '\Monolog\Handler\StreamHandler',
+        'RotatingFile'  => '\Monolog\Handler\RotatingFileHandler',
+        'FirePHP'       => '\Monolog\Handler\FirePHPHandler',
+        'ChromePHP'     => '\Monolog\Handler\ChromePHPHandler',
+        'Socket'        => '\Monolog\Handler\SocketHandler',
+        'Amqp'          => '\Monolog\Handler\AmqpHandler',
+        'Gelf'          => '\Monolog\Handler\GelfHandler',
+        'Cube'          => '\Monolog\Handler\CubeHandler',
+        'Raven'         => '\Monolog\Handler\RavenHandler',
+        'ZendMonitor'   => '\Monolog\Handler\ZendMonitorHandler',
+        'NewRelic'      => '\Monolog\Handler\NewRelicHandler',
+        'Loggly'        => '\Monolog\Handler\LogglyHandler',
+        'SyslogUdp'     => '\Monolog\Handler\SyslogUdpHandler'
     ];
 
     /**
@@ -106,16 +83,16 @@ class Writer
      * @var array
      */
     protected $formatter = [
-        'Line'       => 'LineFormatter',
-        'Html'       => 'HtmlFormatter',
-        'Normalizer' => 'NormalizerFormatter',
-        'Scalar'     => 'ScalarFormatter',
-        'Json'       => 'JsonFormatter',
-        'Wildfire'   => 'WildfireFormatter',
-        'Chrome'     => 'ChromePHPFormatter',
-        'Gelf'       => 'GelfFormatter',
-        'Logstash'   => 'LogstashFormatter',
-        'Elastica'   => 'ElasticaFormatter'
+        'Line'       => '\Monolog\Formatter\LineFormatter',
+        'Html'       => '\Monolog\Formatter\HtmlFormatter',
+        'Normalizer' => '\Monolog\Formatter\NormalizerFormatter',
+        'Scalar'     => '\Monolog\Formatter\ScalarFormatter',
+        'Json'       => '\Monolog\Formatter\JsonFormatter',
+        'Wildfire'   => '\Monolog\Formatter\WildfireFormatter',
+        'Chrome'     => '\Monolog\Formatter\ChromePHPFormatter',
+        'Gelf'       => '\Monolog\Formatter\GelfFormatter',
+        'Logstash'   => '\Monolog\Formatter\LogstashFormatter',
+        'Elastica'   => '\Monolog\Formatter\ElasticaFormatter'
     ];
 
     /**
@@ -415,9 +392,9 @@ class Writer
         if (isset($parameters[0])) {
             if (is_array($parameters[0])) {
                 $parameters[0] = var_export($parameters[0], true);
-            } elseif ($parameters[0] instanceof JsonableInterface) {
+            } elseif ($parameters[0] instanceof JsonableContract) {
                 $parameters[0] = $parameters[0]->toJson();
-            } elseif ($parameters[0] instanceof ArrayableInterface) {
+            } elseif ($parameters[0] instanceof ArrayableContract) {
                 $parameters[0] = var_export($parameters[0]->to[], true);
             }
         }

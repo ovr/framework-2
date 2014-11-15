@@ -18,9 +18,9 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
-use \Brainwave\Contracts\Crypt\Crypt;
 use \GuzzleHttp\Stream\StreamInterface;
-use \Brainwave\Contracts\Http\Requeste;
+use \Brainwave\Contracts\Http\Request as RequestContract;
+use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Response
@@ -125,7 +125,7 @@ interface Response
     /**
      * @return void
      */
-    public function encryptCookies(Crypt $crypt);
+    public function encryptCookies(EncrypterContract $crypt);
 
     /**
      * @return StreamInterface
@@ -150,7 +150,7 @@ interface Response
     /**
      * @return \Brainwave\Http\Response
      */
-    public function finalize(Request $request);
+    public function finalize(RequestContract $request);
 
     /**
      * @return \Brainwave\Http\Response

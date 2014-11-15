@@ -19,13 +19,7 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\Driver\Php as PhpAdapter;
-use \Brainwave\Config\Driver\Ini as IniAdapter;
-use \Brainwave\Config\Driver\Xml as XmlAdapter;
-use \Brainwave\Config\Driver\Json as JsonAdapter;
-use \Brainwave\Config\Driver\Yaml as YamlAdapter;
-use \Brainwave\Config\Driver\Toml as TomlAdapter;
-use \Brainwave\Config\Interfaces\LoaderInterface;
+use \Brainwave\Config\Interfaces\LoaderInterface as LoaderContract;
 
 /**
  * FileLoader
@@ -35,7 +29,7 @@ use \Brainwave\Config\Interfaces\LoaderInterface;
  * @since   0.8.0-dev
  *
  */
-class FileLoader implements LoaderInterface
+class FileLoader implements LoaderContract
 {
     /**
      * The filesystem instance.
@@ -67,12 +61,12 @@ class FileLoader implements LoaderInterface
 
 
     protected $adapter = [
-        'php'  => 'PhpAdapter',
-        'ini'  => 'IniAdapter',
-        'xml'  => 'XmlAdapter',
-        'json' => 'JsonAdapter',
-        'yaml' => 'YamlAdapter',
-        'toml' => 'TomlAdapter',
+        'php'  => '\Brainwave\Config\Adapter\Php',
+        'ini'  => '\Brainwave\Config\Adapter\Ini',
+        'xml'  => '\Brainwave\Config\Adapter\Xml',
+        'json' => '\Brainwave\Config\Adapter\Json',
+        'yaml' => '\Brainwave\Config\Adapter\Yaml',
+        'toml' => '\Brainwave\Config\Adapter\Toml',
     ];
 
     /**
@@ -107,11 +101,11 @@ class FileLoader implements LoaderInterface
         // Get checked config file
         $configFile = $this->exists[preg_replace('[/]', '', $namespace.$group.$file)];
 
-        // Set the right driver for config
-        $driver = $this->driver($this->files->extension($file), $configFile);
+        // Set the right Adapter for config
+        $Adapter = $this->adapter($this->files->extension($file), $configFile);
 
         // return config array
-        $items = $driver->load($configFile, $group);
+        $items = $Adapter->load($configFile, $group);
 
         // Finally we're ready to check for the environment specific configuration
         // file which will be merged on top of the main arrays so that they get
@@ -122,11 +116,11 @@ class FileLoader implements LoaderInterface
         $envConfigFile = $this->exists[preg_replace('[/]', '', $namespace.$environment.$group.$file)];
 
         if ($this->files->exists($envConfigFile)) {
-            // Set the right driver for environment config
-            $envDriver = $this->driver($this->files->extension($file), $path.$env);
+            // Set the right Adapter for environment config
+            $envAdapter = $this->adapter($this->files->extension($file), $path.$env);
 
             // Return config array
-            $envItems = $envDriver->load($envConfigFile, $group);
+            $envItems = $envAdapter->load($envConfigFile, $group);
 
             // Merege env config and config
             $items = $this->configMerge($items, $envItems);
@@ -333,24 +327,26 @@ class FileLoader implements LoaderInterface
     }
 
     /**
-     * Get the right driver for config file
+     * Get the right Adapter for config file
      *
      * @param  string $ext  file extension
      * @param  string $path file path
      * @return array
      */
-    protected function driver($ext, $path)
+    protected function adapter($ext, $path)
     {
         if (isset($this->adapter[$ext])) {
-            $driver = new $this->adapter[$ext]($this->getFilesystem());
+            $class = $this->adapter[$ext];
+
+            $adapter = new $class($this->getFilesystem());
         }
 
-        if ($driver->supports($path)) {
-            return $driver;
+        if ($adapter->supports($path)) {
+            return $adapter;
         }
 
         throw new \RuntimeException(
-            sprintf("Unable to find the right driver for '%s'", $ext)
+            sprintf("Unable to find the right Adapter for '%s'", $ext)
         );
 
     }

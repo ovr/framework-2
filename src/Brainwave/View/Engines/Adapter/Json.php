@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\View\Engines;
+namespace Brainwave\View\Engines\Adapter;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,18 +18,18 @@ namespace Brainwave\View\Engines;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\View\Engines\Interfaces\EnginesInterface;
+use \Pimple\Container;
+use Brainwave\Contracts\View\Engines as EnginesContract;
 
 /**
- * JsonEngine
+ * Json
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class JsonEngine implements EnginesInterface
+class Json implements EnginesContract
 {
     /**
      * Set Path
@@ -55,10 +55,10 @@ class JsonEngine implements EnginesInterface
     /**
      * Construct
      *
-     * @param \Brainwave\Workbench\Workbench $app
-     * @param \Brainwave\View\ViewFactory    $factory
+     * @param \Pimple\Container           $app
+     * @param \Brainwave\View\ViewFactory $factory
      */
-    public function __construct(Workbench $app, ViewFactory $factory)
+    public function __construct(Container $app, ViewFactory $factory)
     {
         $this->app = $app;
         $this->factory = $factory;
@@ -67,7 +67,7 @@ class JsonEngine implements EnginesInterface
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  array   $data
+     * @param  array $data
      * @return string
      */
     public function get(array $data = [])
@@ -100,7 +100,7 @@ class JsonEngine implements EnginesInterface
     /**
      * Get the evaluated contents of the view at the given status.
      *
-     * @param  integer  $status
+     * @param  integer $status
      * @param  array   $data
      * @return string
      */
