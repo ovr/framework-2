@@ -44,13 +44,13 @@ class RequestServiceProvider implements ServiceProviderInterface
         $app['request'] = function ($app) {
             $environment = $app['environment'];
             $headers = new Headers($environment);
-            $CookieJar = new CookieJar($headers);
+            $cookieJar = new CookieJar($headers);
 
             if ($app['settings']->get('cookies::encrypt', false) ===  true) {
                 $CookieJar->decrypt($app['encrypter']);
             }
 
-            return new Request($environment, $headers, $CookieJar);
+            return new Request($environment, $headers, $cookieJar);
         };
     }
 }

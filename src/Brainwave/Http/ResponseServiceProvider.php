@@ -43,8 +43,8 @@ class ResponseServiceProvider implements ServiceProviderInterface
     {
         $app['response'] = function ($app) {
             $headers = new Headers();
-            $CookieJar = new CookieJar();
-            $response = new Response($headers, $CookieJar);
+            $cookieJar = new CookieJar();
+            $response = new Response($headers, $cookieJar);
             $response->setProtocolVersion('HTTP/' . $app['settings']->get('http::version', '1.1'));
 
             return $response;

@@ -8,7 +8,7 @@ namespace Brainwave\Middleware;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Middleware;
  *
  */
 
-use \Brainwave\Middleware\Interfaces\MiddlewareInterface;
+use \Brainwave\Contracts\Middleware\Middleware as MiddlewareContract;
 
 /**
  * Middleware
@@ -28,16 +28,18 @@ use \Brainwave\Middleware\Interfaces\MiddlewareInterface;
  * @since   0.8.0-dev
  *
  */
-abstract class Middleware implements MiddlewareInterface
+abstract class Middleware implements MiddlewareContract
 {
     /**
      * Reference to the primary Application instance
+     *
      * @var \Brainwave\Workbench\Workbench
      */
     protected $app;
 
     /**
      * Reference to the next downstream middleware
+     *
      * @var \Brainwave\Middleware\Middleware|\Brainwave\Workbench\Workbench
      */
     protected $next;

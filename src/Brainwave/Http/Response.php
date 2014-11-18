@@ -556,10 +556,13 @@ class Response implements ResponseContract
     public function __toString()
     {
         $output = sprintf('%s %s', $this->getProtocolVersion(), $this->getReasonPhrase()) . PHP_EOL;
+
         foreach ($this->headers as $name => $value) {
             $output .= sprintf('%s: %s', $name, $value) . PHP_EOL;
         }
+
         $body = (string)$this->getBody();
+
         if ($body) {
             $output .= PHP_EOL . $body;
         }

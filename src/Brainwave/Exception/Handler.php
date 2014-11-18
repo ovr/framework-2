@@ -415,6 +415,6 @@ EOF;
 
         $expected = $parameters[0];
 
-        return ! $expected->getClass() || $expected->getClass()->isInstance($exception);
+        return !$expected->getClass() || $expected->getClass()->isInstance($exception);
     }
 }

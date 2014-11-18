@@ -102,13 +102,13 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             // out HTML. This debug handler always returns JSON from the console env.
             if ($app['environment']->runningInConsole()) {
                 return $app['exception.debug'];
-            } else {
-                return new PlainDisplayer(
-                    $app,
-                    strtolower($app['settings']->get('app::charset', 'en')),
-                    $app['environment']->runningInConsole()
-                );
             }
+
+            return new PlainDisplayer(
+                $app,
+                strtolower($app['settings']->get('app::charset', 'en')),
+                $app['environment']->runningInConsole()
+            );
         };
     }
 

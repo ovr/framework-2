@@ -40,7 +40,7 @@ class Whoops implements ExceptionAdapter
     /**
      * Whoops displayer
      *
-     * @param Container $app \Pimple\Container
+     * @param  Container $app \Pimple\Container
      *
      * @return WhoopsDisplayer
      */
