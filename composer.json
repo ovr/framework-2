@@ -26,7 +26,7 @@
         "guzzlehttp/streams": "1.*",
         "league/flysystem": "0.6.*",
         "league/fractal": "0.10.*@dev",
-        "vlucas/phpdotenv": "1.0.*@dev",
+        "vlucas/phpdotenv": "~1.0.9",
         "jeremeamia/superclosure": "~1.0.1",
         "swiftmailer/swiftmailer": "~5.2",
         "classpreloader/classpreloader": "1.1.*"

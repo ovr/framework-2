@@ -113,13 +113,10 @@ class Dispatcher implements EventsContract
                 ksort($this->hooks[$name]);
             }
 
-            $args = func_get_args();
-            array_shift($args);
-
             foreach ($this->hooks[$name] as $priority) {
                 if (!empty($priority)) {
                     foreach ($priority as $callable) {
-                        call_user_func_array($callable, $args);
+                        call_user_func_array($callable, $hookArg);
                     }
                 }
             }
@@ -130,9 +127,9 @@ class Dispatcher implements EventsContract
      * Triger a chained hook
      * the first callback to return a non-null value will be returned
      *
-     * @param string $name the hook name
-     * @param mixed $hookArg (Optional) Argument for hooked functions,
-     *                       can specify multiple arguments.
+     * @param string $name    the hook name
+     * @param mixed  $hookArg (Optional) Argument for hooked functions,
+     *                         can specify multiple arguments.
      *
      * @return mixed|void
      */
@@ -197,7 +194,7 @@ class Dispatcher implements EventsContract
      * Else, all listeners are returned as an associative array whose
      * keys are hook names and whose values are arrays of listeners.
      *
-     * @param  string     $name A hook name (Optional)
+     * @param  string $name A hook name (Optional)
      *
      * @return array|null
      */
@@ -208,6 +205,18 @@ class Dispatcher implements EventsContract
         } else {
             return $this->hooks;
         }
+    }
+
+    /**
+     * Alias for self::getHooks()
+     *
+     * @param  string $name A hook name (Optional)
+     *
+     * @return array|null
+     */
+    public function emit($name = null)
+    {
+        $this->getHooks($name);
     }
 
     /**
