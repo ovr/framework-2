@@ -62,7 +62,6 @@
         }
     },
     "suggest": {
-        "ircmaxell/random-lib": "A Library For Generating Secure Random Numbers",
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml" : "Narrowspark has support for YML files"
     },
