@@ -18,6 +18,8 @@ namespace Brainwave\Contracts\View;
  *
  */
 
+use \Brainwave\Contracts\Collection\Collection as CollectionContract
+
 /**
  * Factory
  *
@@ -26,7 +28,7 @@ namespace Brainwave\Contracts\View;
  * @since   0.9.4-dev
  *
  */
-interface Factory
+interface Factory extends CollectionContract
 {
     /**
      * Add a piece of data to the view.

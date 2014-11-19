@@ -20,12 +20,8 @@ namespace Brainwave\View;
 
 use \Pimple\Container;
 use \Brainwave\Support\Str;
-use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\EngineResolver;
-use \Brainwave\Contracts\View\View as ViewContracts;
-use \Brainwave\View\Engines\Adapter\Php as PhpEngine;
-use \Brainwave\View\Engines\Adapter\Json as JsonEngine;
-use \Brainwave\Contracts\View\Factory as FactoryContracts;
+use \Brainwave\Contracts\View\Factory as FactoryContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
 /**
@@ -36,7 +32,7 @@ use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
  * @since   0.8.0-dev
  *
  */
-class ViewFactory extends Collection implements ViewContracts, FactoryContracts
+class Factory implements FactoryContract
 {
     /**
      * Container
@@ -44,6 +40,27 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
      * @var \Pimple\Container
      */
     protected $app;
+
+    /**
+     * The resolver instance.
+     *
+     * @var \Brainwave\View\Engines\EngineResolver
+     */
+    protected $resolver;
+
+    /**
+     * The view finder implementation.
+     *
+     * @var \Brainwave\View\Interafaces\ViewFinderInterface
+     */
+    protected $finder;
+
+    /**
+     * The event dispatcher instance.
+     *
+     * @var \Brainwave\Contracts\Events\Dispatcher
+     */
+    protected $events;
 
     /**
      * The engine implementation.
@@ -97,12 +114,21 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
     /**
      * Constructor
      *
-     * @param \Pimple\Container $app
+     * @param \Pimple\Container                               $app
+     * @param \Brainwave\View\Engines\EngineResolver          $resolver
+     * @param \Brainwave\View\Interafaces\ViewFinderInterface $finder
+     * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
-    public function __construct(Container $app)
-    {
-        //App
-        $this->app = $app;
+    public function __construct(
+        Container $app,
+        EngineResolver $resolver,
+        ViewFinderInterface $finder,
+        Dispatcher $events
+    ) {
+        $this->app      = $app;
+        $this->resolver = $resolver;
+        $this->finder   = $finder;
+        $this->events   = $events;
 
         //
         if (!is_null($this->app['settings']->get('view::engine', 'plates'))) {
@@ -113,9 +139,7 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
         $this->engine = $this->engineResolver(new EngineResolver());
 
         //Set extension
-        $this->extensions = (
-            !is_null($this->app['settings']->get('view::extensions', null))) ?
-            $this->app['settings']['view::extensions'] : '.php';
+        $this->extensions = $this->app['settings']->get('view::extensions', 'php');
 
         //
         $this->registerEngineResolver();
@@ -418,71 +442,5 @@ class ViewFactory extends Collection implements ViewContracts, FactoryContracts
         }
 
         return $this;
-    }
-
-    /**
-     * Dynamically bind parameters to the view.
-     *
-     * @param  string  $method
-     * @param  array   $parameters
-     *
-     * @return \Brainwave\View\ViewFactory
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $parameters)
-    {
-        if (Str::startsWith($method, 'with')) {
-            return $this->with(snake_case(substr($method, 4)), $parameters[0]);
-        }
-
-        throw new \BadMethodCallException("Method [$method] does not exist on view.");
-    }
-
-    /**
-     * Get a piece of data from the view.
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return $this->viewData[$key];
-    }
-
-    /**
-     * Set a piece of data on the view.
-     *
-     * @param  string  $key
-     * @param  mixed   $value
-     *
-     * @return void
-     */
-    public function __set($key, $value = null)
-    {
-        $this->with($key, $value);
-    }
-
-    /**
-     * Check if a piece of data is bound to the view.
-     *
-     * @param  string $key
-     *
-     * @return bool
-     */
-    public function __isset($key)
-    {
-        return isset($this->viewData[$key]);
-    }
-
-    /**
-     * Remove a piece of bound data from the view.
-     *
-     * @param  string $key
-     *
-     * @return boolean|null
-     */
-    public function __unset($key)
-    {
-        unset($this->viewData[$key]);
     }
 }

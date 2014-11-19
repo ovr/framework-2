@@ -21,6 +21,8 @@ namespace Brainwave\View;
 use \Pimple\Container;
 use \Brainwave\View\ViewFactory;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\View\Engines\Adapter\Php as PhpEngine;
+use \Brainwave\View\Engines\Adapter\Json as JsonEngine;
 
 /**
  * ViewServiceProvider
