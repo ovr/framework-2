@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -45,8 +45,8 @@ class Cookie implements FactoryContract
      * @param  string     $name     The cookie name
      * @param  string     $value    The cookie value
      * @param  int|string $time     The duration of the cookie;
-     *                                  If integer, should be UNIX timestamp;
-     *                                  If string, converted to UNIX timestamp with `strtotime`;
+     *                              If integer, should be UNIX timestamp;
+     *                              If string, converted to UNIX timestamp with `strtotime`;
      * @param  string     $path     The path on the server in which the cookie will be available on
      * @param  string     $domain   The domain that the cookie is available to
      * @param  bool       $secure   Indicates that the cookie should only be transmitted over a secure
@@ -100,7 +100,7 @@ class Cookie implements FactoryContract
      * or return NULL if cookie does not exist. Cookies created during
      * the current request will not be available until the next request.
      *
-     * @param  string      $name    The cookie name
+     * @param  string $name The cookie name
      *
      * @return string|null
      */

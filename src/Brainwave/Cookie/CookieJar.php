@@ -47,6 +47,7 @@ class CookieJar extends Collection implements CookiesJarContract
 {
     /**
      * Default cookie settings
+     *
      * @var array
      */
     protected $defaults = [
@@ -65,7 +66,7 @@ class CookieJar extends Collection implements CookiesJarContract
      */
     public function __construct(HeadersContract $headers = null)
     {
-        if (!is_null($headers)) {
+        if ($headers !== null) {
             $this->data = $this->parseHeader($headers->get('Cookie', ''));
         }
     }

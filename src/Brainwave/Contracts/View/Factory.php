@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\View;
  *
  */
 
-use \Brainwave\Contracts\Collection\Collection as CollectionContract
+use \Brainwave\Contracts\Collection\Collection as CollectionContract;
 
 /**
  * Factory

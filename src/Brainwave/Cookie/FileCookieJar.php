@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,13 +32,17 @@ use \Brainwave\Cookie\CookieJar;
  */
 class FileCookieJar extends CookieJar
 {
-    /** @var string filename */
+    /**
+     * File path
+     *
+     * @var string
+     */
     protected $filename;
 
     /**
      * Create a new FileCookieJar object
      *
-     * @param string $cookieFile File to store the cookie data
+     * @param  string $cookieFile File to store the cookie data
      *
      * @throws RuntimeException if the file cannot be found or created
      */
@@ -64,25 +68,25 @@ class FileCookieJar extends CookieJar
     protected function persist()
     {
         if (false === file_put_contents($this->filename, $this->serialize())) {
-            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Unable to open file ' . $this->filename);
-            // @codeCoverageIgnoreEnd
         }
     }
 
     /**
-     * Load the contents of the json formatted file into the data array and discard any unsaved state
+     * Load the contents of the json formatted file into the data array
+     * and discard any unsaved state
+     *
+     * @throws RuntimeException if the file cannot be found
      */
     protected function load()
     {
         $json = file_get_contents($this->filename);
+
         if (false === $json) {
-            // @codeCoverageIgnoreStart
             throw new \RuntimeException('Unable to open file ' . $this->filename);
-            // @codeCoverageIgnoreEnd
         }
 
         $this->unserialize($json);
-        $this->cookies = $this->cookies ?: [];
+        $this->defaults = $this->defaults ?: [];
     }
 }
