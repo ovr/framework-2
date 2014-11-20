@@ -12,3 +12,4 @@ build/
 .*.un~
 .buildpath
 .idea
+us.stackdump

@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem\Adapters;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -36,7 +36,8 @@ class RackspaceConnector implements ConnectorInterface
     /**
      * Establish an adapter connection.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return \League\Flysystem\Adapter\Rackspace
      */
     public function connect(array $config)
@@ -50,7 +51,8 @@ class RackspaceConnector implements ConnectorInterface
     /**
      * Get the authentication data.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return array
      *
      * @throws \InvalidArgumentException
@@ -71,7 +73,8 @@ class RackspaceConnector implements ConnectorInterface
     /**
      * Get the rackspace client.
      *
-     * @param  array  $auth
+     * @param  array $auth
+     *
      * @return \OpenCloud\ObjectStore\Resource\Container
      */
     protected function getClient(array $auth)
@@ -87,7 +90,8 @@ class RackspaceConnector implements ConnectorInterface
     /**
      * Get the rackspace adapter.
      *
-     * @param  \OpenCloud\ObjectStore\Resource\Container  $client
+     * @param  \OpenCloud\ObjectStore\Resource\Container $client
+     *
      * @return \League\Flysystem\Adapter\Rackspace
      */
     protected function getAdapter(Container $client)

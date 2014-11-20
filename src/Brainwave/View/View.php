@@ -35,7 +35,6 @@ use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
  */
 class View extends Collection implements ViewContract
 {
-
     /**
      * Dynamically bind parameters to the view.
      *

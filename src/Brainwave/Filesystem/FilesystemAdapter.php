@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -45,7 +45,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Create a new filesystem adapter instance.
      *
-     * @param  \League\Flysystem\FilesystemInterface  $driver
+     * @param  \League\Flysystem\FilesystemInterface $driver
+     *
      * @return void
      */
     public function __construct(FilesystemInterface $driver)
@@ -56,7 +57,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Determine if a file exists.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return bool
      */
     public function exists($path)
@@ -67,7 +69,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get the contents of a file.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return false|array
      *
      * @throws \Brainwave\Filesystem\Exception\FileNotFoundException;
@@ -84,9 +87,10 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Write the contents of a file.
      *
-     * @param  string  $path
-     * @param  string  $contents
-     * @param  string  $visibility
+     * @param  string $path
+     * @param  string $contents
+     * @param  string $visibility
+     *
      * @return bool
      */
     public function put($path, $contents, $visibility = null)
@@ -97,7 +101,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get the visibility for the given path.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return string
      */
     public function getVisibility($path)
@@ -112,8 +117,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Set the visibility for the given path.
      *
-     * @param  string  $path
-     * @param  string  $visibility
+     * @param  string $path
+     * @param  string $visibility
+     *
      * @return void
      */
     public function setVisibility($path, $visibility)
@@ -124,8 +130,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Prepend to a file.
      *
-     * @param  string  $path
-     * @param  string  $data
+     * @param  string $path
+     * @param  string $data
+     *
      * @return boolean
      */
     public function prepend($path, $data)
@@ -136,8 +143,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Append to a file.
      *
-     * @param  string  $path
-     * @param  string  $data
+     * @param  string $path
+     * @param  string $data
+     *
      * @return boolean
      */
     public function append($path, $data)
@@ -148,7 +156,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array  $paths
+     * @param  string|array $paths
+     *
      * @return boolean
      */
     public function delete($paths)
@@ -165,8 +174,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Copy a file to a new location.
      *
-     * @param  string  $from
-     * @param  string  $to
+     * @param  string $from
+     * @param  string $to
+     *
      * @return bool
      */
     public function copy($from, $to)
@@ -177,8 +187,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Move a file to a new location.
      *
-     * @param  string  $from
-     * @param  string  $to
+     * @param  string $from
+     * @param  string $to
+     *
      * @return boolean|null
      */
     public function move($from, $to)
@@ -191,7 +202,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get the file size of a given file.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return false|array
      */
     public function size($path)
@@ -202,7 +214,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get the file's last modification time.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return false|array
      */
     public function lastModified($path)
@@ -213,7 +226,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get an array of all files in a directory.
      *
-     * @param  string|null  $directory
+     * @param  string|null $directory
+     *
      * @param  bool  $recursive
      * @return array
      */
@@ -227,7 +241,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param  string|null  $directory
+     * @param  string|null $directory
+     *
      * @return array
      */
     public function allFiles($directory = null)
@@ -238,8 +253,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get all of the directories within a given directory.
      *
-     * @param  string|null  $directory
-     * @param  bool  $recursive
+     * @param  string|null $directory
+     * @param  bool        $recursive
+     *
      * @return array
      */
     public function directories($directory = null, $recursive = false)
@@ -252,8 +268,9 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Get all (recursive) of the directories within a given directory.
      *
-     * @param  string|null  $directory
-     * @param  bool  $recursive
+     * @param  string|null $directory
+     * @param  bool        $recursive
+     *
      * @return array
      */
     public function allDirectories($directory = null, $recursive = false)
@@ -264,7 +281,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Create a directory.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return bool
      */
     public function makeDirectory($path)
@@ -275,7 +293,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Recursively delete a directory.
      *
-     * @param  string  $directory
+     * @param  string $directory
+     *
      * @return bool
      */
     public function deleteDirectory($directory)
@@ -287,7 +306,8 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * Filter directory contents by type.
      *
      * @param  array  $contents
-     * @param  string  $type
+     * @param  string $type
+     *
      * @return array
      */
     protected function filterContentsByType($contents, $type)
@@ -306,8 +326,10 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     /**
      * Parse the given visibility value.
      *
-     * @param  string|null  $visibility
+     * @param  string|null $visibility
+     *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     protected function parseVisibility($visibility)

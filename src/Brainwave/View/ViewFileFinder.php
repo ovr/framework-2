@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Filesystem\Exception;
+namespace Brainwave\View;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,15 +18,16 @@ namespace Brainwave\Filesystem\Exception;
  *
  */
 
+use \Brainwave\Contracts\View\Interfaces\ViewFileFinder as ViewContract;
+
 /**
- * FileNotFoundException
+ * View
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class FileNotFoundException extends \Exception
+class ViewFileFinder implements ViewContract
 {
-
 }

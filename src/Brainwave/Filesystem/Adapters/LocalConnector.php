@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem\Adapters;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -34,7 +34,8 @@ class LocalConnector implements ConnectorInterface
     /**
      * Establish an adapter connection.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return \League\Flysystem\Adapter\Local
      */
     public function connect(array $config)
@@ -47,7 +48,8 @@ class LocalConnector implements ConnectorInterface
     /**
      * Get the configuration.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return array
      *
      * @throws \InvalidArgumentException
@@ -64,7 +66,8 @@ class LocalConnector implements ConnectorInterface
     /**
      * Get the local adapter.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return \League\Flysystem\Adapter\Local
      */
     protected function getAdapter(array $config)

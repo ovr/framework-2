@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -58,8 +58,9 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Create a new filesystem manager instance.
      *
-     * @param  \Pimple\Container  $app
-     * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory  $factory
+     * @param  \Pimple\Container                                $app
+     * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory $factory
+     *
      * @return void
      */
     public function __construct(Container $app, ConnectionFactory $factory)
@@ -71,7 +72,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Get an OAuth provider implementation.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     public function disk($name = null)
@@ -84,7 +86,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Attempt to get the disk from the local cache.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     protected function get($name)
@@ -95,7 +98,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Resolve the given disk.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     protected function resolve($name)
@@ -108,7 +112,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Adapt the filesystem implementation.
      *
-     * @param  \League\Flysystem\AdapterInterface  $adapter
+     * @param  \League\Flysystem\AdapterInterface $adapter
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     protected function adapt(AdapterInterface $adapter)
@@ -119,7 +124,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Get the filesystem connection configuration.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return array
      */
     protected function getConfig($name)

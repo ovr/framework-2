@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Filesystem\Exception;
+namespace Brainwave\Translator;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,14 +19,15 @@ namespace Brainwave\Filesystem\Exception;
  */
 
 /**
- * FileNotFoundException
+ * LangFileLoader
+ *
+ * the ability to translate strings.
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.2-dev
+ * @since   0.9.4-dev
  *
  */
-class FileNotFoundException extends \Exception
+class LangFileLoader implements FileLoader
 {
-
 }
