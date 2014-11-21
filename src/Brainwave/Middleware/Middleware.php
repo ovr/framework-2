@@ -33,14 +33,14 @@ abstract class Middleware implements MiddlewareContract
     /**
      * Reference to the primary Application instance
      *
-     * @var \Brainwave\Workbench\Workbench
+     * @var \Brainwave\Application\Application
      */
     protected $app;
 
     /**
      * Reference to the next downstream middleware
      *
-     * @var \Brainwave\Middleware\Middleware|\Brainwave\Workbench\Workbench
+     * @var \Brainwave\Middleware\Middleware|\Brainwave\Application\Application
      */
     protected $next;
 
@@ -50,7 +50,7 @@ abstract class Middleware implements MiddlewareContract
      * This method injects the primary Brainwave Application instance into
      * this middleware.
      *
-     * @param  \Brainwave\Workbench\Workbench $application
+     * @param  \Brainwave\Application\Application $application
      */
     final public function setApplication($application)
     {
@@ -63,7 +63,7 @@ abstract class Middleware implements MiddlewareContract
      * This method retrieves the Application previously injected
      * into this middleware.
      *
-     * @return \Brainwave\Workbench\Workbench
+     * @return \Brainwave\Application\Application
      */
     final public function getApplication()
     {
@@ -75,9 +75,9 @@ abstract class Middleware implements MiddlewareContract
      *
      * This method injects the next downstream middleware into
      * this middleware so that it may optionally be called
-     * when Workbenchropriate.
+     * when Applicationropriate.
      *
-     * @param \Brainwave\Workbench\Workbench|\Brainwave\Middleware\Middleware
+     * @param \Brainwave\Application\Application|\Brainwave\Middleware\Middleware
      */
     final public function setNextMiddleware($nextMiddleware)
     {
@@ -90,7 +90,7 @@ abstract class Middleware implements MiddlewareContract
      * This method retrieves the next downstream middleware
      * previously injected into this middleware.
      *
-     * @return \Brainwave\Workbench\Workbench|\Brainwave\Middleware\Middleware
+     * @return \Brainwave\Application\Application|\Brainwave\Middleware\Middleware
      */
     final public function getNextMiddleware()
     {

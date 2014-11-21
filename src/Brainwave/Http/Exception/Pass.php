@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Workbench\Exception;
+namespace Brainwave\Application\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework

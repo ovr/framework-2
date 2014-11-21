@@ -51,7 +51,7 @@ class Helpers
             return self::app()->make($make);
         }
 
-        return \Brainwave\Workbench\StaticalProxyManager::getFacadeApplication();
+        return \Brainwave\Application\StaticalProxyManager::getFacadeApplication();
     }
 
     /**

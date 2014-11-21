@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
+use \Brainwave\Application\Application;
 
 /**
  * BootableProvider Interface
@@ -39,5 +39,5 @@ interface BootableProvider
      *
      * @return void
      */
-    public function boot(Workbench $app);
+    public function boot(Application $app);
 }

@@ -32,7 +32,7 @@ use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 class DependencyResolver implements CallableResolverContract
 {
     /**
-     * Application Brainwave\Workbench\Workbench
+     * Application Brainwave\Application\Application
      *
      * @var bool
      */
@@ -63,7 +63,7 @@ class DependencyResolver implements CallableResolverContract
             $method = $matches[2];
 
             if (!isset($this->app[$service])) {
-                throw new \InvalidArgumentException('Route key does not exist in Workbench');
+                throw new \InvalidArgumentException('Route key does not exist in Application');
             }
 
             $callable =  [$this->app[$service],$method];

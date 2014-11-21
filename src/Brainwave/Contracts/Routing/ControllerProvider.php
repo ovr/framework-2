@@ -33,7 +33,7 @@ interface ControllerProvider
     /**
      * Returns routes to connect to the given application.
      *
-     * @param Workbench $app An Application instance
+     * @param Application $app An Application instance
      *
      * @return string A ControllerCollection instance
      */

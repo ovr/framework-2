@@ -32,7 +32,7 @@ use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 class ContainerResolver implements CallableResolverContract
 {
     /**
-     * Application Brainwave\Workbench\Workbench
+     * Application Brainwave\Application\Application
      *
      * @var bool
      */

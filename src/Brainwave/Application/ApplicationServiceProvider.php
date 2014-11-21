@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Middleware;
+namespace Brainwave\Application;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Contracts\Middleware;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,34 +18,24 @@ namespace Brainwave\Contracts\Middleware;
  *
  */
 
-use \Brainwave\Contracts\Application;
+use \Pimple\Container;
+use \Pimple\ServiceProviderInterface;
+use \Brainwave\Application\EnvironmentDetector;
 
 /**
- * Middleware
+ * EnvironmentServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Middleware
+class EnvironmentServiceProvider implements ServiceProviderInterface
 {
-    /**
-     * @return void
-     */
-    public function setApplication(Application $application);
-
-    /**
-     * @return \Brainwave\Application\Application
-     */
-    public function getApplication();
-
-    /**
-     * @return void
-     */
-    public function setNextMiddleware($nextMiddleware);
-
-    public function getNextMiddleware();
-
-    public function call();
+    public function register(Container $app)
+    {
+        $app['environment'] = function ($app) {
+            return new EnvironmentDetector($app, $_SERVER);
+        };
+    }
 }

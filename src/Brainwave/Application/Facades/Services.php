@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Middleware;
+namespace Brainwave\Application\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,34 +18,20 @@ namespace Brainwave\Contracts\Middleware;
  *
  */
 
-use \Brainwave\Contracts\Application;
+use \Brainwave\Application\StaticalProxyManager;
 
 /**
- * Middleware
+ * Services
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.4-dev
+ * @since   0.8.0-dev
  *
  */
-interface Middleware
+class Services extends StaticalProxyManager
 {
-    /**
-     * @return void
-     */
-    public function setApplication(Application $application);
-
-    /**
-     * @return \Brainwave\Application\Application
-     */
-    public function getApplication();
-
-    /**
-     * @return void
-     */
-    public function setNextMiddleware($nextMiddleware);
-
-    public function getNextMiddleware();
-
-    public function call();
+    protected static function getFacadeAccessor()
+    {
+        return 'services';
+    }
 }

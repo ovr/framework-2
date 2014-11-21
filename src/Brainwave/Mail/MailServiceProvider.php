@@ -199,7 +199,7 @@ class MailServiceProvider implements ServiceProviderInterface
     {
         $ses = $this->app['config']->get('mail::ses', array());
 
-        $this->app['ses.transport'] = function() use ($ses) {
+        $this->app['ses.transport'] = function () use ($ses) {
             $sesClient = SesClient::factory($ses);
 
             return new SesTransport($sesClient);

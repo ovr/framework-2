@@ -31,7 +31,7 @@ class Application
     /**
      * Create and boot a new Console application.
      *
-     * @param  \Brainwave\Workbench\Workbench  $app
+     * @param  \Brainwave\Application\Application  $app
      * @return \Brainwave\Console\Application
      */
     public static function start($app)
@@ -42,7 +42,7 @@ class Application
     /**
      * Create a new Console application.
      *
-     * @param  \Brainwave\Workbench\Workbench  $app
+     * @param  \Brainwave\Application\Application  $app
      * @return \Brainwave\Console\Application
      */
     public static function make($app)

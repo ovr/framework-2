@@ -21,7 +21,7 @@ namespace Brainwave\Routing;
 use \Pimple\Container;
 use \Brainwave\Routing\Router;
 use \Brainwave\Routing\Redirector;
-use \Brainwave\Workbench\Workbench;
+use \Brainwave\Application\Application;
 use \Brainwave\Routing\RouteFactory;
 use \Brainwave\Routing\UrlGenerator;
 use \Pimple\ServiceProviderInterface;
@@ -165,7 +165,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      * all of the routes now and return the application to the callers.
      *
     */
-    public function boot(Workbench $app)
+    public function boot(Application $app)
     {
         $app['files']->getRequire($app::$paths['path'].'/Http/routes.php');
     }
