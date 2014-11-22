@@ -20,6 +20,7 @@ namespace Brainwave\Filesystem;
 
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Filesystem\FileLoader;
 use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Filesystem\FilesystemManager;
 use \Brainwave\Filesystem\Adapters\ConnectionFactory as Factory;
@@ -41,6 +42,7 @@ class FilesystemServiceProvider implements ServiceProviderInterface
         };
 
         $this->registerFlysystem($app);
+        $this->registerFileLoader($app);
     }
 
     /**
@@ -84,6 +86,15 @@ class FilesystemServiceProvider implements ServiceProviderInterface
     {
         $app['filesystem'] = function ($app) {
             return new FilesystemManager($app, $app['filesystem.factory']);
+        };
+    }
+
+    protected function registerFileLoader(Container $app)
+    {
+        $app['file.loader'] = function ($app) {
+            $app['path'] = '';
+
+            return new FileLoader($app['files'], $app['path']);
         };
     }
 }

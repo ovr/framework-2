@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Adapter;
+namespace Brainwave\Filesystem\Parser;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,17 +19,17 @@ namespace Brainwave\Config\Adapter;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Config\Adapter as ConfigContract;
+use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Php
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Php implements ConfigContract
+class Php implements ParserContract
 {
     /**
      * The filesystem instance.
@@ -41,7 +41,8 @@ class Php implements ConfigContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     *
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -54,27 +55,31 @@ class Php implements ConfigContract
      *
      * @param  string $filename
      * @param  string $group
-     * @return array            config data
+     *
+     * @return array data
      */
     public function load($filename, $group = null)
     {
-        $config = $this->files->getRequire($filename);
+        $data = $this->files->getRequire($filename);
 
-        $groupConfig = [];
+        $groupData = [];
 
         if ($group !== null) {
-            foreach ($config as $key => $value) {
-                $groupConfig["{$group}::{$key}"] = $value;
+            foreach ($data as $key => $value) {
+                $groupData["{$group}::{$key}"] = $value;
             }
+
+            return $groupData;
         }
 
-        return ($group === null) ? $config : $groupConfig;
+        return $data;
     }
 
     /**
      * Checking if file ist supported
      *
      * @param  string $filename
+     *
      * @return boolean
      */
     public function supports($filename)
@@ -83,9 +88,10 @@ class Php implements ConfigContract
     }
 
     /**
-     * Format a config file for saving.
+     * Format a php file for saving.
      *
-     * @param  array  $data config data
+     * @param  array $data data
+     *
      * @return string data export
      */
     public function format(array $data)

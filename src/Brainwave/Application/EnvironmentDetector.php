@@ -109,6 +109,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * Get or check the current application environment.
      *
      * @param  mixed
+     *
      * @return string
      */
     public function environment()

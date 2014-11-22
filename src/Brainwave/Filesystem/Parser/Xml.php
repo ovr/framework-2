@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Adapter;
+namespace Brainwave\Filesystem\Parser;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,17 +19,17 @@ namespace Brainwave\Config\Adapter;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Config\Adapter as ConfigContract;
+use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Xml
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Xml implements ConfigContract
+class Xml implements ParserContract
 {
     /**
      * The filesystem instance.
@@ -41,7 +41,8 @@ class Xml implements ConfigContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     *
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -54,30 +55,34 @@ class Xml implements ConfigContract
      *
      * @param  string $filename
      * @param  string $group
-     * @return array            config data
+     *
+     * @return array data
      */
     public function load($filename, $group = null)
     {
         if ($this->files->exists($filename)) {
-            $config = simplexml_load_file($filename);
-            $config = unserialize(serialize(json_decode(json_encode((array) $config), 1)));
+            $data = simplexml_load_file($filename);
+            $data = unserialize(serialize(json_decode(json_encode((array) $data), 1)));
         }
 
-        $groupConfig = [];
+        $groupData = [];
 
         if ($group !== null) {
-            foreach ($config as $key => $value) {
-                $groupConfig["{$group}::{$key}"] = $value;
+            foreach ($data as $key => $value) {
+                $groupData["{$group}::{$key}"] = $value;
             }
+
+            return $groupData;
         }
 
-        return ($group === null) ? $config : $groupConfig;
+        return $data;
     }
 
     /**
      * Checking if file ist supported
      *
      * @param  string $filename
+     *
      * @return boolean
      */
     public function supports($filename)
@@ -86,9 +91,10 @@ class Xml implements ConfigContract
     }
 
     /**
-     * Format a config file for saving.
+     * Format a xml file for saving.
      *
-     * @param  array     $data config data
+     * @param  array $data data
+     *
      * @return string data export
      */
     public function format(array $data)
@@ -105,9 +111,10 @@ class Xml implements ConfigContract
     /**
      * Defination to convert array to xml [NOT IMPLEMENTED]
      *
-     * @param  array $data  config data
-     * @param  \SimpleXMLElement $xml    \SimpleXMLElement
-     * @return string       data
+     * @param  array             $data data
+     * @param  \SimpleXMLElement $xml
+     *
+     * @return string
      */
     private function arrayToXml($data, \SimpleXMLElement &$xml)
     {

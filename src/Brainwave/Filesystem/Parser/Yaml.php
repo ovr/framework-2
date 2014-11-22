@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Adapter;
+namespace Brainwave\Filesystem\Parser;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,18 +19,18 @@ namespace Brainwave\Config\Adapter;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use Yosymfony\Toml\Toml as TomlManager;
-use \Brainwave\Contracts\Config\Adapter as ConfigContract;
+use \Symfony\Component\Yaml\Yaml as YamlParser;
+use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
- * Toml
+ * YamlAdapter
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Toml implements ConfigContract
+class Yaml implements ParserContract
 {
     /**
      * The filesystem instance.
@@ -42,7 +42,8 @@ class Toml implements ConfigContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     *
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -51,52 +52,57 @@ class Toml implements ConfigContract
     }
 
     /**
-     * Loads a TOML file and gets its' contents as an array
+     * Loads a YAML file and gets its' contents as an array
      *
      * @param  string $filename
      * @param  string $group
-     * @return array            config data
+     *
+     * @return array data
      */
     public function load($filename, $group = null)
     {
-        if (!class_exists('Yosymfony\\Toml\\Toml;')) {
-            throw new \RuntimeException('Unable to read toml, the Toml Parser is not installed.');
+        if (!class_exists('Symfony\\Component\\Yaml\\Yaml')) {
+            throw new \RuntimeException('Unable to read yaml as the Symfony Yaml Component is not installed.');
         }
 
         if ($this->files->exists($filename)) {
-            $config = TomlManager::Parse($filename);
+            $data = YamlParser::parse($filename);
         }
 
-        $groupConfig = [];
+        $groupData = [];
 
         if ($group !== null) {
-            foreach ($config as $key => $value) {
-                $groupConfig["{$group}::{$key}"] = $value;
+            foreach ($data as $key => $value) {
+                $groupData["{$group}::{$key}"] = $value;
             }
+
+            return $groupData;
         }
 
-        return ($group === null) ? $config : $groupConfig;
+        return $data;
     }
 
     /**
      * Checking if file ist supported
      *
      * @param  string $filename
+     *
      * @return boolean
      */
     public function supports($filename)
     {
-        return (bool) preg_match('#\.toml(\.dist)?$#', $filename);
+        return (bool) preg_match('#\.ya?ml(\.dist)?$#', $filename);
     }
 
     /**
-     * Format a config file for saving. [NOT IMPLEMENTED]
+     * Format a yaml file for saving.
      *
-     * @param  array     $data config data
+     * @param  array $data data
+     *
      * @return string data export
      */
     public function format(array $data)
     {
-        throw new \Exception('Toml export is not available');
+        return YamlParser::dump($data);
     }
 }

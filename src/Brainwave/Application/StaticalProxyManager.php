@@ -48,7 +48,8 @@ abstract class StaticalProxyManager
     /**
      * Hotswap the underlying instance behind the facade.
      *
-     * @param  mixed  $instance
+     * @param  mixed $instance
+     *
      * @return void
      */
     public static function swap($instance)
@@ -62,6 +63,7 @@ abstract class StaticalProxyManager
      * Initiate a mock expectation on the facade.
      *
      * @param  dynamic
+     *
      * @return \Mockery\Expectation
      */
     public static function shouldReceive()
@@ -80,8 +82,9 @@ abstract class StaticalProxyManager
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string  $name
-     * @return MockInterface
+     * @param  string $name
+     *
+     * @return \Mockery\MockInterface
      */
     protected static function createFreshMockInstance($name)
     {
@@ -97,8 +100,9 @@ abstract class StaticalProxyManager
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string  $name
-     * @return MockInterface
+     * @param  string $name
+     *
+     * @return \Mockery\MockInterface
      */
     protected static function createMockByName($name)
     {
@@ -116,7 +120,8 @@ abstract class StaticalProxyManager
     {
         $name = static::getFacadeAccessor();
 
-        return isset(static::$resolvedInstance[$name]) && static::$resolvedInstance[$name] instanceof MockInterface;
+        return isset(static::$resolvedInstance[$name]) &&
+                static::$resolvedInstance[$name] instanceof MockInterface;
     }
 
     /**
@@ -156,7 +161,8 @@ abstract class StaticalProxyManager
     /**
      * Resolve the facade root instance from the container.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return mixed
      */
     protected static function resolveFacadeInstance($name)
@@ -175,7 +181,8 @@ abstract class StaticalProxyManager
     /**
      * Clear a resolved facade instance.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return void
      */
     public static function clearResolvedInstance($name)
@@ -206,7 +213,8 @@ abstract class StaticalProxyManager
     /**
      * Set the application instance.
      *
-     * @param  \Brainwave\Application\Application  $app
+     * @param  \Brainwave\Application\Application $app
+     *
      * @return void
      */
     public static function setFacadeApplication(Application $app)
@@ -217,8 +225,9 @@ abstract class StaticalProxyManager
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string  $method
-     * @param  array   $args
+     * @param  string $method
+     * @param  array  $args
+     *
      * @return mixed
      */
     public static function __callStatic($method, $args)

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config;
+namespace Brainwave\Filesystem;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,17 +19,17 @@ namespace Brainwave\Config;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\Interfaces\LoaderInterface as LoaderContract;
+use \Brainwave\Filesystem\Interfaces\LoaderInterface;
 
 /**
  * FileLoader
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class FileLoader implements LoaderContract
+class FileLoader implements LoaderInterface
 {
     /**
      * The filesystem instance.
@@ -39,7 +39,7 @@ class FileLoader implements LoaderContract
     protected $files;
 
     /**
-     * The default configuration path.
+     * The default data path.
      *
      * @var string
      */
@@ -60,20 +60,21 @@ class FileLoader implements LoaderContract
     protected $exists = [];
 
 
-    protected $adapter = [
-        'php'  => '\Brainwave\Config\Adapter\Php',
-        'ini'  => '\Brainwave\Config\Adapter\Ini',
-        'xml'  => '\Brainwave\Config\Adapter\Xml',
-        'json' => '\Brainwave\Config\Adapter\Json',
-        'yaml' => '\Brainwave\Config\Adapter\Yaml',
-        'toml' => '\Brainwave\Config\Adapter\Toml',
+    protected $parser = [
+        'php'  => '\Brainwave\Filesystem\Parser\Php',
+        'ini'  => '\Brainwave\Filesystem\Parser\Ini',
+        'xml'  => '\Brainwave\Filesystem\Parser\Xml',
+        'json' => '\Brainwave\Filesystem\Parser\Json',
+        'yaml' => '\Brainwave\Filesystem\Parser\Yaml',
+        'toml' => '\Brainwave\Filesystem\Parser\Toml',
     ];
 
     /**
-     * Create a new file configuration loader.
+     * Create a new file data loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem  $files
-     * @param  string  $defaultPath
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param  string                           $defaultPath
+     *
      * @return FileLoader
      */
     public function __construct(Filesystem $files, $defaultPath)
@@ -83,12 +84,13 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Load the given configuration group.
+     * Load the given data group.
      *
-     * @param  string  $file
-     * @param  string  $group
-     * @param  string  $namespace
-     * @param  string  $environment
+     * @param  string $file
+     * @param  string $group
+     * @param  string $namespace
+     * @param  string $environment
+     *
      * @return array
      */
     public function load($file, $group = null, $environment = null, $namespace = null)
@@ -98,32 +100,32 @@ class FileLoader implements LoaderContract
         // Determine if the given file exists.
         $this->exists($file, $group, $environment, $namespace);
 
-        // Get checked config file
-        $configFile = $this->exists[preg_replace('[/]', '', $namespace.$group.$file)];
+        // Get checked data file
+        $dataFile = $this->exists[preg_replace('[/]', '', $namespace.$group.$file)];
 
-        // Set the right Adapter for config
-        $Adapter = $this->adapter($this->files->extension($file), $configFile);
+        // Set the right Parser for data
+        $parser = $this->parser($this->files->extension($file), $dataFile);
 
-        // return config array
-        $items = $Adapter->load($configFile, $group);
+        // return data array
+        $items = $parser->load($dataFile, $group);
 
-        // Finally we're ready to check for the environment specific configuration
+        // Finally we're ready to check for the environment specific data
         // file which will be merged on top of the main arrays so that they get
         // precedence over them if we are currently in an environments setup.
         $env = "/{$environment}/{$file}";
 
-        // Get checked env config file
-        $envConfigFile = $this->exists[preg_replace('[/]', '', $namespace.$environment.$group.$file)];
+        // Get checked env data file
+        $envdataFile = $this->exists[preg_replace('[/]', '', $namespace.$environment.$group.$file)];
 
-        if ($this->files->exists($envConfigFile)) {
-            // Set the right Adapter for environment config
-            $envAdapter = $this->adapter($this->files->extension($file), $path.$env);
+        if ($this->files->exists($envdataFile)) {
+            // Set the right parser for environment data
+            $envParser = $this->parser($this->files->extension($file), $path.$env);
 
-            // Return config array
-            $envItems = $envAdapter->load($envConfigFile, $group);
+            // Return data array
+            $envItems = $envParser->load($envdataFile, $group);
 
-            // Merege env config and config
-            $items = $this->configMerge($items, $envItems);
+            // Merege env data and data
+            $items = $this->dataMerge($items, $envItems);
         }
 
         return $items;
@@ -132,10 +134,11 @@ class FileLoader implements LoaderContract
     /**
      * Determine if the given file exists.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param  string $file
+     * @param  string $namespace
+     * @param  string $environment
+     * @param  string $group
+     *
      * @return bool|array
      */
     public function exists($file, $group = null, $environment = null, $namespace = null)
@@ -169,7 +172,7 @@ class FileLoader implements LoaderContract
 
         // Finally, we can simply check if this file exists. We will also cache
         // the value in an array so we don't have to go through this process
-        // again on subsequent checks for the existing of the config file.
+        // again on subsequent checks for the existing of the data file.
         $file = "{$path}/{$file}";
 
         $envFile = "{$path}/{$environment}/{$file}";
@@ -186,10 +189,11 @@ class FileLoader implements LoaderContract
     /**
      * Apply any cascades to an array of package options.
      *
-     * @param  string  $package
-     * @param  string  $group
-     * @param  string  $env
-     * @param  array   $items
+     * @param  string $package
+     * @param  string $group
+     * @param  string $env
+     * @param  array  $items
+     *
      * @return array
      */
     public function cascadePackage(
@@ -200,12 +204,12 @@ class FileLoader implements LoaderContract
         $items = null,
         $namespace = 'packages'
     ) {
-        // First we will look for a configuration file in the packages configuration
+        // First we will look for a data file in the packages data
         // folder. If it exists, we will load it and merge it with these original
-        // options so that we will easily 'cascade' a package's configurations.
+        // options so that we will easily 'cascade' a package's datas.
         if ($this->exists($file, "{$namespace}/{$packages}/{$env}", null, $group)) {
 
-            $items = $this->configMerge(
+            $items = $this->dataMerge(
                 $items,
                 $this->files->get(
                     $this->exists[preg_replace('[/]', '', $namespace.$packages.$env.$group.$file)]
@@ -213,13 +217,13 @@ class FileLoader implements LoaderContract
             );
         }
 
-        // Once we have merged the regular package configuration we need to look for
-        // an environment specific configuration file. If one exists, we will get
+        // Once we have merged the regular package data we need to look for
+        // an environment specific data file. If one exists, we will get
         // the contents and merge them on top of this array of options we have.
         $path = $this->getPackagePath($env, $package, $group, $file, $namespace);
 
         if ($this->exists($path)) {
-            $items = $this->configMerge($items, $this->files->get($path));
+            $items = $this->dataMerge($items, $this->files->get($path));
         }
 
         return $items;
@@ -228,10 +232,11 @@ class FileLoader implements LoaderContract
     /**
      * Get the package path for an environment and group.
      *
-     * @param  string  $env
-     * @param  string  $package
-     * @param  string  $group
-     * @param string $namespace
+     * @param  string $env
+     * @param  string $package
+     * @param  string $group
+     * @param  string $namespace
+     *
      * @return string
      */
     protected function getPackagePath($env, $package, $group, $file, $namespace = null)
@@ -243,9 +248,10 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Get the configuration path for a namespace.
+     * Get the data path for a namespace.
      *
-     * @param  string  $namespace
+     * @param  string $namespace
+     *
      * @return string
      */
     protected function getPath($namespace)
@@ -260,8 +266,9 @@ class FileLoader implements LoaderContract
     /**
      * Add a new namespace to the loader.
      *
-     * @param  string  $namespace
-     * @param  string  $hint
+     * @param  string $namespace
+     * @param  string $hint
+     *
      * @return void
      */
     public function addNamespace($namespace, $hint)
@@ -270,7 +277,7 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Returns all registered namespaces with the config
+     * Returns all registered namespaces with the data
      * loader.
      *
      * @return array
@@ -281,12 +288,13 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Sensibly merge configuration arrays.
+     * Sensibly merge data arrays.
      *
      * @param  dynamic array
+     *
      * @return string
      */
-    protected function configMerge()
+    protected function dataMerge()
     {
         $result = [];
 
@@ -295,7 +303,7 @@ class FileLoader implements LoaderContract
                 if (is_numeric($key)) {
                     $result[] = $value;
                 } elseif (array_key_exists($key, $result) && is_array($result[$key]) && is_array($value)) {
-                    $result[$key] = $this->configMerge($result[$key], $value);
+                    $result[$key] = $this->dataMerge($result[$key], $value);
                 } else {
                     $result[$key] = $value;
                 }
@@ -308,7 +316,8 @@ class FileLoader implements LoaderContract
     /**
      * Get a file's contents by requiring it.
      *
-     * @param  string  $path
+     * @param  string $path
+     *
      * @return mixed
      */
     protected function getRequire($path)
@@ -327,26 +336,29 @@ class FileLoader implements LoaderContract
     }
 
     /**
-     * Get the right Adapter for config file
+     * Get the right Parser for data file
      *
      * @param  string $ext  file extension
      * @param  string $path file path
+     *
      * @return array
+     *
+     * @throws \RuntimeException
      */
-    protected function adapter($ext, $path)
+    protected function parser($ext, $path)
     {
-        if (isset($this->adapter[$ext])) {
-            $class = $this->adapter[$ext];
+        if (isset($this->Parser[$ext])) {
+            $class = $this->parser[$ext];
 
-            $adapter = new $class($this->getFilesystem());
+            $Parser = new $class($this->getFilesystem());
         }
 
-        if ($adapter->supports($path)) {
-            return $adapter;
+        if ($parser->supports($path)) {
+            return $Parser;
         }
 
         throw new \RuntimeException(
-            sprintf("Unable to find the right Adapter for '%s'", $ext)
+            sprintf("Unable to find the right Parser for '%s'", $ext)
         );
 
     }

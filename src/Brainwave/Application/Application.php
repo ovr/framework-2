@@ -33,21 +33,19 @@ use \Brainwave\Http\Exception\Stop;
 use \Brainwave\Http\Exception\Pass;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
-use \Brainwave\Application\AliasLoader;
 use \Brainwave\Exception\ExceptionHandler;
 use \Brainwave\Http\RequestServiceProvider;
 use \Brainwave\Http\ResponseServiceProvider;
 use \Brainwave\Config\ConfigServiceProvider;
 use \Brainwave\Http\Exception\HttpException;
 use \Brainwave\Exception\FatalErrorException;
+use \Brainwave\Application\EnvironmentDetector;
 use \Brainwave\Application\StaticalProxyManager;
-use \Brainwave\Application\StaticalProxyResolver;
 use \Brainwave\Exception\ExceptionServiceProvider;
-use \Brainwave\Application\Environment\Environment;
 use \Brainwave\Translator\TranslatorServiceProvider;
 use \Brainwave\Http\Exception\NotFoundHttpException;
+use \Brainwave\Application\ApplicationServiceProvider;
 use \Brainwave\Routing\Controller\ControllerCollection;
-use \Brainwave\Application\Environment\EnvironmentServiceProvider;
 use \Brainwave\Contracts\Application\Application as ApplicationContract;
 use \Brainwave\Contracts\Routing\ControllerProvider as ControllerContract;
 use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
@@ -186,8 +184,8 @@ class Application extends Container implements ApplicationContract
         // Not Found
         $this['notFound'] = null;
 
-        // Environment
-        $this->register(new EnvironmentServiceProvider());
+        // Needed App services
+        $this->register(new ApplicationServiceProvider());
 
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
@@ -240,15 +238,6 @@ class Application extends Container implements ApplicationContract
 
         // Middleware stack
         $this['middleware'] = [$this];
-
-        // StaticalProxy
-        $this['statical.resolver'] = function () {
-            return new StaticalProxyResolver();
-        };
-
-        $this['alias'] = function () {
-            return new AliasLoader();
-        };
     }
 
     /**
@@ -1121,7 +1110,7 @@ class Application extends Container implements ApplicationContract
         array $serverVariables = []
     ) {
         // Build sub-request and sub-response
-        $environment = new Environment(array_merge([
+        $environment = new EnvironmentDetector(array_merge([
             'REQUEST_METHOD' => $method,
             'REQUEST_URI' => $url,
             'SCRIPT_NAME' => '/index.php'

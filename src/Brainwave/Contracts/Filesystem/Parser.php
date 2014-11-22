@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Config;
+namespace Brainwave\Contracts\Filesystem;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,21 +19,22 @@ namespace Brainwave\Contracts\Config;
  */
 
 /**
- * Adapter
+ * Parser
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Adapter
+interface Parser
 {
     /**
      * Loads a file and gets its' contents as an array
      *
      * @param  string $filename
      * @param  string $group
-     * @return array            config data
+     *
+     * @return array data
      */
     public function load($filename, $group = null);
 
@@ -41,14 +42,16 @@ interface Adapter
      * Checking if file ist supported
      *
      * @param  string $filename
+     *
      * @return boolean
      */
     public function supports($filename);
 
     /**
-     * Format a config file for saving.
+     * Format a data file for saving.
      *
-     * @param  array     $data config data
+     * @param  array $data data
+     *
      * @return string data export
      */
     public function format(array $data);

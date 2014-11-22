@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "brainwave/config": "self.version"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +23,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.3-dev"
+            "dev-master": "0.9.4-dev"
         }
     },
     "minimum-stability": "dev"

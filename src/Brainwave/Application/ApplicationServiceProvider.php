@@ -20,7 +20,9 @@ namespace Brainwave\Application;
 
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Application\AliasLoader;
 use \Brainwave\Application\EnvironmentDetector;
+use \Brainwave\Application\StaticalProxyResolver;
 
 /**
  * EnvironmentServiceProvider
@@ -34,8 +36,30 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
+        $this->registerAliasLoader($app);
+        $this->registerEntvironment($app);
+        $this->registerStaticalProxyResolver($app);
+
+    }
+
+    protected function registerEntvironment($app)
+    {
         $app['environment'] = function ($app) {
             return new EnvironmentDetector($app, $_SERVER);
+        };
+    }
+
+    protected function registerAliasLoader($app)
+    {
+        $app['alias'] = function () {
+            return new AliasLoader();
+        };
+    }
+
+    protected function registerStaticalProxyResolver($app)
+    {
+        $app['statical.resolver'] = function () {
+            return new StaticalProxyResolver();
         };
     }
 }

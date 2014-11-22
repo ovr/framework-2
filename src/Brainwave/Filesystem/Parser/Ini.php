@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config\Adapter;
+namespace Brainwave\Filesystem\Parser;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,17 +19,17 @@ namespace Brainwave\Config\Adapter;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Config\Adapter as ConfigContract;
+use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Ini
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Ini implements ConfigContract
+class Ini implements ParserContract
 {
     /**
      * The filesystem instance.
@@ -41,7 +41,8 @@ class Ini implements ConfigContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem  $files
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     *
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -54,31 +55,35 @@ class Ini implements ConfigContract
      *
      * @param  string $filename
      * @param  string $group
-     * @return array            config data
+     *
+     * @return array data data
      */
     public function load($filename, $group = null)
     {
         if ($this->files->exists($filename)) {
-            $config = parse_ini_file($filename, true);
+            $data = parse_ini_file($filename, true);
         } else {
             throw new \Exception("INI file dont exists: ".$filename);
         }
 
-        $groupConfig = [];
+        $groupData = [];
 
         if ($group !== null) {
-            foreach ($config as $key => $value) {
-                $groupConfig["{$group}::{$key}"] = $value;
+            foreach ($data as $key => $value) {
+                $groupData["{$group}::{$key}"] = $value;
             }
+
+            return $groupData;
         }
 
-        return ($group === null) ? $config : $groupConfig;
+        return $data;
     }
 
     /**
      * Checking if file ist supported
      *
      * @param  string $filename
+     *
      * @return boolean
      */
     public function supports($filename)
@@ -87,9 +92,9 @@ class Ini implements ConfigContract
     }
 
     /**
-     * Format a config file for saving.
+     * Format a file for saving.
      *
-     * @param  array     $data config data
+     * @param array $data data
      */
     public function format(array $data)
     {
@@ -97,10 +102,11 @@ class Ini implements ConfigContract
     }
 
     /**
-     * Format a ini config file.
+     * Format a ini file.
      *
-     * @param  array  $data   config data
-     * @param  array  $parent data
+     * @param  array $data
+     * @param  array $parent
+     *
      * @return string data export
      */
     private function iniFormat(array $data, array $parent = [])

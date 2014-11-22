@@ -34,6 +34,7 @@ class StaticalProxyResolver
      * Resolve a facade quickly to its root class
      *
      * @param  string $facade
+     *
      * @return resolved class
      */
     public function resolve($facade)
@@ -47,40 +48,43 @@ class StaticalProxyResolver
     }
 
     /**
-     * [getFacadeNameFromInput description]
+     * Create a uppercase facade name if is not already
      *
-     * @param  string $facadeName [description]
-     * @return [type]             [description]
+     * @param  string $facadeName
+     *
+     * @return string
      */
     public function getFacadeNameFromInput($facadeName)
     {
         if ($this->isUppercase($facadeName)) {
             return $facadeName;
-        } else {
-            return ucfirst(Str::camel(strtolower($facadeName)));
         }
+
+        return ucfirst(Str::camel(strtolower($facadeName)));
     }
 
     /**
-     * [isFacade description]
+     * Checking if facade is a really facade of StaticalProxyManager
      *
-     * @param  string  $facade [description]
-     * @return boolean         [description]
+     * @param  string $facade
+     *
+     * @return boolean
      */
     public function isFacade($facade)
     {
         if (class_exists($facade)) {
             return array_key_exists('Brainwave\Application\StaticalProxyManager', class_parents($facade));
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * [isUppercase description]
+     * Checking if facade name is in uppercase
      *
-     * @param  string  $string [description]
-     * @return boolean         [description]
+     * @param  string $string
+     *
+     * @return boolean
      */
     private function isUppercase($string)
     {
