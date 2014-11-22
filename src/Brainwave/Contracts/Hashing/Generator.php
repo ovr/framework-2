@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Encrypter;
+namespace Brainwave\Contracts\Hashing;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -56,25 +56,4 @@ interface HashGenerator
      * @return array        Returns an array with settings used to make $hash.
      */
     public function getEncoding($hash);
-
-    /**
-     * hashPassword
-     *
-     * @param  string $password password to hash
-     * @param  string $setting  hash settings
-     * @param  string $method   method to hash
-     *
-     * @return string
-     */
-    public function hashPassword($password, $setting, $method = 'sha512');
-
-    /**
-     * Check a password against a hash.
-     *
-     * @param  stirng $password
-     * @param  string $passwordHash
-     *
-     * @return boolen
-     */
-    public function checkPassword($password, $passwordHash);
 }

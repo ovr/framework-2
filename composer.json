@@ -21,7 +21,7 @@
         "league/plates": "3.*",
         "nesbot/carbon": "~1.9",
         "patchwork/utf8": "~1.1",
-        "filp/whoops": "1.2.*@dev",
+        "filp/whoops": "~1.1.3",
         "monolog/monolog": "1.11.*",
         "guzzlehttp/streams": "1.*",
         "league/flysystem": "0.6.*",

@@ -637,7 +637,7 @@ class Request implements RequestContract
             return strtolower($contentTypeParts[0]);
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -673,7 +673,7 @@ class Request implements RequestContract
             return $mediaTypeParams['charset'];
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -772,7 +772,7 @@ class Request implements RequestContract
             }
         }
 
-        return null;
+        return;
     }
 
     /**

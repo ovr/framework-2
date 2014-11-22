@@ -18,8 +18,8 @@ namespace Brainwave\Encrypter;
  *
  */
 
+use \Pimple\Container;
 use \Brainwave\Support\Arr;
-use \RandomLib\Factory as RandomLib;
 use \Brainwave\Contracts\Encrypter as EncrypterContract;
 
 /**
@@ -79,21 +79,21 @@ class Encrypter implements EncrypterContract
     protected $padding = false;
 
     /**
-     * RandomLib instance
+     * Container instance
      *
-     * @var RandomLib
+     * @var \Pimple\Container
      */
-    protected $randomLib;
+    protected $app;
 
     /**
      * Constructor
      *
-     * @param  RandomLib $randomLib
-     * @param  string    $key       Encryption key
-     * @param  int       $cipher    Encryption algorithm
-     * @param  int       $mode      Encryption mode
+     * @param  \Pimple\Container $app
+     * @param  string            $key    Encryption key
+     * @param  int               $cipher Encryption algorithm
+     * @param  int               $mode   Encryption mode
      */
-    public function __construct(RandomLib $randomLib, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
+    public function __construct(Container $app, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
     {
         $this->key       = $key;
         $this->cipher    = $cipher;
@@ -102,7 +102,7 @@ class Encrypter implements EncrypterContract
             $this->mode  = $mode;
         }
 
-        $this->randomLib = $randomLib;
+        $this->app = $app;
     }
 
     /**
@@ -133,8 +133,9 @@ class Encrypter implements EncrypterContract
         // Make sure both algorithm and mode are either block or non-block.
         $isBlockCipher = mcrypt_module_is_blockalgorithm($this->cipher);
         $isBlockMode   = mcrypt_module_is_blockalgorithmmode($this->mode);
+
         if ($isBlockCipher !== $isBlockMode) {
-            throw new \RuntimeException('You can not mix block and non-block ciphers and modes');
+            throw new \RuntimeException('You can`t mix block and non-block ciphers and modes');
         }
 
         $module = mcrypt_module_open($this->cipher, '', $this->mode, '');
@@ -143,7 +144,7 @@ class Encrypter implements EncrypterContract
         $this->validateKeyLength($key, $module);
 
         // Create IV.
-        $iv = $this->randomLib->generate(mcrypt_enc_get_iv_size($module));
+        $iv = $this->app['rand']->generate(mcrypt_enc_get_iv_size($module));
 
         // Init mcrypt.
         mcrypt_generic_init($module, $key, $iv);
@@ -173,7 +174,7 @@ class Encrypter implements EncrypterContract
         $encrypted['cdata'] = base64_encode(mcrypt_generic($module, $serializedData));
         // The message authentication code. Used to make sure the
         // message is valid when decrypted.
-        $encrypted['mac']   = base64_encode($this->pbkdf2($encrypted['cdata'], $key, 1000, 32));
+        $encrypted['mac']   = base64_encode($this->app['hash']->pbkdf2($encrypted['cdata'], $key, 1000, 32));
 
         return json_encode($encrypted);
     }
@@ -217,7 +218,7 @@ class Encrypter implements EncrypterContract
         $block = mcrypt_enc_get_block_size($module);
 
         // Check MAC.
-        if (base64_decode($data['mac']) != $this->pbkdf2($data['cdata'], $key, 1000, 32)) {
+        if (base64_decode($data['mac']) != $this->app['hash']->pbkdf2($data['cdata'], $key, 1000, 32)) {
             throw new \InvalidArgumentException('Message authentication code invalid');
         }
 
@@ -238,8 +239,8 @@ class Encrypter implements EncrypterContract
     /**
      * Validate encryption key based on valid key sizes for selected cipher and cipher mode
      *
-     * @param  string            $key    Encryption key
-     * @param  resource          $module Encryption module
+     * @param  string   $key    Encryption key
+     * @param  resource $module Encryption module
      *
      * @return void
      *
@@ -267,47 +268,6 @@ class Encrypter implements EncrypterContract
                 ));
             }
         }
-    }
-
-    /**
-     * Implement PBKDF2 as described in RFC 2898.
-     *
-     * @param string  $password  Password to protect.
-     * @param string  $salt      Salt.
-     * @param integer $count     Iteration count.
-     * @param integer $dkLen     Derived key length.
-     * @param string  $hashalgo A hash algorithm.
-     *
-     * @return string            Derived key.
-     */
-    public function pbkdf2($password, $salt, $count, $dkLen, $hashalgo = 'sha256')
-    {
-        // Hash length.
-        $hLen          = strlen(hash($hashalgo, null, true));
-        // Length in blocks of derived key.
-        $length        = ceil($dkLen / $hLen);
-        // Derived key.
-        $derived_key   = '';
-
-        // Step 1. Check dkLen.
-        if ($dkLen > (2^32-1) * $hLen) {
-            throw new \InvalidArgumentException('Derived key too long');
-        }
-
-        for ($block = 1; $block<=$length; $block ++) {
-            // Initial hash for this block.
-            $ini_block = $hash_block = hash_hmac($hashalgo, $salt . pack('N', $block), $password, true);
-            // Do block iterations.
-            for ($i = 1; $i<$count; $i ++) {
-                // XOR iteration.
-                $ini_block ^= ($hash_block = hash_hmac($hashalgo, $hash_block, $password, true));
-            }
-            // Append iterated block.
-            $derived_key .= $ini_block;
-        }
-
-        // Returned derived key.
-        return substr($derived_key, 0, $dkLen);
     }
 
     /**
@@ -347,23 +307,6 @@ class Encrypter implements EncrypterContract
         }
 
         return $data;
-    }
-
-    /**
-     * Returns a unique identifier.
-     *
-     * @return string Returns a unique identifier.
-     */
-    public function genUid()
-    {
-        $hex = bin2hex($this->randomLib->generate(32));
-        $str = substr($hex, 0, 16);
-        $str .= '-' . substr($hex, 16, 8);
-        $str .= '-' . substr($hex, 24, 8);
-        $str .= '-' . substr($hex, 32, 8);
-        $str .= '-' . substr($hex, 40, 24);
-
-        return $str;
     }
 
     /**

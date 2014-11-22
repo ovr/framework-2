@@ -335,7 +335,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
     protected function parseVisibility($visibility)
     {
         if (is_null($visibility)) {
-            return null;
+            return;
         }
 
         switch ($visibility) {

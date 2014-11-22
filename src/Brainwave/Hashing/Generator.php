@@ -20,7 +20,6 @@ namespace Brainwave\Encrypter;
 
 use \Brainwave\Support\Helpers;
 use \RandomLib\Factory as RandomLib;
-use \Brainwave\Contracts\Encrypter as EncrypterContract;
 use \Brainwave\Contracts\Encrypter\Generator as HashContract;
 
 /**
@@ -97,13 +96,6 @@ class Generator implements HashContract
     public $drupalCount = 15;
 
     /**
-     * EncrypterContract
-     *
-     * @var EncrypterContract
-     */
-    protected $crypt;
-
-    /**
      * RandomLib instance
      *
      * @var RandomLib
@@ -122,12 +114,10 @@ class Generator implements HashContract
     /**
      * HashGenerator
      *
-     * @param EncrypterContract $crypt
      * @param RandGenerator     $randomLib
      */
-    public function __construct(EncrypterContract $crypt, RandomLib $randomLib)
+    public function __construct(RandomLib $randomLib)
     {
-        $this->crypt     = $crypt;
         $this->randomLib = $randomLib;
     }
 
@@ -187,7 +177,7 @@ class Generator implements HashContract
         if (function_exists('hash_pbkdf2')) {
             $pbkdf2 = hash_pbkdf2($this->pbkdf2Prf, $str, $salt, $this->pbkdf2C, $this->pbkdf2DkLen);
         } else {
-            $pbkdf2 = $this->crypt->pbkdf2(
+            $pbkdf2 = $this->pbkdf2(
                 $str,
                 $salt,
                 $this->pbkdf2C,
@@ -259,6 +249,64 @@ class Generator implements HashContract
     }
 
     /**
+     * Implement PBKDF2 as described in RFC 2898.
+     *
+     * @param string  $password Password to protect.
+     * @param string  $salt     Salt.
+     * @param integer $count    Iteration count.
+     * @param integer $dkLen    Derived key length.
+     * @param string  $hashalgo A hash algorithm.
+     *
+     * @return string           Derived key.
+     */
+    public function pbkdf2($password, $salt, $count, $dkLen, $hashalgo = 'sha256')
+    {
+        // Hash length.
+        $hLen          = strlen(hash($hashalgo, null, true));
+        // Length in blocks of derived key.
+        $length        = ceil($dkLen / $hLen);
+        // Derived key.
+        $derived_key   = '';
+
+        // Step 1. Check dkLen.
+        if ($dkLen > (2^32-1) * $hLen) {
+            throw new \InvalidArgumentException('Derived key too long');
+        }
+
+        for ($block = 1; $block<=$length; $block ++) {
+            // Initial hash for this block.
+            $ini_block = $hash_block = hash_hmac($hashalgo, $salt . pack('N', $block), $password, true);
+            // Do block iterations.
+            for ($i = 1; $i<$count; $i ++) {
+                // XOR iteration.
+                $ini_block ^= ($hash_block = hash_hmac($hashalgo, $hash_block, $password, true));
+            }
+            // Append iterated block.
+            $derived_key .= $ini_block;
+        }
+
+        // Returned derived key.
+        return substr($derived_key, 0, $dkLen);
+    }
+
+    /**
+     * Returns a unique identifier.
+     *
+     * @return string Returns a unique identifier.
+     */
+    public function genUid()
+    {
+        $hex = bin2hex($this->randomLib->generate(32));
+        $str = substr($hex, 0, 16);
+        $str .= '-' . substr($hex, 16, 8);
+        $str .= '-' . substr($hex, 24, 8);
+        $str .= '-' . substr($hex, 32, 8);
+        $str .= '-' . substr($hex, 40, 24);
+
+        return $str;
+    }
+
+    /**
      * Check a string against a hash.
      *
      * @param  string       $str  String to check.
@@ -308,7 +356,7 @@ class Generator implements HashContract
         parse_str($params, $param);
 
         return Helpers::timingSafe(
-            $this->crypt->pbkdf2(
+            $this->pbkdf2(
                 $str,
                 base64_decode($salt),
                 $param['c'],
@@ -429,23 +477,12 @@ class Generator implements HashContract
         return $info;
     }
 
-    /**
-     * hashPassword
-     *
-     * @param  string $password password to hash
-     * @param  string $setting  hash settings
-     * @param  string $method   method to hash
-     *
-     * @return string
-     */
-    public function hashPassword($password, $setting, $method = 'sha512')
+    private function phpassHash($password, $setting, $method = 'sha512')
     {
         /* First 12 characters are the settings. */
         $setting = substr($setting, 0, 12);
         $salt    = substr($setting, 4, 8);
         $count   = 1 << strpos($this->charsets['itoa64'], $setting[3]);
-
-
         $hash = hash($method, $salt . $password, true);
 
         do {
@@ -457,19 +494,6 @@ class Generator implements HashContract
         $expected = 12 + ceil((8 * $len) / 6);
 
         return substr($output, 0, $expected);
-    }
-
-    /**
-     * Check a password against a hash.
-     *
-     * @param  stirng $password
-     * @param  string $passwordHash
-     *
-     * @return boolen
-     */
-    public function checkPassword($password, $passwordHash)
-    {
-        return $this->check($password, $passwordHash);
     }
 
     /**
