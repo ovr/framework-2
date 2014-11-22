@@ -19,10 +19,10 @@ namespace Brainwave\Config;
  */
 
 use \Pimple\Container;
+use \Brainwave\Config\FileLoader;
 use \Brainwave\Config\Repository;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Config\ConfigFileLoader;
 use \Brainwave\Config\Manager as ConfigManager;
 
 /**
@@ -42,7 +42,7 @@ class ConfigServiceProvider implements ServiceProviderInterface
         $app['settings'] = function ($app) {
             $config = new ConfigManager(
                 new Repository,
-                new ConfigFileLoader(
+                new FileLoader(
                     new Filesystem(),
                     $app['settings.path']
                 )

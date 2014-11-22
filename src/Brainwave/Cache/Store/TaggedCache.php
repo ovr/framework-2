@@ -64,7 +64,7 @@ class TaggedCache implements StoreContract
     /**
      * Determine if an item exists in the cache.
      *
-     * @param  string  $key
+     * @param  string $key
      *
      * @return bool
      */

@@ -18,7 +18,7 @@ namespace Brainwave\Config;
  *
  */
 
-use \Brainwave\Config\ConfigFileLoader;
+use \Brainwave\Config\FileLoader;
 use \Brainwave\Contracts\Config\Manager as ManagerContract;
 use \Brainwave\Contracts\Config\Repository as RepositoryContract;
 
@@ -60,7 +60,7 @@ class Manager implements ManagerContract, \IteratorAggregate
      *
      * @param RepositoryContract $repository
      */
-    public function __construct(RepositoryContract $repository, ConfigFileLoader $loader)
+    public function __construct(RepositoryContract $repository, FileLoader $loader)
     {
         $this->setHandler($repository);
         $this->loader = $loader;

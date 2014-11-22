@@ -76,7 +76,9 @@ class Manager implements FactoryContract
      * Constructor.
      *
      * @param \Pimple\Container  $app
-     * @param array $supportedDrivers The list of available drivers, key=driver name, value=driver class
+     * @param array              $supportedDrivers
+     *                           The list of available drivers,
+     *                           key=driver name, value=driver class
      */
     public function __construct(Container $app, array $supportedDrivers = [])
     {
@@ -122,10 +124,10 @@ class Manager implements FactoryContract
     /**
      * Create a new driver instance.
      *
-     * @param  string  $driver
+     * @param  string $driver
      * @return mixed
      *
-     * @throws \Brainwave\Cache\Psr\Cache\Exception\InvalidArgumentException
+     * @throws \Brainwave\Contracts\Cache\InvalidArgumentException
      */
     protected function createDriver($driver, array $options = [])
     {
@@ -147,7 +149,8 @@ class Manager implements FactoryContract
     /**
      * Call a custom driver creator.
      *
-     * @param  string  $driver
+     * @param  string $driver
+     *
      * @return mixed
      */
     protected function callCustomCreator($driver, array $options = [])
@@ -158,8 +161,9 @@ class Manager implements FactoryContract
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string    $driver
-     * @param  \Closure  $callback
+     * @param  string   $driver
+     * @param  \Closure $callback
+     *
      * @return $this
      */
     public function extend($driver, \Closure $callback)
@@ -182,7 +186,8 @@ class Manager implements FactoryContract
     /**
      * Check if the given driver is supported
      *
-     * @param string $driver
+     * @param  string $driver
+     *
      * @return bool
      */
     public function driverExists($driver)
@@ -213,7 +218,8 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the file cache driver.
      *
-     * @param array $config
+     * @param  array $config
+     *
      * @return Repository
      */
     protected function createFileDriver(array $config = [])
@@ -230,7 +236,8 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Memcached cache driver.
      *
-     * @param array $config
+     * @param  array $config
+     *
      * @return Repository
      */
     protected function createMemcachedDriver(array $config = [])
@@ -249,7 +256,8 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Memcache cache driver.
      *
-     * @param array $config
+     * @param  array $config
+     *
      * @return Repository
      */
     protected function createMemcacheDriver(array $config = [])
@@ -268,7 +276,8 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Redis cache driver.
      *
-     * @param array $config
+     * @param  array $config
+     *
      * @return Repository
      */
     protected function createRedisDriver(array $config = [])
@@ -339,7 +348,8 @@ class Manager implements FactoryContract
     /**
      * Set the cache "prefix" value.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return void
      */
     public function setPrefix($name)
@@ -350,7 +360,8 @@ class Manager implements FactoryContract
     /**
      * Create a new cache repository with the given implementation.
      *
-     * @param  AdapterContract  $Cache
+     * @param  AdapterContract $Cache
+     *
      * @return \Brainwave\Cache\Repository
      */
     protected function repository(AdapterContract $Cache)
@@ -371,7 +382,8 @@ class Manager implements FactoryContract
     /**
      * Set the default cache driver name.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return void
      */
     public function setDefaultDriver($name)

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Application\Facades;
+namespace Brainwave\Http\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -8,7 +8,7 @@ namespace Brainwave\Application\Facades;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -38,10 +38,11 @@ class Response extends StaticalProxyManager
     /**
      * Return a new JSON response from the application.
      *
-     * @param  string|array  $data
-     * @param  int    $status
-     * @param  array  $headers
-     * @param  int    $options
+     * @param  string|array $data
+     * @param  int          $status
+     * @param  array        $headers
+     * @param  int          $options
+     *
      * @return \Brainwave\Http\Response
      */
     public static function json($data = [], $status = 200, array $headers = [], $options = 0)
@@ -56,6 +57,6 @@ class Response extends StaticalProxyManager
             ]
         );
 
-        $app['view']->make('json', $status, $jsonData);
+        $app['view']->make($status, $jsonData, 'json');
     }
 }

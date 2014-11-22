@@ -29,7 +29,7 @@ use \Brainwave\Config\Interfaces\LoaderInterface as LoaderContract;
  * @since   0.8.0-dev
  *
  */
-class ConfigFileLoader implements LoaderContract
+class FileLoader implements LoaderContract
 {
     /**
      * The filesystem instance.

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Translator;
+namespace Brainwave\Routing\Facades;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,16 +18,26 @@ namespace Brainwave\Translator;
  *
  */
 
+use \Brainwave\Application\StaticalProxyManager;
+
 /**
- * LangFileLoader
- *
- * the ability to translate strings.
+ * Router
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.4-dev
+ * @since   0.9.1-dev
  *
  */
-class LangFileLoader implements FileLoader
+class Router extends StaticalProxyManager
 {
+    protected static function getFacadeAccessor()
+    {
+        return 'router';
+    }
+
+    public static function pattern(array $array)
+    {
+        $route = self::$app['route'];
+        $route::setDefaultConditions($array);
+    }
 }

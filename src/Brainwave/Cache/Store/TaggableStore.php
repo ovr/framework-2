@@ -35,7 +35,7 @@ abstract class TaggableStore
     /**
      * Begin executing a new tags operation.
      *
-     * @param  string  $name
+     * @param  string $name
      *
      * @return \Brainwave\Cache\Store\TaggedCache
      */
@@ -47,7 +47,7 @@ abstract class TaggableStore
     /**
      * Begin executing a new tags operation.
      *
-     * @param  string  $names
+     * @param  string $names
      *
      * @return \Brainwave\Cache\Store\TaggedCache
      */

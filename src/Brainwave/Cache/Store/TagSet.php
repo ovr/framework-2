@@ -118,7 +118,7 @@ class TagSet
     /**
      * Get the tag identifier key for a given tag.
      *
-     * @param  string  $name
+     * @param  string $name
      *
      * @return string
      */
