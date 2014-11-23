@@ -20,6 +20,7 @@ namespace Brainwave\View;
 
 use \Pimple\Container;
 use \Brainwave\Support\Str;
+use \Brainwave\Support\Arr;
 use \Brainwave\View\Engines\EngineResolver;
 use \Brainwave\Contracts\View\Factory as FactoryContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
@@ -42,11 +43,11 @@ class Factory implements FactoryContract
     protected $app;
 
     /**
-     * The resolver instance.
+     * The engines instance.
      *
      * @var \Brainwave\View\Engines\EngineResolver
      */
-    protected $resolver;
+    protected $engines;
 
     /**
      * The view finder implementation.
@@ -88,7 +89,11 @@ class Factory implements FactoryContract
      *
      * @var array
      */
-    protected $extensions;
+    protected $extensions = [
+        'php'   => 'php',
+        'php'   => 'phtml',
+        'html'  => 'html'
+    ];
 
     /**
      * All registered custom engines
@@ -105,57 +110,39 @@ class Factory implements FactoryContract
     protected $engineResolver;
 
     /**
-     * View data
+     * Data that should be available to all templates.
      *
      * @var array
      */
-    protected $viewData = [];
+    protected $shared = [];
 
     /**
      * Constructor
      *
      * @param \Pimple\Container                               $app
-     * @param \Brainwave\View\Engines\EngineResolver          $resolver
+     * @param \Brainwave\View\Engines\EngineResolver          $engines
      * @param \Brainwave\View\Interafaces\ViewFinderInterface $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(
         Container $app,
-        EngineResolver $resolver,
+        EngineResolver $engines,
         ViewFinderInterface $finder,
         Dispatcher $events
     ) {
-        $this->app      = $app;
-        $this->resolver = $resolver;
-        $this->finder   = $finder;
-        $this->events   = $events;
+        $this->app     = $app;
+        $this->engines = $engines;
+        $this->finder  = $finder;
+        $this->events  = $events;
 
         //
-        if (!is_null($this->app['settings']->get('view::engine', 'plates'))) {
-            $this->customEngines = $this->app['settings']->get('view::engine', 'plates');
-        }
-
-        //
-        $this->engine = $this->engineResolver(new EngineResolver());
-
-        //Set extension
-        $this->extensions = $this->app['settings']->get('view::extensions', 'php');
+        $this->customEngines = $this->app['settings']->get('view::engine', 'plates');
 
         //
         $this->registerEngineResolver();
 
         //Initialize set with these items
         parent::__construct($this->registerItems());
-    }
-
-    /**
-     * Get registered extensions.
-     *
-     * @return array
-     */
-    protected function getExtensions()
-    {
-        return $this->extensions;
     }
 
     /**
@@ -175,22 +162,22 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Register the engine resolver instance.
+     * Register the engine engines instance.
      *
      * @return void
      */
     protected function registerEngineResolver()
     {
-        $resolver = $this->engine;
+        $engines = $this->engine;
 
-        // Next we will register the various engines with the resolver so that the
+        // Next we will register the various engines with the engines so that the
         // environment can resolve the engines it needs for various views based
         // on the extension of view files. We call a method for each engines.
         $engines = array_merge(['php' => 'php', 'json' => 'json'], $this->customEngines);
 
         foreach ($engines as $engineName => $engineClass) {
             if ($engineName === 'php' || $engineName === 'json') {
-                $this->{'register'.ucfirst($engineClass).'Engine'}($resolver);
+                $this->{'register'.ucfirst($engineClass).'Engine'}($engines);
             } elseif ($this->app['settings']->get('view::compiler', null) !== null) {
 
                 foreach ($this->app['settings']->get('view::compiler', []) as $compilerName => $compilerClass) {
@@ -198,13 +185,13 @@ class Factory implements FactoryContract
                         $this->registercustomEngine(
                             $engineName,
                             $engineClass($compilerClass($this->app['settings']->get('view::cache', null))),
-                            $resolver
+                            $engines
                         );
                     }
                 }
 
             } else {
-                $this->registercustomEngine($engineName, $engineClass, $resolver);
+                $this->registercustomEngine($engineName, $engineClass, $engines);
             }
         }
     }
@@ -212,13 +199,13 @@ class Factory implements FactoryContract
     /**
      * Register the PHP engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver $resolver
+     * @param  \Brainwave\View\Engines\EngineResolver $engines
      *
      * @return void
      */
-    protected function registerPhpEngine($resolver)
+    protected function registerPhpEngine($engines)
     {
-        $resolver->register('php', function () {
+        $engines->register('php', function () {
             return new PhpEngine();
         });
     }
@@ -226,13 +213,13 @@ class Factory implements FactoryContract
     /**
      * Register the Json engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver $resolver
+     * @param  \Brainwave\View\Engines\EngineResolver $engines
      *
      * @return void
      */
-    protected function registerJsonEngine($resolver)
+    protected function registerJsonEngine($engines)
     {
-        $resolver->register('json', function () {
+        $engines->register('json', function () {
             return new JsonEngine($this->app, $this);
         });
     }
@@ -242,123 +229,37 @@ class Factory implements FactoryContract
      *
      * @param string                                 $engineName
      * @param string                                 $engineClass
-     * @param \Brainwave\View\Engines\EngineResolver $resolver
+     * @param \Brainwave\View\Engines\EngineResolver $engines
      *
      * @return void
      */
-    protected function registercustomEngine($engineName, $engineClass, $resolver)
+    protected function registercustomEngine($engineName, $engineClass, $engines)
     {
         $eClass = new $engineClass($this->app);
-        $resolver->register($engineName, function () use ($eClass) {
+
+        $engines->register($engineName, function () use ($eClass) {
             return $eClass;
         });
     }
 
     /**
-     * Display template
+     * Get the appropriate view engine for the given path.
      *
-     * This method echoes the rendered template to the current output buffer
+     * @param  string $path
      *
-     * @param  string $template Pathname of template file relative to templates directory
+     * @return \Brainwave\View\Engines\Interfaces\EngineInterface
+     *
+     * @throws \InvalidArgumentException
      */
-    public function make($engine = 'php', $template = null, array $data = [])
+    public function getEngineFromPath($path)
     {
-        echo $this->fetch($engine, $template, $data);
-    }
-
-    /**
-     * Fetch template
-     *
-     * This method returns the rendered template. This is useful if you need to capture
-     * a rendered template into a variable for futher processing.
-     *
-     * @var    string $template Pathname of template file relative to templates directory
-     *
-     * @return string           The rendered template
-     */
-    public function fetch($engine = 'php', $template = null, array $data = [])
-    {
-        return $this->render($engine, $template, $data);
-    }
-
-    /**
-     * Get the evaluated contents of the view.
-     *
-     * @var    string $template Pathname of template file relative to templates directory
-     * @param  string $template
-     *
-     * @return string
-     */
-    protected function render($engine = 'php', $template = null, array $data = [])
-    {
-        $this->with($data);
-
-        if (is_string($template) && $engine === 'php' && $engine !== 'json') {
-
-            $explodeTemplate = explode('::', $template, 2);
-
-            if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']->get('view::template.paths', []) as $pathName => $path) {
-                    if (trim($explodeTemplate[0]) === $pathName) {
-                        $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
-                    }
-                }
-
-                $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
-                        trim($explodeTemplate[1]).
-                        $this->getExtensions();
-            } else {
-                $path = $this->app['settings']['view::default.template.path'].
-                        $template.
-                        $this->getExtensions();
-            }
-        } elseif ($engine == 'json') {
-            $path = $template;
-        } else {
-            $path = $template . $this->getExtensions();
+        if (!$extension = $this->getExtension($path)) {
+            throw new \InvalidArgumentException("Unrecognized extension in file: $path");
         }
 
-        //Replace data
-        $this->replace($this->gatherData());
+        $engine = $this->extensions[$extension];
 
-        $engineR = $this->engine->resolve($engine);
-
-        return $engineR->set($path)->get($this->all());
-    }
-
-    /**
-     * Add a piece of data to the view.
-     *
-     * @param  string|array  $key
-     * @param  mixed         $value
-     *
-     * @return \Brainwave\View\ViewFactory
-     */
-    public function with($key, $value = null)
-    {
-        if (is_array($key)) {
-            foreach ($key as $k => $v) {
-                $this->viewData[$k] = $v;
-            }
-        } else {
-            $this->viewData[$key] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a view instance to the view data.
-     *
-     * @param  string $key
-     * @param  string $view
-     * @param  array  $data
-     *
-     * @return $this
-     */
-    public function nest($factory, $key, $view, array $data = [])
-    {
-        return $this->with($key, $this->make($factory, $view, $data));
+        return $this->engines->resolve($engine);
     }
 
     /**
@@ -371,31 +272,7 @@ class Factory implements FactoryContract
     public function exists($view)
     {
         try {
-            $explodeTemplate = explode('::', $view, 2);
-
-            if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']['view::template.paths'] as $pathName => $path) {
-                    if (trim($explodeTemplate[0]) === $pathName) {
-                        $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
-                    }
-                }
-
-                $path = preg_replace('/([^\/]+)$/', '$1/', $templatePath).
-                        trim($explodeTemplate[1]).
-                        $this->getExtensions();
-            } else {
-                $path = $this->app['settings']['view::default.template.path'].
-                        $template.
-                        $this->getExtensions();
-            }
-
-            if (!is_file($path)) {
-                throw new \InvalidArgumentException(
-                    "Cannot render template `$path` because the template does not exist.
-                    Make sure your view's template directory is correct."
-                );
-            }
-
+            $this->finder->find($view);
         } catch (\InvalidArgumentException $e) {
             return false;
         }
@@ -404,13 +281,123 @@ class Factory implements FactoryContract
     }
 
     /**
-     * EngineResolver
+     * Add a listener to the event dispatcher.
      *
-     * @param EngineResolver $resolver new instance of EngineResolver
+     * @param  string   $name
+     * @param  \Closure $callback
+     * @param  integer  $priority
+     *
+     * @return void
      */
-    protected function engineResolver(EngineResolver $resolver)
+    protected function addEventListener($name, $callback, $priority = null)
     {
-        return $resolver;
+        if (is_null($priority)) {
+            $this->events->listen($name, $callback);
+        } else {
+            $this->events->listen($name, $callback, $priority);
+        }
+    }
+
+    /**
+     * Register a valid view extension and its engine.
+     *
+     * @param  string   $extension
+     * @param  string   $engine
+     * @param  \Closure $resolver
+     *
+     * @return void
+     */
+    public function addExtension($extension, $engine, $resolver = null)
+    {
+        $this->finder->addExtension($extension);
+
+        if (isset($resolver)) {
+            $this->engines->register($engine, $resolver);
+        }
+
+        unset($this->extensions[$extension]);
+
+        $this->extensions = array_merge(array($extension => $engine), $this->extensions);
+    }
+
+    /**
+     * Get the extension to engine bindings.
+     *
+     * @return array
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * Get the extension used by the view file.
+     *
+     * @param  string $path
+     *
+     * @return string
+     */
+    protected function getExtension($path)
+    {
+        $extensions = array_keys($this->extensions);
+
+        return Arr::arrayFirst($extensions, function ($key, $value) use ($path) {
+            return Str::endsWith($path, $value);
+        });
+    }
+
+    /**
+     * Get the engine resolver instance.
+     *
+     * @return \Brainwave\View\Engines\EngineResolver
+     */
+    public function getEngineResolver()
+    {
+        return $this->engines;
+    }
+
+    /**
+     * Get the view finder instance.
+     *
+     * @return \Brainwave\View\Interfaces\ViewFinderInterface
+     */
+    public function getFinder()
+    {
+        return $this->finder;
+    }
+
+    /**
+     * Set the view finder instance.
+     *
+     * @param  \Brainwave\View\InterfaceViewFinderInterface $finder
+     *
+     * @return void
+     */
+    public function setFinder(ViewFinderInterface $finder)
+    {
+        $this->finder = $finder;
+    }
+
+    /**
+     * Get the event dispatcher instance.
+     *
+     * @return \Brainwave\Contracts\Events\Dispatcher
+     */
+    public function getDispatcher()
+    {
+        return $this->events;
+    }
+
+    /**
+     * Set the event dispatcher instance.
+     *
+     * @param  \Brainwave\Contracts\Events\Dispatcher
+     *
+     * @return void
+     */
+    public function setDispatcher(Dispatcher $events)
+    {
+        $this->events = $events;
     }
 
     /**
@@ -420,7 +407,7 @@ class Factory implements FactoryContract
      */
     public function gatherData()
     {
-        return array_merge($this->data, $this->viewData);
+        return array_merge($this->data, $this->shared);
     }
 
     /**
@@ -442,5 +429,25 @@ class Factory implements FactoryContract
         }
 
         return $this;
+    }
+
+    /**
+     * Get all of the shared data for the environment.
+     *
+     * @return array
+     */
+    public function getShared()
+    {
+        return $this->shared;
+    }
+
+    /**
+     * Get all of the registered named views in environment.
+     *
+     * @return array
+     */
+    public function getNames()
+    {
+        return $this->names;
     }
 }

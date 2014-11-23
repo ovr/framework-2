@@ -27,3 +27,5 @@ tools:
     php_cpd:
         enabled: true
         excluded_dirs: [vendor, test]
+    php_analyzer: true
+    php_pdepend: true

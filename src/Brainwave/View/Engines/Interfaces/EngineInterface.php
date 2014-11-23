@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\View;
+namespace Brainwave\View\Engines\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -26,19 +26,14 @@ namespace Brainwave\Contracts\View;
  * @since   0.9.4-dev
  *
  */
-interface Engines
+interface EngineInterface
 {
     /**
      * Get the evaluated contents of the view.
+     *
+     * @param  string  $path
      * @param  array   $data
      * @return string
      */
-     public function get(array $data = []);
-
-    /**
-     * Set path
-     * @param string $path
-     * @return $this \Brainwave\View\Engines
-     */
-     public function set($path);
+    public function get($path, array $data = []);
 }

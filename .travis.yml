@@ -10,8 +10,13 @@ php:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --prefer-source --no-interaction --dev
+  - OCULAR_ENV='5.5'
 
-script: vendor/bin/phpunit --verbose
+script:
+  - vendor/bin/phpunit --verbose
+  - vendor/bin/phpcs --standard=./phpcs.xml -n --report=gitblame ./src/Brainwave
+  - if [ $(phpenv version-name) = $OCULAR_ENV ]; then wget https://scrutinizer-ci.com/ocular.phar; php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - vendor/bin/bugfree lint src/Brainwave/
 
 matrix:
   allow_failures:
