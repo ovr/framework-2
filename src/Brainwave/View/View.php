@@ -52,8 +52,10 @@ class View extends Collection implements ViewContract
         $this->path    = $path;
         $this->engine  = $engine;
         $this->factory = $factory;
+        $this->data    = $data;
 
-        $this->data    = $data instanceof Arrayable ? $data->toArray() : (array) $data;
+        //Initialize set with these items
+        parent::__construct($data instanceof ArrayableContracts ? $data->toArray() : $data);
     }
 
     /**
@@ -76,7 +78,7 @@ class View extends Collection implements ViewContract
      *
      * @var    string $template Pathname of template file relative to templates directory
      *
-     * @return string The rendered template
+     * @return string           The rendered template
      */
     public function fetch($engine = 'php', $template = null, array $data = [])
     {
@@ -140,10 +142,10 @@ class View extends Collection implements ViewContract
     {
         if (is_array($key)) {
             foreach ($key as $k => $v) {
-                $this->viewData[$k] = $v;
+                $this->data[$k] = $v;
             }
         } else {
-            $this->viewData[$key] = $value;
+            $this->data[$key] = $value;
         }
 
         return $this;
@@ -166,8 +168,8 @@ class View extends Collection implements ViewContract
     /**
      * Dynamically bind parameters to the view.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param  string $method
+     * @param  array  $parameters
      *
      * @return \Brainwave\View\ViewFactory
      *
@@ -189,14 +191,14 @@ class View extends Collection implements ViewContract
      */
     public function __get($key)
     {
-        return $this->viewData[$key];
+        return $this->data[$key];
     }
 
     /**
      * Set a piece of data on the view.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
      *
      * @return void
      */
@@ -214,7 +216,7 @@ class View extends Collection implements ViewContract
      */
     public function __isset($key)
     {
-        return isset($this->viewData[$key]);
+        return isset($this->data[$key]);
     }
 
     /**
@@ -226,6 +228,6 @@ class View extends Collection implements ViewContract
      */
     public function __unset($key)
     {
-        unset($this->viewData[$key]);
+        unset($this->data[$key]);
     }
 }

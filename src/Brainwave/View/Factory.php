@@ -21,6 +21,7 @@ namespace Brainwave\View;
 use \Pimple\Container;
 use \Brainwave\Support\Str;
 use \Brainwave\Support\Arr;
+use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\EngineResolver;
 use \Brainwave\Contracts\View\Factory as FactoryContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
@@ -33,7 +34,7 @@ use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
  * @since   0.8.0-dev
  *
  */
-class Factory implements FactoryContract
+class Factory extends Collection implements FactoryContract
 {
     /**
      * Container
@@ -91,16 +92,10 @@ class Factory implements FactoryContract
      */
     protected $extensions = [
         'php'   => 'php',
-        'php'   => 'phtml',
-        'html'  => 'html'
+        'phtml' => 'php',
+        'html'  => 'html',
+        'json'  => 'json'
     ];
-
-    /**
-     * All registered custom engines
-     *
-     * @var array
-     */
-    protected $customEngines = [];
 
     /**
      * Resolve the engine instance
@@ -119,127 +114,24 @@ class Factory implements FactoryContract
     /**
      * Constructor
      *
-     * @param \Pimple\Container                               $app
      * @param \Brainwave\View\Engines\EngineResolver          $engines
      * @param \Brainwave\View\Interafaces\ViewFinderInterface $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(
-        Container $app,
         EngineResolver $engines,
         ViewFinderInterface $finder,
         Dispatcher $events
     ) {
-        $this->app     = $app;
         $this->engines = $engines;
         $this->finder  = $finder;
         $this->events  = $events;
 
-        //
-        $this->customEngines = $this->app['settings']->get('view::engine', 'plates');
-
-        //
-        $this->registerEngineResolver();
-
-        //Initialize set with these items
-        parent::__construct($this->registerItems());
-    }
-
-    /**
-     * Register all data.
-     *
-     * @return items
-     */
-    protected function registerItems()
-    {
-        if ($this->app['settings']->get('view::items', null) !== null) {
-            $data = array_merge($this->app['settings']['view::items'], $this->gatherData());
+        if ($this->app['settings']['view::items'] !== null) {
+            $data = array_merge($this->app['settings']['view::items'], $this->data, $this->shared);
         } else {
-            $data = $this->gatherData();
+            $data = array_merge($this->data, $this->shared);
         }
-
-        return $data instanceof ArrayableContracts ? $data->toArray() : $data;
-    }
-
-    /**
-     * Register the engine engines instance.
-     *
-     * @return void
-     */
-    protected function registerEngineResolver()
-    {
-        $engines = $this->engine;
-
-        // Next we will register the various engines with the engines so that the
-        // environment can resolve the engines it needs for various views based
-        // on the extension of view files. We call a method for each engines.
-        $engines = array_merge(['php' => 'php', 'json' => 'json'], $this->customEngines);
-
-        foreach ($engines as $engineName => $engineClass) {
-            if ($engineName === 'php' || $engineName === 'json') {
-                $this->{'register'.ucfirst($engineClass).'Engine'}($engines);
-            } elseif ($this->app['settings']->get('view::compiler', null) !== null) {
-
-                foreach ($this->app['settings']->get('view::compiler', []) as $compilerName => $compilerClass) {
-                    if ($engineName === $compilerClass) {
-                        $this->registercustomEngine(
-                            $engineName,
-                            $engineClass($compilerClass($this->app['settings']->get('view::cache', null))),
-                            $engines
-                        );
-                    }
-                }
-
-            } else {
-                $this->registercustomEngine($engineName, $engineClass, $engines);
-            }
-        }
-    }
-
-    /**
-     * Register the PHP engine implementation.
-     *
-     * @param  \Brainwave\View\Engines\EngineResolver $engines
-     *
-     * @return void
-     */
-    protected function registerPhpEngine($engines)
-    {
-        $engines->register('php', function () {
-            return new PhpEngine();
-        });
-    }
-
-    /**
-     * Register the Json engine implementation.
-     *
-     * @param  \Brainwave\View\Engines\EngineResolver $engines
-     *
-     * @return void
-     */
-    protected function registerJsonEngine($engines)
-    {
-        $engines->register('json', function () {
-            return new JsonEngine($this->app, $this);
-        });
-    }
-
-    /**
-     * Register custom engine implementation.
-     *
-     * @param string                                 $engineName
-     * @param string                                 $engineClass
-     * @param \Brainwave\View\Engines\EngineResolver $engines
-     *
-     * @return void
-     */
-    protected function registercustomEngine($engineName, $engineClass, $engines)
-    {
-        $eClass = new $engineClass($this->app);
-
-        $engines->register($engineName, function () use ($eClass) {
-            return $eClass;
-        });
     }
 
     /**
@@ -401,13 +293,24 @@ class Factory implements FactoryContract
     }
 
     /**
-     * Gets a variable.
+     * Get the pimple container instance.
      *
-     * @return array
+     * @return \Pimple\Container
      */
-    public function gatherData()
+    public function getContainer()
     {
-        return array_merge($this->data, $this->shared);
+        return $this->app;
+    }
+    /**
+     * Set the pimple container instance.
+     *
+     * @param  \Pimple\Container $container
+     *
+     * @return void
+     */
+    public function setContainer(Container $container)
+    {
+        $this->app = $container;
     }
 
     /**
@@ -422,10 +325,10 @@ class Factory implements FactoryContract
     {
         if (is_array($name)) {
             foreach ($name as $k => $v) {
-                $this->data[$k] = $v;
+                $this->shared[$k] = $v;
             }
         } else {
-            $this->data[$name] = $data;
+            $this->shared[$name] = $data;
         }
 
         return $this;
