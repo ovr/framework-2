@@ -39,10 +39,10 @@ class View extends Collection implements ViewContract
      * Create a new view instance.
      *
      * @param  \Brainwave\View\Factory  $factory
-     * @param  \Brainwave\View\Engines\EngineInterface  $engine
-     * @param  string  $view
-     * @param  string  $path
-     * @param  array   $data
+     * @param  \Brainwave\View\Engines\EngineInterface $engine
+     * @param  string                                  $view
+     * @param  string                                  $path
+     * @param  array                                   $data
      *
      * @return void
      */
@@ -56,12 +56,12 @@ class View extends Collection implements ViewContract
         $this->data    = $data instanceof Arrayable ? $data->toArray() : (array) $data;
     }
 
-        /**
+    /**
      * Display template
      *
      * This method echoes the rendered template to the current output buffer
      *
-     * @param  string $template Pathname of template file relative to templates directory
+     * @param string $template Pathname of template file relative to templates directory
      */
     public function make($engine = 'php', $template = null, array $data = [])
     {
@@ -76,7 +76,7 @@ class View extends Collection implements ViewContract
      *
      * @var    string $template Pathname of template file relative to templates directory
      *
-     * @return string           The rendered template
+     * @return string The rendered template
      */
     public function fetch($engine = 'php', $template = null, array $data = [])
     {
@@ -131,8 +131,8 @@ class View extends Collection implements ViewContract
     /**
      * Add a piece of data to the view.
      *
-     * @param  string|array  $key
-     * @param  mixed         $value
+     * @param  string|array $key
+     * @param  mixed        $value
      *
      * @return \Brainwave\View\ViewFactory
      */
