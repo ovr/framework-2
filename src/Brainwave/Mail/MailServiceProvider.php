@@ -101,6 +101,7 @@ class MailServiceProvider implements ServiceProviderInterface
      * Register the Swift Transport instance.
      *
      * @param  array  $config
+     * @param Container $container
      *
      * @return void
      *
