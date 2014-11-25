@@ -27,7 +27,7 @@ use \Brainwave\Contracts\View\Factory as FactoryContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
 /**
- * ViewFactory
+ * Factory
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -65,20 +65,6 @@ class Factory extends Collection implements FactoryContract
     protected $events;
 
     /**
-     * The engine implementation.
-     *
-     * @var \Brainwave\Contracts\View\Engines
-     */
-    protected $engine;
-
-    /**
-     * ViewFactoryResolver
-     *
-     * @var \Closure
-     */
-    protected $viewFactoryResolver;
-
-    /**
      * Debug
      *
      * @var string
@@ -96,13 +82,6 @@ class Factory extends Collection implements FactoryContract
         'html'  => 'html',
         'json'  => 'json'
     ];
-
-    /**
-     * Resolve the engine instance
-     *
-     * @var \Brainwave\View\Engines\EngineResolver
-     */
-    protected $engineResolver;
 
     /**
      * Data that should be available to all templates.
