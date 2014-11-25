@@ -50,9 +50,9 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $this->app = $app;
+        $app = $app;
 
-        $this->registerSwiftMailer();
+        $this->registerSwiftMailer($app);
 
         $app['mailer'] = function ($app) {
             // Once we have create the mailer instance, we will set a container instance
@@ -64,7 +64,7 @@ class MailServiceProvider implements ServiceProviderInterface
                 $app['view']
             );
 
-            $mailer->setLogger($app['log']);
+            $mailer->setLogger($app['log']->getMonolog());
 
             // If a "from" address is set, we will set it on the mailer so that all mail
             // messages sent by the applications will utilize the same "from" address
@@ -84,14 +84,14 @@ class MailServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function registerSwiftMailer()
+    public function registerSwiftMailer($app)
     {
-        $this->registerSwiftTransport($this->app['settings']);
+        $this->registerSwiftTransport($app, $app['settings']);
 
         // Once we have the transporter registered, we will register the actual Swift
         // mailer instance, passing in the transport instances, which allows us to
         // override this transporter instances during app start-up if necessary.
-        $this->app['swift.mailer'] = function ($app) {
+        $app['swift.mailer'] = function ($app) {
             return new Swift_Mailer($app['swift.transport']);
         };
     }
@@ -105,30 +105,30 @@ class MailServiceProvider implements ServiceProviderInterface
      *
      * @throws \InvalidArgumentException
      */
-    protected function registerSwiftTransport($config)
+    protected function registerSwiftTransport($app, $config)
     {
         switch ($config['mail::driver'])
         {
             case 'smtp':
-                return $this->registerSmtpTransport($config);
+                return $this->registerSmtpTransport($app, $config);
 
             case 'sendmail':
-                return $this->registerSendmailTransport($config);
+                return $this->registerSendmailTransport($app, $config);
 
             case 'mail':
-                return $this->registerMailTransport($config);
+                return $this->registerMailTransport($app, $config);
 
             case 'mailgun':
-                return $this->registerMailgunTransport($config);
+                return $this->registerMailgunTransport($app, $config);
 
             case 'mandrill':
-                return $this->registerMandrillTransport($config);
+                return $this->registerMandrillTransport($app, $config);
 
             case 'ses':
-                return $this->registerSesTransport($config);
+                return $this->registerSesTransport($app, $config);
 
             case 'log':
-                return $this->registerLogTransport($config);
+                return $this->registerLogTransport($app, $config);
 
             default:
                 throw new \InvalidArgumentException('Invalid mail driver.');
@@ -142,9 +142,9 @@ class MailServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerSmtpTransport($config)
+    protected function registerSmtpTransport($app, $config)
     {
-        $this->app['swift.transport'] = function ($app) use ($config) {
+        $app['swift.transport'] = function ($app) use ($config) {
 
             // The Swift SMTP transport instance will allow us to use any SMTP backend
             // for delivering mail such as Sendgrid, Amazon SES, or a custom server
@@ -156,16 +156,16 @@ class MailServiceProvider implements ServiceProviderInterface
 
             // switch between ssl, tls and normal
 
-            if ($this->app['settings']['mail::entcryption'] === 'ssl') {
+            if ($app['settings']['mail::entcryption'] === 'ssl') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
-                      ->setPort($this->app['settings']['mail::port'])
+                      ->setPort($app['settings']['mail::port'])
                       ->setEncryption('ssl')
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption'] === 'tls') {
+            } elseif ($app['settings']['mail::entcryption'] === 'tls') {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -174,7 +174,7 @@ class MailServiceProvider implements ServiceProviderInterface
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
 
-            } elseif ($this->app['settings']['mail::entcryption'] === 0) {
+            } elseif ($app['settings']['mail::entcryption'] === 0) {
 
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
@@ -182,25 +182,24 @@ class MailServiceProvider implements ServiceProviderInterface
                     ->setUsername($config['mail::smtp_username'])
                     ->setPassword($config['mail::smtp_password']);
 
-            } else {
-                throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
             }
+
+            throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
+
         };
     }
 
     /**
      * Register the SES Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  array $config
      *
      * @return void
      */
-    protected function registerSesTransport($config)
+    protected function registerSesTransport($app, $config)
     {
-        $ses = $this->app['config']->get('mail::ses', array());
-
-        $this->app['ses.transport'] = function () use ($ses) {
-            $sesClient = SesClient::factory($ses);
+        $app['ses.transport'] = function () use ($ses) {
+            $sesClient = SesClient::factory($config['mail::ses']);
 
             return new SesTransport($sesClient);
         };
@@ -209,13 +208,13 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Sendmail Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  array $config
      *
      * @return void
      */
-    protected function registerSendmailTransport($config)
+    protected function registerSendmailTransport($app, $config)
     {
-        $this->app['swift.transport'] = function ($app) use ($config) {
+        $app['swift.transport'] = function ($app) use ($config) {
             return Swift_SendmailTransport::newInstance($config['mail::sendmail']);
         };
     }
@@ -223,13 +222,13 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mail Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  array $config
      *
      * @return void
      */
-    protected function registerMailTransport($config)
+    protected function registerMailTransport($app, $config)
     {
-        $this->app['swift.transport'] = function () {
+        $app['swift.transport'] = function () {
             return Swift_MailTransport::newInstance();
         };
     }
@@ -237,15 +236,15 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mailgun Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  array $config
      *
      * @return void
      */
-    protected function registerMailgunTransport($config)
+    protected function registerMailgunTransport($app, $config)
     {
         $mailgun = $config['mail::services.mailgun'];
 
-        $$this->app['swift.transport'] = function () use ($mailgun) {
+        $$app['swift.transport'] = function () use ($mailgun) {
             return new MailgunTransport($mailgun['secret'], $mailgun['domain']);
         };
     }
@@ -253,15 +252,15 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mandrill Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  array $config
      *
      * @return void
      */
-    protected function registerMandrillTransport($config)
+    protected function registerMandrillTransport($app, $config)
     {
-        $mandrill = $this->app['config']['mail::services.mandrill'];
+        $mandrill = $config['mail::services.mandrill'];
 
-        $this->app['swift.transport'] = function () use ($mandrill) {
+        $app['swift.transport'] = function () use ($mandrill) {
             return new MandrillTransport($mandrill['secret']);
         };
     }
@@ -273,9 +272,9 @@ class MailServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerLogTransport($config)
+    protected function registerLogTransport($app, $config)
     {
-        $this->app['swift.transport'] = function ($app) {
+        $app['swift.transport'] = function ($app) {
             return new LogTransport($app['log']->getMonolog());
         };
     }

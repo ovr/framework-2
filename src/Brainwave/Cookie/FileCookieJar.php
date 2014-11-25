@@ -49,7 +49,10 @@ class FileCookieJar extends CookieJar
     public function __construct($cookieFile)
     {
         $this->filename = $cookieFile;
-        $this->load();
+
+        if (file_exists($cookieFile)) {
+            $this->load($cookieFile);
+        }
     }
 
     /**
@@ -57,27 +60,38 @@ class FileCookieJar extends CookieJar
      */
     public function __destruct()
     {
-        $this->persist();
+        $this->save($this->filename);
     }
 
     /**
      * Save the contents of the data array to the file
      *
+     * @param string $filename File to save
      * @throws RuntimeException if the file cannot be found or created
      */
-    protected function persist()
+    protected function save($filename)
     {
-        if (false === file_put_contents($this->filename, $this->serialize())) {
-            throw new \RuntimeException('Unable to open file ' . $this->filename);
+        $json = [];
+        foreach ($this as $cookie) {
+            if ($cookie->getExpires() && !$cookie->getDiscard()) {
+                $json[] = $cookie->toArray();
+            }
+        }
+
+        if (false === file_put_contents($filename, json_encode($json))) {
+            throw new \RuntimeException('Unable to open file ' . $filename);
         }
     }
 
-    /**
-     * Load the contents of the json formatted file into the data array
-     * and discard any unsaved state
-     *
-     * @throws RuntimeException if the file cannot be found
-     */
+     /**
+      * Load cookies from a JSON formatted file.
+      *
+      * Old cookies are kept unless overwritten by newly loaded ones.
+      *
+      * @param string $filename Cookie file to load.
+      *
+      * @throws \RuntimeException if the file cannot be loaded.
+      */
     protected function load()
     {
         $json = file_get_contents($this->filename);

@@ -126,7 +126,7 @@ class XcacheCache extends TaggableStore implements AdapterContract
      */
     public function forever($key, $value)
     {
-        return $this->store($key, $value, 0);
+        return $this->set($key, $value, 0);
     }
 
     /**

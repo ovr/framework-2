@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use \Brainwave\Contracts\Cache\Factory as FactoryContract;
+use \Brainwave\Contracts\Cache\Adapter;
 
 /**
  * TagSet
@@ -30,7 +30,6 @@ use \Brainwave\Contracts\Cache\Factory as FactoryContract;
  */
 class TagSet
 {
-
     /**
      * The cache store implementation.
      *
@@ -48,12 +47,12 @@ class TagSet
     /**
      * Create a new TagSet instance.
      *
-     * @param  FactoryContract $store
-     * @param  array           $names
+     * @param  \Brainwave\Contracts\Cache\Adapter $store
+     * @param  array                              $names
      *
      * @return void
      */
-    public function __construct(FactoryContract $store, array $names = array())
+    public function __construct(Adapter $store, array $names = array())
     {
         $this->store = $store;
         $this->names = $names;

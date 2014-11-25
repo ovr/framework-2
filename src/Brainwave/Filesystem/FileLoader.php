@@ -220,7 +220,7 @@ class FileLoader implements LoaderInterface
         // Once we have merged the regular package data we need to look for
         // an environment specific data file. If one exists, we will get
         // the contents and merge them on top of this array of options we have.
-        $path = $this->getPackagePath($env, $package, $group, $file, $namespace);
+        $path = $this->getPackagePath($env, $packages, $group, $file, $namespace);
 
         if ($this->exists($path)) {
             $items = $this->dataMerge($items, $this->files->get($path));
@@ -347,14 +347,14 @@ class FileLoader implements LoaderInterface
      */
     protected function parser($ext, $path)
     {
-        if (isset($this->Parser[$ext])) {
+        if (isset($this->parser[$ext])) {
             $class = $this->parser[$ext];
 
-            $Parser = new $class($this->getFilesystem());
+            $parser = new $class($this->getFilesystem());
         }
 
         if ($parser->supports($path)) {
-            return $Parser;
+            return $parser;
         }
 
         throw new \RuntimeException(

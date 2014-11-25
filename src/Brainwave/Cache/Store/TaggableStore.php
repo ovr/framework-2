@@ -31,7 +31,6 @@ use \Brainwave\Cache\Store\TaggedCache;
  */
 abstract class TaggableStore
 {
-
     /**
      * Begin executing a new tags operation.
      *

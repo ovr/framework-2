@@ -181,12 +181,14 @@ class Repository implements RepositoryContract
      * Parse a separated key and cache the result
      *
      * @param  string $key
+     * @param  string $separator
+     *
      * @return array
      */
-    protected function parseKey($key)
+    protected function parseKey($key, $separator)
     {
         if (!isset($this->keys[$key])) {
-            $this->keys[$key] = explode($this->separator, $key);
+            $this->keys[$key] = explode($separator, $key);
         }
 
         return $this->keys[$key];

@@ -37,7 +37,7 @@ class FilesystemServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
-        $app['files'] = function ($app) {
+        $app['files'] = function () {
             return new Filesystem();
         };
 
@@ -60,7 +60,7 @@ class FilesystemServiceProvider implements ServiceProviderInterface
             return $app['filesystem']->disk($app['settings']['filesystems::default']);
         };
 
-        $app['filesystem.cloud'] = function () {
+        $app['filesystem.cloud'] = function ($app) {
             return $app['filesystem']->disk($app['settings']['filesystems::cloud']);
         };
     }

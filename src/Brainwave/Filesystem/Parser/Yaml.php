@@ -57,7 +57,7 @@ class Yaml implements ParserContract
      * @param  string $filename
      * @param  string $group
      *
-     * @return array data
+     * @return array|string data
      */
     public function load($filename, $group = null)
     {
@@ -67,19 +67,19 @@ class Yaml implements ParserContract
 
         if ($this->files->exists($filename)) {
             $data = YamlParser::parse($filename);
-        }
 
-        $groupData = [];
+            $groupData = [];
 
-        if ($group !== null) {
-            foreach ($data as $key => $value) {
-                $groupData["{$group}::{$key}"] = $value;
+            if ($group !== null) {
+                foreach ($data as $key => $value) {
+                    $groupData["{$group}::{$key}"] = $value;
+                }
+
+                return $groupData;
             }
 
-            return $groupData;
+            return $data;
         }
-
-        return $data;
     }
 
     /**

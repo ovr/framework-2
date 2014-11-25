@@ -143,13 +143,15 @@ class Writer
     {
         $level = $this->parseLevel($level);
 
-        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath;
+        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
         $monolog = $this->monolog;
-        $monolog->pushHandler(new StreamHandler($pathFolder, $level));
+        $stream  = $monolog->pushHandler(
+            new StreamHandler($pathFolder, $level)
+        );
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $stream->setFormatter($this->parseFormatter($formatter));
         }
     }
 
@@ -164,13 +166,13 @@ class Writer
     {
         $level = $this->parseLevel($level);
 
-        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath;
+        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
         $monolog = $this->monolog;
-        $monolog->parseHandler($stream, $pathFolder, $level);
+        $custom  = $monolog->parseHandler($stream, $pathFolder, $level);
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $custom->setFormatter($this->parseFormatter($formatter));
         }
     }
 
@@ -186,13 +188,13 @@ class Writer
     {
         $level = $this->parseLevel($level);
 
-        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath;
+        (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
-        $monolog = $this->monolog;
-        $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
+        $monolog  = $this->monolog;
+        $rotating = $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $rotating->setFormatter($this->parseFormatter($formatter));
         }
     }
 
@@ -201,23 +203,25 @@ class Writer
      *
      * @param  string  $level
      * @param  integer $messageType
+     *
      * @return void
      */
     public function useErrorLog($level = 'debug', $messageType = ErrorLogHandler::OPERATING_SYSTEM, $formatter = 'Html')
     {
         $level = $this->parseLevel($level);
 
-        $this->monolog->pushHandler(new ErrorLogHandler($messageType, $level));
+        $monolog = $this->monolog;
+        $error   = $monolog->pushHandler(new ErrorLogHandler($messageType, $level));
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $error->setFormatter($this->parseFormatter($formatter));
         }
     }
 
     /**
      * Set path for all logs
      *
-     * @param  string  $path
+     * @param string $path
      */
     public function setPath($path = '')
     {
@@ -231,7 +235,7 @@ class Writer
      */
     public function getPath()
     {
-        return $this->setPath;
+        return $this->path;
     }
 
     /**
@@ -287,9 +291,8 @@ class Writer
             }
 
             return $this->monolog->pushHandler(new $this->handler[$handler]($path, $level));
-        }
 
-        if (is_object($handler)) {
+        } elseif (is_object($handler)) {
             return $this->monolog->pushHandler($handler, $level);
         }
 

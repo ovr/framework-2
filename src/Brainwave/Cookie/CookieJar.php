@@ -51,12 +51,15 @@ class CookieJar extends Collection implements CookiesJarContract
      * @var array
      */
     protected $defaults = [
-        'value' => '',
-        'domain' => null,
-        'path' => null,
-        'expires' => null,
-        'secure' => false,
-        'httponly' => false
+        'Name'     => null,
+        'Value'    => null,
+        'Domain'   => null,
+        'Path'     => '/',
+        'Max-Age'  => null,
+        'Expires'  => null,
+        'Secure'   => false,
+        'Discard'  => false,
+        'HttpOnly' => false
     ];
 
     /**
@@ -107,7 +110,7 @@ class CookieJar extends Collection implements CookiesJarContract
      * @param string $key      Cookie name
      * @param array  $settings Optional cookie settings
      */
-    public function remove($key, $settings = [])
+    public function remove($key, array $settings = [])
     {
         $settings['value'] = '';
         $settings['expires'] = time() - 86400;

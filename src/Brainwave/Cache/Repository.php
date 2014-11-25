@@ -51,7 +51,7 @@ class Repository implements CacheContract, \ArrayAccess
      *
      * @var boolen
      */
-    protected static $supported;
+    protected static $supported = false;
 
     /**
      * Create a new cache repository instance.
@@ -60,7 +60,7 @@ class Repository implements CacheContract, \ArrayAccess
      */
     public function __construct(AdapterContract $driver = null)
     {
-        $this->driver = $driver;
+        $this->driver    = $driver;
         self::$supported = $driver::isSupported();
     }
 
@@ -83,7 +83,7 @@ class Repository implements CacheContract, \ArrayAccess
      */
     public function has($key)
     {
-        return ! is_null($this->get($key));
+        return !is_null($this->get($key));
     }
 
     /**
@@ -98,7 +98,7 @@ class Repository implements CacheContract, \ArrayAccess
     {
         $value = $this->driver->get($key);
 
-        return ! is_null($value) ? $value : value($default);
+        return !is_null($value) ? $value : value($default);
     }
 
     /**
@@ -209,7 +209,7 @@ class Repository implements CacheContract, \ArrayAccess
      */
     public function forget($key)
     {
-        return $this->store->forget($key);
+        return $this->driver->forget($key);
     }
 
     /**

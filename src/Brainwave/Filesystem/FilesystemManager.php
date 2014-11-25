@@ -19,10 +19,10 @@ namespace Brainwave\Filesystem;
  */
 
 use \Pimple\Container;
-use \League\Flysystem\Filesystem as Flysystem;
 use \League\Flysystem\AdapterInterface;
+use \League\Flysystem\Filesystem as Flysystem;
 use \Brainwave\Filesystem\Adapters\ConnectionFactory;
-use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
+use \Brainwave\Contracts\FilesystemManager as Manager;
 
 /**
  * FilesystemManager
@@ -32,7 +32,7 @@ use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
  * @since   0.9.3-dev
  *
  */
-class FilesystemManager implements FilesystemManagerInterface
+class FilesystemManager implements Manager
 {
     /**
      * The application instance.

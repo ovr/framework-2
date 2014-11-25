@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Application;
+namespace Brainwave\Cache\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,26 +18,17 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Brainwave\Application\Application as App;
+use \Brainwave\Contracts\Cache\InvalidArgumentException as ExceptionContract;
 
 /**
- * BootableProvider Interface
+ * InvalidArgumentException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface BootableProvider
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionContract
 {
-    /**
-     * Bootstraps the application.
-     *
-     * This method is called after all services are registered
-     * and should be used for "dynamic" configuration (whenever
-     * a service must be requested).
-     *
-     * @return void
-     */
-    public function boot(App $app);
+
 }

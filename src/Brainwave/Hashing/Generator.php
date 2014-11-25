@@ -135,8 +135,9 @@ class Generator implements HashContract
             throw new \Exception('Method {$method} dont exist.');
         }
 
-        switch($method) {
+        $hash = '';
 
+        switch($method) {
             case 'pbkdf2':
                 $hash = $this->makePbkdf2($str);
                 break;
@@ -148,7 +149,6 @@ class Generator implements HashContract
 
             case 'drupal':
                 return $this->makeDrupal($str);
-                break;
 
             case 'sha256':
             case 'sha512':
@@ -447,13 +447,13 @@ class Generator implements HashContract
     {
         preg_match('/^\$[a-z, 1-6]{1,6}\$/i', $hash, $matches);
 
-        $registeredMethod = $this->registeredMethods;
-
         if (sizeof($matches) > 0) {
             list($method) = $matches;
         } else {
             $method = null;
         }
+
+        $info = [];
 
         switch($method) {
             case $regMethod['sha256']:

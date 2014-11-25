@@ -56,7 +56,7 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
 
-        static::$app->instance(static::getFacadeAccessor(), $instance);
+        static::$app[static::getFacadeAccessor()] = $instance;
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class StaticalProxyManager
         static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
 
         if (isset(static::$app)) {
-            static::$app->instance($name, $mock);
+            static::$app[$name] = $mock;
         }
 
         return $mock;

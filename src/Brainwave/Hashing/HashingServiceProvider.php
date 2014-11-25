@@ -52,7 +52,7 @@ class HashingServiceProvider implements ServiceProviderInterface
 
     protected function registerRand($app)
     {
-        $app['rand'] = function ($app) {
+        $app['rand'] = function () {
             return new RandomLib();
         };
     }
@@ -75,7 +75,7 @@ class HashingServiceProvider implements ServiceProviderInterface
 
     protected function registerPassword($app)
     {
-        $app['password'] = function ($app) {
+        $app['password'] = function () {
             return new Password();
         };
     }

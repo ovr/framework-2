@@ -44,19 +44,15 @@ class ResolverServiceProvider implements ServiceProviderInterface
             switch ($resolverCofig) {
                 case 'DependencyResolver':
                     return new DependencyResolver($app);
-                    break;
 
                 case 'ContainerResolver':
                     return new ContainerResolver($app);
-                    break;
 
                 case 'CallableResolver':
                     return new CallableResolver();
-                    break;
 
                 default:
                     throw new \Exception("Set a Callable Resolver");
-                    break;
             }
         };
     }

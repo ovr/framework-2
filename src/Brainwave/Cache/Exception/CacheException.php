@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Application\Facades;
+namespace Brainwave\Cache\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,25 +18,17 @@ namespace Brainwave\Application\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use \Brainwave\Contracts\Cache\CacheException as ExceptionContract;
 
 /**
- * Resource
+ * CacheException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Resource extends StaticalProxyManager
+class CacheException extends \Exception implements ExceptionContract
 {
-    protected static function getFacadeAccessor()
-    {
-        return self::$brainwave;
-    }
 
-    public static function set($name)
-    {
-        return self::$app->getResources($name);
-    }
 }

@@ -21,8 +21,8 @@ namespace Brainwave\Database\Connection;
 use \PDO;
 use \Brainwave\Support\Str;
 use \Brainwave\Support\Arr;
-use \Brainwave\Cache\CacheManager;
 use \Brainwave\Database\Grammar\Builder;
+use \Brainwave\Cache\Manager as CacheManager;
 use \Brainwave\Database\Exception\ConnectException;
 use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
 
@@ -53,7 +53,7 @@ class Connection implements ConnectionInterface
     /**
      * The cache manager instance.
      *
-     * @var \Brainwave\Cache\CacheManager|\Closure
+     * @var \Brainwave\Cache\Manager|\Closure
      */
     protected $cache;
 
@@ -740,7 +740,7 @@ class Connection implements ConnectionInterface
     /**
      * Get the cache manager instance.
      *
-     * @return \Brainwave\Cache\CacheManager|\Closure
+     * @return \Brainwave\Cache\Manager|\Closure
      */
     public function getCacheManager()
     {
@@ -754,7 +754,7 @@ class Connection implements ConnectionInterface
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Brainwave\Cache\CacheManager|\Closure  $cache
+     * @param  \Brainwave\Cache\Manager|\Closure  $cache
      * @return void
      */
     public function setCacheManager($cache)

@@ -62,21 +62,21 @@ class Ini implements ParserContract
     {
         if ($this->files->exists($filename)) {
             $data = parse_ini_file($filename, true);
-        } else {
-            throw new \Exception("INI file dont exists: ".$filename);
-        }
 
-        $groupData = [];
+            $groupData = [];
 
-        if ($group !== null) {
-            foreach ($data as $key => $value) {
-                $groupData["{$group}::{$key}"] = $value;
+            if ($group !== null) {
+                foreach ($data as $key => $value) {
+                    $groupData["{$group}::{$key}"] = $value;
+                }
+
+                return $groupData;
             }
 
-            return $groupData;
+            return $data;
         }
 
-        return $data;
+        throw new \Exception("INI file dont exists: ".$filename);
     }
 
     /**

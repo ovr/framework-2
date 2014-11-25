@@ -77,7 +77,9 @@ class Headers extends Collection implements HeadersContract
      */
     public function parseHeaders(EnvironmentContract $environment)
     {
-        foreach ($environment as $key => $value) {
+        $env = $environment;
+
+        foreach ($env as $key => $value) {
             $key = strtoupper($key);
 
             if (

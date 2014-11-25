@@ -70,6 +70,7 @@ class Cookie implements FactoryContract
             'secure' => ($secure === null) ? $this->app['settings']->get('cookies::secure', false) : $secure,
             'httponly' => ($httponly === null) ? $this->app['settings']->get('cookies::httponly', false) : $httponly
         ];
+
         $this->app['response']->setCookie($name, $settings);
     }
 
@@ -85,7 +86,7 @@ class Cookie implements FactoryContract
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        return $this->set($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
+        return $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
     public function session($value)

@@ -20,7 +20,7 @@ namespace Brainwave\Cache\Store;
 
 use \Carbon\Carbon;
 use \Brainwave\Cache\Store\TagSet;
-use \Brainwave\Contracts\Cache\Factory as FactoryContract;
+use \Brainwave\Contracts\Cache\Adapter;
 use \Brainwave\Cache\Store\Interfaces\StoreInterface as StoreContract;
 
 /**
@@ -36,7 +36,7 @@ class TaggedCache implements StoreContract
     /**
      * The cache store implementation.
      *
-     * @var FactoryContract
+     * @var \Brainwave\Contracts\Cache\Adapter
      */
     protected $store;
 
@@ -50,12 +50,12 @@ class TaggedCache implements StoreContract
     /**
      * Create a new tagged cache instance.
      *
-     * @param  FactoryContract               $store
-     * @param  \Brainwave\Cache\Store\TagSet $tags
+     * @param  \Brainwave\Contracts\Cache\Adapter $store
+     * @param  \Brainwave\Cache\Store\TagSet      $tags
      *
      * @return void
      */
-    public function __construct(FactoryContract $store, TagSet $tags)
+    public function __construct(Adapter $store, TagSet $tags)
     {
         $this->tags = $tags;
         $this->store = $store;

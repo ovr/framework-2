@@ -18,8 +18,8 @@ namespace Brainwave\Contracts\Cookie;
  *
  */
 
-use \Brainwave\Contracts\Http\Headers;
 use \Brainwave\Contracts\Collection\Collection;
+use \Brainwave\Contracts\Http\Headers as HeadersContract;
 
 /**
  * CookiesJar
@@ -32,24 +32,71 @@ use \Brainwave\Contracts\Collection\Collection;
 interface CookiesJar extends Collection
 {
     /**
-     * @return void
+     * Serialize this collection of cookies into a raw HTTP header
+     *
+     * @param HeadersContract $headers
      */
-    public function setHeaders(Headers $headers);
+    public function setHeaders(HeadersContract $headers);
 
     /**
-     * @param string $name
-     * @param string $value
+     * Remove cookie
      *
-     * @return void
+     * Unlike \Brainwave\Collection, this will actually *set* a cookie with
+     * an expiration date in the past. This expiration date will force
+     * the client-side cache to remove its cookie with the given name
+     * and settings.
+     *
+     * @param string $key      Cookie name
+     * @param array  $settings Optional cookie settings
      */
-    public function setHeader(Headers $headers, $name, $value);
+    public function remove($key, array $settings = []);
 
     /**
-     * @param string $name
+     * Set HTTP cookie header
      *
-     * @return void
+     * This method will construct and set the HTTP `Set-Cookie` header. Brainwave
+     * uses this method instead of PHP's native `setcookie` method. This allows
+     * more control of the HTTP header irrespective of the native implementation's
+     * dependency on PHP versions.
+     *
+     * This method accepts the \Brainwave\Http\Headers object by reference as its
+     * first argument; this method directly modifies this object instead of
+     * returning a value.
+     *
+     * @param HeadersContract $headers
+     * @param string          $name
+     * @param string|array    $value
      */
-    public function deleteHeader(Headers $headers, $name, $value = []);
+    public function setHeader(HeadersContract $headers, $name, $value);
 
+    /**
+     * Delete HTTP cookie header
+     *
+     * This method will construct and set the HTTP `Set-Cookie` header to invalidate
+     * a client-side HTTP cookie. If a cookie with the same name (and, optionally, domain)
+     * is already set in the HTTP response, it will also be removed. Brainwave uses this method
+     * instead of PHP's native `setcookie` method. This allows more control of the HTTP header
+     * irrespective of PHP's native implementation's dependency on PHP versions.
+     *
+     * This method accepts the \Brainwave\Http\Headers object by reference as its
+     * first argument; this method directly modifies this object instead of
+     * returning a value.
+     *
+     * @param HeadersContract $headers
+     * @param string          $name
+     * @param array           $value
+     */
+    public function deleteHeader(HeadersContract $headers, $name, $value = []);
+
+    /**
+     * Parse cookie header
+     *
+     * This method will parse the HTTP request's `Cookie` header
+     * and extract an associative array of cookie names and values.
+     *
+     * @param  string $header
+     *
+     * @return array
+     */
     public function parseHeader($header);
 }

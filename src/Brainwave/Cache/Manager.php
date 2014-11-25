@@ -29,8 +29,8 @@ use \Brainwave\Cache\Adapter\XCacheCache;
 use \Brainwave\Cache\Adapter\WinCacheCache;
 use \Brainwave\Cache\Adapter\MemcacheCache;
 use \Brainwave\Cache\Adapter\MemcachedCache;
-use \Brainwave\Contracts\Cache\CacheException;
-use \Brainwave\Contracts\Cache\InvalidArgumentException;
+use \Brainwave\Cache\Exception\CacheException;
+use \Brainwave\Cache\Exception\InvalidArgumentException;
 use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use \Brainwave\Contracts\Cache\Factory as FactoryContract;
 
@@ -56,7 +56,7 @@ class Manager implements FactoryContract
      *
      * @var array
      */
-    protected $supportedDriverss;
+    protected $supportedDrivers;
 
     /**
      * The array of created "drivers".
@@ -75,10 +75,10 @@ class Manager implements FactoryContract
     /**
      * Constructor.
      *
-     * @param \Pimple\Container  $app
-     * @param array              $supportedDrivers
-     *                           The list of available drivers,
-     *                           key=driver name, value=driver class
+     * @param \Pimple\Container $app
+     * @param array             $supportedDrivers
+     *                          The list of available drivers,
+     *                          key=driver name, value=driver class
      */
     public function __construct(Container $app, array $supportedDrivers = [])
     {
@@ -268,9 +268,9 @@ class Manager implements FactoryContract
         $this->app['settings']['cache::memcache'] :
         $config['memcache'];
 
-        $memcached = MemcacheCache::connect($servers);
+        $memcache = MemcacheCache::connect($servers);
 
-        return $this->repository(new MemcacheCache($memcached, $this->getPrefix()));
+        return $this->repository(new MemcacheCache($memcache, $this->getPrefix()));
     }
 
     /**

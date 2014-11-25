@@ -39,6 +39,13 @@ namespace Brainwave\Http;
 trait HeaderTrait
 {
     /**
+     * Request headers
+     *
+     * @var HeadersContract
+     */
+    protected $headers;
+
+    /**
      * Get HTTP headers
      *
      * @return array

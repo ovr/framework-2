@@ -90,8 +90,8 @@ class Encrypter implements EncrypterContract
      *
      * @param  \Pimple\Container $app
      * @param  string            $key    Encryption key
-     * @param  int               $cipher Encryption algorithm
-     * @param  int               $mode   Encryption mode
+     * @param  integer           $cipher Encryption algorithm
+     * @param  string            $mode   Encryption mode
      */
     public function __construct(Container $app, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
     {
@@ -156,6 +156,8 @@ class Encrypter implements EncrypterContract
         if (mcrypt_module_is_blockalgorithmmode($this->mode) === true) {
             $this->padding = true;
         }
+
+        $encrypted = [];
 
         // Add padding if enabled.
         if ($this->padding === true) {

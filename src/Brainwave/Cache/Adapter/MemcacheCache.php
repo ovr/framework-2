@@ -101,7 +101,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
      * @param \Memcache $memcache
      * @param string    $prefix
      */
-    public function __construct(Memcache $memcache, $prefix = '')
+    public function __construct(\Memcache $memcache, $prefix = '')
     {
         $this->memcache = $memcache;
         $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';

@@ -296,13 +296,15 @@ class Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param  array   $array
-     * @param  string  $key
+     * @param  array  $array
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
-    public static function arrayPull(&$array, $key)
+    public static function arrayPull(&$array, $key, $default = null)
     {
-        $value = arrayGet($array, $key);
+        $value = arrayGet($array, $key, $default);
 
         self::arrayForget($array, $key);
 

@@ -106,7 +106,7 @@ class Request implements RequestContract
     /**
      * Request body (parsed; only available if body is form-urlencoded)
      *
-     * @var array
+     * @var array|mixed
      */
     protected $body;
 
@@ -468,7 +468,7 @@ class Request implements RequestContract
     public function get($key = null, $default = null)
     {
         // Parse and cache query parameters
-        if (is_null($this->queryParameters)) {
+        if ($this->queryParameters === null) {
             $qs = $this->env->get('QUERY_STRING');
 
             if (function_exists('mb_parse_str')) {
@@ -479,7 +479,7 @@ class Request implements RequestContract
         }
 
         // Fetch requested query parameter(s)
-        if ($key) {
+        if ($key && $thi->queryParameters !== null) {
             if (array_key_exists($key, $this->queryParameters)) {
                 $returnVal = $this->queryParameters[$key];
             } else {
@@ -734,8 +734,6 @@ class Request implements RequestContract
      */
     public function getScheme()
     {
-        $isHttps = false;
-
         if ($this->headers->has('X_FORWARDED_PROTO') === true) {
             $headerValue = $this->headers->get('X_FORWARDED_PROTO');
             $isHttps = (strtolower($headerValue) === 'https');
@@ -889,7 +887,7 @@ class Request implements RequestContract
         }
 
         // Build headers
-        $output = sprintf('%s %s %s', $this->getMethod(), $path, $this->getProtocol()) . PHP_EOL;
+        $output = sprintf('%s %s %s', $this->getMethod(), $path, $this->getProtocolVersion()) . PHP_EOL;
 
         foreach ($this->headers as $name => $value) {
             $output .= sprintf("%s: %s", $name, $value) . PHP_EOL;

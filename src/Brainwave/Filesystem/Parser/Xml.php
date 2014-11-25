@@ -63,19 +63,19 @@ class Xml implements ParserContract
         if ($this->files->exists($filename)) {
             $data = simplexml_load_file($filename);
             $data = unserialize(serialize(json_decode(json_encode((array) $data), 1)));
-        }
 
-        $groupData = [];
+            $groupData = [];
 
-        if ($group !== null) {
-            foreach ($data as $key => $value) {
-                $groupData["{$group}::{$key}"] = $value;
+            if ($group !== null) {
+                foreach ($data as $key => $value) {
+                    $groupData["{$group}::{$key}"] = $value;
+                }
+
+                return $groupData;
             }
 
-            return $groupData;
+            return $data;
         }
-
-        return $data;
     }
 
     /**
@@ -95,7 +95,7 @@ class Xml implements ParserContract
      *
      * @param  array $data data
      *
-     * @return string data export
+     * @return string|false data export
      */
     public function format(array $data)
     {
