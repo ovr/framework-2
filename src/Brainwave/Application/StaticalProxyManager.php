@@ -219,7 +219,7 @@ abstract class StaticalProxyManager
      */
     public static function setFacadeApplication(Application $container)
     {
-        self::$container= $container;
+        self::$container = $container;
     }
 
     /**

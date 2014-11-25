@@ -82,7 +82,7 @@ class Manager implements FactoryContract
      */
     public function __construct(Container $container, array $supportedDrivers = [])
     {
-        $this->container= $container;
+        $this->container = $container;
         $this->supportedDrivers = $supportedDrivers;
     }
 

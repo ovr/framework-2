@@ -70,10 +70,10 @@ class Plates implements EnginesContract
      */
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
 
-        if ($extensions = !is_null($this->container['settings']->get('view::plates.extensions', null))) {
-            $this->availableExtensions = $extensions;
+        if ($this->container['settings']->get('view::plates.extensions', null) !== null) {
+            $this->availableExtensions = $this->container['settings']['view::plates.extensions'];
         }
 
         //Engine

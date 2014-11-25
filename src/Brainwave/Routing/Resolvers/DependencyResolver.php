@@ -45,7 +45,7 @@ class DependencyResolver implements CallableResolverContract
      */
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**
@@ -56,8 +56,8 @@ class DependencyResolver implements CallableResolverContract
      */
     public function build($callable)
     {
-        if (is_string($callable) &&
-            preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        $regex = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+        if (is_string($callable) && preg_match($regex, $callable, $matches)) {
 
             $service = $matches[1];
             $method = $matches[2];
@@ -66,7 +66,7 @@ class DependencyResolver implements CallableResolverContract
                 throw new \InvalidArgumentException('Route key does not exist in Application');
             }
 
-            $callable =  [$this->container[$service],$method];
+            $callable =  [$this->container[$service], $method];
         }
 
         if (!is_callable($callable)) {

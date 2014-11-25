@@ -55,7 +55,7 @@ class Redirector
     public function __construct(UrlGenerator $generator, Container $container)
     {
         $this->generator = $generator;
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**

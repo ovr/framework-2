@@ -101,9 +101,9 @@ class Router implements RouterContract
      */
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container   = $container;
 
-        $this->routes = [];
+        $this->routes      = [];
         $this->routeGroups = [];
         $this->routeParams = [];
     }

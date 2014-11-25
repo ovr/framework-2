@@ -38,8 +38,6 @@ class DatabaseServiceProvider implements ServiceProviderInterface
 
     public function register(Container $container)
     {
-        $this->container= $container;
-
         if ($this->container['settings']['database::frozen']) {
             $this->container['db'] = function () {
                 return 'Database is frozen.';
@@ -58,13 +56,12 @@ class DatabaseServiceProvider implements ServiceProviderInterface
                 return $manager;
             };
 
-            $this->registerDatabaseQuery();
+            $this->registerDatabaseQuery($container);
         }
     }
 
-    protected function registerDatabaseQuery()
+    protected function registerDatabaseQuery(Container $container)
     {
-        $container= $this->container;
         $type = $container['db']->getConnections();
 
         $container['db.query'] = function ($container) {
@@ -81,7 +78,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    protected function registerConnectionFactory($container)
+    protected function registerConnectionFactory(Container $container)
     {
         // The connection factory is used to create the actual connection instances on
         // the database. We will inject the factory into the manager so that it may

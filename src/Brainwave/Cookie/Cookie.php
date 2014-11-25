@@ -64,11 +64,11 @@ class Cookie implements FactoryContract
     ) {
         $settings = [
             'value' => $value,
-            'expires' => ($time === null) ? $this->container['settings']->get('cookies::lifetime', '20minutes') : $time,
-            'path' => ($path === null) ? $this->container['settings']->get('cookies::path', '/') : $path,
-            'domain' => ($domain === null) ? $this->container['settings']->get('cookies::domain', null) : $domain,
-            'secure' => ($secure === null) ? $this->container['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => ($httponly === null) ? $this->container['settings']->get('cookies::httponly', false) : $httponly
+            'expires' => ($time === null) ? $this->container['settings']['cookies::lifetime'] : $time,
+            'path' => ($path === null) ? $this->container['settings']['cookies::path'] : $path,
+            'domain' => ($domain === null) ? $this->container['settings']['cookies::domain'] : $domain,
+            'secure' => ($secure === null) ? $this->container['settings']['cookies::secure'] : $secure,
+            'httponly' => ($httponly === null) ? $this->container['settings']['cookies::httponly'] : $httponly
         ];
 
         $this->container['response']->setCookie($name, $settings);
@@ -114,8 +114,8 @@ class Cookie implements FactoryContract
      * Does this request have a given cookie?
      *
      * @param  string $name
+     *
      * @return bool
-     * @api
      */
     public function has($name)
     {
@@ -156,10 +156,10 @@ class Cookie implements FactoryContract
         $httponly = null
     ) {
         $settings = [
-            'domain' => is_null($domain) ? $this->container['settings']->get('cookies::domain', null) : $domain,
-            'path' => is_null($path) ? $this->container['settings']->get('cookies::path', '/') : $path,
-            'secure' => is_null($secure) ? $this->container['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => is_null($httponly) ?$this->container['settings']->get('cookies::httponly', flase) : $httponly
+            'domain'   => is_null($domain) ? $this->container['settings']['cookies::domain'] : $domain,
+            'path'     => is_null($path) ? $this->container['settings']['cookies::path'] : $path,
+            'secure'   => is_null($secure) ? $this->container['settings']['cookies::secure'] : $secure,
+            'httponly' => is_null($httponly) ? $this->container['settings']['cookies::httponly'] : $httponly
         ];
         $this->container['response']->removeCookie($name, $settings);
     }

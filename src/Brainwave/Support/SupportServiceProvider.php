@@ -34,25 +34,21 @@ use \Pimple\ServiceProviderInterface;
  */
 class SupportServiceProvider implements ServiceProviderInterface
 {
-    protected $container;
-
     public function register(Container $container)
     {
-        $this->container= $container;
-
-        $this->registerHelpers();
-        $this->registerArr();
-        $this->registerStr();
+        $this->registerHelpers($container);
+        $this->registerArr($container);
+        $this->registerStr($container);
     }
 
     /**
      * Register Helpers
      *
-     * @return  \Brainwave\Support\Helpers
+     * @return \Brainwave\Support\Helpers
      */
-    protected function registerHelpers()
+    protected function registerHelpers(Container $container)
     {
-        $this->container['helpers'] = function ($container) {
+        $container['helpers'] = function ($container) {
             return new Helpers();
         };
     }
@@ -60,11 +56,11 @@ class SupportServiceProvider implements ServiceProviderInterface
     /**
      * Register Arr
      *
-     * @return  \Brainwave\Support\Arr
+     * @return \Brainwave\Support\Arr
      */
-    protected function registerArr()
+    protected function registerArr(Container $container)
     {
-        $this->container['arr'] = function ($container) {
+        $container['arr'] = function ($container) {
             return new Arr();
         };
     }
@@ -72,11 +68,11 @@ class SupportServiceProvider implements ServiceProviderInterface
     /**
      * Register Str
      *
-     * @return  \Brainwave\Support\Str
+     * @return \Brainwave\Support\Str
      */
-    protected function registerStr()
+    protected function registerStr(Container $container)
     {
-        $this->container['str'] = function ($container) {
+        $container['str'] = function ($container) {
             return new Str();
         };
     }

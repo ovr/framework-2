@@ -387,7 +387,7 @@ class Application extends Container implements ApplicationContract
     public function mount($prefix, $controllers)
     {
         if ($controller instanceof ControllerContractInterface) {
-            $controller = $controller->connect($this->container);
+            $controller = $controller->connect($this);
 
             if (!$controllers instanceof ControllerCollection) {
                 throw new \LogicException(
@@ -402,7 +402,7 @@ class Application extends Container implements ApplicationContract
             );
         }
 
-        $this->container['controllers']->mount($prefix, $controllers);
+        $this['controllers']->mount($prefix, $controllers);
 
         return $this;
     }
@@ -416,7 +416,7 @@ class Application extends Container implements ApplicationContract
     public function getControllersRoutes()
     {
         $route = [];
-        $controllers = $this->container['controllers']->getControllers();
+        $controllers = $this['controllers']->getControllers();
         foreach ($controllers as $controller) {
             $route[] = $controller->getRouteName();
         }
@@ -959,7 +959,7 @@ class Application extends Container implements ApplicationContract
      */
     public function run()
     {
-        $this['events']->containerlyHook('before');
+        $this['events']->applyHook('before');
 
         if ($this['env'] !== 'console') {
             ob_start('mb_output_handler');
@@ -977,7 +977,7 @@ class Application extends Container implements ApplicationContract
         // Finalize and send response
         $this->finalize();
 
-        $this['events']->containerlyHook('after');
+        $this['events']->applyHook('after');
     }
 
     /**
@@ -1051,18 +1051,18 @@ class Application extends Container implements ApplicationContract
         try {
             ob_start();
 
-            $this['events']->containerlyHook('before.router');
+            $this['events']->applyHook('before.router');
             $dispatched = false;
 
             $matchedRouting = $this['router']->getMatchedRoutes($request->getMethod(), $request->getPathInfo(), true);
 
             foreach ($matchedRouting as $route) {
                 try {
-                    $this['events']->containerlyHook('before.dispatch');
+                    $this['events']->applyHook('before.dispatch');
 
                     $dispatched = $route->dispatch($this->dispatchContext);
 
-                    $this['events']->containerlyHook('after.dispatch');
+                    $this['events']->applyHook('after.dispatch');
 
                     if ($dispatched) {
                         break;
@@ -1076,7 +1076,7 @@ class Application extends Container implements ApplicationContract
                 $this->notFound();
             }
 
-            $this['events']->containerlyHook('after.router');
+            $this['events']->applyHook('after.router');
         } catch (Stop $e) {
             throw new Stop();
         }

@@ -102,7 +102,7 @@ class Encrypter implements EncrypterContract
             $this->mode  = $mode;
         }
 
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**

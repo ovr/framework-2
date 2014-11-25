@@ -69,9 +69,9 @@ class Handler
      */
     public function __construct(Container $container, LoggerInterface $log, $debug = true)
     {
-        $this->container  = $container;
-        $this->log   = $log;
-        $this->debug = $debug;
+        $this->container = $container;
+        $this->log       = $log;
+        $this->debug     = $debug;
     }
 
     /**

@@ -37,43 +37,41 @@ class FractalServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $this->container= $container;
-
-        $this->registerFractal();
-        $this->registerJsonApiFractal();
-        $this->registerArrayFractal();
-        $this->registerDataArrayFractal();
+        $this->registerFractal($container);
+        $this->registerJsonApiFractal($container);
+        $this->registerArrayFractal($container);
+        $this->registerDataArrayFractal($container);
     }
 
-    protected function registerFractal()
+    protected function registerFractal(Container $container)
     {
-        $this->container['fractal'] = function ($container) {
+        $container['fractal'] = function ($container) {
             $manager = new Manager();
             return $manager;
         };
     }
 
-    protected function registerJsonApiFractal()
+    protected function registerJsonApiFractal(Container $container)
     {
-        $this->container['fractal.json'] = function ($container) {
+        $container['fractal.json'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
             return $manager;
         };
     }
 
-    protected function registerArrayFractal()
+    protected function registerArrayFractal(Container $container)
     {
-        $this->container['fractal.array'] = function ($container) {
+        $container['fractal.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
             return $manager;
         };
     }
 
-    protected function registerDataArrayFractal()
+    protected function registerDataArrayFractal(Container $container)
     {
-        $this->container['fractal.data.array'] = function ($container) {
+        $container['fractal.data.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
             return $manager;

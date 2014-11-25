@@ -45,7 +45,7 @@ class ContainerResolver implements CallableResolverContract
      */
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**
@@ -57,7 +57,9 @@ class ContainerResolver implements CallableResolverContract
     public function build($callable)
     {
         $matches = [];
-        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        $regex   = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+
+        if (is_string($callable) && preg_match($regex, $callable, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
             $container= $this->container;

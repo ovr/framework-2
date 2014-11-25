@@ -43,12 +43,16 @@ class ExceptionServiceProvider implements ServiceProviderInterface
 
     public function register(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
 
         $this->registerDisplayers();
 
         $container['exception'] = function ($container) {
-            return new ExceptionHandler($container, $container['logger']->getMonolog(), $container['settings']->get('app::debug', true));
+            return new ExceptionHandler(
+                $container,
+                $container['logger']->getMonolog(),
+                $container['settings']->get('app::debug', true)
+            );
         };
     }
 

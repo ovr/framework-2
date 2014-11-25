@@ -170,7 +170,7 @@ class Dispatcher implements EventsContract
      */
     public function trigger($name, $hookArg = null)
     {
-        $this->containerlyHook($name, $hookArg);
+        $this->applyHook($name, $hookArg);
     }
 
     /**

@@ -289,7 +289,7 @@ class Factory extends Collection implements FactoryContract
      */
     public function setContainer(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**

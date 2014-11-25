@@ -61,8 +61,8 @@ class RouteFactory
      */
     public function __construct(Container $container, \Closure $routeResolver, \Closure $controllerResolver)
     {
-        $this->container= $container;
-        $this->routeResolver = $routeResolver;
+        $this->container          = $container;
+        $this->routeResolver      = $routeResolver;
         $this->controllerResolver = $controllerResolver;
     }
 

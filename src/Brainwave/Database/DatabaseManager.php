@@ -71,8 +71,8 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function __construct(Container $container, ConnectionFactory $factory)
     {
-        $this->container= $container;
-        $this->factory = $factory;
+        $this->container = $container;
+        $this->factory   = $factory;
     }
 
     /**
@@ -193,7 +193,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // The database connection can also utilize a cache manager instance when cache
         // functionality is used on queries, which provides an expressive interface
         // to caching both fluent queries and Eloquent queries that are executed.
-        $container= $this->container;
+        $container = $this->container;
 
         $connection->setCacheManager(function () use ($container) {
             return $container['cache'];

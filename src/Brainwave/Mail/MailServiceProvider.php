@@ -50,7 +50,7 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $container= $container;
+        $container = $container;
 
         $this->registerSwiftMailer($container);
 

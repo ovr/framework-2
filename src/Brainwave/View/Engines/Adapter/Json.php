@@ -60,8 +60,8 @@ class Json implements EnginesContract
      */
     public function __construct(Container $container, ViewFactory $factory)
     {
-        $this->container= $container;
-        $this->factory = $factory;
+        $this->container = $container;
+        $this->factory   = $factory;
     }
 
     /**
