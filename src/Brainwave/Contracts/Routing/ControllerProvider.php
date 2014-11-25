@@ -33,7 +33,7 @@ interface ControllerProvider
     /**
      * Returns routes to connect to the given application.
      *
-     * @param Application $containerAn Application instance
+     * @param Application $container Application instance
      *
      * @return string A ControllerCollection instance
      */

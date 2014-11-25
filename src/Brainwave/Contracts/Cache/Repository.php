@@ -91,7 +91,7 @@ interface Repository
      * Get an item from the cache, or store the default value.
      *
      * @param  string  $key
-     * @param  \DateTime|int  $minutes
+     * @param  integer  $minutes
      * @param  \Closure  $callback
      * @return mixed
      */
