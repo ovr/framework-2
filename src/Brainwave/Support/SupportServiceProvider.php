@@ -34,11 +34,11 @@ use \Pimple\ServiceProviderInterface;
  */
 class SupportServiceProvider implements ServiceProviderInterface
 {
-    protected $app;
+    protected $container;
 
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->registerHelpers();
         $this->registerArr();
@@ -52,7 +52,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerHelpers()
     {
-        $this->app['helpers'] = function ($app) {
+        $this->app['helpers'] = function ($container) {
             return new Helpers();
         };
     }
@@ -64,7 +64,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerArr()
     {
-        $this->app['arr'] = function ($app) {
+        $this->app['arr'] = function ($container) {
             return new Arr();
         };
     }
@@ -76,7 +76,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerStr()
     {
-        $this->app['str'] = function ($app) {
+        $this->app['str'] = function ($container) {
             return new Str();
         };
     }

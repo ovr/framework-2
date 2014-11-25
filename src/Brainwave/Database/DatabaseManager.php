@@ -39,7 +39,7 @@ class DatabaseManager implements ConnectionResolverInterface
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The database connection factory instance.
@@ -65,13 +65,13 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Pimple\Container  $app
+     * @param  \Pimple\Container  $container
      * @param  \Brainwave\Database\Connection\ConnectionFactory  $factory
      * @return void
      */
-    public function __construct(Container $app, ConnectionFactory $factory)
+    public function __construct(Container $container, ConnectionFactory $factory)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->factory = $factory;
     }
 
@@ -193,10 +193,10 @@ class DatabaseManager implements ConnectionResolverInterface
         // The database connection can also utilize a cache manager instance when cache
         // functionality is used on queries, which provides an expressive interface
         // to caching both fluent queries and Eloquent queries that are executed.
-        $app = $this->app;
+        $container= $this->app;
 
-        $connection->setCacheManager(function () use ($app) {
-            return $app['cache'];
+        $connection->setCacheManager(function () use ($container) {
+            return $container['cache'];
         });
 
         // Here we'll set a reconnector callback. This reconnector can be any callable

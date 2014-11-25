@@ -34,19 +34,19 @@ use \Brainwave\Routing\Resolvers\DependencyResolver;
  */
 class ResolverServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
         // Route Callable Resolver
-        $app['resolver'] = function ($app) {
+        $container['resolver'] = function ($container) {
 
-            $resolverCofig = $app['settings']->get('app::callable.resolver', 'CallableResolver');
+            $resolverCofig = $container['settings']->get('app::callable.resolver', 'CallableResolver');
 
             switch ($resolverCofig) {
                 case 'DependencyResolver':
-                    return new DependencyResolver($app);
+                    return new DependencyResolver($container);
 
                 case 'ContainerResolver':
-                    return new ContainerResolver($app);
+                    return new ContainerResolver($container);
 
                 case 'CallableResolver':
                     return new CallableResolver();

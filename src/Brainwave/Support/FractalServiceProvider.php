@@ -35,9 +35,9 @@ use \League\Fractal\Serializer\DataArraySerializer;
  */
 class FractalServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->registerFractal();
         $this->registerJsonApiFractal();
@@ -47,7 +47,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerFractal()
     {
-        $this->app['fractal'] = function ($app) {
+        $this->app['fractal'] = function ($container) {
             $manager = new Manager();
             return $manager;
         };
@@ -55,7 +55,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerJsonApiFractal()
     {
-        $this->app['fractal.json'] = function ($app) {
+        $this->app['fractal.json'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
             return $manager;
@@ -64,7 +64,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerArrayFractal()
     {
-        $this->app['fractal.array'] = function ($app) {
+        $this->app['fractal.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
             return $manager;
@@ -73,7 +73,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerDataArrayFractal()
     {
-        $this->app['fractal.data.array'] = function ($app) {
+        $this->app['fractal.data.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
             return $manager;

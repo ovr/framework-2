@@ -32,11 +32,11 @@ use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
  */
 class Cookie implements FactoryContract
 {
-    protected $app;
+    protected $container;
 
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**

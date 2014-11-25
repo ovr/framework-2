@@ -32,11 +32,11 @@ use \Brainwave\Cache\Manager as CacheManager;
  */
 class CacheServiceProvider implements ServiceProviderInterface
 {
-    protected $app;
+    protected $container;
 
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->registerCacheFactory();
         $this->registerDefaultCache();
@@ -45,21 +45,21 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     protected function registerCacheFactory()
     {
-        $this->app['cache.factory'] = function ($app) {
-            $cacheFactory = new CacheManager($app, $app['settings']['cache::supported.drivers']);
-            $cacheFactory->setPrefix($app['settings']['cache::prefix']);
+        $this->app['cache.factory'] = function ($container) {
+            $cacheFactory = new CacheManager($container, $container['settings']['cache::supported.drivers']);
+            $cacheFactory->setPrefix($container['settings']['cache::prefix']);
             return $cacheFactory;
         };
     }
 
     protected function registerDefaultCache()
     {
-        $this->app['cache'] = function ($app) {
+        $this->app['cache'] = function ($container) {
 
             //The default driver
-            $app['cache.factory']->setDefaultDriver($app['settings']['cache::driver']);
+            $container['cache.factory']->setDefaultDriver($container['settings']['cache::driver']);
 
-            return $app['cache.factory']->driver($app['cache.factory']->getDefaultDriver());
+            return $container['cache.factory']->driver($container['cache.factory']->getDefaultDriver());
         };
     }
 

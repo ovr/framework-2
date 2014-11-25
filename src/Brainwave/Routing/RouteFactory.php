@@ -36,7 +36,7 @@ class RouteFactory
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Route factory callable
@@ -55,13 +55,13 @@ class RouteFactory
     /**
      * RouteFactory
      *
-     * @param Container $app
+     * @param Container $container
      * @param Closure   $routeResolver
      * @param Closure   $controllerResolver
      */
-    public function __construct(Container $app, \Closure $routeResolver, \Closure $controllerResolver)
+    public function __construct(Container $container, \Closure $routeResolver, \Closure $controllerResolver)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->routeResolver = $routeResolver;
         $this->controllerResolver = $controllerResolver;
     }

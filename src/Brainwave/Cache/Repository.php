@@ -49,7 +49,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Cache driver supported
      *
-     * @var boolen
+     * @var boolean
      */
     protected static $supported = false;
 
@@ -67,7 +67,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Check if the cache driver is supported
      *
-     * @return bool Returns TRUE if supported or FALSE if not.
+     * @return boolean Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {

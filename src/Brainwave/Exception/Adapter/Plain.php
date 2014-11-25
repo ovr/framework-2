@@ -36,7 +36,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Displayer language
@@ -47,13 +47,13 @@ class PlainDisplayer implements ExceptionDisplayerInterface
     /**
      *
      *
-     * @param Container $app \Pimple\Container
+     * @param Container $container\Pimple\Container
      * @param string    $charset language
      * @param boolen    $console
      */
-    public function __construct(Container $app, $charset, $console)
+    public function __construct(Container $container, $charset, $console)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->charset = strtolower($charset);
     }
 

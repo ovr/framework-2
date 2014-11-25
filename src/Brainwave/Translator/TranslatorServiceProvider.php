@@ -36,17 +36,17 @@ class TranslatorServiceProvider implements ServiceProviderInterface
     /**
      * Register translator
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['translator.path'] = '';
+        $container['translator.path'] = '';
 
-        $app['translator'] = function ($app) {
+        $container['translator'] = function ($container) {
             $translator = new Manager();
-            $translator->setLocale($app['settings']->get('app::locale', 'en'));
+            $translator->setLocale($container['settings']->get('app::locale', 'en'));
             $translator->setLoader(
                 new FileLoader(
-                    $app['files'],
-                    $app['translator.path']
+                    $container['files'],
+                    $container['translator.path']
                 )
             );
             return $translator;

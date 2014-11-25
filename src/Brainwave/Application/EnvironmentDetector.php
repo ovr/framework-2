@@ -60,12 +60,12 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Constructor, will parse an array for environment information if present
      *
-     * @param Container $app
+     * @param Container $container
      * @param array     $environment
      */
-    public function __construct(Container $app, $environment = null)
+    public function __construct(Container $container, $environment = null)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         if (!is_null($environment)) {
             $this->parse($environment);

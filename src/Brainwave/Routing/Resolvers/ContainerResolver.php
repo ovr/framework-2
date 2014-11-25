@@ -36,16 +36,16 @@ class ContainerResolver implements CallableResolverContract
      *
      * @var bool
      */
-    private $app;
+    private $container;
 
     /**
      * Set Application
      *
-     * @param $app \Pimple\Container
+     * @param $container\Pimple\Container
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**
@@ -60,12 +60,12 @@ class ContainerResolver implements CallableResolverContract
         if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
-            $app = $this->app;
+            $container= $this->app;
 
-            $callable = function () use ($class, $method, $app) {
+            $callable = function () use ($class, $method, $container) {
                 static $obj = null;
                 if ($obj === null) {
-                    $obj = new $class($app);
+                    $obj = new $class($container);
                 }
                 return call_user_func_array(array($obj, $method), func_get_args());
             };

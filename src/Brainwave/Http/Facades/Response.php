@@ -47,7 +47,7 @@ class Response extends StaticalProxyManager
      */
     public static function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
-        $app = StaticalProxyManager::getFacadeApp();
+        $container = StaticalProxyManager::getFacadeApp();
 
         $jsonData = array_merge(
             $data,
@@ -57,6 +57,6 @@ class Response extends StaticalProxyManager
             ]
         );
 
-        $app['view']->make($status, $jsonData, 'json');
+        $container['view']->make($status, $jsonData, 'json');
     }
 }

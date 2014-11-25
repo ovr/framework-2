@@ -32,11 +32,11 @@ class App extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {
-        return self::$app;
+        return self::$container;
     }
 
     public static function make($key)
     {
-        return self::$app[$key];
+        return self::$container[$key];
     }
 }

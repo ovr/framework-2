@@ -43,7 +43,7 @@ class Json implements EnginesContract
      *
      * @var \Brainwave\Workbanch\Workbanch
      */
-    protected $app;
+    protected $container;
 
     /**
      * Json data
@@ -55,12 +55,12 @@ class Json implements EnginesContract
     /**
      * Construct
      *
-     * @param \Pimple\Container           $app
+     * @param \Pimple\Container           $container
      * @param \Brainwave\View\ViewFactory $factory
      */
-    public function __construct(Container $app, ViewFactory $factory)
+    public function __construct(Container $container, ViewFactory $factory)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->factory = $factory;
     }
 
@@ -106,7 +106,7 @@ class Json implements EnginesContract
      */
     protected function evaluateStatus($status = 200, array $data = [], $option = 0)
     {
-        $app = $this->app;
+        $container= $this->app;
         $factory = $this->factory;
 
         //append error bool
@@ -140,30 +140,30 @@ class Json implements EnginesContract
         $data = array_merge(
             $data,
             [
-                'method' => $app['request']->getMethod(),
-                'name' => $app['request']->get('name'),
-                'headers' => $app['request']->getHeaders(),
-                'params' => $app['request']->params()
+                'method' => $container['request']->getMethod(),
+                'name' => $container['request']->get('name'),
+                'headers' => $container['request']->getHeaders(),
+                'params' => $container['request']->params()
             ]
         );
 
-        $app['response']->setStatus($status);
-        $app['response']->addHeaders(
+        $container['response']->setStatus($status);
+        $container['response']->addHeaders(
             array_merge(
                 ['Content-Type', 'application/json'],
                 $data['json.headers']
             )
         );
 
-        $jsonp_callback = $app->request->get('callback', null);
+        $jsonp_callback = $container->request->get('callback', null);
 
         if ($jsonp_callback !== null) {
-            $app['response']->write($jsonp_callback.'('.json_encode($data, $option).')');
+            $container['response']->write($jsonp_callback.'('.json_encode($data, $option).')');
         } else {
-            $app['response']->write(json_encode($data, $option));
+            $container['response']->write(json_encode($data, $option));
         }
 
-        $app->stop();
+        $container->stop();
     }
 
     /**

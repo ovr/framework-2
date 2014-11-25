@@ -35,18 +35,18 @@ class Whoops implements ExceptionAdapter
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Whoops displayer
      *
-     * @param  Container $app \Pimple\Container
+     * @param  Container $container\Pimple\Container
      *
      * @return WhoopsDisplayer
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**

@@ -49,7 +49,7 @@ class Manager implements FactoryContract
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * All supported drivers
@@ -75,14 +75,14 @@ class Manager implements FactoryContract
     /**
      * Constructor.
      *
-     * @param \Pimple\Container $app
+     * @param \Pimple\Container $container
      * @param array             $supportedDrivers
      *                          The list of available drivers,
      *                          key=driver name, value=driver class
      */
-    public function __construct(Container $app, array $supportedDrivers = [])
+    public function __construct(Container $container, array $supportedDrivers = [])
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->supportedDrivers = $supportedDrivers;
     }
 

@@ -34,31 +34,31 @@ use \Brainwave\Application\StaticalProxyResolver;
  */
 class EnvironmentServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->registerAliasLoader($app);
-        $this->registerEntvironment($app);
-        $this->registerStaticalProxyResolver($app);
+        $this->registerAliasLoader($container);
+        $this->registerEntvironment($container);
+        $this->registerStaticalProxyResolver($container);
 
     }
 
-    protected function registerEntvironment($app)
+    protected function registerEntvironment($container)
     {
-        $app['environment'] = function ($app) {
-            return new EnvironmentDetector($app, $_SERVER);
+        $container['environment'] = function ($container) {
+            return new EnvironmentDetector($container, $_SERVER);
         };
     }
 
-    protected function registerAliasLoader($app)
+    protected function registerAliasLoader($container)
     {
-        $app['alias'] = function () {
+        $container['alias'] = function () {
             return new AliasLoader();
         };
     }
 
-    protected function registerStaticalProxyResolver($app)
+    protected function registerStaticalProxyResolver($container)
     {
-        $app['statical.resolver'] = function () {
+        $container['statical.resolver'] = function () {
             return new StaticalProxyResolver();
         };
     }

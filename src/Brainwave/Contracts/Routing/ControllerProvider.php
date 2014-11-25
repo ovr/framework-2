@@ -33,9 +33,9 @@ interface ControllerProvider
     /**
      * Returns routes to connect to the given application.
      *
-     * @param Application $app An Application instance
+     * @param Application $containerAn Application instance
      *
      * @return string A ControllerCollection instance
      */
-    public function connect(Application $app);
+    public function connect(Application $container);
 }

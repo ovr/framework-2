@@ -52,7 +52,7 @@ interface Parser
      *
      * @param  array $data data
      *
-     * @return string data export
+     * @return string|false data export
      */
     public function format(array $data);
 }

@@ -181,9 +181,7 @@ class FileLoader implements LoaderInterface
             $this->exists[$envKey] = $envFile;
         }
 
-        $this->exists[$key] = $file;
-
-        return $this;
+        return $this->exists[$key] = $file;
     }
 
     /**

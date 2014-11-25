@@ -39,7 +39,7 @@ class FilesystemManager implements Manager
      *
      * @var \Brainwave\Contracts\Foundation\Application
      */
-    protected $app;
+    protected $container;
 
     /**
      * The factory instance.
@@ -58,14 +58,14 @@ class FilesystemManager implements Manager
     /**
      * Create a new filesystem manager instance.
      *
-     * @param  \Pimple\Container                                $app
+     * @param  \Pimple\Container                                $container
      * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory $factory
      *
      * @return void
      */
-    public function __construct(Container $app, ConnectionFactory $factory)
+    public function __construct(Container $container, ConnectionFactory $factory)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->factory = $factory;
     }
 

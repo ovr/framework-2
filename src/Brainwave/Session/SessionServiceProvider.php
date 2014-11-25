@@ -35,16 +35,16 @@ use \Brainwave\Session\CsrfTokenFactory;
  */
 class SessionServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['deleteCookie'] = null;
-        $app['session'] = function ($app) {
+        $container['deleteCookie'] = null;
+        $container['session'] = function ($container) {
             $session = new SessionManager(
                 new SegmentFactory,
-                new CsrfTokenFactory($app['encrypter']),
+                new CsrfTokenFactory($container['encrypter']),
                 new Str,
                 $_COOKIE,
-                $app['deleteCookie']
+                $container['deleteCookie']
             );
 
             $session->start();

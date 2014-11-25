@@ -37,6 +37,6 @@ class Lang extends StaticalProxyManager
 
     public function get($orig, $language = false, $replacements = null)
     {
-        return self::$app['translator']->getTranslation($orig, $language, $replacements);
+        return self::$container['translator']->getTranslation($orig, $language, $replacements);
     }
 }

@@ -39,15 +39,15 @@ class RequestServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['request'] = function ($app) {
-            $environment = $app['environment'];
+        $container['request'] = function ($container) {
+            $environment = $container['environment'];
             $headers = new Headers($environment);
             $cookieJar = new CookieJar($headers);
 
-            if ($app['settings']->get('cookies::encrypt', false) ===  true) {
-                $cookieJar->decrypt($app['encrypter']);
+            if ($container['settings']->get('cookies::encrypt', false) ===  true) {
+                $cookieJar->decrypt($container['encrypter']);
             }
 
             return new Request($environment, $headers, $cookieJar);

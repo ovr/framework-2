@@ -32,10 +32,10 @@ use \Brainwave\Events\Dispatcher;
  */
 class EventsServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['events'] = function ($app) {
-            return new Dispatcher($app);
+        $container['events'] = function ($container) {
+            return new Dispatcher($container);
         };
     }
 }

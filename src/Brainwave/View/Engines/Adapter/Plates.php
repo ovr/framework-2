@@ -40,7 +40,7 @@ class Plates implements EnginesContract
      *
      * @var void
      */
-    protected $app;
+    protected $container;
 
     /**
      * Set Path
@@ -64,13 +64,13 @@ class Plates implements EnginesContract
 
     /**
      * Create a new view environment instance.
-     * @param  \Pimple\Container $app
+     * @param  \Pimple\Container $container
      *
      * @return void
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         if ($extensions = !is_null($this->app['settings']->get('view::plates.extensions', null))) {
             $this->availableExtensions = $extensions;

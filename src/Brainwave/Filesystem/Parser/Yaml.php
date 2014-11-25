@@ -70,7 +70,7 @@ class Yaml implements ParserContract
 
             $groupData = [];
 
-            if ($group !== null) {
+            if ($group !== null && is_array($data)) {
                 foreach ($data as $key => $value) {
                     $groupData["{$group}::{$key}"] = $value;
                 }

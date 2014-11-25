@@ -34,34 +34,34 @@ use \Brainwave\Hashing\Generator as HashGenerator;
  */
 class HashingServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->registerRand($app);
-        $this->registerRandGenerator($app);
-        $this->registerHashGenerator($app);
+        $this->registerRand($container);
+        $this->registerRandGenerator($container);
+        $this->registerHashGenerator($container);
 
-        $this->registerPassword($app);
+        $this->registerPassword($container);
     }
 
-    protected function registerHashGenerator($app)
+    protected function registerHashGenerator($container)
     {
-        $app['hash'] = function ($app) {
-            return new HashGenerator($app['rand.generator']);
+        $container['hash'] = function ($container) {
+            return new HashGenerator($container['rand.generator']);
         };
     }
 
-    protected function registerRand($app)
+    protected function registerRand($container)
     {
-        $app['rand'] = function () {
+        $container['rand'] = function () {
             return new RandomLib();
         };
     }
 
-    protected function registerRandGenerator($app)
+    protected function registerRandGenerator($container)
     {
-        $app['rand.generator'] = function ($app) {
+        $container['rand.generator'] = function ($container) {
             $generatorStrength = ucfirst(
-                $app['settings']->get(
+                $container['settings']->get(
                     'app::crypt.generator.strength',
                     'Medium'
                 )
@@ -69,13 +69,13 @@ class HashingServiceProvider implements ServiceProviderInterface
 
             $generator = "get{$generatorStrength}StrengthGenerator";
 
-            return $app['rand']->$generator();
+            return $container['rand']->$generator();
         };
     }
 
-    protected function registerPassword($app)
+    protected function registerPassword($container)
     {
-        $app['password'] = function () {
+        $container['password'] = function () {
             return new Password();
         };
     }

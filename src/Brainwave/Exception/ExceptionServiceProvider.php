@@ -39,16 +39,16 @@ use \Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
  */
 class ExceptionServiceProvider implements ServiceProviderInterface
 {
-    protected $app;
+    protected $container;
 
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->registerDisplayers();
 
-        $app['exception'] = function ($app) {
-            return new ExceptionHandler($app, $app['logger']->getMonolog(), $app['settings']->get('app::debug', true));
+        $container['exception'] = function ($container) {
+            return new ExceptionHandler($container, $container['logger']->getMonolog(), $container['settings']->get('app::debug', true));
         };
     }
 
@@ -74,16 +74,16 @@ class ExceptionServiceProvider implements ServiceProviderInterface
         $this->registerWhoopsHandler();
         $this->registerPrettyWhoopsHandlerInfo();
 
-        $this->app['whoops'] = function ($app) {
+        $this->app['whoops'] = function ($container) {
             // We will instruct Whoops to not exit after it displays the exception as it
             // will otherwise run out before we can do anything else. We just want to
             // let the framework go ahead and finish a request on this end instead.
             Arr::with($whoops = new Run)->allowQuit(false);
 
             $whoops->writeToOutput(true);
-            $whoops->pushHandler($app['whoops.plain.handler']);
-            $whoops->pushHandler($app['whoops.handler']);
-            $whoops->pushHandler($app['whoops.handler.info']);
+            $whoops->pushHandler($container['whoops.plain.handler']);
+            $whoops->pushHandler($container['whoops.handler']);
+            $whoops->pushHandler($container['whoops.handler.info']);
 
             return $whoops;
         };
@@ -96,18 +96,18 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPlainDisplayer()
     {
-        $this->app['exception.plain'] = function ($app) {
+        $this->app['exception.plain'] = function ($container) {
             // If the application is running in a console environment, we will just always
             // use the debug handler as there is no point in the console ever returning
             // out HTML. This debug handler always returns JSON from the console env.
-            if ($app['environment']->runningInConsole()) {
-                return $app['exception.debug'];
+            if ($container['environment']->runningInConsole()) {
+                return $container['exception.debug'];
             }
 
             return new PlainDisplayer(
-                $app,
-                strtolower($app['settings']->get('app::charset', 'en')),
-                $app['environment']->runningInConsole()
+                $container,
+                strtolower($container['settings']->get('app::charset', 'en')),
+                $container['environment']->runningInConsole()
             );
         };
     }
@@ -121,11 +121,11 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     {
         $this->registerWhoops();
 
-        $this->app['exception.debug'] = function ($app) {
+        $this->app['exception.debug'] = function ($container) {
             return new WhoopsDisplayer(
-                $app,
-                strtolower($app['settings']->get('app::charset', 'en')),
-                $app['environment']->runningInConsole()
+                $container,
+                strtolower($container['settings']->get('app::charset', 'en')),
+                $container['environment']->runningInConsole()
             );
         };
     }
@@ -155,8 +155,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPlainTextHandler()
     {
-        $this->app['whoops.plain.handler'] = function ($app) {
-            return new PlainTextHandler($app['logger']->getMonolog());
+        $this->app['whoops.plain.handler'] = function ($container) {
+            return new PlainTextHandler($container['logger']->getMonolog());
         };
     }
 
@@ -187,7 +187,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPrettyWhoopsHandler()
     {
-        $this->app['whoops.handler'] = function ($app) {
+        $this->app['whoops.handler'] = function ($container) {
             Arr::with($handler = new PrettyPageHandler)->setEditor('sublime');
 
             $handler->setResourcesPath(dirname(__FILE__).DS.'Resources');
@@ -208,25 +208,25 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPrettyWhoopsHandlerInfo()
     {
-        $this->app['whoops.handler.info'] = function ($app) {
+        $this->app['whoops.handler.info'] = function ($container) {
             try {
-                $request = $app['request'];
+                $request = $container['request'];
             } catch (\RuntimeException $e) {
                 // This error occurred too early in the application's life
                 // and the request instance is not yet available.
                 return;
             }
 
-            $app['whoops.handler']->setPageTitle("We're all going to be fired!");
+            $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 
-            $app['whoops.handler']->addDataTable('Narrowspark Application', [
+            $container['whoops.handler']->addDataTable('Narrowspark Application', [
                 'Charset'          => $request->getContentCharset(),
                 'Locale'           => $request->getContentCharset() ?: '<none>',
-                'Route Class'      => $app['settings']['http::route.class'],
-                'Application Class'=> get_class($app)
+                'Route Class'      => $container['settings']['http::route.class'],
+                'Application Class'=> get_class($container)
             ]);
 
-            $app['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
+            $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
                 'Base URL'    => $request->getUrl(),
                 'URI'         => $request->getScriptName(),
                 'Request URI' => $request->getPathInfo(),
@@ -240,7 +240,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
                 'Host'        => $request->getHost(),
             ]);
 
-            return $app['whoops.handler'];
+            return $container['whoops.handler'];
         };
     }
 }

@@ -36,7 +36,7 @@ abstract class StaticalProxyManager
      *
      * @var \Brainwave\Application\Application
      */
-    protected static $app;
+    protected static $container;
 
     /**
      * The resolved object instances.
@@ -56,7 +56,7 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
 
-        static::$app[static::getFacadeAccessor()] = $instance;
+        static::$container[static::getFacadeAccessor()] = $instance;
     }
 
     /**
@@ -90,8 +90,8 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
 
-        if (isset(static::$app)) {
-            static::$app[$name] = $mock;
+        if (isset(static::$container)) {
+            static::$container[$name] = $mock;
         }
 
         return $mock;
@@ -175,7 +175,7 @@ abstract class StaticalProxyManager
             return static::$resolvedInstance[$name];
         }
 
-        return static::$resolvedInstance[$name] = static::$app[$name];
+        return static::$resolvedInstance[$name] = static::$container[$name];
     }
 
     /**
@@ -207,19 +207,19 @@ abstract class StaticalProxyManager
      */
     public static function getFacadeApplication()
     {
-        return static::$app;
+        return static::$container;
     }
 
     /**
      * Set the application instance.
      *
-     * @param  \Brainwave\Application\Application $app
+     * @param  \Brainwave\Application\Application $container
      *
      * @return void
      */
-    public static function setFacadeApplication(Application $app)
+    public static function setFacadeApplication(Application $container)
     {
-        self::$app = $app;
+        self::$container= $container;
     }
 
     /**

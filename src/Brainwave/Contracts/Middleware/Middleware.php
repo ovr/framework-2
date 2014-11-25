@@ -33,7 +33,7 @@ interface Middleware
     /**
      * @return void
      */
-    public function setApplication(Application $application);
+    public function setApplication(Application $containerlication);
 
     /**
      * @return \Brainwave\Application\Application

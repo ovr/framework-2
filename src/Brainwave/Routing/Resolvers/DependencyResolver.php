@@ -36,16 +36,16 @@ class DependencyResolver implements CallableResolverContract
      *
      * @var bool
      */
-    private $app;
+    private $container;
 
     /**
      * Set Application
      *
-     * @param $app \Pimple\Container
+     * @param $container\Pimple\Container
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**

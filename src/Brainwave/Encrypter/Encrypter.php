@@ -83,17 +83,17 @@ class Encrypter implements EncrypterContract
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Constructor
      *
-     * @param  \Pimple\Container $app
+     * @param  \Pimple\Container $container
      * @param  string            $key    Encryption key
      * @param  integer           $cipher Encryption algorithm
      * @param  string            $mode   Encryption mode
      */
-    public function __construct(Container $app, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
+    public function __construct(Container $container, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
     {
         $this->key       = $key;
         $this->cipher    = $cipher;
@@ -102,7 +102,7 @@ class Encrypter implements EncrypterContract
             $this->mode  = $mode;
         }
 
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**

@@ -38,11 +38,11 @@ use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContrac
  */
 class RoutingServiceProvider implements ServiceProviderInterface, BootableProviderContract
 {
-    protected $app;
+    protected $container;
 
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->registerRouter();
         $this->registerRedirector();
@@ -60,8 +60,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouter()
     {
-        $this->app['router'] = function ($app) {
-            return new Router($app);
+        $this->app['router'] = function ($container) {
+            return new Router($container);
         };
     }
 
@@ -72,13 +72,13 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerUrlGenerator()
     {
-        $this->app['url'] = function ($app) {
+        $this->app['url'] = function ($container) {
             // The URL generator needs the route collection that exists on the router.
             // Keep in mind this is an object, so we're passing by references here
             // and all the registered routes will be available to the generator.
-            $routes = $app['router']->getAllRoutes();
+            $routes = $container['router']->getAllRoutes();
 
-            return new UrlGenerator($routes, $app['request']);
+            return new UrlGenerator($routes, $container['request']);
         };
     }
 
@@ -89,8 +89,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRedirector()
     {
-        $this->app['redirect'] = function ($app) {
-            return new Redirector($app['url'], $app);
+        $this->app['redirect'] = function ($container) {
+            return new Redirector($container['url'], $container);
         };
     }
 
@@ -101,11 +101,11 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteResolver()
     {
-        $this->app['routes.resolver'] = function ($app) {
+        $this->app['routes.resolver'] = function ($container) {
             $options = [
-                'routeClass'    => $app['settings']['http::route.class'],
-                'caseSensitive' => $app['settings']['http::route.case_sensitive'],
-                'routeEscape'   => $app['settings']['http::route.escape']
+                'routeClass'    => $container['settings']['http::route.class'],
+                'caseSensitive' => $container['settings']['http::route.case_sensitive'],
+                'routeEscape'   => $container['settings']['http::route.escape']
             ];
 
             return function ($pattern, $callable) use ($options) {
@@ -126,8 +126,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteFactory()
     {
-        $this->app['routes.factory'] = function ($app) {
-            return new RouteFactory($app, $app['routes.resolver'], $app['controller.factory']);
+        $this->app['routes.factory'] = function ($container) {
+            return new RouteFactory($container, $container['routes.resolver'], $container['controller.factory']);
         };
     }
 
@@ -152,8 +152,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerControllers()
     {
-        $this->app['controllers'] = function ($app) {
-            return new ControllerCollection($app);
+        $this->app['controllers'] = function ($container) {
+            return new ControllerCollection($container);
         };
     }
 
@@ -165,8 +165,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      * all of the routes now and return the application to the callers.
      *
     */
-    public function boot(Application $app)
+    public function boot(Application $container)
     {
-        $app['files']->getRequire($app::$paths['path'].'/Http/routes.php');
+        $container['files']->getRequire($container::$paths['path'].'/Http/routes.php');
     }
 }

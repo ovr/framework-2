@@ -38,7 +38,7 @@ class Handler
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The log implementation.
@@ -64,12 +64,12 @@ class Handler
     /**
      * Create a new exception handler instance.
      *
-     * @param \Pimple\Container        $app
+     * @param \Pimple\Container        $container
      * @param \Psr\Log\LoggerInterface $log
      */
-    public function __construct(Container $app, LoggerInterface $log, $debug = true)
+    public function __construct(Container $container, LoggerInterface $log, $debug = true)
     {
-        $this->app   = $app;
+        $this->container  = $container;
         $this->log   = $log;
         $this->debug = $debug;
     }

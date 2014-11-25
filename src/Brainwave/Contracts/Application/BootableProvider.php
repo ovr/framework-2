@@ -39,5 +39,5 @@ interface BootableProvider
      *
      * @return void
      */
-    public function boot(App $app);
+    public function boot(App $container);
 }

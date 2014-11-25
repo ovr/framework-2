@@ -479,7 +479,7 @@ class Request implements RequestContract
         }
 
         // Fetch requested query parameter(s)
-        if ($key && $thi->queryParameters !== null) {
+        if ($key && $this->queryParameters !== null) {
             if (array_key_exists($key, $this->queryParameters)) {
                 $returnVal = $this->queryParameters[$key];
             } else {

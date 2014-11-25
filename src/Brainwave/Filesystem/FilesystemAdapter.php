@@ -71,7 +71,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      *
      * @param  string $path
      *
-     * @return false|array
+     * @return \League\Flysystem\Handler
      *
      * @throws \Brainwave\Filesystem\Exception\FileNotFoundException;
      */

@@ -37,9 +37,9 @@ class AutoloaderServiceProvider implements ServiceProviderInterface
      * Register Classloader
      * @return  \Brainwave\Support\Autoloader\Autoloader
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['autoloader'] = function ($app) {
+        $container['autoloader'] = function ($container) {
             return new Autoloader();
         };
     }

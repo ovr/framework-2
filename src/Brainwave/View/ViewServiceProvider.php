@@ -38,11 +38,11 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register view
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->registerEngineResolver($app);
-        $this->registerViewFinder($app);
-        $this->registerFactory($app);
+        $this->registerEngineResolver($container);
+        $this->registerViewFinder($container);
+        $this->registerFactory($container);
     }
 
     /**
@@ -50,7 +50,7 @@ class ViewServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerEngineResolver($app)
+    protected function registerEngineResolver($container)
     {
         $engines = new EngineResolver();
 
@@ -61,9 +61,9 @@ class ViewServiceProvider implements ServiceProviderInterface
             $this->{'register'.ucfirst($engineClass).'Engine'}($engines);
         }
 
-        if ($app['settings']['view::compilers'] !== null) {
+        if ($container['settings']['view::compilers'] !== null) {
 
-            foreach ($app['settings']['view::compilers'] as $compilerName => $compilerClass) {
+            foreach ($container['settings']['view::compilers'] as $compilerName => $compilerClass) {
                 if ($engineName === $compilerClass[0]) {
                     $this->registercustomEngine(
                         $engineName,
@@ -136,10 +136,10 @@ class ViewServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerViewFinder($app)
+    protected function registerViewFinder($container)
     {
-        $app['view.finder'] = function ($app) {
-            return new FileViewFinder($app['files'], $app['config']['view.paths']);
+        $container['view.finder'] = function ($container) {
+            return new FileViewFinder($container['files'], $container['config']['view.paths']);
         };
     }
 
@@ -148,16 +148,16 @@ class ViewServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFactory($app)
+    protected function registerFactory($container)
     {
-        $app['view'] = function ($app) {
+        $container['view'] = function ($container) {
 
-            $env = new Factory($app['view.engine.resolver'], $app['view.finder'], $app['events']);
+            $env = new Factory($container['view.engine.resolver'], $container['view.finder'], $container['events']);
 
             // We will also set the container instance on this view environment.
-            $env->setContainer($app);
+            $env->setContainer($container);
 
-            $env->share('app', $app);
+            $env->share('app', $container);
 
             return $env;
         };

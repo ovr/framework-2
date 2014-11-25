@@ -32,17 +32,17 @@ use \Pimple\ServiceProviderInterface;
  */
 class EncrypterServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['encrypter'] = function ($app) {
+        $container['encrypter'] = function ($container) {
             return new Encrypter(
-                $app['rand.generator'],
-                $app['settings']->get(
+                $container['rand.generator'],
+                $container['settings']->get(
                     'app::crypt.key',
                     '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
                 ),
-                $app['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
-                $app['settings']->get('app::crypt.mode', 'cbc')
+                $container['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
+                $container['settings']->get('app::crypt.mode', 'cbc')
             );
         };
     }

@@ -36,7 +36,7 @@ class Dispatcher implements EventsContract
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Application hooks
@@ -55,11 +55,11 @@ class Dispatcher implements EventsContract
     /**
      * Manager
      *
-     * @param var Container $app
+     * @param var Container $container
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**

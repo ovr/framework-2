@@ -39,7 +39,7 @@ class Router implements RouterContract
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The current (most recently dispatched) route
@@ -99,9 +99,9 @@ class Router implements RouterContract
      * Create a new router handler.
      *
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
 
         $this->routes = [];
         $this->routeGroups = [];

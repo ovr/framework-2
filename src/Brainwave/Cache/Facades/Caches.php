@@ -37,6 +37,6 @@ class Caches extends StaticalProxyManager
 
     public static function make($key)
     {
-        return self::$app['caches'][$key];
+        return self::$container['caches'][$key];
     }
 }

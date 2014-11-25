@@ -35,7 +35,7 @@ abstract class Middleware implements MiddlewareContract
      *
      * @var \Brainwave\Application\Application
      */
-    protected $app;
+    protected $container;
 
     /**
      * Reference to the next downstream middleware
@@ -50,11 +50,11 @@ abstract class Middleware implements MiddlewareContract
      * This method injects the primary Brainwave Application instance into
      * this middleware.
      *
-     * @param  \Brainwave\Application\Application $application
+     * @param  \Brainwave\Application\Application $containerlication
      */
-    final public function setApplication($application)
+    final public function setApplication($containerlication)
     {
-        $this->app = $application;
+        $this->container= $containerlication;
     }
 
     /**

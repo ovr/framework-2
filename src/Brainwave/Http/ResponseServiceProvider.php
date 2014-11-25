@@ -39,13 +39,13 @@ class ResponseServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['response'] = function ($app) {
+        $container['response'] = function ($container) {
             $headers = new Headers();
             $cookieJar = new CookieJar();
             $response = new Response($headers, $cookieJar);
-            $response->setProtocolVersion('HTTP/' . $app['settings']->get('http::version', '1.1'));
+            $response->setProtocolVersion('HTTP/' . $container['settings']->get('http::version', '1.1'));
 
             return $response;
         };

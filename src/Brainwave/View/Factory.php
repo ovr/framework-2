@@ -41,7 +41,7 @@ class Factory extends Collection implements FactoryContract
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The engines instance.
@@ -289,7 +289,7 @@ class Factory extends Collection implements FactoryContract
      */
     public function setContainer(Container $container)
     {
-        $this->app = $container;
+        $this->container= $container;
     }
 
     /**

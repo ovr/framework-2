@@ -37,7 +37,7 @@ class Router extends StaticalProxyManager
 
     public static function pattern(array $array)
     {
-        $route = self::$app['route'];
+        $route = self::$container['route'];
         $route::setDefaultConditions($array);
     }
 }

@@ -57,13 +57,13 @@ class ControllerCollection extends RouteCollection
     /**
      * ControllerCollection
      *
-     * @param Container $app
+     * @param Container $container
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        parent::__construct($app);
+        parent::__construct($container);
 
-        $this->defaultRouter = $app['router'];
+        $this->defaultRouter = $container['router'];
     }
 
     /**

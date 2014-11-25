@@ -34,16 +34,16 @@ use \Brainwave\Config\Manager as ConfigManager;
  */
 class ConfigServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['settings.path'] = '';
+        $container['settings.path'] = '';
 
-        $app['settings'] = function ($app) {
+        $container['settings'] = function ($container) {
             $config = new ConfigManager(
                 new Repository,
                 new FileLoader(
-                    $app['files'],
-                    $app['settings.path']
+                    $container['files'],
+                    $container['settings.path']
                 )
             );
 

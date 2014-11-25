@@ -38,11 +38,11 @@ class LoggerServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['logger'] = function ($app) {
+        $container['logger'] = function ($container) {
             return new MonologWriter(
-                new Logger($app['env'])
+                new Logger($container['env'])
             );
         };
     }

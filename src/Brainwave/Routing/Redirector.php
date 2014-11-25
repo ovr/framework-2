@@ -34,9 +34,9 @@ class Redirector
     /**
      * Application instance
      *
-     * @var Container $app
+     * @var Container $container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The URL generator instance.
@@ -49,13 +49,13 @@ class Redirector
      * Create a new Redirector instance.
      *
      * @param  UrlGenerator $generator
-     * @param  Container    $app
+     * @param  Container    $container
      * @return void
      */
-    public function __construct(UrlGenerator $generator, Container $app)
+    public function __construct(UrlGenerator $generator, Container $container)
     {
         $this->generator = $generator;
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**
