@@ -21,7 +21,7 @@ namespace Brainwave\Filesystem;
 use \Brainwave\Collection\Collection;
 use \League\Flysystem\AdapterInterface;
 use \League\Flysystem\FilesystemInterface;
-use \Brainwave\Filesystem\Interfaces\FilesystemInterface as Cloud;
+use \Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract ;
 use \Brainwave\Filesystem\Exception\FileNotFoundException;
 
 /**
@@ -32,7 +32,7 @@ use \Brainwave\Filesystem\Exception\FileNotFoundException;
  * @since   0.9.3-dev
  *
  */
-class FilesystemAdapter implements FilesystemInterface, Cloud
+class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
 {
 
     /**

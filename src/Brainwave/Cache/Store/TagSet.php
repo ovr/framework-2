@@ -33,7 +33,7 @@ class TagSet
     /**
      * The cache store implementation.
      *
-     * @var FactoryContract
+     * @var \Brainwave\Contracts\Cache\Adapter
      */
     protected $store;
 

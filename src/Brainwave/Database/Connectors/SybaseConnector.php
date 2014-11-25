@@ -34,7 +34,8 @@ class SybaseConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return \PDO
      */
     public function connect(array $config)

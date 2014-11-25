@@ -59,6 +59,11 @@
             "Brainwave\\": "src/Brainwave/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Brainwave\\Tests\\": "tests/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.4-dev"

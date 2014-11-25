@@ -43,7 +43,7 @@ class TaggedCache implements StoreContract
     /**
      * The tag set instance.
      *
-     * @var \Brainwave\Cache\TagSet
+     * @var \Brainwave\Cache\Store\TagSet
      */
     protected $tags;
 
@@ -57,7 +57,7 @@ class TaggedCache implements StoreContract
      */
     public function __construct(Adapter $store, TagSet $tags)
     {
-        $this->tags = $tags;
+        $this->tags  = $tags;
         $this->store = $store;
     }
 
@@ -70,7 +70,7 @@ class TaggedCache implements StoreContract
      */
     public function has($key)
     {
-        return ! is_null($this->get($key));
+        return $this->get($key) !== null;
     }
 
     /**
@@ -85,7 +85,7 @@ class TaggedCache implements StoreContract
     {
         $value = $this->store->get($this->taggedItemKey($key));
 
-        return ! is_null($value) ? $value : value($default);
+        return ($value !== null) ? $value : value($default);
     }
 
     /**
@@ -103,6 +103,24 @@ class TaggedCache implements StoreContract
 
         if (!is_null($minutes)) {
             $this->store->set($this->taggedItemKey($key), $value, $minutes);
+        }
+    }
+
+    /**
+     * Store an item in the cache for a given number of minutes.
+     *
+     * @param  string        $key
+     * @param  mixed         $value
+     * @param  \DateTime|int $minutes
+     *
+     * @return void
+     */
+    public function put($key, $value, $minutes)
+    {
+        $minutes = $this->getMinutes($minutes);
+
+        if ($minutes !== null) {
+            $this->store->put($this->taggedItemKey($key), $value, $minutes);
         }
     }
 

@@ -83,7 +83,7 @@ class Repository implements CacheContract, \ArrayAccess
      */
     public function has($key)
     {
-        return !is_null($this->get($key));
+        return $this->get($key) !== null;
     }
 
     /**
@@ -98,7 +98,7 @@ class Repository implements CacheContract, \ArrayAccess
     {
         $value = $this->driver->get($key);
 
-        return !is_null($value) ? $value : value($default);
+        return ($value !== null) ? $value : value($default);
     }
 
     /**

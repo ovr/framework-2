@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="Aztech">
-  <description>´Narrowspark coding standard</description>
+  <description>Narrowspark coding standard</description>
     <rule ref="Aztech.Commenting.FunctionComment" />
     <rule ref="Aztech.Formatting.NoConsecutiveBlankLines" />
     <rule ref="Aztech.Formatting.ReturnFormatting" />

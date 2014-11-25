@@ -557,7 +557,7 @@ class Arr
      * @param  $object
      * @return void
      */
-    public static function with($object)
+    protected static function with($object)
     {
         return $object;
     }

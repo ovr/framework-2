@@ -34,7 +34,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
     /**
      * The Memcache instance.
      *
-     * @var Memcache
+     * @var \Memcache
      */
     private $memcache;
 
@@ -58,7 +58,8 @@ class MemcacheCache extends TaggableStore implements AdapterContract
     /**
      * Create a new Memcache connection.
      *
-     * @param  array  $servers
+     * @param  array $servers
+     *
      * @return \Memcache
      *
      * @throws \RuntimeException

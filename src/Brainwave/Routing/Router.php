@@ -167,10 +167,10 @@ class Router implements RouterContract
      * determine which \Brainwave\Interfaces\RouteInterface objects are candidates to be
      * dispatched for the current HTTP request.
      *
-     * @param  string             $httpMethod  The HTTP request method
-     * @param  string             $resourceUri The resource URI
-     * @return array[\Brainwave\Interfaces\RouteInterface]
-     * @api
+     * @param  string $httpMethod  The HTTP request method
+     * @param  string $resourceUri The resource URI
+     *
+     * @return array \Brainwave\Interfaces\RouteInterface
      */
     public function getmatchedRoutes($httpMethod, $resourceUri, $save = true)
     {

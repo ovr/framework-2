@@ -183,7 +183,7 @@ class Dispatcher implements EventsContract
      */
     public function triggerChain($event, array $args = [])
     {
-        $this->containerlyChain($event, $args);
+        $this->applyChain($event, $args);
     }
 
     /**

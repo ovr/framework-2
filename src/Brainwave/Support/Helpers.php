@@ -32,6 +32,7 @@ class Helpers
      * Escape HTML entities in a string.
      *
      * @param  string $value
+     *
      * @return string
      */
     public static function e($value)
@@ -43,6 +44,7 @@ class Helpers
      * Get the root Facade application instance.
      *
      * @param  string $make
+     *
      * @return mixed
      */
     public static function app($make = null)
@@ -58,6 +60,7 @@ class Helpers
      * Get the path to the application folder.
      *
      * @param  string $path
+     *
      * @return string
      */
     public static function appPath($path = '')
@@ -69,6 +72,7 @@ class Helpers
      * Get the path to the storage folder.
      *
      * @param  string $path
+     *
      * @return string
      */
     public static function storagePath($path = '')
@@ -80,6 +84,7 @@ class Helpers
      * Get the class "basename" of the given object / class.
      *
      * @param  string|object $class
+     *
      * @return string
      */
     public static function classBasename($class)
@@ -95,6 +100,7 @@ class Helpers
      * @param  string $search
      * @param  array  $replace
      * @param  string $subject
+     *
      * @return string
      */
     public static function strReplaceArray($search, array $replace, $subject)
@@ -110,6 +116,7 @@ class Helpers
      * Returns all traits used by a class, it's subclasses and trait of their traits
      *
      * @param  string $class
+     *
      * @return array
      */
     public static function classUsesRecursive($class)
@@ -162,6 +169,7 @@ class Helpers
      * @param  object $object Class
      * @param  string $method private/protected method
      * @param  array  $args
+     *
      * @return void
      */
     public static function callPrivateMethod($object, $method, array $args = [])
@@ -170,5 +178,17 @@ class Helpers
         $closure = $reflection->getMethod($method)->getClosure($object);
 
         return call_user_func_array($closure, $args);
+    }
+
+    /**
+     * Return the given object. Useful for chaining.
+     *
+     * @param  $object
+     *
+     * @return void
+     */
+    public static function with($object)
+    {
+        return $object;
     }
 }

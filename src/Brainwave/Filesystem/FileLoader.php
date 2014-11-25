@@ -348,12 +348,12 @@ class FileLoader implements LoaderInterface
             $class = $this->parser[$ext];
 
             $parser = new $class($this->getFilesystem());
-        }
 
-        if ($parser->supports($path)) {
-            return $parser;
-        }
+            if ($parser->supports($path)) {
+                return $parser;
+            }
 
+        }
         throw new \RuntimeException(
             sprintf("Unable to find the right Parser for '%s'", $ext)
         );

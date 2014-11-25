@@ -31,7 +31,7 @@ use \Brainwave\Contracts\Routing\Route as RouteContract;
 interface Router
 {
     /**
-     * @return RouteContractInterface|null
+     * @return RouteContract|null
      */
     public function getCurrentRoute();
 

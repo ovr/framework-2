@@ -69,7 +69,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
         };
 
         foreach ($type as $driver => $value) {
-            $container["db.{$driver}.query"] = function ($container) {
+            $container["db.{$driver}.query"] = function ($container) use ($driver) {
                 return new Query($container['db']->connection($driver));
             };
         }

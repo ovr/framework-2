@@ -51,8 +51,8 @@ interface StoreInterface
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string $key
-     * @param  integer  $value
+     * @param  string  $key
+     * @param  integer $value
      *
      * @return void
      */
@@ -61,8 +61,8 @@ interface StoreInterface
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string $key
-     * @param  integer  $value
+     * @param  string  $key
+     * @param  integer $value
      *
      * @return void
      */

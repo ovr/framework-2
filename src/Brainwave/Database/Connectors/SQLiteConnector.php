@@ -57,6 +57,6 @@ class SQLiteConnector extends Connectors implements ConnectorInterface
             throw new \InvalidArgumentException("Database does not exist.");
         }
 
-        return $this->createConnection("sqlite:{$path}", $config, $options);
+        return $this->createConnection("sqlite:{$path}", $config, $this->getOptions($config));
     }
 }

@@ -20,7 +20,7 @@ namespace Brainwave\Exception;
 
 use \Whoops\Run;
 use \Pimple\Container;
-use \Brainwave\Support\Arr;
+use \Brainwave\Support\Helpers;
 use \Pimple\ServiceProviderInterface;
 use \Whoops\Handler\PlainTextHandler;
 use \Whoops\Handler\PrettyPageHandler;
@@ -82,7 +82,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             // We will instruct Whoops to not exit after it displays the exception as it
             // will otherwise run out before we can do anything else. We just want to
             // let the framework go ahead and finish a request on this end instead.
-            Arr::with($whoops = new Run)->allowQuit(false);
+            Helpers::with($whoops = new Run)->allowQuit(false);
 
             $whoops->writeToOutput(true);
             $whoops->pushHandler($container['whoops.plain.handler']);
@@ -192,7 +192,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     protected function registerPrettyWhoopsHandler()
     {
         $this->container['whoops.handler'] = function ($container) {
-            Arr::with($handler = new PrettyPageHandler)->setEditor('sublime');
+            Helpers::with($handler = new PrettyPageHandler)->setEditor('sublime');
 
             $handler->setResourcesPath(dirname(__FILE__).'/Resources');
 

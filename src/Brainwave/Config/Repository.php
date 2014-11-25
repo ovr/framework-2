@@ -161,7 +161,7 @@ class Repository implements RepositoryContract
      */
     public function offsetUnset($key)
     {
-        $keys = $this->parseKey($key);
+        $keys = $this->parseKey($key, $this->separator);
         $array = &$this->values;
 
         while (count($keys) > 1) {
@@ -203,7 +203,7 @@ class Repository implements RepositoryContract
      */
     protected function getValue($key, array $array = [])
     {
-        $keys = $this->parseKey($key);
+        $keys = $this->parseKey($key, $this->separator);
 
         while (count($keys) > 0 and !is_null($array)) {
             $key = array_shift($keys);

@@ -26,7 +26,6 @@ use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;
-use \Brainwave\Http\Exception\Pass;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
 use \Brainwave\Http\RequestServiceProvider;
@@ -56,9 +55,11 @@ use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContrac
 class Application extends Container implements ApplicationContract
 {
     /**
+     * Slim Version
+     *
      * @const string
      */
-    const VERSION = '3.0.0';
+    const VERSION = '3.0.0-dev';
 
     /**
      * The Brainwave framework version.
@@ -163,7 +164,9 @@ class Application extends Container implements ApplicationContract
     public static $paths;
 
     /**
-     * Constructor
+     * Instantiate a new Application
+     *
+     * Let's start make magic!
      */
     public function __construct()
     {
@@ -237,7 +240,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Bind the installation paths to the application.
      *
-     * @param  array  $paths
+     * @param  array $paths
+     *
      * @return void
      */
     public static function bindInstallPaths(array $paths)
@@ -302,7 +306,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a maintenance mode event listener.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
     public function down(\Closure $callback)
@@ -313,7 +318,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Register an application error handler.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
     public function error(\Closure $callback)
@@ -324,7 +330,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Register an error handler for fatal errors.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
     public function fatal(\Closure $callback)
@@ -337,13 +344,14 @@ class Application extends Container implements ApplicationContract
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int     $code
-     * @param  string  $message
-     * @param  array   $headers
+     * @param  int    $code
+     * @param  string $message
+     * @param  array  $headers
+     *
      * @return void
      *
-     * @throws \Brainwave\Http\Exception\HttpException
      * @throws \Brainwave\Http\Exception\NotFoundHttpException
+     * @throws \Brainwave\Http\Exception\HttpException
      */
     public function abort($code, $message = '', array $headers = [])
     {
@@ -357,7 +365,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a 404 error handler.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
     public function missing(\Closure $callback)
@@ -370,9 +379,9 @@ class Application extends Container implements ApplicationContract
     /**
      * Mounts controllers under the given route prefix.
      *
-     * @param string                      $prefix      The route prefix
-     * @param ControllerCollection|
-     *        ControllerContractInterface $controllers A ControllerCollection or a ControllerContractInterface instance
+     * @param  string                      $prefix      The route prefix
+     * @param  ControllerCollection|
+     *         ControllerContractInterface $controllers A ControllerCollection or a ControllerContractInterface instance
      *
      * @return Application
      *
@@ -380,8 +389,8 @@ class Application extends Container implements ApplicationContract
      */
     public function mount($prefix, $controllers)
     {
-        if ($controller instanceof ControllerContractInterface) {
-            $controller = $controller->connect($this);
+        if ($controllers instanceof ControllerContract) {
+            $controllers = $controller->connect($this);
 
             if (!$controllers instanceof ControllerCollection) {
                 throw new \LogicException(
@@ -390,7 +399,7 @@ class Application extends Container implements ApplicationContract
             }
         }
 
-        if (!$controller instanceof ControllerCollection) {
+        if (!$controllers instanceof ControllerCollection) {
             throw new \LogicException(
                 'The "mount" method takes either a ControllerCollection or a ControllerContractInterface instance.'
             );
@@ -405,7 +414,6 @@ class Application extends Container implements ApplicationContract
      * Get controllers route
      *
      * @return Route
-     * @api
      */
     public function getControllersRoutes()
     {
@@ -442,6 +450,7 @@ class Application extends Container implements ApplicationContract
      * Set the current application locale.
      *
      * @param  string  $locale
+     *
      * @return Application
      */
     public function setLocale($locale)
@@ -453,8 +462,9 @@ class Application extends Container implements ApplicationContract
     /**
      * Resolve the given type from the container.
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  string $abstract
+     * @param  array  $parameters
+     *
      * @return mixed
      */
     public function make($abstract, $parameters = array())
@@ -475,7 +485,7 @@ class Application extends Container implements ApplicationContract
      *
      * @return string
      */
-    public function version()
+    public function getVersion()
     {
         return self::BRAINWAVE_VERSION;
     }
@@ -510,8 +520,6 @@ class Application extends Container implements ApplicationContract
      * whose body is the output of the Not Found handler.
      *
      * @param mixed $callable Anything that returns true for is_callable()
-     *
-     * @api
      */
     public function notFound($callable = null)
     {
@@ -538,6 +546,7 @@ class Application extends Container implements ApplicationContract
             } else {
                 call_user_func([$this['exception'], 'pageNotFound']);
             }
+
             $this->halt('404');
         }
     }
@@ -553,22 +562,23 @@ class Application extends Container implements ApplicationContract
      * and send a '304 Not Modified' response to the client.
      *
      * @param  int                       $time  The last modified UNIX timestamp
-     * @throws \InvalidArgumentException        If provided timestamp is not an integer
      *
-     * @api
+     * @throws \InvalidArgumentException        If provided timestamp is not an integer
      */
     public function lastModified($time)
     {
         if (is_integer($time)) {
             $this['response']->setHeader('Last-Modified', gmdate('D, d M Y H:i:s T', $time));
+
             if ($time === strtotime($this['request']->getHeader('IF_MODIFIED_SINCE'))) {
                 $this->halt('304');
             }
-        } else {
-            throw new \InvalidArgumentException(
-                'Brainwave::lastModified only accepts an integer UNIX timestamp value.'
-            );
+
         }
+
+        throw new \InvalidArgumentException(
+            'Brainwave::lastModified only accepts an integer UNIX timestamp value.'
+        );
     }
 
     /**
@@ -585,9 +595,9 @@ class Application extends Container implements ApplicationContract
      *
      * @param  string                    $value The etag value
      * @param  string                    $type  The type of etag to create; either "strong" or "weak"
+     *
      * @throws \InvalidArgumentException        If provided type is invalid
      *
-     * @api
      */
     public function etag($value, $type = 'strong')
     {
@@ -597,10 +607,12 @@ class Application extends Container implements ApplicationContract
         }
 
         // Set etag value
-        $value = '"' . $value . '"';
+        $value = "{$value}";
+
         if ($type === 'weak') {
             $value = 'W/'.$value;
         }
+
         $this['response']->setHeader('ETag', $value);
 
         // Check conditional GET
@@ -624,14 +636,13 @@ class Application extends Container implements ApplicationContract
      *
      * @param string|int $time If string, a time to be parsed by `strtotime()`;
      *                         If int, a UNIX timestamp;
-     *
-     * @api
      */
     public function expires($time)
     {
         if (is_string($time)) {
             $time = strtotime($time);
         }
+
         $this['response']->setHeader('Expires', gmdate('D, d M Y H:i:s T', $time));
     }
 
@@ -642,9 +653,8 @@ class Application extends Container implements ApplicationContract
      * the Brainwave app is instantiated. The return value WILL NOT have a trailing slash.
      *
      * @return string
-     * @throws \RuntimeException If $_SERVER[SCRIPT_FILENAME] is not available
      *
-     * @api
+     * @throws \RuntimeException If $_SERVER[SCRIPT_FILENAME] is not available
      */
     public function root()
     {
@@ -664,13 +674,11 @@ class Application extends Container implements ApplicationContract
      * The thrown exception will be caught in application's `call()` method
      * and the response will be sent as is to the HTTP client.
      *
-     * @throws Stop
-     *
-     * @api
+     * @throws HttpException
      */
     public function stop()
     {
-        throw new Stop();
+        throw new HttpException();
     }
 
     /**
@@ -682,12 +690,13 @@ class Application extends Container implements ApplicationContract
      *
      * @param int $status The HTTP response status
      *
-     * @api
+     * @throws HtppException
      */
     public function halt($status, $message = '')
     {
         $this['response']->setStatus($status);
         $this['response']->write($message, true);
+
         $this->stop();
     }
 
@@ -698,20 +707,17 @@ class Application extends Container implements ApplicationContract
      * the router's current iteration to stop and continue to the subsequent route if available.
      * If no subsequent matching Routing are found, a 404 response will be sent to the client.
      *
-     * @throws Pass
-     *
-     * @api
+     * @throws NotFoundHttpException
      */
     public function pass()
     {
-        throw new Pass();
+        throw new NotFoundHttpException();
     }
 
     /**
      * Set the HTTP response Content-Type
-     * @param  string $type The Content-Type for the Response (ie. text/html)
      *
-     * @api
+     * @param string $type The Content-Type for the Response (ie. text/html)
      */
     public function contentType($type)
     {
@@ -720,9 +726,8 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Set the HTTP response status code
-     * @param  int $code The HTTP response status code
      *
-     * @api
+     * @param int $code The HTTP response status code
      */
     public function status($code)
     {
@@ -737,7 +742,6 @@ class Application extends Container implements ApplicationContract
      * @param string $file        The URI of the file, can be local or remote
      * @param string $contentType Optional content type of the stream,
      *                            if not specified Brainwave will attempt to get this
-     * @api
      */
     public function sendFile($file, $contentType = false)
     {
@@ -788,7 +792,6 @@ class Application extends Container implements ApplicationContract
      *
      * @param string $command     The command to run
      * @param string $contentType Optional content type of the stream
-     * @api
      */
     public function sendProcess($command, $contentType = "text/plain")
     {
@@ -810,7 +813,7 @@ class Application extends Container implements ApplicationContract
         $download = "attachment;";
 
         if ($filename) {
-            $download .= "filename='" . $filename . "'";
+            $download .= "filename={$filename}";
         }
 
         $this['response']->setHeader("Content-Disposition", $download);
@@ -823,7 +826,6 @@ class Application extends Container implements ApplicationContract
      * The argument must be an instance that subclasses Brainwave Middleware.
      *
      * @param Middleware
-     * @api
      */
     public function middleware(Middleware $newMiddleware)
     {
@@ -839,6 +841,7 @@ class Application extends Container implements ApplicationContract
 
         $newMiddleware->setApplication($this);
         $newMiddleware->setNextMiddleware($this['middleware'][0]);
+
         array_unshift($middleware, $newMiddleware);
 
         $this['middleware'] = $middleware;
@@ -895,7 +898,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a new boot listener.
      *
-     * @param  mixed  $callback
+     * @param  mixed $callback
+     *
      * @return void
      */
     public function booting($callback)
@@ -906,7 +910,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a new "booted" listener.
      *
-     * @param  mixed  $callback
+     * @param  mixed $callback
      * @return void
      */
     public function booted($callback)
@@ -921,7 +925,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Call the booting callbacks for the application.
      *
-     * @param  array  $callbacks
+     * @param  array $callbacks
      * @return void
      */
     protected function fireAppCallbacks(array $callbacks)
@@ -939,7 +943,7 @@ class Application extends Container implements ApplicationContract
     public function setRequestForConsoleEnvironment()
     {
         //TODO
-        return $this->runningInConsole();
+        //return $this->runningInConsole();
     }
 
     /**
@@ -948,8 +952,6 @@ class Application extends Container implements ApplicationContract
      * This method invokes the middleware stack, including the core Brainwave application;
      * the result is an array of HTTP status, header, and body. These three items
      * are returned to the HTTP client.
-     *
-     * @api
      */
     public function run()
     {
@@ -1061,7 +1063,7 @@ class Application extends Container implements ApplicationContract
                     if ($dispatched) {
                         break;
                     }
-                } catch (Pass $e) {
+                } catch (NotFoundHttpException $e) {
                     continue;
                 }
             }
@@ -1071,8 +1073,8 @@ class Application extends Container implements ApplicationContract
             }
 
             $this['events']->applyHook('after.router');
-        } catch (Stop $e) {
-            throw new Stop();
+        } catch (HttpException $e) {
+            throw new HttpException();
         }
 
         $response->write(ob_get_clean());
@@ -1093,6 +1095,7 @@ class Application extends Container implements ApplicationContract
      * @param  array  $CookieJar       Associative array of request CookieJar
      * @param  string $body            The request body
      * @param  array  $serverVariables Custom $_SERVER variables
+     *
      * @return Response
      */
     public function subRequest(
@@ -1129,7 +1132,7 @@ class Application extends Container implements ApplicationContract
         $this->dispatchRequest($subRequest, $subResponse);
 
         // Restore original request and response
-        $this['request'] = $oldRequest;
+        $this['request']  = $oldRequest;
         $this['response'] = $oldResponse;
 
         return $subResponse;
@@ -1150,21 +1153,22 @@ class Application extends Container implements ApplicationContract
      *
      * @return mixed
      */
-    public function __get($id)
+    public function __get($key)
     {
-        return $this->offsetGet($id);
+        return $this->offsetGet($key);
     }
 
     /**
      * Dynamically set application services.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function __set($key, $value)
     {
-        $this->offsetSet($id, $value);
+        $this->offsetSet($key, $value);
     }
 
     /**
@@ -1172,9 +1176,9 @@ class Application extends Container implements ApplicationContract
      *
      * @return boolean
      */
-    public function __isset($id)
+    public function __isset($key)
     {
-        return $this->offsetExists($id);
+        return $this->offsetExists($key);
     }
 
     /**
@@ -1182,54 +1186,58 @@ class Application extends Container implements ApplicationContract
      *
      * @return void
      */
-    public function __unset($id)
+    public function __unset($key)
     {
-        $this->offsetUnset($id);
+        $this->offsetUnset($key);
     }
 
     /**
      * Gets a parameter or an object.
      *
      * @param string $id The unique identifier for the parameter or object
+     *
      * @return mixed The value of the parameter or an object
      */
-    public function offsetGet($id)
+    public function offsetGet($key)
     {
-        return parent::offsetGet(str_replace('_', '.', $id));
+        return parent::offsetGet(str_replace('_', '.', $key));
     }
 
     /**
      * Sets a parameter or an object.
      *
-     * @param string           $id    The unique identifier for the parameter or object
-     * @param mixed            $value The value of the parameter or a closure to define an object
+     * @param string $id    The unique identifier for the parameter or object
+     * @param mixed  $value The value of the parameter or a closure to define an object
+     *
      * @return Application
      */
-    public function offsetSet($id, $value)
+    public function offsetSet($key, $value)
     {
-        parent::offsetSet(str_replace('_', '.', $id), $value);
+        parent::offsetSet(str_replace('_', '.', $key), $value);
         return $this;
     }
 
     /**
      * Checks if a parameter or an object is set.
      *
-     * @param string $id The unique identifier for the parameter or object
+     * @param  string $id The unique identifier for the parameter or object
+     *
      * @return Boolean
      */
-    public function offsetExists($id)
+    public function offsetExists($key)
     {
-        return parent::offsetExists(str_replace('_', '.', $id));
+        return parent::offsetExists(str_replace('_', '.', $key));
     }
 
     /**
      * Description
      *
-     * @param Unsets a parameter or an object.
+     * @param  Unsets a parameter or an object.
+     *
      * @return string $id The unique identifier for the parameter or object
      */
-    public function offsetUnset($id)
+    public function offsetUnset($key)
     {
-        parent::offsetUnset(str_replace('_', '.', $id));
+        parent::offsetUnset(str_replace('_', '.', $key));
     }
 }
