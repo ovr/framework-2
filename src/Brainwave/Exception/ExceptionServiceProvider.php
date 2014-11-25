@@ -194,7 +194,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
         $this->container['whoops.handler'] = function ($container) {
             Arr::with($handler = new PrettyPageHandler)->setEditor('sublime');
 
-            $handler->setResourcesPath(dirname(__FILE__).DS.'Resources');
+            $handler->setResourcesPath(dirname(__FILE__).'/Resources');
 
             return $handler;
         };

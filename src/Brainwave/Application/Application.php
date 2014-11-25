@@ -1,9 +1,6 @@
 <?php
 namespace Brainwave\Application;
 
-//
-PHP_OS == "Windows" || PHP_OS == "WINNT" ? define("DS", "\\") : define("DS", "/");
-
 /**
  * Narrowspark - a PHP 5 framework
  *
@@ -29,11 +26,9 @@ use \Brainwave\Routing\Route;
 use \Brainwave\Http\Response;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Cookie\CookieJar;
-use \Brainwave\Http\Exception\Stop;
 use \Brainwave\Http\Exception\Pass;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\Middleware\Middleware;
-use \Brainwave\Exception\ExceptionHandler;
 use \Brainwave\Http\RequestServiceProvider;
 use \Brainwave\Http\ResponseServiceProvider;
 use \Brainwave\Config\ConfigServiceProvider;
@@ -169,7 +164,6 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Constructor
-     * @api
      */
     public function __construct()
     {
@@ -526,10 +520,10 @@ class Application extends Container implements ApplicationContract
                 return $callable;
             };
         } elseif (is_string($callable)) {
-            $callable = Route::stringToCallable($callable);
+            $callable = $this['route']::stringToCallable($callable);
 
             if (!$callable) {
-                throw new Stop();
+                throw new NotFoundHttpException();
             }
 
             $this['notFound'] = function () use ($callable) {
