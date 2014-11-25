@@ -90,7 +90,6 @@ class Handler
      * Register the exception /
      * error handlers for the application.
      *
-     * @param  string  $environment
      *
      * @return void
      */
@@ -407,7 +406,7 @@ EOF;
      * @param  \ReflectionFunction  $reflection
      * @param  \Exception  $exception
      *
-     * @return boolen
+     * @return boolean
      */
     protected function hints(\ReflectionFunction $reflection, $exception)
     {

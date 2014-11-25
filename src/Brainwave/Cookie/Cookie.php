@@ -125,7 +125,7 @@ class Cookie implements FactoryContract
     /**
      * Encrypt cookies
      *
-     * @param CryptInterface $crypt
+     * @param EncrypterContract $crypt
      */
     public function encryptCookies(EncrypterContract $crypt)
     {

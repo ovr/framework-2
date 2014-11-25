@@ -119,7 +119,7 @@ class Controller
      *
      * @param  string $method
      * @param  array  $arguments
-     * @return \Brainwave\Routing\Interfaces\RouteInterface
+     * @return Controller
      */
     public function __call($method, $arguments)
     {

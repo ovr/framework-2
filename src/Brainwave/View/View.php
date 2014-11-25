@@ -136,7 +136,7 @@ class View extends Collection implements ViewContract
      * @param  string|array $key
      * @param  mixed        $value
      *
-     * @return \Brainwave\View\ViewFactory
+     * @return View
      */
     public function with($key, $value = null)
     {
@@ -171,7 +171,7 @@ class View extends Collection implements ViewContract
      * @param  string $method
      * @param  array  $parameters
      *
-     * @return \Brainwave\View\ViewFactory
+     * @return View
      *
      * @throws \BadMethodCallException
      */

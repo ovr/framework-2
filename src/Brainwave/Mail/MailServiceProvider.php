@@ -82,6 +82,7 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Swift Mailer instance.
      *
+     * @param Container $app
      * @return void
      */
     public function registerSwiftMailer($app)

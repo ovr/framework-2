@@ -183,7 +183,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  Connection\Connection  $connection
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function prepare(ConnectionInterface $connection)

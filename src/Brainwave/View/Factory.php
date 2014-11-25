@@ -94,7 +94,7 @@ class Factory extends Collection implements FactoryContract
      * Constructor
      *
      * @param \Brainwave\View\Engines\EngineResolver          $engines
-     * @param \Brainwave\View\Interafaces\ViewFinderInterface $finder
+     * @param ViewFinderInterface $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(
@@ -240,7 +240,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Set the view finder instance.
      *
-     * @param  \Brainwave\View\InterfaceViewFinderInterface $finder
+     * @param  ViewFinderInterface $finder
      *
      * @return void
      */
@@ -295,7 +295,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Share a piece of data across all views.
      *
-     * @param mixed $name
+     * @param string $name
      * @param mixed $data the data
      *
      * @return self

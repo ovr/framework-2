@@ -38,7 +38,7 @@ interface Adapter
     /**
      * Fetch a stored variable from the cache
      *
-     * @param mixed $key The key used to store the value
+     * @param string $key The key used to store the value
      *
      * @return mixed The stored variable
      */
@@ -66,8 +66,9 @@ interface Adapter
     /**
      * Store variable in the cache
      *
-     * @param mixed $key The key to use to set the value
+     * @param string $key The key to use to set the value
      * @param mixed $value The variable to set
+     * @param integer $minutes
      *
      * @return void
      */

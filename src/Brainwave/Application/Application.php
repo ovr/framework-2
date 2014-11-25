@@ -283,7 +283,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Determine if the application is currently down for maintenance.
      *
-     * @return bool
+     * @return boolean|null
      */
     public function isDownForMaintenance()
     {

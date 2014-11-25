@@ -61,7 +61,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
      * Show Exception
      *
      * @param  string $exception [description]
-     * @return void
+     * @return string|null
      */
     public function display($exception = '')
     {

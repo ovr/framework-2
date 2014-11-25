@@ -59,7 +59,6 @@ class FileLoader implements LoaderInterface
      */
     protected $exists = [];
 
-
     protected $parser = [
         'php'  => '\Brainwave\Filesystem\Parser\Php',
         'ini'  => '\Brainwave\Filesystem\Parser\Ini',
@@ -189,7 +188,7 @@ class FileLoader implements LoaderInterface
     /**
      * Apply any cascades to an array of package options.
      *
-     * @param  string $package
+     * @param  string $packages
      * @param  string $group
      * @param  string $env
      * @param  array  $items

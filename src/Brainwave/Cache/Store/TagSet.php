@@ -50,7 +50,7 @@ class TagSet
      * @param  \Brainwave\Contracts\Cache\Adapter $store
      * @param  array                              $names
      *
-     * @return void
+     * @return TagSet
      */
     public function __construct(Adapter $store, array $names = array())
     {
