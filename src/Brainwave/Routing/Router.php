@@ -269,9 +269,9 @@ class Router implements RouterContract
     protected function addRoute($args)
     {
         $pattern = array_shift($args);
-        $callable = $this->app['resolver']->build(array_pop($args));
+        $callable = $this->container['resolver']->build(array_pop($args));
 
-        $route = $this->app['routes.factory']->make($pattern, $callable);
+        $route = $this->container['routes.factory']->make($pattern, $callable);
 
         $this->routeCount++;
         $route->setName((string)$this->routeCount);
@@ -367,14 +367,14 @@ class Router implements RouterContract
         $args = func_get_args();
         $pattern = array_shift($args);
 
-        $callable = $this->app['resolver']->build(array_pop($args));
-        $this->app['router']->pushGroup($pattern, $args);
+        $callable = $this->container['resolver']->build(array_pop($args));
+        $this->container['router']->pushGroup($pattern, $args);
 
         if (is_callable($callable)) {
             call_user_func($callable);
         }
 
-        $this->app['router']->popGroup();
+        $this->container['router']->popGroup();
     }
 
     /**

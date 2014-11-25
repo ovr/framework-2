@@ -183,17 +183,17 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  Connection\Connection  $connection
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function prepare(ConnectionInterface $connection)
     {
-        $connection->setFetchMode($this->app['settings']['database::fetch']);
+        $connection->setFetchMode($this->container['settings']['database::fetch']);
 
         // The database connection can also utilize a cache manager instance when cache
         // functionality is used on queries, which provides an expressive interface
         // to caching both fluent queries and Eloquent queries that are executed.
-        $container= $this->app;
+        $container= $this->container;
 
         $connection->setCacheManager(function () use ($container) {
             return $container['cache'];
@@ -224,7 +224,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // To get the database connection configuration, we will just pull each of the
         // connection configurations and get the configurations for the given name.
         // If the configuration doesn't exist, we'll throw an exception and bail.
-        $connections = $this->app['settings']['database::connections'];
+        $connections = $this->container['settings']['database::connections'];
 
         if (is_null($config = Arr::arrayGet($connections, $name))) {
             throw new \InvalidArgumentException("Database [$name] not configured.");
@@ -240,7 +240,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->app['settings']['database::default'];
+        return $this->container['settings']['database::default'];
     }
 
     /**
@@ -251,7 +251,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function setDefaultConnection($name)
     {
-        $this->app['settings']['database::default'] = $name;
+        $this->container['settings']['database::default'] = $name;
     }
 
     /**

@@ -73,7 +73,7 @@ class Redirector
      */
     public function redirect($url, $status = 302)
     {
-        $this->app['response']->redirect($url, $status);
+        $this->container['response']->redirect($url, $status);
         $this->halt($status);
     }
 
@@ -99,7 +99,7 @@ class Redirector
      */
     public function urlFor($name, $params = [])
     {
-        return $this->app['request']->getScriptName().$this['router']->urlFor($name, $params);
+        return $this->container['request']->getScriptName().$this['router']->urlFor($name, $params);
     }
 
     /**
@@ -131,6 +131,6 @@ class Redirector
      */
     public function halt($status, $message = '')
     {
-        $this->app->halt($status, $message = '');
+        $this->container->halt($status, $message = '');
     }
 }

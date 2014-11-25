@@ -18,7 +18,6 @@ namespace Brainwave\Support;
  *
  */
 
-
 /**
  * Str
  *

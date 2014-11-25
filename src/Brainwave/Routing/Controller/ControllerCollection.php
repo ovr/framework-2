@@ -132,7 +132,7 @@ class ControllerCollection extends RouteCollection
      */
     public function __call($method, array $arguments)
     {
-        $defaultRoute = $this->app['routes.factory'];
+        $defaultRoute = $this->container['routes.factory'];
 
         if (!method_exists($defaultRoute, $method)) {
             throw new \BadMethodCallException(

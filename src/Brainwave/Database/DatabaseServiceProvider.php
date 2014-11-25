@@ -40,8 +40,8 @@ class DatabaseServiceProvider implements ServiceProviderInterface
     {
         $this->container= $container;
 
-        if ($this->app['settings']['database::frozen']) {
-            $this->app['db'] = function () {
+        if ($this->container['settings']['database::frozen']) {
+            $this->container['db'] = function () {
                 return 'Database is frozen.';
             };
         } else {
@@ -50,7 +50,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
             // The database manager is used to resolve various connections, since multiple
             // connections might be managed. It also implements the connection resolver
             // interface which may be used by other components requiring connections.
-            $this->app['db'] = function ($container) {
+            $this->container['db'] = function ($container) {
                 $manager = new DatabaseManager(
                     $container,
                     $container['db.factory']
@@ -64,7 +64,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
 
     protected function registerDatabaseQuery()
     {
-        $container= $this->app;
+        $container= $this->container;
         $type = $container['db']->getConnections();
 
         $container['db.query'] = function ($container) {

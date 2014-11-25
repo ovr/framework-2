@@ -170,7 +170,7 @@ class Dispatcher implements EventsContract
      */
     public function trigger($name, $hookArg = null)
     {
-        $this->applyHook($name, $hookArg);
+        $this->containerlyHook($name, $hookArg);
     }
 
     /**
@@ -183,7 +183,7 @@ class Dispatcher implements EventsContract
      */
     public function triggerChain($event, array $args = [])
     {
-        $this->applyChain($event, $args);
+        $this->containerlyChain($event, $args);
     }
 
     /**

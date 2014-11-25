@@ -48,6 +48,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the engine engines instance.
      *
+     * @param Container $container
      * @return void
      */
     protected function registerEngineResolver($container)
@@ -116,7 +117,6 @@ class ViewServiceProvider implements ServiceProviderInterface
         return $this->registerPhpEngine($engines);
     }
 
-
     /**
      * Register the Json engine implementation.
      *
@@ -127,13 +127,14 @@ class ViewServiceProvider implements ServiceProviderInterface
     protected function registerJsonEngine($engines)
     {
         $engines->register('json', function () {
-            return new JsonEngine($this->app, $this);
+            return new JsonEngine($this->container, $this);
         });
     }
 
     /**
      * Register the view finder implementation.
      *
+     * @param Container $container
      * @return void
      */
     protected function registerViewFinder($container)
@@ -146,6 +147,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the view environment.
      *
+     * @param Container $container
      * @return void
      */
     protected function registerFactory($container)

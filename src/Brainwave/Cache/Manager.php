@@ -89,7 +89,7 @@ class Manager implements FactoryContract
     /**
      * Builder.
      *
-     * @param  string $driver The cache driver to use
+     * @param  AdapterContract $driver The cache driver to use
      *
      * @return AdapterContract
      */
@@ -155,7 +155,7 @@ class Manager implements FactoryContract
      */
     protected function callCustomCreator($driver, array $options = [])
     {
-        return $this->customCreators[$driver]($this->app, $options);
+        return $this->customCreators[$driver]($this->container, $options);
     }
 
     /**
@@ -227,10 +227,10 @@ class Manager implements FactoryContract
         $config = array_filter($config);
 
         $path = empty($config) ?
-        $this->app['settings']['cache::path'] :
+        $this->container['settings']['cache::path'] :
         $config['path'];
 
-        return $this->repository(new FileCache($this->app['files'], $path));
+        return $this->repository(new FileCache($this->container['files'], $path));
     }
 
     /**
@@ -245,7 +245,7 @@ class Manager implements FactoryContract
         $config = array_filter($config);
 
         $servers = empty($config) ?
-        $this->app['settings']['cache::memcached'] :
+        $this->container['settings']['cache::memcached'] :
         $config['memcached'];
 
         $memcached = MemcachedCache::connect($servers);
@@ -265,7 +265,7 @@ class Manager implements FactoryContract
         $config = array_filter($config);
 
         $servers = empty($config) ?
-        $this->app['settings']['cache::memcache'] :
+        $this->container['settings']['cache::memcache'] :
         $config['memcache'];
 
         $memcache = MemcacheCache::connect($servers);
@@ -286,16 +286,16 @@ class Manager implements FactoryContract
 
         $servers = empty($config) ?
         (
-            (!is_null($this->app['settings']['cache::redis.parameters'])) ?
-            $this->app['settings']['cache::redis.parameters'] :
+            (!is_null($this->container['settings']['cache::redis.parameters'])) ?
+            $this->container['settings']['cache::redis.parameters'] :
             ''
         ) :
         $config['parameters'];
 
         $options = empty($config) ?
         (
-            (!is_null($this->app['settings']['cache::redis.options'])) ?
-            $this->app['settings']['cache::redis.options'] :
+            (!is_null($this->container['settings']['cache::redis.options'])) ?
+            $this->container['settings']['cache::redis.options'] :
             []
         ) :
         $config['options'];
@@ -342,7 +342,7 @@ class Manager implements FactoryContract
      */
     public function getPrefix()
     {
-        return $this->app['settings']['cache::prefix'];
+        return $this->container['settings']['cache::prefix'];
     }
 
     /**
@@ -354,7 +354,7 @@ class Manager implements FactoryContract
      */
     public function setPrefix($name)
     {
-        $this->app['settings']['cache::prefix'] = $name;
+        $this->container['settings']['cache::prefix'] = $name;
     }
 
     /**
@@ -376,7 +376,7 @@ class Manager implements FactoryContract
      */
     public function getDefaultDriver()
     {
-        return $this->app['settings']['cache::driver'];
+        return $this->container['settings']['cache::driver'];
     }
 
     /**
@@ -388,6 +388,6 @@ class Manager implements FactoryContract
      */
     public function setDefaultDriver($name)
     {
-        $this->app['settings']['cache::driver'] = $name;
+        $this->container['settings']['cache::driver'] = $name;
     }
 }

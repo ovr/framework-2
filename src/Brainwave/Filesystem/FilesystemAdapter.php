@@ -71,7 +71,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      *
      * @param  string $path
      *
-     * @return \League\Flysystem\Handler
+     * @return false|string
      *
      * @throws \Brainwave\Filesystem\Exception\FileNotFoundException;
      */
@@ -120,7 +120,7 @@ class FilesystemAdapter implements FilesystemInterface, Cloud
      * @param  string $path
      * @param  string $visibility
      *
-     * @return void
+     * @return boolean
      */
     public function setVisibility($path, $visibility)
     {

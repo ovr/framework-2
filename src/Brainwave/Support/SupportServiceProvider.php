@@ -52,7 +52,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerHelpers()
     {
-        $this->app['helpers'] = function ($container) {
+        $this->container['helpers'] = function ($container) {
             return new Helpers();
         };
     }
@@ -64,7 +64,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerArr()
     {
-        $this->app['arr'] = function ($container) {
+        $this->container['arr'] = function ($container) {
             return new Arr();
         };
     }
@@ -76,7 +76,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerStr()
     {
-        $this->app['str'] = function ($container) {
+        $this->container['str'] = function ($container) {
             return new Str();
         };
     }

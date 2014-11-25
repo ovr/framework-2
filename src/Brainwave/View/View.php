@@ -102,7 +102,7 @@ class View extends Collection implements ViewContract
             $explodeTemplate = explode('::', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
-                foreach ($this->app['settings']['view::template.paths'] as $pathName => $path) {
+                foreach ($this->container['settings']['view::template.paths'] as $pathName => $path) {
                     if (trim($explodeTemplate[0]) === $pathName) {
                         $templatePath = preg_replace('/([^\/]+)$/', '$1/', $path);
                     }
@@ -112,7 +112,7 @@ class View extends Collection implements ViewContract
                         trim($explodeTemplate[1]).
                         $this->getExtensions();
             } else {
-                $path = $this->app['settings']['view::default.template.path'].
+                $path = $this->container['settings']['view::default.template.path'].
                         $template.
                         $this->getExtensions();
             }
@@ -136,7 +136,7 @@ class View extends Collection implements ViewContract
      * @param  string|array $key
      * @param  mixed        $value
      *
-     * @return \Brainwave\View\ViewFactory
+     * @return View
      */
     public function with($key, $value = null)
     {
@@ -171,7 +171,7 @@ class View extends Collection implements ViewContract
      * @param  string $method
      * @param  array  $parameters
      *
-     * @return \Brainwave\View\ViewFactory
+     * @return View
      *
      * @throws \BadMethodCallException
      */

@@ -94,7 +94,7 @@ class Factory extends Collection implements FactoryContract
      * Constructor
      *
      * @param \Brainwave\View\Engines\EngineResolver          $engines
-     * @param \Brainwave\View\Interafaces\ViewFinderInterface $finder
+     * @param ViewFinderInterface $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(
@@ -106,8 +106,8 @@ class Factory extends Collection implements FactoryContract
         $this->finder  = $finder;
         $this->events  = $events;
 
-        if ($this->app['settings']['view::items'] !== null) {
-            $data = array_merge($this->app['settings']['view::items'], $this->data, $this->shared);
+        if ($this->container['settings']['view::items'] !== null) {
+            $data = array_merge($this->container['settings']['view::items'], $this->data, $this->shared);
         } else {
             $data = array_merge($this->data, $this->shared);
         }
@@ -240,7 +240,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Set the view finder instance.
      *
-     * @param  \Brainwave\View\InterfaceViewFinderInterface $finder
+     * @param  ViewFinderInterface $finder
      *
      * @return void
      */
@@ -278,7 +278,7 @@ class Factory extends Collection implements FactoryContract
      */
     public function getContainer()
     {
-        return $this->app;
+        return $this->container;
     }
     /**
      * Set the pimple container instance.
@@ -295,7 +295,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Share a piece of data across all views.
      *
-     * @param mixed $name
+     * @param string $name
      * @param mixed $data the data
      *
      * @return self

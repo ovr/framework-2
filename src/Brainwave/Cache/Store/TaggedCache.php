@@ -169,7 +169,7 @@ class TaggedCache implements StoreContract
      *
      * @param  string $key
      *
-     * @return bool
+     * @return boolean|null
      */
     public function forget($key)
     {

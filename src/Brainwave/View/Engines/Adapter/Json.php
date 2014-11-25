@@ -55,8 +55,8 @@ class Json implements EnginesContract
     /**
      * Construct
      *
-     * @param \Pimple\Container           $container
-     * @param \Brainwave\View\ViewFactory $factory
+     * @param \Pimple\Container                   $container
+     * @param \Brainwave\View\ViewServiceProvider $factory
      */
     public function __construct(Container $container, ViewFactory $factory)
     {
@@ -72,8 +72,8 @@ class Json implements EnginesContract
      */
     public function get(array $data = [])
     {
-        if ($data['options'] === $this->app['settings']['http::json.option']) {
-            $options = $this->app['settings']['http::json.option'];
+        if ($data['options'] === $this->container['settings']['http::json.option']) {
+            $options = $this->container['settings']['http::json.option'];
         } else {
             $options = $data['options'];
         }
@@ -106,7 +106,7 @@ class Json implements EnginesContract
      */
     protected function evaluateStatus($status = 200, array $data = [], $option = 0)
     {
-        $container= $this->app;
+        $container= $this->container;
         $factory = $this->factory;
 
         //append error bool

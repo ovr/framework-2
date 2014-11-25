@@ -61,17 +61,17 @@ class PlainDisplayer implements ExceptionDisplayerInterface
      * Show Exception
      *
      * @param  string $exception [description]
-     * @return void
+     * @return string|null
      */
     public function display($exception = '')
     {
-        $this->app->contentType('text/html');
+        $this->container->contentType('text/html');
 
         //Set error status
-        $this->app['response']->setStatus(500);
+        $this->container['response']->setStatus(500);
         $title = 'Brainwave Application Error';
         $header = 'The application could not run because of the following error:';
-        $footer = 'Copyright &copy; ' . date('Y') .  $this->app['settings']->get('app::footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') .  $this->container['settings']->get('app::footer', 'narrowspark');
 
         if ($exception instanceof \Exception || $exception instanceof \ErrorException) {
             $code = $exception->getCode();
@@ -143,7 +143,7 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer = '', $css = '', $js = '')
     {
-        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->app['settings']->get('app::footer', 'narrowspark');
+        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->container['settings']->get('app::footer', 'narrowspark');
 
         print <<<EOF
 <!DOCTYPE html>

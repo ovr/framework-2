@@ -126,7 +126,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
             return false;
         }
 
-        return $this->app['env'];
+        return $this->container['env'];
     }
 
     /**
@@ -140,7 +140,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     {
         $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
 
-        return $this->app['env'] = $this->detect($envs, $args);
+        return $this->container['env'] = $this->detect($envs, $args);
     }
 
     /**
@@ -150,13 +150,13 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      */
     public function runningUnitTests()
     {
-        return $this->app['env'] = 'testing';
+        return $this->container['env'] = 'testing';
     }
 
     /**
      * Determine if we are running console.
      *
-     * @return string
+     * @return boolean
      */
     public function runningInConsole()
     {

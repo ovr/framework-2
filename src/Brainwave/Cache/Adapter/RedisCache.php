@@ -109,7 +109,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Create a new RedisCache store.
      *
-     * @param \Redis   $redis
+     * @param Client   $redis
      * @param  string  $prefix
      *
      * @return AdapterContract

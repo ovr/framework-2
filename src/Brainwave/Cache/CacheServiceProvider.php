@@ -45,7 +45,7 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     protected function registerCacheFactory()
     {
-        $this->app['cache.factory'] = function ($container) {
+        $this->container['cache.factory'] = function ($container) {
             $cacheFactory = new CacheManager($container, $container['settings']['cache::supported.drivers']);
             $cacheFactory->setPrefix($container['settings']['cache::prefix']);
             return $cacheFactory;
@@ -54,7 +54,7 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     protected function registerDefaultCache()
     {
-        $this->app['cache'] = function ($container) {
+        $this->container['cache'] = function ($container) {
 
             //The default driver
             $container['cache.factory']->setDefaultDriver($container['settings']['cache::driver']);
@@ -65,17 +65,17 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     protected function registerCaches()
     {
-        if ($this->app['settings']['cache::caches'] !== null) {
-            foreach ($this->app['settings']['cache::caches'] as $name => $class) {
-                if ($this->app['cache.factory']->getDefaultDriver() === $name) {
+        if ($this->container['settings']['cache::caches'] !== null) {
+            foreach ($this->container['settings']['cache::caches'] as $name => $class) {
+                if ($this->container['cache.factory']->getDefaultDriver() === $name) {
                     // we use shortcuts here in case the default has been overridden
-                    $config = $this->app['settings']['cache::driver'];
+                    $config = $this->container['settings']['cache::driver'];
                 } else {
-                    $config = $this->app['settings']['cache::caches'][$name];
+                    $config = $this->container['settings']['cache::caches'][$name];
                 }
 
-                $this->app['caches'][$name] = function () use ($config) {
-                    return $this->app['cache.factory']->driver($config['driver'], $config);
+                $this->container['caches'][$name] = function () use ($config) {
+                    return $this->container['cache.factory']->driver($config['driver'], $config);
                 };
             }
         }

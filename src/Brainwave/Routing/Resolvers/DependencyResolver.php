@@ -62,11 +62,11 @@ class DependencyResolver implements CallableResolverContract
             $service = $matches[1];
             $method = $matches[2];
 
-            if (!isset($this->app[$service])) {
+            if (!isset($this->container[$service])) {
                 throw new \InvalidArgumentException('Route key does not exist in Application');
             }
 
-            $callable =  [$this->app[$service],$method];
+            $callable =  [$this->container[$service],$method];
         }
 
         if (!is_callable($callable)) {

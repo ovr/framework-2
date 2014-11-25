@@ -60,7 +60,7 @@ class ContainerResolver implements CallableResolverContract
         if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
-            $container= $this->app;
+            $container= $this->container;
 
             $callable = function () use ($class, $method, $container) {
                 static $obj = null;

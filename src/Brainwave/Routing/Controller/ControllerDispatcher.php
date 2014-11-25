@@ -47,8 +47,6 @@ class ControllerDispatcher
     /**
      * ControllerDispatcher
      *
-     * @param string $pattern
-     * @param mixed $callable
      */
     public function __construct(\Closure $resolver, $method)
     {

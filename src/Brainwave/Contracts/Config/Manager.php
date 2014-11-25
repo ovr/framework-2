@@ -32,6 +32,7 @@ interface Manager extends \ArrayAccess
      * Set Brainwave's defaults using the handler
      *
      * @param array $values
+     * @return void
      */
     public function setArray(array $values);
 
@@ -68,6 +69,7 @@ interface Manager extends \ArrayAccess
      *
      * @param  string $key
      * @param  mixed $value
+     * @return void
      */
     public function set($key, $value);
 }

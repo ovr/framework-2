@@ -59,9 +59,9 @@ class Whoops implements ExceptionAdapter
     public function display($exception)
     {
         if ($exception instanceof \Exception) {
-            $whoops = $this->app['whoops']->handleException($exception);
+            $whoops = $this->container['whoops']->handleException($exception);
         } elseif ($exception instanceof \ErrorException) {
-            $whoops = $this->app['whoops']->handleError($exception);
+            $whoops = $this->container['whoops']->handleError($exception);
         }
 
         return $whoops;

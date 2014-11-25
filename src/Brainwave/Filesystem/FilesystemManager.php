@@ -130,7 +130,7 @@ class FilesystemManager implements Manager
      */
     protected function getConfig($name)
     {
-        return $this->app['settings']["filesystems::disks.{$name}"];
+        return $this->container['settings']["filesystems::disks.{$name}"];
     }
 
     /**
@@ -140,6 +140,6 @@ class FilesystemManager implements Manager
      */
     public function getDefaultDriver()
     {
-        return $this->app['settings']['filesystems::default'];
+        return $this->container['settings']['filesystems::default'];
     }
 }

@@ -42,6 +42,9 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
 
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerEntvironment($container)
     {
         $container['environment'] = function ($container) {
@@ -49,6 +52,9 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
         };
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerAliasLoader($container)
     {
         $container['alias'] = function () {
@@ -56,6 +62,9 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
         };
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerStaticalProxyResolver($container)
     {
         $container['statical.resolver'] = function () {

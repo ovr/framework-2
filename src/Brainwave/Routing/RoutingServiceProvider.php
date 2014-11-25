@@ -60,7 +60,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouter()
     {
-        $this->app['router'] = function ($container) {
+        $this->container['router'] = function ($container) {
             return new Router($container);
         };
     }
@@ -72,7 +72,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerUrlGenerator()
     {
-        $this->app['url'] = function ($container) {
+        $this->container['url'] = function ($container) {
             // The URL generator needs the route collection that exists on the router.
             // Keep in mind this is an object, so we're passing by references here
             // and all the registered routes will be available to the generator.
@@ -89,7 +89,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRedirector()
     {
-        $this->app['redirect'] = function ($container) {
+        $this->container['redirect'] = function ($container) {
             return new Redirector($container['url'], $container);
         };
     }
@@ -101,7 +101,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteResolver()
     {
-        $this->app['routes.resolver'] = function ($container) {
+        $this->container['routes.resolver'] = function ($container) {
             $options = [
                 'routeClass'    => $container['settings']['http::route.class'],
                 'caseSensitive' => $container['settings']['http::route.case_sensitive'],
@@ -126,7 +126,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerRouteFactory()
     {
-        $this->app['routes.factory'] = function ($container) {
+        $this->container['routes.factory'] = function ($container) {
             return new RouteFactory($container, $container['routes.resolver'], $container['controller.factory']);
         };
     }
@@ -138,7 +138,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerControllersFactory()
     {
-        $this->app['controller.factory'] = function ($class) {
+        $this->container['controller.factory'] = function ($class) {
             return function ($class) {
                 return new $class;
             };
@@ -152,7 +152,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerControllers()
     {
-        $this->app['controllers'] = function ($container) {
+        $this->container['controllers'] = function ($container) {
             return new ControllerCollection($container);
         };
     }

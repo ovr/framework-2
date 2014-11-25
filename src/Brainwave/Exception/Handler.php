@@ -90,7 +90,6 @@ class Handler
      * Register the exception /
      * error handlers for the application.
      *
-     * @param  string  $environment
      *
      * @return void
      */
@@ -322,12 +321,12 @@ class Handler
      */
     protected function displayException($exception)
     {
-        $settings = $this->app['settings'];
+        $settings = $this->container['settings'];
 
         if ($settings->get('app::mode', 'production') === 'development'||
             $settings->get('app::mode', 'production') === 'testing'
         ) {
-            $displayer = $this->debug ? $this->app['exception.debug'] : $this->app['exception.plain'];
+            $displayer = $this->debug ? $this->container['exception.debug'] : $this->container['exception.plain'];
 
             return $displayer->display($exception);
         }
@@ -346,7 +345,7 @@ class Handler
     {
         //Log error
         $this->report($exception);
-        $this->app['response']->setStatus(503);
+        $this->container['response']->setStatus(503);
 
         $content = <<<EOF
 <div>
@@ -364,7 +363,7 @@ class Handler
 EOF;
 
         $templateSettings = $this->getTemplate();
-        $this->app['view']->make(
+        $this->container['view']->make(
             $templateSettings['503.engine'],
             $templateSettings['503.template'],
             [
@@ -407,7 +406,7 @@ EOF;
      * @param  \ReflectionFunction  $reflection
      * @param  \Exception  $exception
      *
-     * @return boolen
+     * @return boolean
      */
     protected function hints(\ReflectionFunction $reflection, $exception)
     {

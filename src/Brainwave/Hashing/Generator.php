@@ -127,7 +127,7 @@ class Generator implements HashContract
      * @param  string $str    string to hash.
      * @param  string $method default method 'bcrypt'.
      *
-     * @return string|boolen  returns hashed string, or false on error.
+     * @return string|false  returns hashed string, or false on error.
      */
     public function make($str, $method = 'bcrypt')
     {
@@ -347,7 +347,7 @@ class Generator implements HashContract
      * @param  string $str  String to check.
      * @param  string $hash The hash to check the string against.
      *
-     * @return boolean|null Returns true on match.
+     * @return boolean Returns true on match.
      */
     private function checkPbkdf2($str, $hash)
     {
@@ -373,7 +373,7 @@ class Generator implements HashContract
      * @param  string $str  String to check.
      * @param  string $hash The hash to check the string against.
      *
-     * @return boolean|null Returns true on match.
+     * @return boolean Returns true on match.
      */
     private function checkDrupal($str, $hash)
     {
@@ -392,7 +392,7 @@ class Generator implements HashContract
      * @param  string $str  String to check.
      * @param  string $hash The hash to check the string against.
      *
-     * @return boolean|null Returns true on match.
+     * @return boolean Returns true on match.
      */
     private function checkBcryptSha($str, $hash)
     {
@@ -406,7 +406,7 @@ class Generator implements HashContract
      * @param  string $str  String to check.
      * @param  string $hash The hash to check the string against.
      *
-     * @return boolean|null Returns true on match.
+     * @return boolean Returns true on match.
      */
     private function checkHashLen($str, $hash)
     {
@@ -477,6 +477,10 @@ class Generator implements HashContract
         return $info;
     }
 
+    /**
+     * @param string $password
+     * @param string $setting
+     */
     private function phpassHash($password, $setting, $method = 'sha512')
     {
         /* First 12 characters are the settings. */

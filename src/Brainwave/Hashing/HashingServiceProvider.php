@@ -43,6 +43,9 @@ class HashingServiceProvider implements ServiceProviderInterface
         $this->registerPassword($container);
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerHashGenerator($container)
     {
         $container['hash'] = function ($container) {
@@ -50,6 +53,9 @@ class HashingServiceProvider implements ServiceProviderInterface
         };
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerRand($container)
     {
         $container['rand'] = function () {
@@ -57,6 +63,9 @@ class HashingServiceProvider implements ServiceProviderInterface
         };
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerRandGenerator($container)
     {
         $container['rand.generator'] = function ($container) {
@@ -73,6 +82,9 @@ class HashingServiceProvider implements ServiceProviderInterface
         };
     }
 
+    /**
+     * @param Container $container
+     */
     protected function registerPassword($container)
     {
         $container['password'] = function () {

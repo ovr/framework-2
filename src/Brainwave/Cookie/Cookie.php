@@ -64,14 +64,14 @@ class Cookie implements FactoryContract
     ) {
         $settings = [
             'value' => $value,
-            'expires' => ($time === null) ? $this->app['settings']->get('cookies::lifetime', '20minutes') : $time,
-            'path' => ($path === null) ? $this->app['settings']->get('cookies::path', '/') : $path,
-            'domain' => ($domain === null) ? $this->app['settings']->get('cookies::domain', null) : $domain,
-            'secure' => ($secure === null) ? $this->app['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => ($httponly === null) ? $this->app['settings']->get('cookies::httponly', false) : $httponly
+            'expires' => ($time === null) ? $this->container['settings']->get('cookies::lifetime', '20minutes') : $time,
+            'path' => ($path === null) ? $this->container['settings']->get('cookies::path', '/') : $path,
+            'domain' => ($domain === null) ? $this->container['settings']->get('cookies::domain', null) : $domain,
+            'secure' => ($secure === null) ? $this->container['settings']->get('cookies::secure', false) : $secure,
+            'httponly' => ($httponly === null) ? $this->container['settings']->get('cookies::httponly', false) : $httponly
         ];
 
-        $this->app['response']->setCookie($name, $settings);
+        $this->container['response']->setCookie($name, $settings);
     }
 
     /**
@@ -107,7 +107,7 @@ class Cookie implements FactoryContract
      */
     public function get($name)
     {
-        return $this->app['request']->getCookie($name);
+        return $this->container['request']->getCookie($name);
     }
 
     /**
@@ -119,17 +119,17 @@ class Cookie implements FactoryContract
      */
     public function has($name)
     {
-        return $this->app['request']->hasCookie($name);
+        return $this->container['request']->hasCookie($name);
     }
 
     /**
      * Encrypt cookies
      *
-     * @param CryptInterface $crypt
+     * @param EncrypterContract $crypt
      */
     public function encryptCookies(EncrypterContract $crypt)
     {
-        $this->app['request']->encryptCookies($crypt);
+        $this->container['request']->encryptCookies($crypt);
     }
 
     /**
@@ -156,11 +156,11 @@ class Cookie implements FactoryContract
         $httponly = null
     ) {
         $settings = [
-            'domain' => is_null($domain) ? $this->app['settings']->get('cookies::domain', null) : $domain,
-            'path' => is_null($path) ? $this->app['settings']->get('cookies::path', '/') : $path,
-            'secure' => is_null($secure) ? $this->app['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => is_null($httponly) ?$this->app['settings']->get('cookies::httponly', flase) : $httponly
+            'domain' => is_null($domain) ? $this->container['settings']->get('cookies::domain', null) : $domain,
+            'path' => is_null($path) ? $this->container['settings']->get('cookies::path', '/') : $path,
+            'secure' => is_null($secure) ? $this->container['settings']->get('cookies::secure', false) : $secure,
+            'httponly' => is_null($httponly) ?$this->container['settings']->get('cookies::httponly', flase) : $httponly
         ];
-        $this->app['response']->removeCookie($name, $settings);
+        $this->container['response']->removeCookie($name, $settings);
     }
 }

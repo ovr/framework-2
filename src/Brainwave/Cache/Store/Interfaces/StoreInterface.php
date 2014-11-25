@@ -18,7 +18,6 @@ namespace Brainwave\Cache\Store\Interfaces;
  *
  */
 
-
 /**
  * StoreInterface
  *
@@ -53,9 +52,9 @@ interface StoreInterface
      * Increment the value of an item in the cache.
      *
      * @param  string $key
-     * @param  mixed  $value
+     * @param  integer  $value
      *
-     * @return int|bool
+     * @return void
      */
     public function increment($key, $value = 1);
 
@@ -63,9 +62,9 @@ interface StoreInterface
      * Decrement the value of an item in the cache.
      *
      * @param  string $key
-     * @param  mixed  $value
+     * @param  integer  $value
      *
-     * @return int|bool
+     * @return void
      */
     public function decrement($key, $value = 1);
 

@@ -144,7 +144,7 @@ class Encrypter implements EncrypterContract
         $this->validateKeyLength($key, $module);
 
         // Create IV.
-        $iv = $this->app['rand']->generate(mcrypt_enc_get_iv_size($module));
+        $iv = $this->container['rand']->generate(mcrypt_enc_get_iv_size($module));
 
         // Init mcrypt.
         mcrypt_generic_init($module, $key, $iv);
@@ -176,7 +176,7 @@ class Encrypter implements EncrypterContract
         $encrypted['cdata'] = base64_encode(mcrypt_generic($module, $serializedData));
         // The message authentication code. Used to make sure the
         // message is valid when decrypted.
-        $encrypted['mac']   = base64_encode($this->app['hash']->pbkdf2($encrypted['cdata'], $key, 1000, 32));
+        $encrypted['mac']   = base64_encode($this->container['hash']->pbkdf2($encrypted['cdata'], $key, 1000, 32));
 
         return json_encode($encrypted);
     }
@@ -220,7 +220,7 @@ class Encrypter implements EncrypterContract
         $block = mcrypt_enc_get_block_size($module);
 
         // Check MAC.
-        if (base64_decode($data['mac']) != $this->app['hash']->pbkdf2($data['cdata'], $key, 1000, 32)) {
+        if (base64_decode($data['mac']) != $this->container['hash']->pbkdf2($data['cdata'], $key, 1000, 32)) {
             throw new \InvalidArgumentException('Message authentication code invalid');
         }
 

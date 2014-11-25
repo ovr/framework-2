@@ -107,8 +107,8 @@ class Mailer implements MailerContract
      */
     public function alwaysFrom($address, $name = null)
     {
-        $email_address = (empty($address)) ? $this->app['settings']['mail::always.from'] : $address;
-        $email_name = (isset($name)) ? $this->app['settings']['mail::email.name'] : $name;
+        $email_address = (empty($address)) ? $this->container['settings']['mail::always.from'] : $address;
+        $email_name = (isset($name)) ? $this->container['settings']['mail::email.name'] : $name;
 
         $this->from = compact($email_address, $email_name);
     }
@@ -240,7 +240,6 @@ class Mailer implements MailerContract
 
         throw new \InvalidArgumentException("Callback is not valid.");
     }
-
 
     /**
      * Render the given view.

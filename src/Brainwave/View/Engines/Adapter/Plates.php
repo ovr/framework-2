@@ -72,7 +72,7 @@ class Plates implements EnginesContract
     {
         $this->container= $container;
 
-        if ($extensions = !is_null($this->app['settings']->get('view::plates.extensions', null))) {
+        if ($extensions = !is_null($this->container['settings']->get('view::plates.extensions', null))) {
             $this->availableExtensions = $extensions;
         }
 
@@ -85,10 +85,10 @@ class Plates implements EnginesContract
      */
     protected function loader()
     {
-        $engine = new Engine($this->app['settings']->get('view::default.template.path', null));
+        $engine = new Engine($this->container['settings']->get('view::default.template.path', null));
 
-        if (!is_null($this->app['settings']->get('view::template.paths', null))) {
-            foreach ($this->app['settings']->get('view::template.paths', null) as $name => $addPaths) {
+        if (!is_null($this->container['settings']->get('view::template.paths', null))) {
+            foreach ($this->container['settings']->get('view::template.paths', null) as $name => $addPaths) {
                 $engine->addFolder($name, $addPaths);
             }
         }
@@ -136,13 +136,13 @@ class Plates implements EnginesContract
         $engine = $this->engine;
 
         // Set uri extensions
-        $engine->loadExtension(new URI($this->app['request']->getPathInfo()));
+        $engine->loadExtension(new URI($this->container['request']->getPathInfo()));
 
         // Set asset extensions
-        $engine->loadExtension(new Asset($this->app['settings']->get('view::asset', null)));
+        $engine->loadExtension(new Asset($this->container['settings']->get('view::asset', null)));
 
         // Get all extensions
-        if (!is_null($this->app['settings']->get('view::plates.extensions', null))) {
+        if (!is_null($this->container['settings']->get('view::plates.extensions', null))) {
             foreach ($this->availableExtensions as $ext) {
                 $this->engine->loadedExtensions($ext);
             }

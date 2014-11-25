@@ -45,6 +45,9 @@ interface Middleware
      */
     public function setNextMiddleware($nextMiddleware);
 
+    /**
+     * @return \Brainwave\Middleware\Middleware
+     */
     public function getNextMiddleware();
 
     public function call();
