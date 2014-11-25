@@ -40,7 +40,7 @@ class HttpException extends \RuntimeException implements HttpExceptionContract
      * @param string     $message
      * @param \Exception $previous
      * @param array      $headers
-     * @param interger   $code
+     * @param integer   $code
      */
     public function __construct(
         $statusCode,

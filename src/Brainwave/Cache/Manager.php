@@ -89,7 +89,7 @@ class Manager implements FactoryContract
     /**
      * Builder.
      *
-     * @param  string $driver The cache driver to use
+     * @param  AdapterContract $driver The cache driver to use
      *
      * @return AdapterContract
      */

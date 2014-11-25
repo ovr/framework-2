@@ -66,6 +66,7 @@ interface Repository
      * @param string $key The key to use to set the value
      * @param mixed $value The variable to set
      * @param integer $minutes
+     * @return void
      */
     public function set($key, $value, $minutes);
 

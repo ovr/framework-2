@@ -302,7 +302,7 @@ class Response implements ResponseContract
     /**
      * Encrypt cookies
      *
-     * @param \Brainwave\Crypt\Interfaces\EncrypterContract $crypt
+     * @param EncrypterContract $crypt
      */
     public function encryptCookies(EncrypterContract $crypt)
     {

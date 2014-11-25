@@ -34,6 +34,7 @@ interface Repository extends \ArrayAccess
      *
      * @param array $values
      * @required
+     * @return void
      */
     public function setArray(array $values = []);
 

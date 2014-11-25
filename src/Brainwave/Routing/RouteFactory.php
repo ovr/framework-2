@@ -56,8 +56,8 @@ class RouteFactory
      * RouteFactory
      *
      * @param Container $app
-     * @param Closure   $routeResolver
-     * @param Closure   $controllerResolver
+     * @param \Closure   $routeResolver
+     * @param \Closure   $controllerResolver
      */
     public function __construct(Container $app, \Closure $routeResolver, \Closure $controllerResolver)
     {
@@ -103,7 +103,7 @@ class RouteFactory
      * Define a callback that uses a given reference to a service or class name
      *
      * @param  string $callable
-     * @return \Closure
+     * @return ControllerDispatcher
      */
     protected function makeControllerCallback($callable)
     {

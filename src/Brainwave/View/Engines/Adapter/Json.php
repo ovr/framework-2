@@ -56,7 +56,7 @@ class Json implements EnginesContract
      * Construct
      *
      * @param \Pimple\Container           $app
-     * @param \Brainwave\View\ViewFactory $factory
+     * @param \Brainwave\View\ViewServiceProvider $factory
      */
     public function __construct(Container $app, ViewFactory $factory)
     {

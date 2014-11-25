@@ -35,6 +35,7 @@ interface CookiesJar extends Collection
      * Serialize this collection of cookies into a raw HTTP header
      *
      * @param HeadersContract $headers
+     * @return void
      */
     public function setHeaders(HeadersContract $headers);
 
@@ -48,6 +49,7 @@ interface CookiesJar extends Collection
      *
      * @param string $key      Cookie name
      * @param array  $settings Optional cookie settings
+     * @return void
      */
     public function remove($key, array $settings = []);
 
@@ -66,6 +68,7 @@ interface CookiesJar extends Collection
      * @param HeadersContract $headers
      * @param string          $name
      * @param string|array    $value
+     * @return void
      */
     public function setHeader(HeadersContract $headers, $name, $value);
 
@@ -85,6 +88,7 @@ interface CookiesJar extends Collection
      * @param HeadersContract $headers
      * @param string          $name
      * @param array           $value
+     * @return void
      */
     public function deleteHeader(HeadersContract $headers, $name, $value = []);
 

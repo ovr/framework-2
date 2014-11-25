@@ -241,7 +241,6 @@ class Mailer implements MailerContract
         throw new \InvalidArgumentException("Callback is not valid.");
     }
 
-
     /**
      * Render the given view.
      *

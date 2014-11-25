@@ -90,7 +90,7 @@ abstract class Middleware implements MiddlewareContract
      * This method retrieves the next downstream middleware
      * previously injected into this middleware.
      *
-     * @return \Brainwave\Application\Application|\Brainwave\Middleware\Middleware
+     * @return Middleware
      */
     final public function getNextMiddleware()
     {

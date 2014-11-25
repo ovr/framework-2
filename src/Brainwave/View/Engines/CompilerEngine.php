@@ -18,7 +18,6 @@ namespace Brainwave\View\Engines;
  *
  */
 
-
 use \Brainwave\Contracts\View\Compiler as CompilerContract;
 
 /**

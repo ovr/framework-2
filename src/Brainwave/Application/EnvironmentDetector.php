@@ -156,7 +156,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Determine if we are running console.
      *
-     * @return string
+     * @return boolean
      */
     public function runningInConsole()
     {

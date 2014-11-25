@@ -28,5 +28,8 @@ namespace Brainwave\Contracts\Routing;
  */
 interface CallableResolver
 {
+    /**
+     * @return callable
+     */
     public function build($callable);
 }

@@ -18,15 +18,6 @@ namespace Brainwave\Mail;
  *
  */
 
-use Aws\Ses\SesClient;
-use Swift_SmtpTransport as SmtpTransport;
-use Swift_MailTransport as MailTransport;
-use Swift_SendmailTransport as SendmailTransport;
-use Brainwave\Mail\Transport\Ses as SesTransport;
-use Brainwave\Mail\Transport\Log as LogTransport;
-use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
-use Brainwave\Mail\Transport\Mandrill as MandrillTransport;
-
 /**
  * TransportManager
  *

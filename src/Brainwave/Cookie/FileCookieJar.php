@@ -88,7 +88,6 @@ class FileCookieJar extends CookieJar
       *
       * Old cookies are kept unless overwritten by newly loaded ones.
       *
-      * @param string $filename Cookie file to load.
       *
       * @throws \RuntimeException if the file cannot be loaded.
       */

@@ -159,7 +159,7 @@ class Repository implements CacheContract, \ArrayAccess
      * Get an item from the cache, or store the default value.
      *
      * @param  string        $key
-     * @param  \DateTime|int $minutes
+     * @param  integer $minutes
      * @param  \Closure      $callback
      *
      * @return mixed
@@ -205,7 +205,7 @@ class Repository implements CacheContract, \ArrayAccess
      *
      * @param  string $key
      *
-     * @return bool
+     * @return boolean|null
      */
     public function forget($key)
     {
@@ -237,7 +237,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Get the cache driver implementation.
      *
-     * @return DriverInterface
+     * @return AdapterContract
      */
     public function getdriver()
     {
@@ -286,7 +286,7 @@ class Repository implements CacheContract, \ArrayAccess
      *
      * @param  string $key
      *
-     * @return void
+     * @return boolean|null
      */
     public function offsetUnset($key)
     {
