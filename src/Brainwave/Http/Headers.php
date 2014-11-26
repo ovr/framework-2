@@ -71,7 +71,7 @@ class Headers extends Collection implements HeadersContract
     /**
      * Parse provided headers into this collection
      *
-     * @param  $environment
+     * @param  EnvironmentContract $environment
      *
      * @return void
      */

@@ -220,7 +220,6 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mail Swift Transport instance.
      *
-     * @param  array $config
      *
      * @return void
      */
@@ -266,7 +265,6 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the "Log" Swift Transport instance.
      *
-     * @param  array  $config
      *
      * @return void
      */

@@ -277,7 +277,6 @@ class Application extends Container implements ApplicationContract
         }
     }
 
-
     /**
      * Determine if the application is currently down for maintenance.
      *
@@ -1089,8 +1088,7 @@ class Application extends Container implements ApplicationContract
      *
      * @param  string $url             The request URL
      * @param  string $method          The request method
-     * @param  array  $headers         Associative array of request headers
-     * @param  array  $CookieJar       Associative array of request CookieJar
+     * @param  array  $headersArr         Associative array of request headers
      * @param  string $body            The request body
      * @param  array  $serverVariables Custom $_SERVER variables
      *
@@ -1204,7 +1202,6 @@ class Application extends Container implements ApplicationContract
     /**
      * Gets a parameter or an object.
      *
-     * @param string $id The unique identifier for the parameter or object
      *
      * @return mixed The value of the parameter or an object
      */
@@ -1216,7 +1213,6 @@ class Application extends Container implements ApplicationContract
     /**
      * Sets a parameter or an object.
      *
-     * @param string $id    The unique identifier for the parameter or object
      * @param mixed  $value The value of the parameter or a closure to define an object
      *
      * @return Application
@@ -1230,7 +1226,6 @@ class Application extends Container implements ApplicationContract
     /**
      * Checks if a parameter or an object is set.
      *
-     * @param  string $id The unique identifier for the parameter or object
      *
      * @return Boolean
      */

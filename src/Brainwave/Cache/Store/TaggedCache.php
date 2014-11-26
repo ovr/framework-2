@@ -50,7 +50,7 @@ class TaggedCache implements StoreInterface
     /**
      * Create a new tagged cache instance.
      *
-     * @param                                $store
+     * @param                                TaggableStore $store
      * @param  \Brainwave\Cache\Store\TagSet $tags
      *
      * @return void
