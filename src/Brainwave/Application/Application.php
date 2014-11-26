@@ -390,7 +390,7 @@ class Application extends Container implements ApplicationContract
     public function mount($prefix, $controllers)
     {
         if ($controllers instanceof ControllerContract) {
-            $controllers = $controller->connect($this);
+            $controllers = $controllers->connect($this);
 
             if (!$controllers instanceof ControllerCollection) {
                 throw new \LogicException(
@@ -987,8 +987,6 @@ class Application extends Container implements ApplicationContract
             $this->boot();
         }
 
-        $this->boot($this);
-
         // Set header for OPTIONS and all other routes
         if ($this['router']->getCurrentRoute()) {
             $this['response']->setHeader(
@@ -1115,7 +1113,7 @@ class Application extends Container implements ApplicationContract
 
         $headers = new Headers($environment);
 
-        if (isset($headersArray)) {
+        if (isset($headersArr)) {
             foreach ($headersArr as $key => $value) {
                 $headers->set($key, $value);
             }

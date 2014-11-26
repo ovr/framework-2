@@ -173,7 +173,7 @@ class FileCache implements AdapterContract
 
         $int = ((int) $raw['data']) + $value;
 
-        $this->set($key, $int, (int) $raw['time']);
+        $this->put($key, $int, (int) $raw['time']);
 
         return $int;
     }
@@ -201,7 +201,7 @@ class FileCache implements AdapterContract
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        return $this->put($key, $value, 0);
     }
 
     /**

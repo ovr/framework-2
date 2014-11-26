@@ -34,13 +34,6 @@ use \Brainwave\Translator\Interfaces\TranslatorInterface;
 class TranslatorManager implements TranslatorInterface
 {
     /**
-     * Lang folder path
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
      * An array containing all of the translation information.
      *
      * @var array
@@ -469,27 +462,5 @@ class TranslatorManager implements TranslatorInterface
         if ($exception) {
             throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
         }
-    }
-
-    /**
-     * Set path to lang folder
-     *
-     * @param string $path
-     */
-    public function addPath($path)
-    {
-        $this->path = $path;
-        $this->getLoader()->addDefaultPath($path);
-        return $this;
-    }
-
-    /**
-     * Get lang folder path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 }

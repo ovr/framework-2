@@ -107,7 +107,7 @@ class TaggedCache implements StoreInterface
         $minutes = $this->getMinutes($minutes);
 
         if (!is_null($minutes)) {
-            $this->store->set($this->taggedItemKey($key), $value, $minutes);
+            $this->store->put($this->taggedItemKey($key), $value, $minutes);
         }
     }
 

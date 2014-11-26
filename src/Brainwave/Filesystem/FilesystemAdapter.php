@@ -71,7 +71,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return false|string
+     * @return string
      *
      * @throws \Brainwave\Contracts\Filesystem\FileNotFoundException;
      */

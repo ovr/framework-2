@@ -142,7 +142,7 @@ class ApcCache extends TaggableStore implements AdapterContract
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        return $this->put($key, $value, 0);
     }
 
     /**

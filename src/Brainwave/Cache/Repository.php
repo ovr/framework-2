@@ -132,7 +132,7 @@ class Repository implements CacheContract, \ArrayAccess
         $minutes = $this->getMinutes($minutes);
 
         if (!is_null($minutes)) {
-            $this->driver->set($key, $value, $minutes);
+            $this->driver->put($key, $value, $minutes);
         }
     }
 

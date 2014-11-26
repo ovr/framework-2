@@ -168,7 +168,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function shouldReturnJson(Container $container)
     {
-        return $container['environment']->runningInConsole() || $this->requestWantsJson();
+        return $container['environment']->runningInConsole() || $this->requestWantsJson($container);
     }
 
     /**

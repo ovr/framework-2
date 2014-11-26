@@ -189,7 +189,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     {
         $value = is_numeric($value) ? $value : serialize($value);
 
-        $this->connection()->set($this->prefix.$key, $value);
+        $this->connection()->put($this->prefix.$key, $value);
     }
 
     /**

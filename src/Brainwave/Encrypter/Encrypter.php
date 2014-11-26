@@ -43,7 +43,7 @@ class Encrypter implements EncrypterContract
     /**
      * The algorithm used for encryption.
      *
-     * @var integer
+     * @var string
      * @see http://www.php.net/manual/mcrypt.ciphers.php
      */
     protected $cipher = MCRYPT_RIJNDAEL_256;
@@ -90,7 +90,7 @@ class Encrypter implements EncrypterContract
      *
      * @param  \Pimple\Container $container
      * @param  string            $key    Encryption key
-     * @param  integer           $cipher Encryption algorithm
+     * @param  string            $cipher Encryption algorithm
      * @param  string            $mode   Encryption mode
      */
     public function __construct(Container $container, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')

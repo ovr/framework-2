@@ -35,7 +35,7 @@ interface Application
      *
      * @return string
      */
-    public function version();
+    public function getVersion();
 
     /**
      * Determine if the application is currently down for maintenance.

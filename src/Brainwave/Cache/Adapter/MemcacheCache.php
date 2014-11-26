@@ -131,7 +131,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
-        return $this->memcache->set($this->prefix.$key, $value, $minutes * 60);
+        return $this->memcache->put($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
@@ -170,7 +170,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
      */
     public function forever($key, $value)
     {
-        return $this->set($key, $value, 0);
+        return $this->put($key, $value, 0);
     }
 
     /**
