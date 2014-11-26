@@ -36,7 +36,7 @@ abstract class StaticalProxyManager
      *
      * @var \Brainwave\Application\Application
      */
-    protected static $container;
+    protected static $app;
 
     /**
      * The resolved object instances.
@@ -56,7 +56,7 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
 
-        static::$container[static::getFacadeAccessor()] = $instance;
+        static::$app[static::getFacadeAccessor()] = $instance;
     }
 
     /**
@@ -90,8 +90,8 @@ abstract class StaticalProxyManager
     {
         static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
 
-        if (isset(static::$container)) {
-            static::$container[$name] = $mock;
+        if (isset(static::$app)) {
+            static::$app[$name] = $mock;
         }
 
         return $mock;
@@ -106,7 +106,8 @@ abstract class StaticalProxyManager
      */
     protected static function createMockByName($name)
     {
-        $class = static::getMockableClass($name);
+        $staticClass = static::getMockableClass();
+        $class = $staticClass($name);
 
         return $class ? \Mockery::mock($class) : \Mockery::mock();
     }
@@ -159,7 +160,7 @@ abstract class StaticalProxyManager
     }
 
     /**
-     * Resolve the facade root instance from the container.
+     * Resolve the facade root instance from the app.
      *
      * @param  string $name
      *
@@ -175,7 +176,7 @@ abstract class StaticalProxyManager
             return static::$resolvedInstance[$name];
         }
 
-        return static::$resolvedInstance[$name] = static::$container[$name];
+        return static::$resolvedInstance[$name] = static::$app[$name];
     }
 
     /**
@@ -207,19 +208,19 @@ abstract class StaticalProxyManager
      */
     public static function getFacadeApplication()
     {
-        return static::$container;
+        return static::$app;
     }
 
     /**
      * Set the application instance.
      *
-     * @param  \Brainwave\Application\Application $container
+     * @param  \Brainwave\Application\Application $app
      *
      * @return void
      */
-    public static function setFacadeApplication(Application $container)
+    public static function setFacadeApplication(Application $app)
     {
-        self::$container = $container;
+        self::$app = $app;
     }
 
     /**

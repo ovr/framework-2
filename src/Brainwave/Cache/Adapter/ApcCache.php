@@ -95,7 +95,7 @@ class ApcCache extends TaggableStore implements AdapterContract
      *
      * @return array|bool
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         return $this->apcu ?
         apcu_store($this->prefix.$key, $value, $minutes * 60) :

@@ -69,7 +69,7 @@ class NullCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         //
     }

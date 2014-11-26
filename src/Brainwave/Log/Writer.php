@@ -96,7 +96,9 @@ class Writer
     ];
 
     /**
-     * @var folder path
+     * Folder path
+     *
+     * @var string
      */
     protected $path;
 
@@ -109,6 +111,7 @@ class Writer
      * Create a new log writer instance.
      *
      * @param  \Monolog\Logger $monolog
+     *
      * @return void
      */
     public function __construct(MonologLogger $monolog)
@@ -119,8 +122,9 @@ class Writer
     /***
      * Call Monolog with the given method and parameters.
      *
-     * @param  string  $method
+     * @param  string $method
      * @param  array  $parameters
+     *
      * @return mixed
      */
     protected function callMonolog($method, $parameters)
@@ -135,8 +139,9 @@ class Writer
     /**
      * Register a file log handler.
      *
-     * @param  string  $path
-     * @param  string  $level
+     * @param  string $path
+     * @param  string $level
+     *
      * @return void
      */
     public function useFiles($path, $level = 'debug', $formatter = 'Html')
@@ -146,20 +151,21 @@ class Writer
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
         $monolog = $this->monolog;
-        $stream  = $monolog->pushHandler(
+        $monolog->pushHandler(
             new StreamHandler($pathFolder, $level)
         );
 
         if (!empty($formatter)) {
-            $stream->setFormatter($this->parseFormatter($formatter));
+            $monolog->setFormatter($this->parseFormatter($formatter));
         }
     }
 
     /**
      * Register a file log handler.
      *
-     * @param  string  $path
-     * @param  string  $level
+     * @param  string $path
+     * @param  string $level
+     *
      * @return void
      */
     public function useCustomFiles($path, $stream, $level = 'debug', $formatter = 'Html')
@@ -169,19 +175,20 @@ class Writer
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
         $monolog = $this->monolog;
-        $custom  = $monolog->parseHandler($stream, $pathFolder, $level);
+        $monolog->parseHandler($stream, $pathFolder, $level);
 
         if (!empty($formatter)) {
-            $custom->setFormatter($this->parseFormatter($formatter));
+            $monolog->setFormatter($this->parseFormatter($formatter));
         }
     }
 
     /**
      * Register a daily file log handler.
      *
-     * @param  string  $path
-     * @param  int     $days
-     * @param  string  $level
+     * @param  string $path
+     * @param  int    $days
+     * @param  string $level
+     *
      * @return void
      */
     public function useDailyFiles($path, $days = 0, $level = 'debug', $formatter = 'Html')
@@ -190,11 +197,11 @@ class Writer
 
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
-        $monolog  = $this->monolog;
-        $rotating = $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
+        $monolog = $this->monolog;
+        $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
 
         if (!empty($formatter)) {
-            $rotating->setFormatter($this->parseFormatter($formatter));
+            $monolog->setFormatter($this->parseFormatter($formatter));
         }
     }
 
@@ -211,10 +218,10 @@ class Writer
         $level = $this->parseLevel($level);
 
         $monolog = $this->monolog;
-        $error   = $monolog->pushHandler(new ErrorLogHandler($messageType, $level));
+        $monolog->pushHandler(new ErrorLogHandler($messageType, $level));
 
         if (!empty($formatter)) {
-            $error->setFormatter($this->parseFormatter($formatter));
+            $monolog->setFormatter($this->parseFormatter($formatter));
         }
     }
 
@@ -241,7 +248,8 @@ class Writer
     /**
      * Parse the string level into a Monolog constant.
      *
-     * @param  string  $level
+     * @param  string $level
+     *
      * @return int
      *
      * @throws \InvalidArgumentException
@@ -258,8 +266,9 @@ class Writer
     /**
      * Parse the formatter into a Monolog constant.
      *
-     * @param  string  $formatter
-     * @param  string  $formatterInput
+     * @param  string $formatter
+     * @param  string $formatterInput
+     *
      * @return int
      *
      * @throws \InvalidArgumentException
@@ -352,6 +361,7 @@ class Writer
      * Dynamically pass log calls into the writer.
      *
      * @param  dynamic (level, param, param)
+     *
      * @return mixed
      */
     public function write()
@@ -364,8 +374,9 @@ class Writer
     /**
      * Dynamically handle error additions.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param  string $method
+     * @param  array  $parameters
+     *
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -387,7 +398,8 @@ class Writer
     /**
      * Format the parameters for the logger.
      *
-     * @param  mixed  $parameters
+     * @param  mixed $parameters
+     *
      * @return void
      */
     protected function formatParameters(&$parameters)

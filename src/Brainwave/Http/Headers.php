@@ -71,27 +71,27 @@ class Headers extends Collection implements HeadersContract
     /**
      * Parse provided headers into this collection
      *
-     * @param  EnvironmentContract $environment
+     * @param  $environment
      *
      * @return void
      */
-    public function parseHeaders(EnvironmentContract $environment)
+    public function parseHeaders($environment)
     {
-        $env = $environment;
+        if ($environment instanceof EnvironmentContract) {
+            foreach ($env as $key => $value) {
+                $key = strtoupper($key);
 
-        foreach ($env as $key => $value) {
-            $key = strtoupper($key);
+                if (
+                    strpos($key, 'HTTP_') === 0 ||
+                    strpos($key, 'REDIRECT_') === 0 ||
+                    in_array($key, $this->special)
+                ) {
+                    if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
+                        continue;
+                    }
 
-            if (
-                strpos($key, 'HTTP_') === 0 ||
-                strpos($key, 'REDIRECT_') === 0 ||
-                in_array($key, $this->special)
-            ) {
-                if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
-                    continue;
+                    parent::set($this->normalizeKey($key), [$value]);
                 }
-
-                parent::set($this->normalizeKey($key), [$value]);
             }
         }
     }
@@ -134,11 +134,13 @@ class Headers extends Collection implements HeadersContract
     public function add($key, $value)
     {
         $header = $this->get($key, true);
+
         if (is_array($value)) {
             $header = array_merge($header, $value);
         } else {
             $header[] = $value;
         }
+
         parent::set($this->normalizeKey($key), $header);
     }
 

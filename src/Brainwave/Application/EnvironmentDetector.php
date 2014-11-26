@@ -35,6 +35,13 @@ use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 class EnvironmentDetector extends Collection implements EnvironmentContract
 {
     /**
+     * The application instance being facaded.
+     *
+     * @var \Pimple\Container
+     */
+    protected static $container;
+
+    /**
      * Mock data for an Environment
      *
      * @var array
@@ -65,7 +72,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      */
     public function __construct(Container $container, $environment = null)
     {
-        $this->container= $container;
+        $this->container = $container;
 
         if (!is_null($environment)) {
             $this->parse($environment);
@@ -263,13 +270,15 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
             return call_user_func($environments);
         }
 
-        foreach ($environments as $environment => $hosts) {
-            // To determine the current environment, we'll simply iterate through the possible
-            // environments and look for the host that matches the host for this request we
-            // are currently processing here, then return back these environment's names.
-            foreach ((array) $hosts as $host) {
-                if ($this->isMachine($host)) {
-                    return $environment;
+        if (is_array($environments)) {
+            foreach ($environments as $environment => $hosts) {
+                // To determine the current environment, we'll simply iterate through the possible
+                // environments and look for the host that matches the host for this request we
+                // are currently processing here, then return back these environment's names.
+                foreach ((array) $hosts as $host) {
+                    if ($this->isMachine($host)) {
+                        return $environment;
+                    }
                 }
             }
         }
@@ -291,7 +300,9 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
         // and if it was that automatically overrides as the environment. Otherwise, we
         // will check the environment as a "web" request like a typical HTTP request.
         if (!is_null($value = $this->getEnvironmentArgument($args))) {
-            return reset(array_slice(explode('=', $value), 1));
+            $arr = array_slice(explode('=', $value), 1);
+
+            return reset($arr);
         }
 
         return $this->detectWebEnvironment($environments);

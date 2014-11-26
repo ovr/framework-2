@@ -22,7 +22,7 @@ use \Brainwave\Collection\Collection;
 use \League\Flysystem\AdapterInterface;
 use \League\Flysystem\FilesystemInterface;
 use \Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract ;
-use \Brainwave\Filesystem\Exception\FileNotFoundException;
+use \Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 
 /**
  * FilesystemAdapter
@@ -32,7 +32,7 @@ use \Brainwave\Filesystem\Exception\FileNotFoundException;
  * @since   0.9.3-dev
  *
  */
-class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
+class FilesystemAdapter implements CloudFilesystemContract
 {
 
     /**
@@ -73,14 +73,14 @@ class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
      *
      * @return false|string
      *
-     * @throws \Brainwave\Filesystem\Exception\FileNotFoundException;
+     * @throws \Brainwave\Contracts\Filesystem\FileNotFoundException;
      */
     public function get($path)
     {
         try {
             return $this->driver->read($path);
         } catch (\League\Flysystem\FileNotFoundException $e) {
-            throw new FileNotFoundException($path, $e->getCode(), $e);
+            throw new ContractFileNotFoundException($path, $e->getCode(), $e);
         }
     }
 
@@ -146,7 +146,7 @@ class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
      * @param  string $path
      * @param  string $data
      *
-     * @return boolean
+     * @return integer
      */
     public function append($path, $data)
     {
@@ -204,7 +204,7 @@ class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return false|array
+     * @return integer
      */
     public function size($path)
     {
@@ -216,7 +216,7 @@ class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return false|array
+     * @return integer
      */
     public function lastModified($path)
     {
@@ -228,7 +228,8 @@ class FilesystemAdapter implements FilesystemInterface, CloudFilesystemContract
      *
      * @param  string|null $directory
      *
-     * @param  bool  $recursive
+     * @param  bool $recursive
+     *
      * @return array
      */
     public function files($directory = null, $recursive = false)

@@ -130,10 +130,11 @@ class Connection implements ConnectionInterface
     /**
      * Create a new database connection instance.
      *
-     * @param  \PDO     $pdo
-     * @param  string   $database
-     * @param  string   $tablePrefix
-     * @param  array    $config
+     * @param  \PDO    $pdo
+     * @param  string  $database
+     * @param  string  $tablePrefix
+     * @param  array   $config
+     *
      * @return void
      */
     public function __construct(
@@ -159,6 +160,7 @@ class Connection implements ConnectionInterface
      *
      * @param  string $table table name
      * @param  string $alias alias name
+     *
      * @return boolean|null
      */
     public function setAlias($table, $alias)
@@ -170,6 +172,7 @@ class Connection implements ConnectionInterface
      * Get alias for table
      *
      * @param  string $table
+     *
      * @return string|array
      */
     public function getAlias($table)
@@ -182,9 +185,10 @@ class Connection implements ConnectionInterface
     /**
      * Run a SQL statement and log its execution context.
      *
-     * @param  string    $query
-     * @param  array     $bindings
-     * @param  \Closure  $callback
+     * @param  string   $query
+     * @param  array    $bindings
+     * @param  \Closure $callback
+     *
      * @return mixed
      *
      * @throws \Brainwave\Database\Exception\ConnectException
@@ -222,9 +226,10 @@ class Connection implements ConnectionInterface
     /**
      * Run a SQL statement.
      *
-     * @param  string    $query
-     * @param  array     $bindings
-     * @param  \Closure  $callback
+     * @param  string   $query
+     * @param  array    $bindings
+     * @param  \Closure $callback
+     *
      * @return mixed
      *
      * @throws \Brainwave\Database\Exception\ConnectException
@@ -254,9 +259,10 @@ class Connection implements ConnectionInterface
     /**
      * Handle a query exception that occurred during query execution.
      *
-     * @param  \Brainwave\Database\Exception\ConnectException  $e
-     * @param  string    $query
-     * @param  \Closure  $callback
+     * @param  \Brainwave\Database\Exception\ConnectException $e
+     * @param  string                                         $query
+     * @param  \Closure                                       $callback
+     *
      * @return mixed
      *
      * @throws \Brainwave\Database\Exception\ConnectException
@@ -280,6 +286,7 @@ class Connection implements ConnectionInterface
      * Determine if the given exception was caused by a lost connection.
      *
      * @param  \Brainwave\Database\Exception\ConnectException
+     *
      * @return bool
      */
     protected function causedByLostConnection(ConnectException $e)
@@ -300,7 +307,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the reconnect instance on the connection.
      *
-     * @param  callable  $reconnector
+     * @param  callable $reconnector
+     *
      * @return $this
      */
     public function setReconnector(callable $reconnector)
@@ -341,7 +349,8 @@ class Connection implements ConnectionInterface
     /**
          * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return mixed
      *
      * @throws \Exception
@@ -437,7 +446,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the default fetch mode for the connection.
      *
-     * @param  int  $fetchMode
+     * @param  int $fetchMode
+     *
      * @return int
      */
     public function setFetchMode($fetchMode)
@@ -448,7 +458,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the PDO connection.
      *
-     * @param  \PDO|null  $pdo
+     * @param  \PDO|null $pdo
+     *
      * @return $this
      */
     public function setPdo($pdo)
@@ -482,6 +493,7 @@ class Connection implements ConnectionInterface
      * Set the query grammar used by the connection.
      *
      * @param  \Brainwave\Database\Grammar\Builder
+     *
      * @return void
      */
     public function setQueryGrammar(Builder $grammar)
@@ -502,7 +514,8 @@ class Connection implements ConnectionInterface
     /**
      * Get an option from the configuration options.
      *
-     * @param  string  $option
+     * @param  string $option
+     *
      * @return mixed
      */
     public function getConfig($option)
@@ -523,7 +536,8 @@ class Connection implements ConnectionInterface
     /**
      * Execute the given callback in "dry run" mode.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return array
      */
     public function pretend(\Closure $callback)
@@ -555,7 +569,8 @@ class Connection implements ConnectionInterface
     /**
      * Prepare the query bindings for execution.
      *
-     * @param  array  $bindings
+     * @param  array $bindings
+     *
      * @return array
      */
     public function prepareBindings(array $bindings)
@@ -579,8 +594,9 @@ class Connection implements ConnectionInterface
     /**
      * Execute an SQL statement and return the boolean result.
      *
-     * @param  string  $query
-     * @param  array   $bindings
+     * @param  string $query
+     * @param  array  $bindings
+     *
      * @return bool
      */
     public function statement($query, $bindings = array())
@@ -599,8 +615,9 @@ class Connection implements ConnectionInterface
     /**
      * Run an SQL statement and get the number of rows affected.
      *
-     * @param  string  $query
-     * @param  array   $bindings
+     * @param  string $query
+     * @param  array  $bindings
+     *
      * @return int
      */
     public function affectingStatement($query, $bindings = array())
@@ -624,9 +641,10 @@ class Connection implements ConnectionInterface
     /**
      * Log a query in the connection's query log.
      *
-     * @param  string  $query
-     * @param  array   $bindings
-     * @param  double  $time
+     * @param  string $query
+     * @param  array  $bindings
+     * @param  double $time
+     *
      * @return void
      */
     public function logQuery($query, $bindings, $time = null)
@@ -706,7 +724,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the name of the connected database.
      *
-     * @param  string  $database
+     * @param  string $database
+     *
      * @return string
      */
     public function setDatabaseName($database)
@@ -727,7 +746,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the table prefix in use by the connection.
      *
-     * @param  string  $prefix
+     * @param  string $prefix
+     *
      * @return void
      */
     public function setTablePrefix($prefix)
@@ -754,7 +774,8 @@ class Connection implements ConnectionInterface
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Brainwave\Cache\Manager|\Closure  $cache
+     * @param  \Brainwave\Cache\Manager|\Closure $cache
+     *
      * @return void
      */
     public function setCacheManager($cache)
@@ -767,7 +788,8 @@ class Connection implements ConnectionInterface
     /**
      * Get the elapsed time since a given starting point.
      *
-     * @param  int    $start
+     * @param  int $start
+     *
      * @return float
      */
     protected function getElapsedTime($start)

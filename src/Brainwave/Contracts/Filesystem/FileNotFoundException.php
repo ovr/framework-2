@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Filesystem\Exception;
+namespace Brainwave\Contracts\Filesystem;
 
 /**
  * Narrowspark - a PHP 5 framework

@@ -57,7 +57,7 @@ class Yaml implements ParserContract
      * @param  string $filename
      * @param  string $group
      *
-     * @return array|string data
+     * @return array data
      */
     public function load($filename, $group = null)
     {
@@ -78,7 +78,7 @@ class Yaml implements ParserContract
                 return $groupData;
             }
 
-            return $data;
+            return (array) $data;
         }
     }
 

@@ -27,12 +27,16 @@ use \ClassPreloader\ClassLoader;
  * @since   0.9.3-dev
  *
  */
-$config = ClassLoader::getIncludes(function (ClassLoader $loader) {
+
+$loader = new ClassLoader();
+
+$config = ClassLoader::getIncludes(function ($loader) {
 
     $basePath = Application::$paths['path.base'];
     $core = Config::get("autoload::optimize", []);
 
     require $basePath.'/vendor/autoload.php';
+
     $loader->register();
 });
 

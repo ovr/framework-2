@@ -39,13 +39,9 @@ use \Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
  */
 class ExceptionServiceProvider implements ServiceProviderInterface
 {
-    protected $container;
-
     public function register(Container $container)
     {
-        $this->container = $container;
-
-        $this->registerDisplayers();
+        $this->registerDisplayers($container);
 
         $container['exception'] = function ($container) {
             return new ExceptionHandler(
@@ -61,11 +57,11 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerDisplayers()
+    protected function registerDisplayers(Container $container)
     {
-        $this->registerPlainDisplayer();
+        $this->registerPlainDisplayer($container);
 
-        $this->registerDebugDisplayer();
+        $this->registerDebugDisplayer($container);
     }
 
     /**
@@ -73,16 +69,17 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerWhoops()
+    protected function registerWhoops(Container $container)
     {
-        $this->registerWhoopsHandler();
-        $this->registerPrettyWhoopsHandlerInfo();
+        $this->registerWhoopsHandler($container);
+        $this->registerPrettyWhoopsHandlerInfo($container);
 
-        $this->container['whoops'] = function ($container) {
+        $container['whoops'] = function ($container) {
             // We will instruct Whoops to not exit after it displays the exception as it
             // will otherwise run out before we can do anything else. We just want to
             // let the framework go ahead and finish a request on this end instead.
-            Helpers::with($whoops = new Run)->allowQuit(false);
+            $whoops = new Run();
+            $whoops->allowQuit(false);
 
             $whoops->writeToOutput(true);
             $whoops->pushHandler($container['whoops.plain.handler']);
@@ -98,9 +95,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerPlainDisplayer()
+    protected function registerPlainDisplayer(Container $container)
     {
-        $this->container['exception.plain'] = function ($container) {
+        $container['exception.plain'] = function ($container) {
             // If the application is running in a console environment, we will just always
             // use the debug handler as there is no point in the console ever returning
             // out HTML. This debug handler always returns JSON from the console env.
@@ -121,11 +118,11 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerDebugDisplayer()
+    protected function registerDebugDisplayer(Container $container)
     {
-        $this->registerWhoops();
+        $this->registerWhoops($container);
 
-        $this->container['exception.debug'] = function ($container) {
+        $container['exception.debug'] = function ($container) {
             return new WhoopsDisplayer(
                 $container,
                 strtolower($container['settings']->get('app::charset', 'en')),
@@ -139,16 +136,16 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerWhoopsHandler()
+    protected function registerWhoopsHandler(Container $container)
     {
-        if ($this->shouldReturnJson()) {
-            $this->container['whoops.handler'] = function () {
+        if ($this->shouldReturnJson($container)) {
+            $container['whoops.handler'] = function () {
                 return new JsonResponseHandler;
             };
         } else {
-            $this->registerPlainTextHandler();
+            $this->registerPlainTextHandler($container);
 
-            $this->registerPrettyWhoopsHandler();
+            $this->registerPrettyWhoopsHandler($container);
         }
     }
 
@@ -157,9 +154,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerPlainTextHandler()
+    protected function registerPlainTextHandler(Container $container)
     {
-        $this->container['whoops.plain.handler'] = function ($container) {
+        $container['whoops.plain.handler'] = function ($container) {
             return new PlainTextHandler($container['logger']->getMonolog());
         };
     }
@@ -169,9 +166,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return bool
      */
-    protected function shouldReturnJson()
+    protected function shouldReturnJson(Container $container)
     {
-        return $this->container['environment']->runningInConsole() || $this->requestWantsJson();
+        return $container['environment']->runningInConsole() || $this->requestWantsJson();
     }
 
     /**
@@ -179,9 +176,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return bool
      */
-    protected function requestWantsJson()
+    protected function requestWantsJson(Container $container)
     {
-        return $this->container['request']->isAjax() || $this->container['request']->isJson();
+        return $container['request']->isAjax() || $container['request']->isJson();
     }
 
     /**
@@ -189,12 +186,13 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerPrettyWhoopsHandler()
+    protected function registerPrettyWhoopsHandler(Container $container)
     {
-        $this->container['whoops.handler'] = function ($container) {
-            Helpers::with($handler = new PrettyPageHandler)->setEditor('sublime');
+        $container['whoops.handler'] = function ($container) {
+            $handler = new PrettyPageHandler();
+            $handler->setEditor($container['settings']->get('app::whoops.editor', 'sublime'));
 
-            $handler->setResourcesPath(dirname(__FILE__).'/Resources');
+            $handler->setResourcesPath(dirname(__DIR__).'/Resources');
 
             return $handler;
         };
@@ -210,9 +208,10 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerPrettyWhoopsHandlerInfo()
+    protected function registerPrettyWhoopsHandlerInfo(Container $container)
     {
-        $this->container['whoops.handler.info'] = function ($container) {
+        $container['whoops.handler.info'] = function ($container) {
+
             try {
                 $request = $container['request'];
             } catch (\RuntimeException $e) {

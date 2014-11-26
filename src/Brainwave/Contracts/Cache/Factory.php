@@ -31,7 +31,8 @@ interface Factory
     /**
      * Get a cache driver instance.
      *
-     * @param  string  $driver
+     * @param  string $driver
+     *
      * @return mixed
      */
     public function driver($driver = null);

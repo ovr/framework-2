@@ -70,7 +70,7 @@ class ArrayCache implements AdapterContract
      *
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         $this->storage[$key] = $value;
     }

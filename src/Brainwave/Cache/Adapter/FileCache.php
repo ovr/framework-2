@@ -134,7 +134,7 @@ class FileCache implements AdapterContract
      *
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         $value = $this->expiration($minutes).serialize($value);
 

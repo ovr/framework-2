@@ -85,7 +85,7 @@ class WincacheCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         wincache_ucache_set($this->prefix.$key, $value, $minutes * 60);
     }

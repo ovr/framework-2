@@ -131,7 +131,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      * @param  int     $minutes
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
     }

@@ -67,7 +67,7 @@ class Mailer implements MailerContract
     /**
      * The log writer instance.
      *
-     * @var \Brainwave\Log\Writer
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 

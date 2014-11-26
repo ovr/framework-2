@@ -38,7 +38,7 @@ interface Adapter
     /**
      * Fetch a stored variable from the cache
      *
-     * @param string $key The key used to store the value
+     * @param  string $key The key used to store the value
      *
      * @return mixed The stored variable
      */
@@ -66,13 +66,13 @@ interface Adapter
     /**
      * Store variable in the cache
      *
-     * @param string $key The key to use to set the value
-     * @param mixed $value The variable to set
+     * @param string  $key The key to use to put the value
+     * @param mixed   $value The variable to put
      * @param integer $minutes
      *
      * @return void
      */
-    public function set($key, $value, $minutes);
+    public function put($key, $value, $minutes);
 
     /**
      * Increment the value of an item in the cache.

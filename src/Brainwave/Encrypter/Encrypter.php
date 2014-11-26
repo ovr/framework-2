@@ -43,7 +43,7 @@ class Encrypter implements EncrypterContract
     /**
      * The algorithm used for encryption.
      *
-     * @var string
+     * @var integer
      * @see http://www.php.net/manual/mcrypt.ciphers.php
      */
     protected $cipher = MCRYPT_RIJNDAEL_256;

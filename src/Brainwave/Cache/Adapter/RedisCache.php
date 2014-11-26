@@ -79,7 +79,7 @@ class RedisCache extends TaggableStore implements AdapterContract
 
         try {
             $client->connect();
-        } catch (\Predis\Network\ConnectionException $e) {
+        } catch (\Predis\Connection\ConnectionException $e) {
             throw new \RuntimeException("Couldn't connected to Redis: ".$e->getMessage());
         }
 
@@ -144,7 +144,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      *
      * @return void
      */
-    public function set($key, $value, $minutes)
+    public function put($key, $value, $minutes)
     {
         $value = is_numeric($value) ? $value : serialize($value);
 

@@ -18,7 +18,7 @@ namespace Brainwave\Config;
  *
  */
 
-use \Brainwave\Config\FileLoader;
+use \Brainwave\Filesystem\FileLoader;
 use \Brainwave\Contracts\Config\Manager as ManagerContract;
 use \Brainwave\Contracts\Config\Repository as RepositoryContract;
 
@@ -99,7 +99,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Get the configuration loader
      *
-     * @return \Brainwave\Config\FileLoader
+     * @return \Brainwave\Filesystem\FileLoader
      */
     public function getLoader()
     {

@@ -678,7 +678,7 @@ class Application extends Container implements ApplicationContract
      */
     public function stop()
     {
-        throw new HttpException();
+        throw new \Exception();
     }
 
     /**
@@ -1073,8 +1073,8 @@ class Application extends Container implements ApplicationContract
             }
 
             $this['events']->applyHook('after.router');
-        } catch (HttpException $e) {
-            throw new HttpException();
+        } catch (\Exception $e) {
+            $this->stop();
         }
 
         $response->write(ob_get_clean());
@@ -1101,31 +1101,43 @@ class Application extends Container implements ApplicationContract
     public function subRequest(
         $url,
         $method = 'GET',
-        array $headers = [],
-        array $CookieJar = [],
+        array $headersArr = [],
+        array $cookieArr = [],
         $body = '',
         array $serverVariables = []
     ) {
         // Build sub-request and sub-response
         $environment = new EnvironmentDetector(array_merge([
             'REQUEST_METHOD' => $method,
-            'REQUEST_URI' => $url,
-            'SCRIPT_NAME' => '/index.php'
+            'REQUEST_URI'    => $url,
+            'SCRIPT_NAME'    => '/index.php'
         ], $serverVariables));
 
         $headers = new Headers($environment);
 
-        $CookieJar = new CookieJar($headers);
+        if (isset($headersArray)) {
+            foreach ($headersArr as $key => $value) {
+                $headers->set($key, $value);
+            }
+        }
 
-        $subRequest = new Request($environment, $headers, $CookieJar, $body);
+        $cookieJar = new CookieJar($headers);
+
+        if (isset($cookieArr)) {
+            foreach ($cookieArr as $key => $value) {
+                $cookieJar->set($key, $value);
+            }
+        }
+
+        $subRequest  = new Request($environment, $headers, $cookieJar, $body);
         $subResponse = new Response(new Headers(), new CookieJar());
 
         // Cache original request and response
-        $oldRequest = $this['request'];
+        $oldRequest  = $this['request'];
         $oldResponse = $this['response'];
 
         // Set sub-request and sub-response
-        $this['request'] = $subRequest;
+        $this['request']  = $subRequest;
         $this['response'] = $subResponse;
 
         // Dispatch sub-request through application router

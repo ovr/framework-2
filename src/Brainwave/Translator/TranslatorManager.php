@@ -18,7 +18,7 @@ namespace Brainwave\Translator;
  *
  */
 
-use \Brainwave\Config\FileLoader;
+use \Brainwave\Filesystem\FileLoader;
 use \Brainwave\Translator\Interfaces\TranslatorInterface;
 
 /**
@@ -48,9 +48,9 @@ class TranslatorManager implements TranslatorInterface
     protected $translations = [];
 
     /**
-     * [$loader description]
+     * FileLoader instance
      *
-     * @var \Brainwave\Config\FileLoader
+     * @var \Brainwave\Filesystem\FileLoader
      */
     protected $loader;
 

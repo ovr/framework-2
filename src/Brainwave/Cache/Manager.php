@@ -89,11 +89,11 @@ class Manager implements FactoryContract
     /**
      * Builder.
      *
-     * @param  AdapterContract $driver The cache driver to use
+     * @param  string $driver The cache driver to use
      *
-     * @return AdapterContract
+     * @return mixed
      */
-    public function driver(AdapterContract $driver, array $options = [])
+    public function driver($driver, array $options = [])
     {
         $driver = $driver ?: $this->getDefaultDriver();
 
