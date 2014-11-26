@@ -146,7 +146,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $path
      * @param  string $data
      *
-     * @return integer
+     * @return boolean
      */
     public function append($path, $data)
     {

@@ -100,7 +100,7 @@ class FilesystemManager implements Manager
      *
      * @param  string $name
      *
-     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @return FilesystemAdapter
      */
     protected function resolve($name)
     {
@@ -114,7 +114,7 @@ class FilesystemManager implements Manager
      *
      * @param  \League\Flysystem\AdapterInterface $adapter
      *
-     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @return FilesystemAdapter
      */
     protected function adapt(AdapterInterface $adapter)
     {
