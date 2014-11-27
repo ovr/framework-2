@@ -20,7 +20,6 @@ namespace Brainwave\Exception;
 
 use \Whoops\Run;
 use \Pimple\Container;
-use \Brainwave\Support\Helpers;
 use \Pimple\ServiceProviderInterface;
 use \Whoops\Handler\PlainTextHandler;
 use \Whoops\Handler\PrettyPageHandler;

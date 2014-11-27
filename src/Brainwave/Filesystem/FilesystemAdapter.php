@@ -340,10 +340,10 @@ class FilesystemAdapter implements CloudFilesystemContract
         }
 
         switch ($visibility) {
-            case Cloud::VISIBILITY_PUBLIC:
+            case CloudFilesystemContract::VISIBILITY_PUBLIC:
                 return AdapterInterface::VISIBILITY_PUBLIC;
 
-            case Cloud::VISIBILITY_PRIVATE:
+            case CloudFilesystemContract::VISIBILITY_PRIVATE:
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 

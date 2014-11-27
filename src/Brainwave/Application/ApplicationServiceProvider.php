@@ -45,7 +45,7 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    protected function registerEntvironment($container)
+    protected function registerEntvironment(Container $container)
     {
         $container['environment'] = function ($container) {
             return new EnvironmentDetector($container, $_SERVER);
@@ -55,7 +55,7 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    protected function registerAliasLoader($container)
+    protected function registerAliasLoader(Container $container)
     {
         $container['alias'] = function () {
             return new AliasLoader();
@@ -65,7 +65,7 @@ class EnvironmentServiceProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    protected function registerStaticalProxyResolver($container)
+    protected function registerStaticalProxyResolver(Container $container)
     {
         $container['statical.resolver'] = function () {
             return new StaticalProxyResolver();

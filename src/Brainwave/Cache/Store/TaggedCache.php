@@ -50,8 +50,8 @@ class TaggedCache implements StoreInterface
     /**
      * Create a new tagged cache instance.
      *
-     * @param                                TaggableStore $store
-     * @param  \Brainwave\Cache\Store\TagSet $tags
+     * @param  \Brainwave\Cache\Store\TaggableStore $store
+     * @param  \Brainwave\Cache\Store\TagSet        $tags
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class TaggedCache implements StoreInterface
         if ($store instanceof Adapter) {
             $this->store = $store;
         } else {
-            throw new Exception("{$store} is not a instance of '\Brainwave\Contracts\Cache\Adapter'");
+            throw new \Exception("{$store} is not a instance of '\Brainwave\Contracts\Cache\Adapter'");
         }
     }
 

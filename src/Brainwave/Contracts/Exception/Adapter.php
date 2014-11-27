@@ -18,8 +18,6 @@ namespace Brainwave\Contracts\Exception;
  *
  */
 
-use \Pimple\Container;
-
 /**
  * Adapter
  *

@@ -85,7 +85,7 @@ interface Repository
      *
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback);
+    public function remember($key, $minutes, \Closure $callback);
 
     /**
      * Get an item from the cache, or store the default value forever.
@@ -95,7 +95,7 @@ interface Repository
      *
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback);
+    public function rememberForever($key, \Closure $callback);
 
     /**
      * Check if the cache driver is supported

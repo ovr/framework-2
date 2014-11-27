@@ -90,16 +90,17 @@ class Handler
      * Register the exception /
      * error handlers for the application.
      *
+     * @param  $env
      *
      * @return void
      */
-    public function register($exception)
+    public function register($env)
     {
         $this->registerErrorHandler();
 
         $this->registerExceptionHandler();
 
-        if ($exception !== 'testing') {
+        if ($env !== 'testing') {
             $this->registerShutdownHandler();
         }
     }
@@ -151,10 +152,10 @@ class Handler
      * these ErrorException objects are then thrown and caught by Brainwave's
      * built-in or custom error handlers.
      *
-     * @param  int            $level   The numeric type of the Error
-     * @param  string         $message The error message
-     * @param  string         $file    The absolute path to the affected file
-     * @param  int            $line    The line number of the error in the affected file
+     * @param  int    $level   The numeric type of the Error
+     * @param  string $message The error message
+     * @param  string $file    The absolute path to the affected file
+     * @param  int    $line    The line number of the error in the affected file
      *
      * @throws ErrorException
      */
@@ -168,7 +169,8 @@ class Handler
     /**
      * Handle an uncaught exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
+     *
      * @return void
      */
     public function handleUncaughtException($exception)
@@ -179,7 +181,8 @@ class Handler
     /**
      * Handle a console exception.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
+     *
      * @return void
      */
     public function handleConsole($exception)
@@ -252,7 +255,8 @@ class Handler
     /**
      * Format an exception thrown by a handler.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
+     *
      * @return string
      */
     protected function formatException(\Exception $e)
@@ -268,10 +272,11 @@ class Handler
     /**
      * Register an application error handler.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
-    public function error(Closure $callback)
+    public function error(\Closure $callback)
     {
         array_unshift($this->handlers, $callback);
     }
@@ -279,10 +284,11 @@ class Handler
     /**
      * Register an application error handler at the bottom of the stack.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return void
      */
-    public function pushError(Closure $callback)
+    public function pushError(\Closure $callback)
     {
         $this->handlers[] = $callback;
     }
@@ -337,7 +343,7 @@ class Handler
     /**
      * Logs Exception if debug is false
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      *
      * @return void
      */
@@ -378,7 +384,8 @@ EOF;
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int   $type
+     * @param  int $type
+     *
      * @return bool
      */
     protected function isFatal($type)
@@ -389,8 +396,9 @@ EOF;
     /**
      * Determine if the given handler handles this exception.
      *
-     * @param  \Closure    $handler
-     * @param  \Exception  $exception
+     * @param  \Closure   $handler
+     * @param  \Exception $exception
+     *
      * @return bool
      */
     protected function handlesException(\Closure $handler, $exception)
@@ -403,8 +411,8 @@ EOF;
     /**
      * Determine if the given handler type hints the exception.
      *
-     * @param  \ReflectionFunction  $reflection
-     * @param  \Exception  $exception
+     * @param  \ReflectionFunction $reflection
+     * @param  \Exception          $exception
      *
      * @return boolean
      */

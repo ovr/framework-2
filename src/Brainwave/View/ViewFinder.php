@@ -18,6 +18,7 @@ namespace Brainwave\View;
  *
  */
 
+use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Contracts\View\Interfaces\ViewFinderInterface;
 
 /**

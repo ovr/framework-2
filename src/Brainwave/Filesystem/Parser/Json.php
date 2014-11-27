@@ -19,7 +19,7 @@ namespace Brainwave\Filesystem\Parser;
  */
 
 use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Filesystem\Parser as dataContract;
+use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Json

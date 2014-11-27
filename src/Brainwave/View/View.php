@@ -18,10 +18,9 @@ namespace Brainwave\View;
  *
  */
 
-use \Pimple\Container;
 use \Brainwave\Support\Str;
 use \Brainwave\Collection\Collection;
-use \Brainwave\View\Engines\EngineResolver;
+use \Brainwave\View\Engines\EngineInterface;
 use \Brainwave\Contracts\View\View as ViewContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 

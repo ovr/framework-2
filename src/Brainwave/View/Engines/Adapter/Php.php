@@ -18,7 +18,7 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use Brainwave\Contracts\View\Engines as EnginesContract;
+use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Php
@@ -31,32 +31,16 @@ use Brainwave\Contracts\View\Engines as EnginesContract;
 class Php implements EnginesContract
 {
     /**
-     * Set Path
-     * @var string
-     */
-    protected $path;
-
-    /**
      * Get the evaluated contents of the view.
      *
-     * @param  array   $data
+     * @param  string $path
+     * @param  array  $data
+     *
      * @return string
      */
-    public function get(array $data = [])
+    public function get($path, array $data = [])
     {
-        return $this->evaluatePath($this->path, $data);
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return $this \Brainwave\View\Engines
-     */
-    public function set($path)
-    {
-        $this->path = $path;
-        return $this;
+        return $this->evaluatePath($path, $data);
     }
 
     /**

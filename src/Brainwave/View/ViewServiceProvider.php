@@ -19,7 +19,8 @@ namespace Brainwave\View;
  */
 
 use \Pimple\Container;
-use \Brainwave\View\ViewFactory;
+use \Brainwave\View\Factory;
+use \Brainwave\View\ViewFinder;
 use \Pimple\ServiceProviderInterface;
 use \Brainwave\View\Engines\EngineResolver;
 use \Brainwave\View\Engines\Adapter\Php as PhpEngine;
@@ -48,7 +49,8 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the engine engines instance.
      *
-     * @param Container $container
+     * @param  Container $container
+     *
      * @return void
      */
     protected function registerEngineResolver($container)
@@ -134,20 +136,22 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the view finder implementation.
      *
-     * @param Container $container
+     * @param  Container $container
+     *
      * @return void
      */
     protected function registerViewFinder($container)
     {
         $container['view.finder'] = function ($container) {
-            return new FileViewFinder($container['files'], $container['config']['view.paths']);
+            return new ViewFinder($container['files'], $container['config']['view.paths']);
         };
     }
 
     /**
      * Register the view environment.
      *
-     * @param Container $container
+     * @param  Container $container
+     *
      * @return void
      */
     protected function registerFactory($container)

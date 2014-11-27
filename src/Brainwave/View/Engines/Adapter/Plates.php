@@ -23,7 +23,7 @@ use \League\Plates\Engine;
 use \League\Plates\Extension\URI;
 use \League\Plates\Extension\Asset;
 use \League\Plates\Template\Template;
-use \Brainwave\Contracts\View\Engines as EnginesContract;
+use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Plates
@@ -41,13 +41,6 @@ class Plates implements EnginesContract
      * @var void
      */
     protected $container;
-
-    /**
-     * Set Path
-     *
-     * @var string
-     */
-    protected $path;
 
     /**
      * [$engine description]
@@ -100,27 +93,16 @@ class Plates implements EnginesContract
     }
 
     /**
-    * Get the evaluated contents of the view.
-    * @param  array $data
-    *
-    * @return string
-    */
-    public function get(array $data = [])
+     * Get the evaluated contents of the view.
+     *
+     * @param  string $path
+     * @param  array  $data
+     *
+     * @return string
+     */
+    public function get($path, array $data = [])
     {
-        return $this->evaluatePath($this->path, $data);
-    }
-
-   /**
-    * Set path
-    *
-    * @param string $path
-    *
-    * @return $this \Brainwave\View\Engines
-    */
-    public function set($path)
-    {
-        $this->path = $path;
-        return $this;
+        return $this->evaluatePath($path, $data);
     }
 
     /**

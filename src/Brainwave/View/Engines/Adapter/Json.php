@@ -19,7 +19,7 @@ namespace Brainwave\View\Engines\Adapter;
  */
 
 use \Pimple\Container;
-use Brainwave\Contracts\View\Engines as EnginesContract;
+use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Json
@@ -55,8 +55,8 @@ class Json implements EnginesContract
     /**
      * Construct
      *
-     * @param \Pimple\Container                   $container
-     * @param \Brainwave\View\ViewServiceProvider $factory
+     * @param \Pimple\Container                                  $container
+     * @param \Brainwave\View\Engines\Interfaces\EngineInterface $factory
      */
     public function __construct(Container $container, ViewFactory $factory)
     {
@@ -67,10 +67,12 @@ class Json implements EnginesContract
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  array $data
+     * @param  string $path
+     * @param  array  $data
+     *
      * @return string
      */
-    public function get(array $data = [])
+    public function get($path, array $data = [])
     {
         if ($data['options'] === $this->container['settings']['http::json.option']) {
             $options = $this->container['settings']['http::json.option'];
@@ -79,22 +81,10 @@ class Json implements EnginesContract
         }
 
         return $this->evaluateStatus(
-            $this->status,
+            $path,
             $data,
             $options
         );
-    }
-
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return $this \Brainwave\View\Engines
-     */
-    public function set($path)
-    {
-        $this->status = $path;
-        return $this;
     }
 
     /**
@@ -102,6 +92,7 @@ class Json implements EnginesContract
      *
      * @param  integer $status
      * @param  array   $data
+     *
      * @return string
      */
     protected function evaluateStatus($status = 200, array $data = [], $option = 0)
@@ -169,8 +160,10 @@ class Json implements EnginesContract
     /**
      * Handle a view exception.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
+     *
      * @return void
+     *
      * @throws $e
      */
     protected function handleViewException($e)
