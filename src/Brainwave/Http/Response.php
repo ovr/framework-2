@@ -8,7 +8,7 @@ namespace Brainwave\Http;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -21,11 +21,11 @@ namespace Brainwave\Http;
 use \GuzzleHttp\Stream\Stream;
 use \Brainwave\Http\HeaderTrait;
 use \GuzzleHttp\Stream\StreamInterface;
-use \Brainwave\Crypt\Interfaces\CryptInterface;
-use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Http\Interfaces\RequestInterface;
-use \Brainwave\Http\Interfaces\ResponseInterface;
-use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
+use \Brainwave\Contracts\Http\Headers as HeadersContract;
+use \Brainwave\Contracts\Http\Request as RequestContract;
+use \Brainwave\Contracts\Http\Response as ResponseContract;
+use \Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
+use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /** Response
  *
@@ -42,40 +42,46 @@ use \Brainwave\Cookie\Interfaces\CookiesJarInterface;
  * @since   0.8.0-dev
  *
  */
-class Response implements ResponseInterface
+class Response implements ResponseContract
 {
     /**
      * Response protocol version
+     *
      * @var string
      */
     protected $protocolVersion = 'HTTP/1.1';
 
     /**
      * Response status code
+     *
      * @var int
      */
     protected $status = 200;
 
     /**
      * Response headers
-     * @var \Brainwave\Http\Interfaces\HeadersInterface
+     *
+     * @var HeadersContract
      */
     protected $headers;
 
     /**
      * Response cookies
-     * @var \Brainwave\Http\Interfaces\CookiesInterface
+     *
+     * @var CookiesJarContract
      */
     protected $cookies;
 
     /**
      * Response body
+     *
      * @var \GuzzleHttp\Stream\StreamInterface
      */
     protected $body;
 
     /**
      * Response codes and associated messages
+     *
      * @var array
      */
     protected static $messages = [
@@ -148,22 +154,23 @@ class Response implements ResponseInterface
     /**
      * Constructor
      *
-     * @param HeadersInterface $headers The HTTP response headers
-     * @param CookiesJarInterface $cookies The HTTP response cookies
-     * @param string                                      $body    The HTTP response body
-     * @param int                                         $status  The HTTP response status
-     * @api
+     * @param HeadersContract    $headers The HTTP response headers
+     * @param CookiesJarContract $cookies The HTTP response cookies
+     * @param string             $body    The HTTP response body
+     * @param int                $status  The HTTP response status
      */
     public function __construct(
-        HeadersInterface $headers,
-        CookiesJarInterface $cookies,
+        HeadersContract $headers,
+        CookiesJarContract $cookies,
         $body = '',
         $status = 200
     ) {
         $this->headers = $headers;
+
         if ($this->headers->has('Content-Type') === false) {
             $this->headers->set('Content-Type', 'text/html');
         }
+
         $this->cookies = $cookies;
         $this->setStatus($status);
         $this->body = new Stream(fopen('php://temp', 'r+'));
@@ -174,7 +181,6 @@ class Response implements ResponseInterface
      * Get HTTP protocol version
      *
      * @return string
-     * @api
      */
     public function getProtocolVersion()
     {
@@ -185,7 +191,6 @@ class Response implements ResponseInterface
      * Set HTTP protocol version
      *
      * @param string $version Either "HTTP/1.1" or "HTTP/1.0"
-     * @api
      */
     public function setProtocolVersion($version)
     {
@@ -196,7 +201,6 @@ class Response implements ResponseInterface
      * Get response status code
      *
      * @return int
-     * @api
      */
     public function getStatus()
     {
@@ -207,7 +211,6 @@ class Response implements ResponseInterface
      * Set response status code
      *
      * @param int $status
-     * @api
      */
     public function setStatus($status)
     {
@@ -218,15 +221,14 @@ class Response implements ResponseInterface
      * Get response reason phrase
      *
      * @return string
-     * @api
      */
     public function getReasonPhrase()
     {
-        if (isset(static::$messages[$this->status]) === true) {
+        if (isset(static::$messages[$this->status])) {
             return static::$messages[$this->status];
         }
 
-        return null;
+        return;
     }
 
     use HeaderTrait;
@@ -235,7 +237,6 @@ class Response implements ResponseInterface
      * Get cookies
      *
      * @return array
-     * @api
      */
     public function getCookies()
     {
@@ -246,7 +247,6 @@ class Response implements ResponseInterface
      * Set multiple cookies
      *
      * @param array $cookies
-     * @api
      */
     public function setCookies(array $cookies)
     {
@@ -257,8 +257,8 @@ class Response implements ResponseInterface
      * Does this request have a given cookie?
      *
      * @param  string $name
+     *
      * @return bool
-     * @api
      */
     public function hasCookie($name)
     {
@@ -269,8 +269,8 @@ class Response implements ResponseInterface
      * Get cookie value
      *
      * @param  string $name
+     *
      * @return array
-     * @api
      */
     public function getCookie($name)
     {
@@ -282,7 +282,6 @@ class Response implements ResponseInterface
      *
      * @param string       $name
      * @param array|string $value
-     * @api
      */
     public function setCookie($name, $value)
     {
@@ -294,7 +293,6 @@ class Response implements ResponseInterface
      *
      * @param string $name
      * @param array  $settings
-     * @api
      */
     public function removeCookie($name, $settings = [])
     {
@@ -304,10 +302,9 @@ class Response implements ResponseInterface
     /**
      * Encrypt cookies
      *
-     * @param \Brainwave\Crypt\Interfaces\CryptInterface $crypt
-     * @api
+     * @param EncrypterContract $crypt
      */
-    public function encryptCookies(CryptInterface $crypt)
+    public function encryptCookies(EncrypterContract $crypt)
     {
         $this->cookies->encrypt($crypt);
     }
@@ -316,7 +313,6 @@ class Response implements ResponseInterface
      * Get response body
      *
      * @return \GuzzleHttp\Stream\StreamInterface
-     * @api
      */
     public function getBody()
     {
@@ -327,7 +323,6 @@ class Response implements ResponseInterface
      * Set response body
      *
      * @param \GuzzleHttp\Stream\StreamInterface $body
-     * @api
      */
     public function setBody(StreamInterface $body)
     {
@@ -339,7 +334,6 @@ class Response implements ResponseInterface
      *
      * @param string $body      Content to append to the current HTTP response body
      * @param bool   $overwrite Clear the existing body before writing new content?
-     * @api
      */
     public function write($body, $overwrite = false)
     {
@@ -347,6 +341,7 @@ class Response implements ResponseInterface
             $this->body->close();
             $this->body = new Stream(fopen('php://temp', 'r+'));
         }
+
         $this->body->write($body);
     }
 
@@ -354,7 +349,6 @@ class Response implements ResponseInterface
      * Get the response body size if known
      *
      * @return integer|null
-     * @api
      */
     public function getSize()
     {
@@ -367,15 +361,15 @@ class Response implements ResponseInterface
      * Apply final preparations to the resposne object
      * so that it is suitable for delivery to the client.
      *
-     * @param  \Brainwave\Http\Interfaces\RequestInterface $request
-     * @return Response Self
-     * @api
+     * @param  RequestContract $request
+     *
+     * @return self
      */
-    public function finalize(RequestInterface $request)
+    public function finalize(RequestContract $request)
     {
         $sendBody = true;
 
-        if (in_array($this->status, [204, 304]) === true) {
+        if (in_array($this->status, [204, 304])) {
             $this->headers->remove('Content-Type');
             $this->headers->remove('Content-Length');
             $sendBody = false;
@@ -406,12 +400,12 @@ class Response implements ResponseInterface
      * Send HTTP response headers and body
      *
      * @return Response Self
-     * @api
      */
     public function send()
     {
         // Send headers
-        if (headers_sent() === false) {
+        if (!headers_sent()) {
+
             if (strpos(PHP_SAPI, 'cgi') === 0) {
                 header(sprintf('Status: %s', $this->getReasonPhrase()));
             } else {
@@ -431,6 +425,7 @@ class Response implements ResponseInterface
 
         // Send body
         $this->body->seek(0);
+
         while ($this->body->eof() === false) {
             echo $this->body->read(1024);
         }
@@ -446,7 +441,6 @@ class Response implements ResponseInterface
      *
      * @param string $url    The redirect destination
      * @param int    $status The redirect HTTP status code
-     * @api
      */
     public function redirect($url, $status = 302)
     {
@@ -458,7 +452,6 @@ class Response implements ResponseInterface
      * Helpers: Empty?
      *
      * @return bool
-     * @api
      */
     public function isEmpty()
     {
@@ -469,7 +462,6 @@ class Response implements ResponseInterface
      * Helpers: Informational?
      *
      * @return bool
-     * @api
      */
     public function isInformational()
     {
@@ -480,7 +472,6 @@ class Response implements ResponseInterface
      * Helpers: OK?
      *
      * @return bool
-     * @api
      */
     public function isOk()
     {
@@ -491,7 +482,6 @@ class Response implements ResponseInterface
      * Helpers: Successful?
      *
      * @return bool
-     * @api
      */
     public function isSuccessful()
     {
@@ -502,7 +492,6 @@ class Response implements ResponseInterface
      * Helpers: Redirect?
      *
      * @return bool
-     * @api
      */
     public function isRedirect()
     {
@@ -513,7 +502,6 @@ class Response implements ResponseInterface
      * Helpers: Redirection?
      *
      * @return bool
-     * @api
      */
     public function isRedirection()
     {
@@ -524,7 +512,6 @@ class Response implements ResponseInterface
      * Helpers: Forbidden?
      *
      * @return bool
-     * @api
      */
     public function isForbidden()
     {
@@ -535,7 +522,6 @@ class Response implements ResponseInterface
      * Helpers: Not Found?
      *
      * @return bool
-     * @api
      */
     public function isNotFound()
     {
@@ -546,7 +532,6 @@ class Response implements ResponseInterface
      * Helpers: Client error?
      *
      * @return bool
-     * @api
      */
     public function isClientError()
     {
@@ -557,7 +542,6 @@ class Response implements ResponseInterface
      * Helpers: Server Error?
      *
      * @return bool
-     * @api
      */
     public function isServerError()
     {
@@ -568,15 +552,17 @@ class Response implements ResponseInterface
      * Convert response to string
      *
      * @return string
-     * @api
      */
     public function __toString()
     {
         $output = sprintf('%s %s', $this->getProtocolVersion(), $this->getReasonPhrase()) . PHP_EOL;
+
         foreach ($this->headers as $name => $value) {
             $output .= sprintf('%s: %s', $name, $value) . PHP_EOL;
         }
+
         $body = (string)$this->getBody();
+
         if ($body) {
             $output .= PHP_EOL . $body;
         }

@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,6 @@ namespace Brainwave\Routing;
  */
 
 use \Pimple\Container;
-use \Brainwave\Http\Request;
 use \Brainwave\Routing\Controller\ControllerDispatcher;
 
 /**
@@ -37,7 +36,7 @@ class RouteFactory
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * Route factory callable
@@ -56,14 +55,14 @@ class RouteFactory
     /**
      * RouteFactory
      *
-     * @param Container $app
-     * @param Closure   $routeResolver
-     * @param Closure   $controllerResolver
+     * @param Container $container
+     * @param \Closure  $routeResolver
+     * @param \Closure  $controllerResolver
      */
-    public function __construct(Container $app, \Closure $routeResolver, \Closure $controllerResolver)
+    public function __construct(Container $container, \Closure $routeResolver, \Closure $controllerResolver)
     {
-        $this->app = $app;
-        $this->routeResolver = $routeResolver;
+        $this->container          = $container;
+        $this->routeResolver      = $routeResolver;
         $this->controllerResolver = $controllerResolver;
     }
 
@@ -104,7 +103,7 @@ class RouteFactory
      * Define a callback that uses a given reference to a service or class name
      *
      * @param  string $callable
-     * @return \Closure
+     * @return ControllerDispatcher
      */
     protected function makeControllerCallback($callable)
     {
@@ -125,8 +124,8 @@ class RouteFactory
      */
     protected function resolveControllerInstance($service)
     {
-        if (isset($this->app[$service])) {
-            return $this->app[$service];
+        if (isset($this->container[$service])) {
+            return $this->container[$service];
         }
 
         if (class_exists($service)) {

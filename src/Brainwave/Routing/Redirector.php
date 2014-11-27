@@ -8,7 +8,7 @@ namespace Brainwave\Routing;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -34,9 +34,9 @@ class Redirector
     /**
      * Application instance
      *
-     * @var Container $app
+     * @var Container $container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The URL generator instance.
@@ -49,13 +49,13 @@ class Redirector
      * Create a new Redirector instance.
      *
      * @param  UrlGenerator $generator
-     * @param  Container    $app
+     * @param  Container    $container
      * @return void
      */
-    public function __construct(UrlGenerator $generator, Container $app)
+    public function __construct(UrlGenerator $generator, Container $container)
     {
         $this->generator = $generator;
-        $this->app = $app;
+        $this->container = $container;
     }
 
     /**
@@ -73,7 +73,7 @@ class Redirector
      */
     public function redirect($url, $status = 302)
     {
-        $this->app['response']->redirect($url, $status);
+        $this->container['response']->redirect($url, $status);
         $this->halt($status);
     }
 
@@ -99,7 +99,7 @@ class Redirector
      */
     public function urlFor($name, $params = [])
     {
-        return $this->app['request']->getScriptName().$this['router']->urlFor($name, $params);
+        return $this->container['request']->getScriptName().$this['router']->urlFor($name, $params);
     }
 
     /**
@@ -131,6 +131,6 @@ class Redirector
      */
     public function halt($status, $message = '')
     {
-        $this->app->halt($status, $message = '');
+        $this->container->halt($status, $message = '');
     }
 }

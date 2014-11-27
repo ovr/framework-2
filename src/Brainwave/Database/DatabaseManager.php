@@ -8,7 +8,7 @@ namespace Brainwave\Database;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,7 +39,7 @@ class DatabaseManager implements ConnectionResolverInterface
      *
      * @var \Pimple\Container
      */
-    protected $app;
+    protected $container;
 
     /**
      * The database connection factory instance.
@@ -65,14 +65,14 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Pimple\Container  $app
+     * @param  \Pimple\Container  $container
      * @param  \Brainwave\Database\Connection\ConnectionFactory  $factory
      * @return void
      */
-    public function __construct(Container $app, ConnectionFactory $factory)
+    public function __construct(Container $container, ConnectionFactory $factory)
     {
-        $this->app = $app;
-        $this->factory = $factory;
+        $this->container = $container;
+        $this->factory   = $factory;
     }
 
     /**
@@ -183,20 +183,20 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  Connection\Connection  $connection
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function prepare(ConnectionInterface $connection)
     {
-        $connection->setFetchMode($this->app['settings']['database::fetch']);
+        $connection->setFetchMode($this->container['settings']['database::fetch']);
 
         // The database connection can also utilize a cache manager instance when cache
         // functionality is used on queries, which provides an expressive interface
         // to caching both fluent queries and Eloquent queries that are executed.
-        $app = $this->app;
+        $container = $this->container;
 
-        $connection->setCacheManager(function () use ($app) {
-            return $app['cache'];
+        $connection->setCacheManager(function () use ($container) {
+            return $container['cache'];
         });
 
         // Here we'll set a reconnector callback. This reconnector can be any callable
@@ -224,7 +224,7 @@ class DatabaseManager implements ConnectionResolverInterface
         // To get the database connection configuration, we will just pull each of the
         // connection configurations and get the configurations for the given name.
         // If the configuration doesn't exist, we'll throw an exception and bail.
-        $connections = $this->app['settings']['database::connections'];
+        $connections = $this->container['settings']['database::connections'];
 
         if (is_null($config = Arr::arrayGet($connections, $name))) {
             throw new \InvalidArgumentException("Database [$name] not configured.");
@@ -240,7 +240,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function getDefaultConnection()
     {
-        return $this->app['settings']['database::default'];
+        return $this->container['settings']['database::default'];
     }
 
     /**
@@ -251,7 +251,7 @@ class DatabaseManager implements ConnectionResolverInterface
      */
     public function setDefaultConnection($name)
     {
-        $this->app['settings']['database::default'] = $name;
+        $this->container['settings']['database::default'] = $name;
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Brainwave\Cache;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,11 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
-use \Closure;
-use \DateTime;
-use \ArrayAccess;
 use \Carbon\Carbon;
-use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
+use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use \Brainwave\Contracts\Cache\Repository as CacheContract;
 
 /**
  * Repository
@@ -32,12 +30,12 @@ use \Brainwave\Cache\Driver\Interfaces\DriverInterface;
  * @since   0.9.2-dev
  *
  */
-class Repository implements ArrayAccess
+class Repository implements CacheContract, \ArrayAccess
 {
     /**
      * The cache driver implementation.
      *
-     * @var \Brainwave\Cache\Driver\Interfaces\DriverInterface
+     * @var \Brainwave\Contracts\Cache\Adapter
      */
     protected $driver;
 
@@ -48,23 +46,28 @@ class Repository implements ArrayAccess
      */
     protected $default = 60;
 
-    protected static $supported;
+    /**
+     * Cache driver supported
+     *
+     * @var boolean
+     */
+    protected static $supported = false;
 
     /**
      * Create a new cache repository instance.
      *
-     * @param  \Brainwave\Cache\Driver\Interfaces\DriverInterface  $driver
+     * @param AdapterContract $driver
      */
-    public function __construct(DriverInterface $driver = null)
+    public function __construct(AdapterContract $driver = null)
     {
-        $this->driver = $driver;
+        $this->driver    = $driver;
         self::$supported = $driver::isSupported();
     }
 
     /**
      * Check if the cache driver is supported
      *
-     * @return bool Returns TRUE if supported or FALSE if not.
+     * @return boolean Returns TRUE if supported or FALSE if not.
      */
     public static function isSupported()
     {
@@ -74,33 +77,36 @@ class Repository implements ArrayAccess
     /**
      * Determine if an item exists in the cache.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function has($key)
     {
-        return ! is_null($this->get($key));
+        return $this->get($key) !== null;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
     public function get($key, $default = null)
     {
         $value = $this->driver->get($key);
 
-        return ! is_null($value) ? $value : value($default);
+        return ($value !== null) ? $value : value($default);
     }
 
     /**
      * Retrieve an item from the cache and delete it.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
     public function pull($key, $default = null)
@@ -115,9 +121,10 @@ class Repository implements ArrayAccess
     /**
      * Store an item in the cache.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  string        $key
+     * @param  mixed         $value
+     * @param  \DateTime|int $minutes
+     *
      * @return void
      */
     public function set($key, $value, $minutes)
@@ -125,16 +132,17 @@ class Repository implements ArrayAccess
         $minutes = $this->getMinutes($minutes);
 
         if (!is_null($minutes)) {
-            $this->driver->set($key, $value, $minutes);
+            $this->driver->put($key, $value, $minutes);
         }
     }
 
     /**
      * Store an item in the cache if the key does not exist.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  \DateTime|int  $minutes
+     * @param  string        $key
+     * @param  mixed         $value
+     * @param  \DateTime|int $minutes
+     *
      * @return bool
      */
     public function add($key, $value, $minutes)
@@ -150,12 +158,13 @@ class Repository implements ArrayAccess
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string  $key
-     * @param  \DateTime|int  $minutes
-     * @param  \Closure  $callback
+     * @param  string        $key
+     * @param  integer $minutes
+     * @param  \Closure      $callback
+     *
      * @return mixed
      */
-    public function remember($key, $minutes, Closure $callback)
+    public function remember($key, $minutes, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -173,10 +182,11 @@ class Repository implements ArrayAccess
      * Get an item from the cache, or store the default value forever.
      *
      * @param  string   $key
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return mixed
      */
-    public function rememberForever($key, Closure $callback)
+    public function rememberForever($key, \Closure $callback)
     {
         // If the item exists in the cache we will just return this immediately
         // otherwise we will execute the given Closure and cache the result
@@ -194,11 +204,12 @@ class Repository implements ArrayAccess
      * Remove an item from the cache.
      *
      * @param  string $key
-     * @return bool
+     *
+     * @return boolean|null
      */
     public function forget($key)
     {
-        return $this->store->forget($key);
+        return $this->driver->forget($key);
     }
 
     /**
@@ -214,7 +225,8 @@ class Repository implements ArrayAccess
     /**
      * Set the default cache time in minutes.
      *
-     * @param  int   $minutes
+     * @param  int  $minutes
+     *
      * @return void
      */
     public function setDefaultCacheTime($minutes)
@@ -225,7 +237,7 @@ class Repository implements ArrayAccess
     /**
      * Get the cache driver implementation.
      *
-     * @return DriverInterface
+     * @return AdapterContract
      */
     public function getdriver()
     {
@@ -235,7 +247,8 @@ class Repository implements ArrayAccess
     /**
      * Determine if a cached value exists.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return bool
      */
     public function offsetExists($key)
@@ -246,7 +259,8 @@ class Repository implements ArrayAccess
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function offsetGet($key)
@@ -257,8 +271,9 @@ class Repository implements ArrayAccess
     /**
      * Store an item in the cache for the default time.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
+     *
      * @return void
      */
     public function offsetSet($key, $value)
@@ -269,8 +284,9 @@ class Repository implements ArrayAccess
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
-     * @return void
+     * @param  string $key
+     *
+     * @return boolean|null
      */
     public function offsetUnset($key)
     {
@@ -280,12 +296,13 @@ class Repository implements ArrayAccess
     /**
      * Calculate the number of minutes with the given duration.
      *
-     * @param  \DateTime|int  $duration
+     * @param  \DateTime|int $duration
+     *
      * @return int|null
      */
     protected function getMinutes($duration)
     {
-        if ($duration instanceof DateTime) {
+        if ($duration instanceof \DateTime) {
             $fromNow = Carbon::instance($duration)->diffInMinutes();
 
             return $fromNow > 0 ? $fromNow : null;
@@ -297,8 +314,9 @@ class Repository implements ArrayAccess
     /**
      * Pass missing methods to the store.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param  string $method
+     * @param  array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

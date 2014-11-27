@@ -8,7 +8,7 @@ namespace Brainwave\Support;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -34,25 +34,21 @@ use \Pimple\ServiceProviderInterface;
  */
 class SupportServiceProvider implements ServiceProviderInterface
 {
-    protected $app;
-
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
-
-        $this->registerHelpers();
-        $this->registerArr();
-        $this->registerStr();
+        $this->registerHelpers($container);
+        $this->registerArr($container);
+        $this->registerStr($container);
     }
 
     /**
      * Register Helpers
      *
-     * @return  \Brainwave\Support\Helpers
+     * @return \Brainwave\Support\Helpers
      */
-    protected function registerHelpers()
+    protected function registerHelpers(Container $container)
     {
-        $this->app['helpers'] = function ($app) {
+        $container['helpers'] = function ($container) {
             return new Helpers();
         };
     }
@@ -60,11 +56,11 @@ class SupportServiceProvider implements ServiceProviderInterface
     /**
      * Register Arr
      *
-     * @return  \Brainwave\Support\Arr
+     * @return \Brainwave\Support\Arr
      */
-    protected function registerArr()
+    protected function registerArr(Container $container)
     {
-        $this->app['arr'] = function ($app) {
+        $container['arr'] = function ($container) {
             return new Arr();
         };
     }
@@ -72,11 +68,11 @@ class SupportServiceProvider implements ServiceProviderInterface
     /**
      * Register Str
      *
-     * @return  \Brainwave\Support\Str
+     * @return \Brainwave\Support\Str
      */
-    protected function registerStr()
+    protected function registerStr(Container $container)
     {
-        $this->app['str'] = function ($app) {
+        $container['str'] = function ($container) {
             return new Str();
         };
     }

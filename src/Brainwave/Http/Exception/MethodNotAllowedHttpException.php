@@ -8,7 +8,7 @@ namespace Brainwave\Http\Exception;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -38,8 +38,12 @@ class MethodNotAllowedHttpException extends HttpException
      * @param \Exception $previous The previous exception
      * @param int        $code     The internal exception code
      */
-    public function __construct(array $allow, $message = null, \Exception $previous = null, $code = 0)
-    {
+    public function __construct(
+        array $allow,
+        $message = null,
+        \Exception $previous = null,
+        $code = 0
+    ) {
         $headers = ['Allow' => strtoupper(implode(', ', $allow))];
 
         parent::__construct(405, $message, $previous, $headers, $code);

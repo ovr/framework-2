@@ -8,7 +8,7 @@ namespace Brainwave\Routing\Controller;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -57,13 +57,13 @@ class ControllerCollection extends RouteCollection
     /**
      * ControllerCollection
      *
-     * @param Container $app
+     * @param Container $container
      */
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        parent::__construct($app);
+        parent::__construct($container);
 
-        $this->defaultRouter = $app['router'];
+        $this->defaultRouter = $container['router'];
     }
 
     /**
@@ -132,7 +132,7 @@ class ControllerCollection extends RouteCollection
      */
     public function __call($method, array $arguments)
     {
-        $defaultRoute = $this->app['routes.factory'];
+        $defaultRoute = $this->container['routes.factory'];
 
         if (!method_exists($defaultRoute, $method)) {
             throw new \BadMethodCallException(

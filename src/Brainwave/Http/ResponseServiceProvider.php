@@ -8,7 +8,7 @@ namespace Brainwave\Http;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,13 +39,13 @@ class ResponseServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['response'] = function ($app) {
+        $container['response'] = function ($container) {
             $headers = new Headers();
-            $CookieJar = new CookieJar();
-            $response = new Response($headers, $CookieJar);
-            $response->setProtocolVersion('HTTP/' . $app['settings']->get('http::version', '1.1'));
+            $cookieJar = new CookieJar();
+            $response = new Response($headers, $cookieJar);
+            $response->setProtocolVersion('HTTP/' . $container['settings']->get('http::version', '1.1'));
 
             return $response;
         };

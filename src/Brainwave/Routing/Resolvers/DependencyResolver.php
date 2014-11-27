@@ -8,7 +8,7 @@ namespace Brainwave\Resolvers;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,8 +18,8 @@ namespace Brainwave\Resolvers;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
+use \Pimple\Container;
+use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 
 /**
  * DependencyResolver
@@ -29,23 +29,23 @@ use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
  * @since   0.8.0-dev
  *
  */
-class DependencyResolver implements CallableResolverInterface
+class DependencyResolver implements CallableResolverContract
 {
     /**
-     * Application Brainwave\Workbench\Workbench
+     * Application Brainwave\Application\Application
      *
      * @var bool
      */
-    private $app;
+    private $container;
 
     /**
      * Set Application
      *
-     * @param $app Brainwave\Workbench\Workbench
+     * @param $container\Pimple\Container
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container = $container;
     }
 
     /**
@@ -56,17 +56,17 @@ class DependencyResolver implements CallableResolverInterface
      */
     public function build($callable)
     {
-        if (is_string($callable) &&
-            preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        $regex = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+        if (is_string($callable) && preg_match($regex, $callable, $matches)) {
 
             $service = $matches[1];
             $method = $matches[2];
 
-            if (!isset($this->app[$service])) {
-                throw new \InvalidArgumentException('Route key does not exist in Workbench');
+            if (!isset($this->container[$service])) {
+                throw new \InvalidArgumentException('Route key does not exist in Application');
             }
 
-            $callable =  [$this->app[$service],$method];
+            $callable =  [$this->container[$service], $method];
         }
 
         if (!is_callable($callable)) {

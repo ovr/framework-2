@@ -8,7 +8,7 @@ namespace Brainwave\Database\Connectors;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -57,6 +57,6 @@ class SQLiteConnector extends Connectors implements ConnectorInterface
             throw new \InvalidArgumentException("Database does not exist.");
         }
 
-        return $this->createConnection("sqlite:{$path}", $config, $options);
+        return $this->createConnection("sqlite:{$path}", $config, $this->getOptions($config));
     }
 }

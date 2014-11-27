@@ -8,7 +8,7 @@ namespace Brainwave\Mail;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,7 +19,6 @@ namespace Brainwave\Mail;
  */
 
 use \Swift_Image;
-use \Swift_Message;
 use \Swift_Attachment;
 
 /**
@@ -32,7 +31,6 @@ use \Swift_Attachment;
  */
 class Message
 {
-
     /**
      * The Swift Message instance.
      *
@@ -46,7 +44,7 @@ class Message
      * @param  \Swift_Message  $swift
      * @return void
      */
-    public function __construct(Swift_Message $swift)
+    public function __construct(\Swift_Message $swift)
     {
         $this->swift = $swift;
     }
@@ -61,6 +59,7 @@ class Message
     public function from($address, $name = null)
     {
         $this->swift->setFrom($address, $name);
+
         return $this;
     }
 
@@ -74,6 +73,7 @@ class Message
     public function sender($address, $name = null)
     {
         $this->swift->setSender($address, $name);
+
         return $this;
     }
 
@@ -86,6 +86,7 @@ class Message
     public function returnPath($address)
     {
         $this->swift->setReturnPath($address);
+
         return $this;
     }
 
@@ -215,6 +216,7 @@ class Message
     public function attachData($data, $name, array $options = [])
     {
         $attachment = $this->createAttachmentFromData($data, $name);
+
         return $this->prepAttachment($attachment, $options);
     }
 
@@ -252,6 +254,7 @@ class Message
     public function embedData($data, $name, $contentType = null)
     {
         $image = Swift_Image::newInstance($data, $name, $contentType);
+
         return $this->swift->embed($image);
     }
 
@@ -279,6 +282,7 @@ class Message
         }
 
         $this->swift->attach($attachment);
+
         return $this;
     }
 
@@ -302,6 +306,7 @@ class Message
     public function __call($method, $parameters)
     {
         $callable = [$this->swift, $method];
+
         return call_user_func_array($callable, $parameters);
     }
 }

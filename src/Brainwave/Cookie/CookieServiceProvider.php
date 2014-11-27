@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -32,10 +32,10 @@ use \Pimple\ServiceProviderInterface;
  */
 class CookieServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['cookie'] = function ($app) {
-            return new Cookie($app);
+        $container['cookie'] = function ($container) {
+            return new Cookie($container);
         };
     }
 }

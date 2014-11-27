@@ -8,7 +8,7 @@ namespace Brainwave\Routing\Resolvers;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.7-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -34,29 +34,25 @@ use \Brainwave\Routing\Resolvers\DependencyResolver;
  */
 class ResolverServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
         // Route Callable Resolver
-        $app['resolver'] = function ($app) {
+        $container['resolver'] = function ($container) {
 
-            $resolverCofig = $app['settings']->get('app::callable.resolver', 'CallableResolver');
+            $resolverCofig = $container['settings']->get('app::callable.resolver', 'CallableResolver');
 
             switch ($resolverCofig) {
                 case 'DependencyResolver':
-                    return new DependencyResolver($app);
-                    break;
+                    return new DependencyResolver($container);
 
                 case 'ContainerResolver':
-                    return new ContainerResolver();
-                    break;
+                    return new ContainerResolver($container);
 
                 case 'CallableResolver':
                     return new CallableResolver();
-                    break;
 
                 default:
                     throw new \Exception("Set a Callable Resolver");
-                    break;
             }
         };
     }

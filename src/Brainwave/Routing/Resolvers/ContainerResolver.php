@@ -8,7 +8,7 @@ namespace Brainwave\Routing\Resolvers;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,8 +18,8 @@ namespace Brainwave\Routing\Resolvers;
  *
  */
 
-use \Brainwave\Workbench\Workbench;
-use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
+use \Pimple\Container;
+use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 
 /**
  * AppResolver
@@ -29,23 +29,23 @@ use \Brainwave\Routing\Resolvers\Interfaces\CallableResolverInterface;
  * @since   0.8.0-dev
  *
  */
-class AppResolver implements CallableResolverInterface
+class ContainerResolver implements CallableResolverContract
 {
     /**
-     * Application Brainwave\Workbench\Workbench
+     * Application Brainwave\Application\Application
      *
      * @var bool
      */
-    private $app;
+    private $container;
 
     /**
      * Set Application
      *
-     * @param $app Brainwave\Workbench\Workbench
+     * @param $container\Pimple\Container
      */
-    public function __construct(Workbench $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container = $container;
     }
 
     /**
@@ -57,15 +57,17 @@ class AppResolver implements CallableResolverInterface
     public function build($callable)
     {
         $matches = [];
-        if (is_string($callable) && preg_match('!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!', $callable, $matches)) {
+        $regex   = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
+
+        if (is_string($callable) && preg_match($regex, $callable, $matches)) {
             $class = $matches[1];
             $method = $matches[2];
-            $app = $this->app;
+            $container= $this->container;
 
-            $callable = function () use ($class, $method, $app) {
+            $callable = function () use ($class, $method, $container) {
                 static $obj = null;
                 if ($obj === null) {
-                    $obj = new $class($app);
+                    $obj = new $class($container);
                 }
                 return call_user_func_array(array($obj, $method), func_get_args());
             };

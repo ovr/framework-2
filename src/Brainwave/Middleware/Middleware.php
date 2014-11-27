@@ -8,7 +8,7 @@ namespace Brainwave\Middleware;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Middleware;
  *
  */
 
-use \Brainwave\Middleware\Interfaces\MiddlewareInterface;
+use \Brainwave\Contracts\Middleware\Middleware as MiddlewareContract;
 
 /**
  * Middleware
@@ -28,17 +28,19 @@ use \Brainwave\Middleware\Interfaces\MiddlewareInterface;
  * @since   0.8.0-dev
  *
  */
-abstract class Middleware implements MiddlewareInterface
+abstract class Middleware implements MiddlewareContract
 {
     /**
      * Reference to the primary Application instance
-     * @var \Brainwave\Workbench\Workbench
+     *
+     * @var \Brainwave\Application\Application
      */
-    protected $app;
+    protected $container;
 
     /**
      * Reference to the next downstream middleware
-     * @var \Brainwave\Middleware\Middleware|\Brainwave\Workbench\Workbench
+     *
+     * @var \Brainwave\Middleware\Middleware|\Brainwave\Application\Application
      */
     protected $next;
 
@@ -48,11 +50,11 @@ abstract class Middleware implements MiddlewareInterface
      * This method injects the primary Brainwave Application instance into
      * this middleware.
      *
-     * @param  \Brainwave\Workbench\Workbench $application
+     * @param  \Brainwave\Application\Application $containerlication
      */
-    final public function setApplication($application)
+    final public function setApplication($containerlication)
     {
-        $this->app = $application;
+        $this->container= $containerlication;
     }
 
     /**
@@ -61,11 +63,11 @@ abstract class Middleware implements MiddlewareInterface
      * This method retrieves the Application previously injected
      * into this middleware.
      *
-     * @return \Brainwave\Workbench\Workbench
+     * @return \Brainwave\Application\Application
      */
     final public function getApplication()
     {
-        return $this->app;
+        return $this->container;
     }
 
     /**
@@ -73,9 +75,9 @@ abstract class Middleware implements MiddlewareInterface
      *
      * This method injects the next downstream middleware into
      * this middleware so that it may optionally be called
-     * when Workbenchropriate.
+     * when Applicationropriate.
      *
-     * @param \Brainwave\Workbench\Workbench|\Brainwave\Middleware\Middleware
+     * @param \Brainwave\Application\Application|\Brainwave\Middleware\Middleware
      */
     final public function setNextMiddleware($nextMiddleware)
     {
@@ -88,7 +90,7 @@ abstract class Middleware implements MiddlewareInterface
      * This method retrieves the next downstream middleware
      * previously injected into this middleware.
      *
-     * @return \Brainwave\Workbench\Workbench|\Brainwave\Middleware\Middleware
+     * @return Middleware
      */
     final public function getNextMiddleware()
     {

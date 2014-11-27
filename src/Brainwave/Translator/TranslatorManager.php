@@ -8,7 +8,7 @@ namespace Brainwave\Translator;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -18,7 +18,7 @@ namespace Brainwave\Translator;
  *
  */
 
-use \Brainwave\Config\FileLoader;
+use \Brainwave\Filesystem\FileLoader;
 use \Brainwave\Translator\Interfaces\TranslatorInterface;
 
 /**
@@ -34,13 +34,6 @@ use \Brainwave\Translator\Interfaces\TranslatorInterface;
 class TranslatorManager implements TranslatorInterface
 {
     /**
-     * Lang folder path
-     *
-     * @var string
-     */
-    protected $path;
-
-    /**
      * An array containing all of the translation information.
      *
      * @var array
@@ -48,9 +41,9 @@ class TranslatorManager implements TranslatorInterface
     protected $translations = [];
 
     /**
-     * [$loader description]
+     * FileLoader instance
      *
-     * @var \Brainwave\Config\FileLoader
+     * @var \Brainwave\Filesystem\FileLoader
      */
     protected $loader;
 
@@ -469,27 +462,5 @@ class TranslatorManager implements TranslatorInterface
         if ($exception) {
             throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
         }
-    }
-
-    /**
-     * Set path to lang folder
-     *
-     * @param string $path
-     */
-    public function addPath($path)
-    {
-        $this->path = $path;
-        $this->getLoader()->addDefaultPath($path);
-        return $this;
-    }
-
-    /**
-     * Get lang folder path
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 }

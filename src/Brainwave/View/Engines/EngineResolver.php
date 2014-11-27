@@ -8,7 +8,7 @@ namespace Brainwave\View\Engines;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -30,12 +30,14 @@ class EngineResolver
 {
     /**
      * The array of engine resolvers.
+     *
      * @var array
      */
     protected $resolvers = [];
 
     /**
      * The resolved engine instances.
+     *
      * @var array
      */
     protected $resolved = [];
@@ -43,8 +45,10 @@ class EngineResolver
     /**
      * Register a new engine resolver.
      * The engine string typically corresponds to a file extension.
+     *
      * @param  string   $engine
      * @param  \Closure  $resolver
+     *
      * @return void
      */
     public function register($engine, \Closure $resolver)
@@ -54,8 +58,10 @@ class EngineResolver
 
     /**
      * Resolver an engine instance by name.
+     *
      * @param  string  $engine
-     * @return \Brainwave\View\Engines\EngineInterface
+     *
+     * @return \Brainwave\Contracts\View\Engines
      */
     public function resolve($engine)
     {

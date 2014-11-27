@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,10 +19,10 @@ namespace Brainwave\Filesystem;
  */
 
 use \Pimple\Container;
-use \League\Flysystem\Filesystem as Flysystem;
 use \League\Flysystem\AdapterInterface;
+use \League\Flysystem\Filesystem as Flysystem;
 use \Brainwave\Filesystem\Adapters\ConnectionFactory;
-use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
+use \Brainwave\Contracts\FilesystemManager as Manager;
 
 /**
  * FilesystemManager
@@ -32,14 +32,14 @@ use \Brainwave\Filesystem\Interfaces\FilesystemManagerInterface;
  * @since   0.9.3-dev
  *
  */
-class FilesystemManager implements FilesystemManagerInterface
+class FilesystemManager implements Manager
 {
     /**
      * The application instance.
      *
      * @var \Brainwave\Contracts\Foundation\Application
      */
-    protected $app;
+    protected $container;
 
     /**
      * The factory instance.
@@ -58,20 +58,22 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Create a new filesystem manager instance.
      *
-     * @param  \Pimple\Container  $app
-     * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory  $factory
+     * @param  \Pimple\Container                                $container
+     * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory $factory
+     *
      * @return void
      */
-    public function __construct(Container $app, ConnectionFactory $factory)
+    public function __construct(Container $container, ConnectionFactory $factory)
     {
-        $this->app = $app;
+        $this->container= $container;
         $this->factory = $factory;
     }
 
     /**
      * Get an OAuth provider implementation.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     public function disk($name = null)
@@ -84,7 +86,8 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Attempt to get the disk from the local cache.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
     protected function get($name)
@@ -95,8 +98,9 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Resolve the given disk.
      *
-     * @param  string  $name
-     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @param  string $name
+     *
+     * @return FilesystemAdapter
      */
     protected function resolve($name)
     {
@@ -108,8 +112,9 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Adapt the filesystem implementation.
      *
-     * @param  \League\Flysystem\AdapterInterface  $adapter
-     * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
+     * @param  \League\Flysystem\AdapterInterface $adapter
+     *
+     * @return FilesystemAdapter
      */
     protected function adapt(AdapterInterface $adapter)
     {
@@ -119,12 +124,13 @@ class FilesystemManager implements FilesystemManagerInterface
     /**
      * Get the filesystem connection configuration.
      *
-     * @param  string  $name
+     * @param  string $name
+     *
      * @return array
      */
     protected function getConfig($name)
     {
-        return $this->app['settings']["filesystems::disks.{$name}"];
+        return $this->container['settings']["filesystems::disks.{$name}"];
     }
 
     /**
@@ -134,6 +140,6 @@ class FilesystemManager implements FilesystemManagerInterface
      */
     public function getDefaultDriver()
     {
-        return $this->app['settings']['filesystems::default'];
+        return $this->container['settings']['filesystems::default'];
     }
 }

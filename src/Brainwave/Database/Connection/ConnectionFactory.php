@@ -8,7 +8,7 @@ namespace Brainwave\Database\Connection;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -51,7 +51,8 @@ class ConnectionFactory
     /**
      * Create a new connection factory instance.
      *
-     * @param  \Pimple\Container  $container
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     public function __construct(Container $container)
@@ -62,8 +63,9 @@ class ConnectionFactory
     /**
      * Establish a PDO connection based on the configuration.
      *
-     * @param  array   $config
-     * @param  string  $name
+     * @param  array  $config
+     * @param  string $name
+     *
      * @return Connection
      */
     public function make(array $config, $name = null)
@@ -76,8 +78,9 @@ class ConnectionFactory
     /**
      * Parse and prepare the database configuration.
      *
-     * @param  array   $config
-     * @param  string  $name
+     * @param  array  $config
+     * @param  string $name
+     *
      * @return array
      */
     protected function parseConfig(array $config, $name)
@@ -88,7 +91,8 @@ class ConnectionFactory
     /**
      * Create a single database connection instance.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return Connection
      */
     protected function createSingleConnection(array $config)
@@ -106,7 +110,8 @@ class ConnectionFactory
     /**
      * Create a connector instance based on the configuration.
      *
-     * @param  array  $config
+     * @param  array $config
+     *
      * @return \Brainwave\Database\Connectors\Interfaces\ConnectorInterface
      *
      * @throws \InvalidArgumentException
@@ -160,10 +165,11 @@ class ConnectionFactory
     /**
      * Create a new connection instance.
      *
-     * @param  \PDO     $connection
-     * @param  string   $database
-     * @param  string   $prefix
-     * @param  array    $config
+     * @param  \PDO    $connection
+     * @param  string  $database
+     * @param  string  $prefix
+     * @param  array   $config
+     *
      * @return Connection
      *
      * @throws \InvalidArgumentException

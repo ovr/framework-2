@@ -8,7 +8,7 @@ namespace Brainwave\Http;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -39,18 +39,18 @@ class RequestServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['request'] = function ($app) {
-            $environment = $app['environment'];
+        $container['request'] = function ($container) {
+            $environment = $container['environment'];
             $headers = new Headers($environment);
-            $CookieJar = new CookieJar($headers);
+            $cookieJar = new CookieJar($headers);
 
-            if ($app['settings']->get('cookies::encrypt', false) ===  true) {
-                $CookieJar->decrypt($app['crypt']);
+            if ($container['settings']->get('cookies::encrypt', false) ===  true) {
+                $cookieJar->decrypt($container['encrypter']);
             }
 
-            return new Request($environment, $headers, $CookieJar);
+            return new Request($environment, $headers, $cookieJar);
         };
     }
 }

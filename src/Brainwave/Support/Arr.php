@@ -8,7 +8,7 @@ namespace Brainwave\Support;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -296,13 +296,15 @@ class Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param  array   $array
-     * @param  string  $key
+     * @param  array  $array
+     * @param  string $key
+     * @param  mixed  $default
+     *
      * @return mixed
      */
-    public static function arrayPull(&$array, $key)
+    public static function arrayPull(&$array, $key, $default = null)
     {
-        $value = arrayGet($array, $key);
+        $value = arrayGet($array, $key, $default);
 
         self::arrayForget($array, $key);
 
@@ -555,7 +557,7 @@ class Arr
      * @param  $object
      * @return void
      */
-    public static function with($object)
+    protected static function with($object)
     {
         return $object;
     }

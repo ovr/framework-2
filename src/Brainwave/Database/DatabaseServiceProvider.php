@@ -8,7 +8,7 @@ namespace Brainwave\Database;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -34,60 +34,57 @@ use \Brainwave\Database\Connection\ConnectionFactory;
  */
 class DatabaseServiceProvider implements ServiceProviderInterface
 {
-    protected $app;
+    protected $container;
 
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
-
-        if ($this->app['settings']['database::frozen']) {
-            $this->app['db'] = function () {
+        if ($this->container['settings']['database::frozen']) {
+            $this->container['db'] = function () {
                 return 'Database is frozen.';
             };
         } else {
-            $this->registerConnectionFactory($app);
+            $this->registerConnectionFactory($container);
 
             // The database manager is used to resolve various connections, since multiple
             // connections might be managed. It also implements the connection resolver
             // interface which may be used by other components requiring connections.
-            $this->app['db'] = function ($app) {
+            $this->container['db'] = function ($container) {
                 $manager = new DatabaseManager(
-                    $app,
-                    $app['db.factory']
+                    $container,
+                    $container['db.factory']
                 );
                 return $manager;
             };
 
-            $this->registerDatabaseQuery();
+            $this->registerDatabaseQuery($container);
         }
     }
 
-    protected function registerDatabaseQuery()
+    protected function registerDatabaseQuery(Container $container)
     {
-        $app = $this->app;
-        $type = $app['db']->getConnections();
+        $type = $container['db']->getConnections();
 
-        $app['db.query'] = function ($app) {
-            return new Query($app['db']->connection());
+        $container['db.query'] = function ($container) {
+            return new Query($container['db']->connection());
         };
 
         foreach ($type as $driver => $value) {
-            $app["db.{$driver}.query"] = function ($app) {
-                return new Query($app['db']->connection($driver));
+            $container["db.{$driver}.query"] = function ($container) use ($driver) {
+                return new Query($container['db']->connection($driver));
             };
         }
     }
 
     /**
-     * @param Container $app
+     * @param Container $container
      */
-    protected function registerConnectionFactory($app)
+    protected function registerConnectionFactory(Container $container)
     {
         // The connection factory is used to create the actual connection instances on
         // the database. We will inject the factory into the manager so that it may
         // make the connections while they are actually needed and not of before.
-        $app['db.factory'] = function ($app) {
-            return new ConnectionFactory($app);
+        $container['db.factory'] = function ($container) {
+            return new ConnectionFactory($container);
         };
     }
 }

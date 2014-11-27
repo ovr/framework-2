@@ -8,7 +8,7 @@ namespace Brainwave\Log;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,8 +20,8 @@ namespace Brainwave\Log;
 
 use \Monolog\Logger;
 use \Pimple\Container;
-use \Brainwave\Log\MonologWriter;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Log\Writer as MonologWriter;
 
 /**
  * LoggerServiceProvider
@@ -38,11 +38,11 @@ class LoggerServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['logger'] = function ($app) {
+        $container['logger'] = function ($container) {
             return new MonologWriter(
-                new Logger($app['env'])
+                new Logger($container['env'])
             );
         };
     }

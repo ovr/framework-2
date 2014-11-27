@@ -8,7 +8,7 @@ namespace Brainwave\Cookie;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,8 @@ namespace Brainwave\Cookie;
  */
 
 use \Pimple\Container;
-use \Brainwave\Crypt\Interfaces\CryptInterface;
-use \Brainwave\Cookie\Interfaces\CookieInterface;
+use \Brainwave\Contracts\Cookie\Factory as FactoryContract;
+use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Cookie
@@ -30,31 +30,30 @@ use \Brainwave\Cookie\Interfaces\CookieInterface;
  * @since   0.8.0-dev
  *
  */
-class Cookie implements CookieInterface
+class Cookie implements FactoryContract
 {
-    protected $app;
+    protected $container;
 
-    public function __construct(Container $app)
+    public function __construct(Container $container)
     {
-        $this->app = $app;
+        $this->container= $container;
     }
 
     /**
-     * Set HTTP cookie to be sent with the HTTP response
+     * Create HTTP cookie to be sent with the HTTP response
      *
      * @param  string     $name     The cookie name
      * @param  string     $value    The cookie value
      * @param  int|string $time     The duration of the cookie;
-     *                                  If integer, should be UNIX timestamp;
-     *                                  If string, converted to UNIX timestamp with `strtotime`;
+     *                              If integer, should be UNIX timestamp;
+     *                              If string, converted to UNIX timestamp with `strtotime`;
      * @param  string     $path     The path on the server in which the cookie will be available on
      * @param  string     $domain   The domain that the cookie is available to
      * @param  bool       $secure   Indicates that the cookie should only be transmitted over a secure
      *                              HTTPS connection to/from the client
      * @param  bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
-     * @api
      */
-    public function set(
+    public function make(
         $name,
         $value,
         $time = null,
@@ -65,13 +64,14 @@ class Cookie implements CookieInterface
     ) {
         $settings = [
             'value' => $value,
-            'expires' => ($time === null) ? $this->app['settings']->get('cookies::lifetime', '20minutes') : $time,
-            'path' => ($path === null) ? $this->app['settings']->get('cookies::path', '/') : $path,
-            'domain' => ($domain === null) ? $this->app['settings']->get('cookies::domain', null) : $domain,
-            'secure' => ($secure === null) ? $this->app['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => ($httponly === null) ? $this->app['settings']->get('cookies::httponly', false) : $httponly
+            'expires' => ($time === null) ? $this->container['settings']['cookies::lifetime'] : $time,
+            'path' => ($path === null) ? $this->container['settings']['cookies::path'] : $path,
+            'domain' => ($domain === null) ? $this->container['settings']['cookies::domain'] : $domain,
+            'secure' => ($secure === null) ? $this->container['settings']['cookies::secure'] : $secure,
+            'httponly' => ($httponly === null) ? $this->container['settings']['cookies::httponly'] : $httponly
         ];
-        $this->app['response']->setCookie($name, $settings);
+
+        $this->container['response']->setCookie($name, $settings);
     }
 
     /**
@@ -86,7 +86,7 @@ class Cookie implements CookieInterface
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        return $this->set($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
+        return $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
     public function session($value)
@@ -101,40 +101,39 @@ class Cookie implements CookieInterface
      * or return NULL if cookie does not exist. Cookies created during
      * the current request will not be available until the next request.
      *
-     * @param  string      $name    The cookie name
+     * @param  string $name The cookie name
+     *
      * @return string|null
-     * @api
      */
     public function get($name)
     {
-        return $this->app['request']->getCookie($name);
+        return $this->container['request']->getCookie($name);
     }
 
     /**
      * Does this request have a given cookie?
      *
      * @param  string $name
+     *
      * @return bool
-     * @api
      */
     public function has($name)
     {
-        return $this->app['request']->hasCookie($name);
+        return $this->container['request']->hasCookie($name);
     }
 
     /**
      * Encrypt cookies
      *
-     * @param CryptInterface $crypt
-     * @api
+     * @param EncrypterContract $crypt
      */
-    public function encryptCookies(CryptInterface $crypt)
+    public function encryptCookies(EncrypterContract $crypt)
     {
-        $this->app['request']->encryptCookies($crypt);
+        $this->container['request']->encryptCookies($crypt);
     }
 
     /**
-     * Delete HTTP cookie (encrypted or unencrypted)
+     * Forget HTTP cookie (encrypted or unencrypted)
      *
      * Remove a Cookie from the client. This method will overwrite an existing Cookie
      * with a new, empty, auto-expiring Cookie. This method's arguments must match
@@ -148,9 +147,8 @@ class Cookie implements CookieInterface
      * @param  bool   $secure   Indicates that the cookie should only be transmitted over a secure
      *                          HTTPS connection from the client
      * @param  bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
-     * @api
      */
-    public function delete(
+    public function forget(
         $name,
         $path = null,
         $domain = null,
@@ -158,11 +156,11 @@ class Cookie implements CookieInterface
         $httponly = null
     ) {
         $settings = [
-            'domain' => is_null($domain) ? $this->app['settings']->get('cookies::domain', null) : $domain,
-            'path' => is_null($path) ? $this->app['settings']->get('cookies::path', '/') : $path,
-            'secure' => is_null($secure) ? $this->app['settings']->get('cookies::secure', false) : $secure,
-            'httponly' => is_null($httponly) ?$this->app['settings']->get('cookies::httponly', flase) : $httponly
+            'domain'   => is_null($domain) ? $this->container['settings']['cookies::domain'] : $domain,
+            'path'     => is_null($path) ? $this->container['settings']['cookies::path'] : $path,
+            'secure'   => is_null($secure) ? $this->container['settings']['cookies::secure'] : $secure,
+            'httponly' => is_null($httponly) ? $this->container['settings']['cookies::httponly'] : $httponly
         ];
-        $this->app['response']->removeCookie($name, $settings);
+        $this->container['response']->removeCookie($name, $settings);
     }
 }

@@ -1,0 +1,31 @@
+{
+    "name": "brainwave/hashing",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "hashing", "password"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/hashing",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "ircmaxell/password-compat": "1.0.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Hashing\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

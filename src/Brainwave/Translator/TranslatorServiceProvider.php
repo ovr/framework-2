@@ -8,7 +8,7 @@ namespace Brainwave\Translator;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,10 +19,9 @@ namespace Brainwave\Translator;
  */
 
 use \Pimple\Container;
-use \Brainwave\Config\FileLoader;
-use \Brainwave\Filesystem\Filesystem;
+use \Brainwave\Translator\Manager;
+use \Brainwave\Filesystem\FileLoader;
 use \Pimple\ServiceProviderInterface;
-use \Brainwave\Translator\TranslatorManager;
 
 /**
  * TranslatorServiceProvider
@@ -37,17 +36,17 @@ class TranslatorServiceProvider implements ServiceProviderInterface
     /**
      * Register translator
      */
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['translator.path'] = '';
+        $container['translator.path'] = '';
 
-        $app['translator'] = function ($app) {
-            $translator = new TranslatorManager();
-            $translator->setLocale($app['settings']->get('app::locale', 'en'));
+        $container['translator'] = function ($container) {
+            $translator = new Manager();
+            $translator->setLocale($container['settings']->get('app::locale', 'en'));
             $translator->setLoader(
                 new FileLoader(
-                    new Filesystem(),
-                    $app['translator.path']
+                    $container['files'],
+                    $container['translator.path']
                 )
             );
             return $translator;

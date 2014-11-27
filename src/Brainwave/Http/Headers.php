@@ -8,7 +8,7 @@ namespace Brainwave\Http;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -19,8 +19,8 @@ namespace Brainwave\Http;
  */
 
 use \Brainwave\Collection\Collection;
-use \Brainwave\Http\Interfaces\HeadersInterface;
-use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
+use \Brainwave\Contracts\Http\Headers as HeadersContract;
+use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 
 /**
  * Headers
@@ -40,10 +40,11 @@ use \Brainwave\Workbench\Environment\Interfaces\EnvironmentInterface;
  * @since   0.8.0-dev
  *
  */
-class Headers extends Collection implements HeadersInterface
+class Headers extends Collection implements HeadersContract
 {
     /**
      * Special header keys to treat like HTTP_ headers
+     *
      * @var array
      */
     protected $special = [
@@ -58,10 +59,9 @@ class Headers extends Collection implements HeadersInterface
     /**
      * Constructor, will parse an environment for headers if present
      *
-     * @param EnvironmentInterface $environment
-     * @api
+     * @param EnvironmentContract $environment
      */
-    public function __construct(EnvironmentInterface $environment = null)
+    public function __construct(EnvironmentContract $environment = null)
     {
         if (!is_null($environment)) {
             $this->parseHeaders($environment);
@@ -71,25 +71,27 @@ class Headers extends Collection implements HeadersInterface
     /**
      * Parse provided headers into this collection
      *
-     * @param  EnvironmentInterface $environment
+     * @param  EnvironmentContract $environment
+     *
      * @return void
-     * @api
      */
-    public function parseHeaders(EnvironmentInterface $environment)
+    public function parseHeaders($environment)
     {
-        foreach ($environment as $key => $value) {
-            $key = strtoupper($key);
+        if ($environment instanceof EnvironmentContract) {
+            foreach ($environment as $key => $value) {
+                $key = strtoupper($key);
 
-            if (
-                strpos($key, 'HTTP_') === 0 ||
-                strpos($key, 'REDIRECT_') === 0 ||
-                in_array($key, $this->special)
-            ) {
-                if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
-                    continue;
+                if (
+                    strpos($key, 'HTTP_') === 0 ||
+                    strpos($key, 'REDIRECT_') === 0 ||
+                    in_array($key, $this->special)
+                ) {
+                    if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
+                        continue;
+                    }
+
+                    parent::set($this->normalizeKey($key), [$value]);
                 }
-
-                parent::set($this->normalizeKey($key), [$value]);
             }
         }
     }
@@ -99,7 +101,6 @@ class Headers extends Collection implements HeadersInterface
      *
      * @param string $key   The data key
      * @param mixed  $value The data value
-     * @api
      */
     public function set($key, $value)
     {
@@ -109,10 +110,11 @@ class Headers extends Collection implements HeadersInterface
     /**
      * Get data value with key
      *
-     * @param  string $key     The data key
-     * @param  boolean  $asArray The value to return if data key does not exist
-     * @return mixed           The data value, or the default value
-     * @api
+     * @param  string  $key     The data key
+     * @param  boolean $asArray The value to return if data key does not exist
+     *
+     * @return mixed            The data value, or the default value
+     *
      */
     public function get($key, $asArray = null)
     {
@@ -128,25 +130,26 @@ class Headers extends Collection implements HeadersInterface
      *
      * @param string $key   The data key
      * @param mixed  $value The data value
-     * @api
      */
     public function add($key, $value)
     {
         $header = $this->get($key, true);
+
         if (is_array($value)) {
             $header = array_merge($header, $value);
         } else {
             $header[] = $value;
         }
+
         parent::set($this->normalizeKey($key), $header);
     }
 
     /**
      * Does this set contain a key?
      *
-     * @param  string  $key The data key
+     * @param  string $key The data key
+     *
      * @return boolean
-     * @api
      */
     public function has($key)
     {
@@ -157,7 +160,6 @@ class Headers extends Collection implements HeadersInterface
      * Remove value with key from this set
      *
      * @param string $key The data key
-     * @api
      */
     public function remove($key)
     {

@@ -8,7 +8,7 @@ namespace Brainwave\Filesystem;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,6 +20,7 @@ namespace Brainwave\Filesystem;
 
 use \Pimple\Container;
 use \Pimple\ServiceProviderInterface;
+use \Brainwave\Filesystem\FileLoader;
 use \Brainwave\Filesystem\Filesystem;
 use \Brainwave\Filesystem\FilesystemManager;
 use \Brainwave\Filesystem\Adapters\ConnectionFactory as Factory;
@@ -34,13 +35,14 @@ use \Brainwave\Filesystem\Adapters\ConnectionFactory as Factory;
  */
 class FilesystemServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $app['files'] = function ($app) {
+        $container['files'] = function () {
             return new Filesystem();
         };
 
-        $this->registerFlysystem($app);
+        $this->registerFlysystem($container);
+        $this->registerFileLoader($container);
     }
 
     /**
@@ -48,18 +50,18 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFlysystem(Container $app)
+    protected function registerFlysystem(Container $container)
     {
-        $this->registerFactory($app);
+        $this->registerFactory($container);
 
-        $this->registerManager($app);
+        $this->registerManager($container);
 
-        $app['filesystem.disk'] = function () {
-            return $app['filesystem']->disk($app['settings']['filesystems::default']);
+        $container['filesystem.disk'] = function ($container) {
+            return $container['filesystem']->disk($container['settings']['filesystems::default']);
         };
 
-        $app['filesystem.cloud'] = function () {
-            return $app['filesystem']->disk($app['settings']['filesystems::cloud']);
+        $container['filesystem.cloud'] = function ($container) {
+            return $container['filesystem']->disk($container['settings']['filesystems::cloud']);
         };
     }
 
@@ -68,9 +70,9 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFactory(Container $app)
+    protected function registerFactory(Container $container)
     {
-        $app['filesystem.factory'] = function () {
+        $container['filesystem.factory'] = function () {
             return new Factory();
         };
     }
@@ -80,10 +82,19 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerManager(Container $app)
+    protected function registerManager(Container $container)
     {
-        $app['filesystem'] = function ($app) {
-            return new FilesystemManager($app, $app['filesystem.factory']);
+        $container['filesystem'] = function ($container) {
+            return new FilesystemManager($container, $container['filesystem.factory']);
+        };
+    }
+
+    protected function registerFileLoader(Container $container)
+    {
+        $container['file.loader'] = function ($container) {
+            $container['path'] = '';
+
+            return new FileLoader($container['files'], $container['path']);
         };
     }
 }

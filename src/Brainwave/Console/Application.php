@@ -8,7 +8,7 @@ namespace Brainwave\Console;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -31,23 +31,25 @@ class Application
     /**
      * Create and boot a new Console application.
      *
-     * @param  \Brainwave\Workbench\Workbench  $app
+     * @param  \Brainwave\Application\Application $container
+     *
      * @return \Brainwave\Console\Application
      */
-    public static function start($app)
+    public static function start($container)
     {
-        return static::make($app);
+        return static::make($container);
     }
 
     /**
      * Create a new Console application.
      *
-     * @param  \Brainwave\Workbench\Workbench  $app
+     * @param  \Brainwave\Application\Application $container
+     *
      * @return \Brainwave\Console\Application
      */
-    public static function make($app)
+    public static function make($container)
     {
-        $app->boot();
+        $container->boot();
 
     }
 

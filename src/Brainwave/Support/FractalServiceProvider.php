@@ -8,7 +8,7 @@ namespace Brainwave\Support;
  * @copyright   2014 Daniel Bannert
  * @link        http://www.narrowspark.de
  * @license     http://www.narrowspark.com/license
- * @version     0.9.3-dev
+ * @version     0.9.4-dev
  * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
@@ -35,45 +35,43 @@ use \League\Fractal\Serializer\DataArraySerializer;
  */
 class FractalServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $app)
+    public function register(Container $container)
     {
-        $this->app = $app;
-
-        $this->registerFractal();
-        $this->registerJsonApiFractal();
-        $this->registerArrayFractal();
-        $this->registerDataArrayFractal();
+        $this->registerFractal($container);
+        $this->registerJsonApiFractal($container);
+        $this->registerArrayFractal($container);
+        $this->registerDataArrayFractal($container);
     }
 
-    protected function registerFractal()
+    protected function registerFractal(Container $container)
     {
-        $this->app['fractal'] = function ($app) {
+        $container['fractal'] = function ($container) {
             $manager = new Manager();
             return $manager;
         };
     }
 
-    protected function registerJsonApiFractal()
+    protected function registerJsonApiFractal(Container $container)
     {
-        $this->app['fractal.json'] = function ($app) {
+        $container['fractal.json'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
             return $manager;
         };
     }
 
-    protected function registerArrayFractal()
+    protected function registerArrayFractal(Container $container)
     {
-        $this->app['fractal.array'] = function ($app) {
+        $container['fractal.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
             return $manager;
         };
     }
 
-    protected function registerDataArrayFractal()
+    protected function registerDataArrayFractal(Container $container)
     {
-        $this->app['fractal.data.array'] = function ($app) {
+        $container['fractal.data.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
             return $manager;

@@ -1,0 +1,34 @@
+{
+    "name": "brainwave/crypt",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "crypt"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/crypt",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "ext-openssl": "*",
+        "ext-mcrypt": "*",
+        "ircmaxell/random-lib": "1.0.0",
+        "ircmaxell/password-compat": "1.0.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Crypt\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.3-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
