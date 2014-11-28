@@ -34,6 +34,15 @@ use \Brainwave\Filesystem\Adapters\RackspaceConnector;
  */
 class ConnectionFactory
 {
+
+    protected $defaultDriver = [
+        'awss3'     => 'AwsS3',
+        'local'     => 'Local',
+        'null'      => 'Null',
+        'rackspace' => 'Rackspace',
+        'ftp'       => 'Ftp',
+    ];
+
     /**
      * Establish an adapter connection.
      *
@@ -61,18 +70,8 @@ class ConnectionFactory
             throw new \InvalidArgumentException("A driver must be specified.");
         }
 
-        switch ($config['driver'])
-        {
-            case 'awss3':
-                return new AwsS3Connector();
-            case 'local':
-                return new LocalConnector();
-            case 'null':
-                return new NullConnector();
-            case 'rackspace':
-                return new RackspaceConnector();
-            case 'ftp':
-                return new FtpConnector();
+        if (isset($this->defaultDriver[$config['driver']])) {
+            return new $this->defaultDriver[$config['driver']]).Connector();
         }
 
         throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");
