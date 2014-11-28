@@ -71,7 +71,7 @@ class ConnectionFactory
         }
 
         if (isset($this->defaultDriver[$config['driver']])) {
-            return new $this->defaultDriver[$config['driver']]).Connector();
+            return new $this->defaultDriver[$config['driver']].Connector();
         }
 
         throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");
