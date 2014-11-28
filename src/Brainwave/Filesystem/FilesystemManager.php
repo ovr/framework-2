@@ -37,7 +37,7 @@ class FilesystemManager implements Manager
     /**
      * The application instance.
      *
-     * @var \Brainwave\Contracts\Application\Application
+     * @var \Pimple\Container
      */
     protected $container;
 

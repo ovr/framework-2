@@ -134,9 +134,9 @@ class Arr
      */
     public static function arrayFetch($array, $key)
     {
-        foreach (explode('.', $key) as $segment) {
-            $results = [];
+        $results = [];
 
+        foreach (explode('.', $key) as $segment) {
             foreach ($array as $value) {
                 $value = (array) $value;
 

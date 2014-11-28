@@ -51,44 +51,44 @@ class Router implements RouterContract
     /**
      * All route objects, numerically indexed
      *
-     * @var array[RouteContract]
+     * @var array RouteContract
      */
-    protected $routes;
+    protected $routes = [];
 
     /**
      * Named route objects, indexed by route name
      *
-     * @var array[RouteContract]
+     * @var array RouteContract
      */
-    protected $namedRoutes;
+    protected $namedRoutes = [];
 
     /**
      * Route objects that addRoute the request URI
      *
-     * @var array[RouteContract]
+     * @var array RouteContract
      */
-    protected $matchedRoutes;
+    protected $matchedRoutes = [];
 
     /**
      * Cached urls: store and reuse already generated urls
      *
      * @var array
      */
-    protected $cachedUrls;
+    protected $cachedUrls = [];
 
     /**
      * Route groups
      *
      * @var array
      */
-    protected $routeGroups;
+    protected $routeGroups = [];
 
     /**
      * All params of the matched route
      *
      * @var array
      */
-    protected $routeParams;
+    protected $routeParams = [];
 
     /**
      * @var integer Counts the number of available routes.
@@ -101,11 +101,7 @@ class Router implements RouterContract
      */
     public function __construct(Container $container)
     {
-        $this->container   = $container;
-
-        $this->routes      = [];
-        $this->routeGroups = [];
-        $this->routeParams = [];
+        $this->container = $container;
     }
 
     /**
@@ -184,11 +180,12 @@ class Router implements RouterContract
             if ($route->matches($resourceUri)) {
                 $matchedRoutes[] = $route;
             }
+
+            $this->routeParams = array_merge($this->routeParams, $route->getParams());
         }
 
         if ($save === true) {
             $this->matchedRoutes = $matchedRoutes;
-            $this->routeParams = array_merge($this->routeParams, $route->getParams());
         }
 
         return $matchedRoutes;

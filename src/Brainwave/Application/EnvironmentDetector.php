@@ -35,11 +35,11 @@ use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 class EnvironmentDetector extends Collection implements EnvironmentContract
 {
     /**
-     * The application instance being facaded.
+     * The application instance.
      *
      * @var \Pimple\Container
      */
-    protected static $container;
+    protected $container;
 
     /**
      * Mock data for an Environment

@@ -835,6 +835,7 @@ class Collection implements
      * @param  \Brainwave\Collection\Collection|
      *         ArrayableContract|
      *         array $items
+     *
      * @return static
      */
     public function intersect($items)

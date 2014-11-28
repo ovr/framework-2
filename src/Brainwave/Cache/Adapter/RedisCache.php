@@ -20,6 +20,7 @@ namespace Brainwave\Cache\Adapter;
 
 use \Predis\Client as Client;
 use \Brainwave\Cache\Store\TaggableStore;
+use \\Predis\Connection\ConnectionException;
 use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
@@ -79,7 +80,7 @@ class RedisCache extends TaggableStore implements AdapterContract
 
         try {
             $client->connect();
-        } catch (\Predis\Connection\ConnectionException $e) {
+        } catch (ConnectionException $e) {
             throw new \RuntimeException("Couldn't connected to Redis: ".$e->getMessage());
         }
 

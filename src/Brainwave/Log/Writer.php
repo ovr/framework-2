@@ -152,14 +152,13 @@ class Writer
 
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
-        $monolog = $this->monolog;
-        $monolog->pushHandler(
-            new StreamHandler($pathFolder, $level)
-        );
+        $stream = new StreamHandler($pathFolder, $level);
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $stream->setFormatter($this->parseFormatter($formatter));
         }
+
+        $this->monolog->pushHandler($stream);
     }
 
     /**
@@ -176,12 +175,7 @@ class Writer
 
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
-        $monolog = $this->monolog;
-        $monolog->parseHandler($stream, $pathFolder, $level);
-
-        if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
-        }
+        $this->parseHandler($stream, $pathFolder, $level, $formatter);
     }
 
     /**
@@ -199,12 +193,13 @@ class Writer
 
         (empty($path)) ? $pathFolder = $path : $pathFolder = $this->getPath();
 
-        $monolog = $this->monolog;
-        $monolog->pushHandler(new RotatingFileHandler($pathFolder, $days, $level));
+        $rotating = new RotatingFileHandler($pathFolder, $days, $level);
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $rotating->setFormatter($this->parseFormatter($formatter));
         }
+
+        $this->monolog->pushHandler($rotating);
     }
 
     /**
@@ -219,12 +214,13 @@ class Writer
     {
         $level = $this->parseLevel($level);
 
-        $monolog = $this->monolog;
-        $monolog->pushHandler(new ErrorLogHandler($messageType, $level));
+        $error = new ErrorLogHandler($messageType, $level);
 
         if (!empty($formatter)) {
-            $monolog->setFormatter($this->parseFormatter($formatter));
+            $error->setFormatter($this->parseFormatter($formatter));
         }
+
+        $this->monolog->pushHandler($error);
     }
 
     /**
@@ -291,7 +287,7 @@ class Writer
      *
      * @throws \InvalidArgumentException
      */
-    protected function parseHandler($handler, $path = '', $level = '')
+    protected function parseHandler($handler, $path = '', $level = '', $formatter = '')
     {
         if (isset($this->handler[$handler])) {
 
@@ -301,7 +297,13 @@ class Writer
                 return $this->monolog->pushHandler($socket, $level);
             }
 
-            return $this->monolog->pushHandler(new $this->handler[$handler]($path, $level));
+            $handler = new $this->handler[$handler]($path, $level);
+
+            if (!empty($formatter)) {
+                $handler->setFormatter($this->parseFormatter($formatter));
+            }
+
+            return $this->monolog->pushHandler($handler);
 
         } elseif (is_object($handler)) {
             return $this->monolog->pushHandler($handler, $level);
@@ -311,10 +313,12 @@ class Writer
     }
 
     /**
-     * [addRecord description]
+     * AddRecord to monolog
      *
-     * @param string $level monolog log level
-     * @param string $value log text
+     * @param  string $level monolog log level
+     * @param  string $value log text
+     *
+     * @throws \InvalidArgumentException
      */
     public function addRecord($level, $value)
     {

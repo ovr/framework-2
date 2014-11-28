@@ -71,11 +71,11 @@ class Headers extends Collection implements HeadersContract
     /**
      * Parse provided headers into this collection
      *
-     * @param  EnvironmentContract $environment
+     * @param  \Traversable $environment
      *
      * @return void
      */
-    public function parseHeaders($environment)
+    public function parseHeaders(\Traversable $environment)
     {
         if ($environment instanceof EnvironmentContract) {
             foreach ($environment as $key => $value) {

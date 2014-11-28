@@ -37,10 +37,18 @@ use \Brainwave\View\Engines\Adapter\Json as JsonEngine;
 class ViewServiceProvider implements ServiceProviderInterface
 {
     /**
+     * Container instance
+     *
+     * @var \Pimple\Container
+     */
+    protected $container;
+
+    /**
      * Register view
      */
     public function register(Container $container)
     {
+        $this->container = $container;
         $this->registerEngineResolver($container);
         $this->registerViewFinder($container);
         $this->registerFactory($container);
@@ -67,9 +75,9 @@ class ViewServiceProvider implements ServiceProviderInterface
         if ($container['settings']['view::compilers'] !== null) {
 
             foreach ($container['settings']['view::compilers'] as $compilerName => $compilerClass) {
-                if ($engineName === $compilerClass[0]) {
+                if ($compilerName === $compilerClass[0]) {
                     $this->registercustomEngine(
-                        $engineName,
+                        $compilerName,
                         call_user_func_array($compilerClass[0], (array) $compilerClass[1]),
                         $engines
                     );

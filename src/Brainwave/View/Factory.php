@@ -23,6 +23,7 @@ use \Brainwave\Support\Str;
 use \Brainwave\Support\Arr;
 use \Brainwave\Collection\Collection;
 use \Brainwave\View\Engines\EngineResolver;
+use \Brainwave\Contracts\Events\Dispatcher;
 use \Brainwave\Contracts\View\Factory as FactoryContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
@@ -94,7 +95,7 @@ class Factory extends Collection implements FactoryContract
      * Constructor
      *
      * @param \Brainwave\View\Engines\EngineResolver          $engines
-     * @param ViewFinderInterface $finder
+     * @param \Brainwave\View\Interfaces\ViewFinderInterface  $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(
@@ -107,9 +108,9 @@ class Factory extends Collection implements FactoryContract
         $this->events  = $events;
 
         if ($this->container['settings']['view::items'] !== null) {
-            $data = array_merge($this->container['settings']['view::items'], $this->data, $this->shared);
+            $this->data = array_merge($this->container['settings']['view::items'], $this->data, $this->shared);
         } else {
-            $data = array_merge($this->data, $this->shared);
+            $this->data = array_merge($this->data, $this->shared);
         }
     }
 

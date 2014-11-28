@@ -32,16 +32,16 @@ use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 class ContainerResolver implements CallableResolverContract
 {
     /**
-     * Application Brainwave\Application\Application
+     * Container instance
      *
-     * @var bool
+     * @var \Pimple\Container
      */
     private $container;
 
     /**
-     * Set Application
+     * Set Container
      *
-     * @param $container\Pimple\Container
+     * @param \Pimple\Container $container
      */
     public function __construct(Container $container)
     {

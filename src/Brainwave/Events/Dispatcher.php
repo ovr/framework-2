@@ -168,7 +168,7 @@ class Dispatcher implements EventsContract
      *
      * @return mixed|void
      */
-    public function trigger($name, $hookArg = null)
+    public function fire($name, $hookArg = null)
     {
         $this->applyHook($name, $hookArg);
     }

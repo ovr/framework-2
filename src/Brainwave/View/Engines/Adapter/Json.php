@@ -39,9 +39,9 @@ class Json implements EnginesContract
     protected $status;
 
     /**
-     * App
+     * Container instance
      *
-     * @var \Brainwave\Workbanch\Workbanch
+     * @var \Pimple\Container
      */
     protected $container;
 

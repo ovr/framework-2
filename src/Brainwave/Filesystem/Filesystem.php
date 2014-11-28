@@ -20,7 +20,6 @@ namespace Brainwave\Filesystem;
 
 use \FilesystemIterator;
 use \Brainwave\Filesystem\Exception\FileNotFoundException;
-use \Brainwave\Contracts\Filesystem\Filesystem as FilesystemContract ;
 
 /**
  * Filesystem
@@ -30,7 +29,7 @@ use \Brainwave\Contracts\Filesystem\Filesystem as FilesystemContract ;
  * @since   0.9.2-dev
  *
  */
-class Filesystem implements FilesystemContract
+class Filesystem
 {
     /**
      * Determine if a file exists.
@@ -98,7 +97,7 @@ class Filesystem implements FilesystemContract
      * @param  string $path
      * @param  string $contents
      *
-     * @return int
+     * @return boolean
      */
     public function put($path, $contents)
     {

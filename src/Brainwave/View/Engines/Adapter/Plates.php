@@ -38,7 +38,7 @@ class Plates implements EnginesContract
     /**
      * Container
      *
-     * @var void
+     * @var \Pimple\Container
      */
     protected $container;
 
@@ -57,6 +57,7 @@ class Plates implements EnginesContract
 
     /**
      * Create a new view environment instance.
+     *
      * @param  \Pimple\Container $container
      *
      * @return void
