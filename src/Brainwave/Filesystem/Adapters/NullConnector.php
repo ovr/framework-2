@@ -19,7 +19,7 @@ namespace Brainwave\Filesystem\Adapters;
  */
 
 use \League\Flysystem\Adapter\NullAdapter;
-use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * NullConnector
@@ -29,7 +29,7 @@ use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
  * @since   0.9.3-dev
  *
  */
-class NullConnector implements ConnectorInterface
+class NullConnector implements ConnectorContract
 {
 
     /**

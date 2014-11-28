@@ -108,10 +108,10 @@ class FilesystemAdapter implements CloudFilesystemContract
     public function getVisibility($path)
     {
         if ($this->driver->getVisibility($path) == AdapterInterface::VISIBILITY_PUBLIC) {
-            return Cloud::VISIBILITY_PUBLIC;
+            return CloudFilesystemContract::VISIBILITY_PUBLIC;
         }
 
-        return Cloud::VISIBILITY_PRIVATE;
+        return CloudFilesystemContract::VISIBILITY_PRIVATE;
     }
 
     /**

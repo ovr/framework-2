@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Routing;
  *
  */
 
-use \Brainwave\Contracts\Application;
+use \Brainwave\Contracts\Application\Application;
 
 /**
  * ControllerProvider

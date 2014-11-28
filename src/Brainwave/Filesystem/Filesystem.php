@@ -20,6 +20,7 @@ namespace Brainwave\Filesystem;
 
 use \FilesystemIterator;
 use \Brainwave\Filesystem\Exception\FileNotFoundException;
+use \Brainwave\Contracts\Filesystem\Filesystem as FilesystemContract ;
 
 /**
  * Filesystem
@@ -29,7 +30,7 @@ use \Brainwave\Filesystem\Exception\FileNotFoundException;
  * @since   0.9.2-dev
  *
  */
-class Filesystem
+class Filesystem implements FilesystemContract
 {
     /**
      * Determine if a file exists.

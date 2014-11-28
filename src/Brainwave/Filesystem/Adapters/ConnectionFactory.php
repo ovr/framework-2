@@ -18,6 +18,12 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
+use \Brainwave\Filesystem\Adapters\FtpConnector;
+use \Brainwave\Filesystem\Adapters\NullConnector;
+use \Brainwave\Filesystem\Adapters\AwsS3Connector;
+use \Brainwave\Filesystem\Adapters\LocalConnector;
+use \Brainwave\Filesystem\Adapters\RackspaceConnector;
+
 /**
  * ConnectionFactory
  *
@@ -45,7 +51,7 @@ class ConnectionFactory
      *
      * @param  array $config
      *
-     * @return \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface
+     * @return \Brainwave\Contracts\Filesystem\Connector
      *
      * @throws \InvalidArgumentException
      */
@@ -65,6 +71,8 @@ class ConnectionFactory
                 return new NullConnector();
             case 'rackspace':
                 return new RackspaceConnector();
+            case 'ftp':
+                return new FtpConnector();
         }
 
         throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");

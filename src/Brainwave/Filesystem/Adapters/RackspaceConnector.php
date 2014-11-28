@@ -21,7 +21,7 @@ namespace Brainwave\Filesystem\Adapters;
 use \OpenCloud\OpenStack;
 use \League\Flysystem\Adapter\Rackspace;
 use \OpenCloud\ObjectStore\Resource\Container;
-use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -31,7 +31,7 @@ use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
  * @since   0.9.3-dev
  *
  */
-class RackspaceConnector implements ConnectorInterface
+class RackspaceConnector implements ConnectorContract
 {
     /**
      * Establish an adapter connection.

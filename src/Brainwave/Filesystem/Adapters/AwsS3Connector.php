@@ -20,7 +20,7 @@ namespace Brainwave\Filesystem\Adapters;
 
 use \Aws\S3\S3Client;
 use \League\Flysystem\Adapter\AwsS3;
-use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * AwsS3Connector
@@ -30,7 +30,7 @@ use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
  * @since   0.9.3-dev
  *
  */
-class AwsS3Connector implements ConnectorInterface
+class AwsS3Connector implements ConnectorContract
 {
     /**
      * Establish an adapter connection.

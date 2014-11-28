@@ -19,7 +19,7 @@ namespace Brainwave\Filesystem\Adapters;
  */
 
 use \League\Flysystem\Adapter\Local;
-use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -29,7 +29,7 @@ use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
  * @since   0.9.3-dev
  *
  */
-class LocalConnector implements ConnectorInterface
+class LocalConnector implements ConnectorContract
 {
     /**
      * Establish an adapter connection.

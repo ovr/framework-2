@@ -19,7 +19,7 @@ namespace Brainwave\Filesystem\Adapters;
  */
 
 use League\Flysystem\Adapter\Ftp;
-use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * FtpConnector
@@ -29,7 +29,7 @@ use \Brainwave\Filesystem\Adapters\Interfaces\ConnectorInterface;
  * @since   0.9.4-dev
  *
  */
-class FtpConnector implements ConnectorInterface
+class FtpConnector implements ConnectorContract
 {
     /**
      * Establish an adapter connection.

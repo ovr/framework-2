@@ -161,8 +161,8 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      * all of the routes now and return the application to the callers.
      *
     */
-    public function boot(Application $container)
+    public function boot(Application $app)
     {
-        $container['files']->getRequire($container::$paths['path'].'/Http/routes.php');
+        $app['files']->getRequire($app::$paths['path'].'/Http/routes.php');
     }
 }
