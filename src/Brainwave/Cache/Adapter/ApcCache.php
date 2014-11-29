@@ -84,6 +84,8 @@ class ApcCache extends TaggableStore implements AdapterContract
         if ($value !== false) {
             return $value;
         }
+
+        return null;
     }
 
     /**
@@ -93,11 +95,11 @@ class ApcCache extends TaggableStore implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return array|bool
+     * @return void
      */
     public function put($key, $value, $minutes)
     {
-        return $this->apcu ?
+        $this->apcu ?
         apcu_store($this->prefix.$key, $value, $minutes * 60) :
         apc_store($this->prefix.$key, $value, $minutes * 60);
     }

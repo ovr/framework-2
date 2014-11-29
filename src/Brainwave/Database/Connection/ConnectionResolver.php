@@ -18,7 +18,7 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use \Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
+use \Brainwave\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 
 /**
  * ConnectionResolver
@@ -28,7 +28,7 @@ use \Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
  * @since   0.9.2-dev
  *
  */
-class ConnectionResolver implements ConnectionResolverInterface
+class ConnectionResolver implements ConnectionResolverContract
 {
     /**
      * All of the registered connections.

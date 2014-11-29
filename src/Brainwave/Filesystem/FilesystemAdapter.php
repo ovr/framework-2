@@ -17,10 +17,10 @@ namespace Brainwave\Filesystem;
  * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
  *
  */
-
 use \Brainwave\Collection\Collection;
 use \League\Flysystem\AdapterInterface;
 use \League\Flysystem\FilesystemInterface;
+use \League\Flysystem\FileNotFoundException;
 use \Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract ;
 use \Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 
@@ -79,7 +79,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     {
         try {
             return $this->driver->read($path);
-        } catch (\League\Flysystem\FileNotFoundException $e) {
+        } catch (FileNotFoundException $e) {
             throw new ContractFileNotFoundException($path, $e->getCode(), $e);
         }
     }
@@ -329,14 +329,14 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string|null $visibility
      *
-     * @return string
+     * @return null|string
      *
      * @throws \InvalidArgumentException
      */
     protected function parseVisibility($visibility)
     {
         if (is_null($visibility)) {
-            return;
+            return null;
         }
 
         switch ($visibility) {

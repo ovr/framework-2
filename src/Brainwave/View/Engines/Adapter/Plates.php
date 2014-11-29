@@ -142,6 +142,7 @@ class Plates implements EnginesContract
         // flush out any stray output that might get out before an error occurs or
         // an exception is thrown. This prevents any partial views from leaking.
         ob_start();
+
         try {
             return $template->render($data);
         } catch (\Exception $e) {

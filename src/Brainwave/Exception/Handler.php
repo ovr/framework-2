@@ -195,7 +195,7 @@ class Handler
      *
      * @param  \Exception $exception
      *
-     * @return void
+     * @return string
      */
     protected function callCustomHandlers($exception)
     {

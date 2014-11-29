@@ -78,7 +78,7 @@ class FileDriver implements DriverInterface
         $versions = $this->fetchAll();
 
         if (in_array($migration->getVersion(), $versions)) {
-            return;
+            return null;
         }
 
         $versions[] = $migration->getVersion();
@@ -99,7 +99,7 @@ class FileDriver implements DriverInterface
         $versions = $this->fetchAll();
 
         if (!in_array($migration->getVersion(), $versions)) {
-            return;
+            return null;
         }
 
         unset($versions[array_search($migration->getVersion(), $versions)]);

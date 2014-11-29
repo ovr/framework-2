@@ -329,7 +329,6 @@ $files = array_merge($core, $config, array_map('realpath', [
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/Interfaces/RouterInterface.php',
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/Redirector.php',
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/Route.php',
-    $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/RouteCollection.php',
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/RouteFactory.php',
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/Router.php',
     $basePath.'vendor/narrowspark/framework/src/Brainwave/Routing/RoutingServiceProvider.php',

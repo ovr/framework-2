@@ -19,7 +19,7 @@ namespace Brainwave\Translator;
  */
 
 use \Brainwave\Filesystem\FileLoader;
-use \Brainwave\Translator\Interfaces\TranslatorInterface;
+use \Brainwave\Contracts\Translator\Translator as TranslatorContract;
 
 /**
  * TranslatorManager
@@ -31,7 +31,7 @@ use \Brainwave\Translator\Interfaces\TranslatorInterface;
  * @since   0.8.0-dev
  *
  */
-class TranslatorManager implements TranslatorInterface
+class Manager implements TranslatorContract
 {
     /**
      * An array containing all of the translation information.
@@ -108,10 +108,13 @@ class TranslatorManager implements TranslatorInterface
      * [setLoader description]
      *
      * @param FileLoader $loader \Brainwave\Config\Fileloader
+     *
+     * @return \Brainwave\Translator\Manager
      */
     public function setLoader(FileLoader $loader)
     {
         $this->loader = $loader;
+
         return $this;
     }
 
@@ -154,6 +157,7 @@ class TranslatorManager implements TranslatorInterface
      * Get all translation information for a given language.
      *
      * @param  String $language The name of language that this information is made up of.
+     *
      * @return array            The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslations($language)
@@ -164,15 +168,18 @@ class TranslatorManager implements TranslatorInterface
         if (isset($this->translations[$language])) {
             return $this->translations[$language];
         }
+
         return [];
     }
 
     /**
      * Set the translation of a given term or phrase within a given language.
      *
-     * @param String $orig        The original string.
-     * @param String $translation The translation.
-     * @param String $language    The language that the translation is written in. (e.g. 'en').
+     * @param string $orig        The original string.
+     * @param string $translation The translation.
+     * @param string $language    The language that the translation is written in. (e.g. 'en').
+     *
+     * @return \Brainwave\Translator\Manager
      */
     public function setTranslation($orig, $translation, $language)
     {
@@ -191,10 +198,10 @@ class TranslatorManager implements TranslatorInterface
     /**
      * Get the translation for a given string.
      *
-     * @param  String         $orig     The original string.
-     * @param  Boolean|String $language The language that the translation is written in. (e.g. 'en').
+     * @param  string         $orig     The original string.
+     * @param  boolean|string $language The language that the translation is written in. (e.g. 'en').
      *
-     * @return String|False The translated string.
+     * @return string|false The translated string.
      */
     public function getTranslation($orig, $language = false, $replacements = null)
     {
@@ -231,17 +238,17 @@ class TranslatorManager implements TranslatorInterface
 
         switch ($language) {
             case 'af': //afrikaans, nplurals=2
-                    $s = ( ($count==1) ? 0 :  2);
-                    $localized = $lang[ $s ];
+                $s = ( ($count==1) ? 0 :  2);
+                return $lang[ $s ];
                 break;
             case 'ar': //arabic, nplurals=6
-                    $s = ( ($count== 0) ? 0 : ( ($count==1) ? 1 : ( ($count==2) ? 2 : ( ( ($count % 100 >= 3) && ($count % 100 <= 10) ) ? 3 : ( ( ($count % 100 >= 11) && ($count % 100 <= 99) ) ? 4 : 5 ) ) ) ) );
-                    $localized = $lang[ $s ];
+                $s = ( ($count== 0) ? 0 : (($count==1) ? 1 : (($count==2) ? 2 : ((($count % 100 >= 3) && ($count % 100 <= 10) ) ? 3 : ((($count % 100 >= 11) && ($count % 100 <= 99) ) ? 4 : 5)))));
+                return $lang[ $s ];
                 break;
 
             case 'cz': //czech, nplurals=3
-                    $s = ( ($count==1) ? '0' : ($count>=2 && $count<=4) ? 1 : 1 );
-                    $localized = $lang[ $s ];
+                $s = ( ($count==1) ? '0' : ($count>=2 && $count<=4) ? 1 : 1);
+                return $lang[ $s ];
                 break;
             case 'de': //german
             case 'bg': //bulgarian
@@ -256,20 +263,20 @@ class TranslatorManager implements TranslatorInterface
             case 'sq': //albainian
             case 'my': //malay
                        // nplurals=2;
-                    $s = ( ($count != 1) ? '0' : 1 );
-                    $localized = $lang[ $s ];
+                $s = (($count != 1) ? '0' : 1);
+                return $lang[$s];
                 break;
             case 'pl': //polskiy, nplurals=3
-                    $s = (($count == 1) ? 0 : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20) ) ? 1 : 2 ));
-                    $localized = $lang[ $s ];
+                $s = (($count == 1) ? 0 : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20) ) ? 1 : 2 ));
+                return $lang[$s];
                 break;
             case 'ru': //russian, nplurals=3
-                    $s = ( (($count%10==1) && ($count%100!=11)) ? '0' : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20)) ? 1 : 2 ) );
-                    $localized = $lang[ $s ];
+                $s = ((($count%10==1) && ($count%100!=11)) ? '0' : ((($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20)) ? 1 : 2 ));
+                return $lang[$s];
                 break;
             case 'sk': //slovak, nplurals=3
-                    $s = ( ($count==1) ? 1 : ( ($count>=2 && $count<=4) ? 1 : '0' ) );
-                    $localized = $lang[ $s ];
+                $s = (($count==1) ? 1 : (($count>=2 && $count<=4) ? 1 : '0' ));
+                return $lang[$s];
                 break;
             case 'fa': //farsi
             case 'ja': //japan
@@ -279,46 +286,44 @@ class TranslatorManager implements TranslatorInterface
             case 'tw': //tradional Chinese (?)
             case 'kz': //Kazakh
                        //nplurals=1
-                    $s = '0';
-                    $localized = $lang[ $s ];
+                $s = '0';
+                return $lang[$s];
                 break;
             case 'ua': //ukrainian, nplurals=3
-                    $s = ( ($count%10==1 && $count%100!=11) ? '0' : ( $count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20) ) ? 1 : 1 );
-                    $localized = $lang[ $s ];
+                $s = (($count%10==1 && $count%100!=11) ? '0' : ($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 1);
+                return $lang[$s];
                 break;
             case 'lt': //lithuanian, nplurals=3
-                    $s = ( ($count%10==1 && $count%100!=11) ? '0' : ( $count%10>=2 && ($count%100<10 || $count%100>=20) ) ? 1 : 1 );
-                    $localized = $lang[ $s ];
+                $s = (($count%10==1 && $count%100!=11) ? '0' : ($count%10>=2 && ($count%100<10 || $count%100>=20)) ? 1 : 1 );
+                return $lang[$s];
                 break;
             case 'fr': //french, nplurals=2
-                    $s = ( $count > 1 ? '0' : 1 );
-                    $localized = $lang[ $key.$s ];
+                $s = ( $count > 1 ? '0' : 1 );
+                return $lang[$key. $s];
                 break;
             case 'ie': //irish, nplurals=5;
-                    $s = (($count==1)? 0 : (($count==2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
-                    $localized = $lang[ $s ];
+                $s = (($count==1)? 0 : (($count==2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
+                return $lang[$s];
                 break;
             case 'is': //icelandic, nplurals=2;
             case 'hr': //croatian, nplurals=3;
-                    $s = ($count%10!=1 || $count%100==11) ? 0 : 1;
-                    $localized = $lang[ $s ];
+                $s = ($count%10!=1 || $count%100==11) ? 0 : 1;
+                return $lang[$s];
                 break;
             case 'lv': //latvian
-                    $s = ( ($count%10==1 && $count%100!=11) ? 0 : (($count != 0) ? 1 : 2));
-                    $localized = $lang[ $s ];
+                $s = ( ($count%10==1 && $count%100!=11) ? 0 : (($count != 0) ? 1 : 2));
+                return $lang[$s];
                 break;
             case 'cy': //welsh, nplurals=4
-                    $s =  (($count==1) ? 0 : (($count==2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
-                    $localized = $lang[ $s ];
+                $s =  (($count==1) ? 0 : (($count==2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
+                return $lang[$s];
                 break;
             case 'be': //belarusian, nplurals=3
             case 'bs': //bosnian, nplurals=3
-                    $s =  (($count%10==1 && $count%100!=11) ? 0 : (($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 2));
-                    $localized = $lang[ $s ];
+                $s =  (($count%10==1 && $count%100!=11) ? 0 : (($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 2));
+                return $lang[$s];
                 break;
         }
-
-        return $localized;
     }
 
     /**
@@ -342,7 +347,8 @@ class TranslatorManager implements TranslatorInterface
         }
 
         $lang = $this->getLoader()->load($file, $namespace, $environment, $group);
-        return $this->setTranslations($lang, $language, true);
+
+        $this->setTranslations($lang, $language, true);
     }
 
     /**
@@ -445,7 +451,10 @@ class TranslatorManager implements TranslatorInterface
      * Check if lang is valid
      *
      * @param string|boolean $checkLang
-     * @return boolean|null or InvalidArgumentException
+     *
+     * @return boolean
+     *
+     * @throw InvalidArgumentException
      */
     protected function checkLang($checkLang)
     {
@@ -454,12 +463,8 @@ class TranslatorManager implements TranslatorInterface
         foreach ($validLangs as $vLang) {
             if ($vLang === $checkLang) {
                 return true;
-            } else {
-                $exception = true;
             }
-        }
 
-        if ($exception) {
             throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
         }
     }

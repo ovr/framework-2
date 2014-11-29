@@ -95,6 +95,8 @@ class Ini implements ParserContract
      * Format a file for saving.
      *
      * @param array $data data
+     *
+     * @return void
      */
     public function format(array $data)
     {

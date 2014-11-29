@@ -58,7 +58,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Create a new Memcached connection.
      *
-     * @param  array  $servers
+     * @param  array $servers
      * @return \Memcached
      *
      * @throws \RuntimeException
@@ -98,8 +98,9 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Create a new Memcached store.
      *
-     * @param  \Memcached  $memcached
-     * @param  string      $prefix
+     * @param  \Memcached $memcached
+     * @param  string     $prefix
+     *
      * @return AdapterContract
      */
     public function __construct($memcached, $prefix = '')
@@ -111,7 +112,8 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string  $key
+     * @param  string $key
+     *
      * @return mixed
      */
     public function get($key)
@@ -121,15 +123,18 @@ class MemcachedCache extends TaggableStore implements AdapterContract
         if ($this->memcached->getResultCode() == 0) {
             return $value;
         }
+
+        return null;
     }
 
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
-     * @return void
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  int    $minutes
+     *
+     * @return bool
      */
     public function put($key, $value, $minutes)
     {
@@ -140,7 +145,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      * Increment the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
      * @return integer
      */
     public function increment($key, $value = 1)
@@ -152,7 +157,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      * Decrement the value of an item in the cache.
      *
      * @param  string  $key
-     * @param  integer   $value
+     * @param  integer $value
      * @return integer
      */
     public function decrement($key, $value = 1)
@@ -163,9 +168,10 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @return void
+     * @param  string $key
+     * @param  mixed  $value
+     *
+     * @return bool
      */
     public function forever($key, $value)
     {
@@ -175,7 +181,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return void
      */
     public function forget($key)
@@ -186,7 +192,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return bool
      */
     public function flush()
     {

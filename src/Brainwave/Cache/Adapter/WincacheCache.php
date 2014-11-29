@@ -74,6 +74,8 @@ class WincacheCache extends TaggableStore implements AdapterContract
         if ($value !== false) {
             return $value;
         }
+
+        return null;
     }
 
     /**
@@ -83,7 +85,7 @@ class WincacheCache extends TaggableStore implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return void
+     * @return bool
      */
     public function put($key, $value, $minutes)
     {
@@ -122,7 +124,7 @@ class WincacheCache extends TaggableStore implements AdapterContract
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return void
+     * @return bool
      */
     public function forever($key, $value)
     {

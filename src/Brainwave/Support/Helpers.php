@@ -18,6 +18,8 @@ namespace Brainwave\Support;
  *
  */
 
+    use \Brainwave\Application\StaticalProxyManager;
+
 /**
  * Helpers
  *
@@ -53,7 +55,7 @@ class Helpers
             return self::app()->make($make);
         }
 
-        return \Brainwave\Application\StaticalProxyManager::getFacadeApplication();
+        return StaticalProxyManager::getFacadeApplication();
     }
 
     /**
@@ -170,7 +172,7 @@ class Helpers
      * @param  string $method private/protected method
      * @param  array  $args
      *
-     * @return void
+     * @return mixed
      */
     public static function callPrivateMethod($object, $method, array $args = [])
     {
@@ -185,7 +187,7 @@ class Helpers
      *
      * @param  $object
      *
-     * @return void
+     * @return object
      */
     public static function with($object)
     {

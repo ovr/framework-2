@@ -258,6 +258,8 @@ class FileLoader implements LoaderInterface
         } elseif (isset($this->hints[$namespace])) {
             return $this->hints[$namespace];
         }
+
+        return '';
     }
 
     /**

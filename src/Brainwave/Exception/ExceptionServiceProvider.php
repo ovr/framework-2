@@ -216,7 +216,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             } catch (\RuntimeException $e) {
                 // This error occurred too early in the application's life
                 // and the request instance is not yet available.
-                return;
+                return '';
             }
 
             $container['whoops.handler']->setPageTitle("We're all going to be fired!");

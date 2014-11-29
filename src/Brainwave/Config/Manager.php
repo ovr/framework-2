@@ -114,11 +114,12 @@ class Manager implements ManagerContract, \IteratorAggregate
      * @param string $environment
      * @param string $group
      *
-     * @return void
+     * @return array
      */
     public function bind($file, $group = null, $environment = null, $namespace = null)
     {
         $config = $this->loader->load($file, $group, $environment, $namespace);
+
         return $this->setArray($config);
     }
 

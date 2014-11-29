@@ -71,6 +71,8 @@ class Repository implements RepositoryContract
      * Set Separator
      *
      * @param string $separator
+     *
+     * @return \Brainwave\Config\Repository
      */
     public function setSeparator($separator)
     {

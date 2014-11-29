@@ -54,7 +54,7 @@ class AliasLoader
      *
      * @param  array  $aliases
      */
-    private function __construct(array $aliases = [])
+    public function __construct(array $aliases = [])
     {
         $this->aliases = $aliases;
     }
@@ -82,6 +82,7 @@ class AliasLoader
      * Load a class alias if it is registered.
      *
      * @param  string  $alias
+     *
      * @return boolean|null
      */
     public function load($alias)
@@ -89,6 +90,8 @@ class AliasLoader
         if (isset($this->aliases[$alias])) {
             return class_alias($this->aliases[$alias], $alias);
         }
+
+        return null;
     }
 
     /**

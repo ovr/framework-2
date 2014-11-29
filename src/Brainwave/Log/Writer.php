@@ -283,33 +283,51 @@ class Writer
     /**
      * Parse the handler into a Monolog constant.
      *
+     * @param  string $handler
+     * @param  string $path
+     * @param  string $level
+     * @param  string $formatter
+     *
      * @return int
      *
      * @throws \InvalidArgumentException
      */
     protected function parseHandler($handler, $path = '', $level = '', $formatter = '')
     {
+        if ($handler === 'Socket') {
+            return $this->isSocket($handler);
+        }
+
         if (isset($this->handler[$handler])) {
 
-            if ($handler === 'Socket') {
-                $socket = new $this->handler[$handler]($path);
-                $socket->setPersistent(true);
-                return $this->monolog->pushHandler($socket, $level);
-            }
-
-            $handler = new $this->handler[$handler]($path, $level);
+            $customHandler = new $this->handler[$handler]($path, $level);
 
             if (!empty($formatter)) {
-                $handler->setFormatter($this->parseFormatter($formatter));
+                $customHandler->setFormatter($this->parseFormatter($formatter));
             }
 
-            return $this->monolog->pushHandler($handler);
+            return $this->monolog->pushHandler($customHandler);
 
-        } elseif (is_object($handler)) {
-            return $this->monolog->pushHandler($handler, $level);
         }
 
         throw new \InvalidArgumentException("Invalid handler.");
+    }
+
+    /**
+     * Check if handler is a Socket Handler
+     *
+     * @param  string $handler
+     * @param  string $path
+     * @param  string $level
+     *
+     * @return boolean
+     */
+    protected function isSocket($handler, $path = '', $level = '')
+    {
+        $socket = new $this->handler[$handler]($path, $level);
+        $socket->setPersistent(true);
+
+        return $this->monolog->pushHandler($socket);
     }
 
     /**

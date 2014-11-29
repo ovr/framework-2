@@ -228,7 +228,7 @@ class Response implements ResponseContract
             return static::$messages[$this->status];
         }
 
-        return;
+        return '';
     }
 
     use HeaderTrait;

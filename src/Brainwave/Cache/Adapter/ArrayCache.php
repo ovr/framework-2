@@ -59,6 +59,8 @@ class ArrayCache implements AdapterContract
         if (array_key_exists($key, $this->storage)) {
             return $this->storage[$key];
         }
+
+        return null;
     }
 
     /**
@@ -115,7 +117,7 @@ class ArrayCache implements AdapterContract
      */
     public function forever($key, $value)
     {
-        return $this->put($key, $value, 0);
+        $this->put($key, $value, 0);
     }
 
     /**

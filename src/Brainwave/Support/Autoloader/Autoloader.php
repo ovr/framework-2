@@ -58,6 +58,8 @@ class Autoloader
                 return true;
             }
         }
+
+        return false;
     }
 
     /**

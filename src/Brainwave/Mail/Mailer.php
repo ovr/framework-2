@@ -185,6 +185,8 @@ class Mailer implements MailerContract
             $this->logMessage($message);
             return 1;
         }
+
+        return 0;
     }
 
     /**

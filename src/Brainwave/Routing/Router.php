@@ -117,9 +117,9 @@ class Router implements RouterContract
 
         if (array_key_exists($key, $this->routeParams)) {
             return $this->routeParams["$key"];
-        } else {
-            return;
         }
+
+        return '';
     }
 
     /**
@@ -152,7 +152,7 @@ class Router implements RouterContract
             return $this->matchedRoutes[0];
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -531,7 +531,7 @@ class Router implements RouterContract
             return $this->namedRoutes[(string) $name];
         }
 
-        return;
+        return null;
     }
 
     /**

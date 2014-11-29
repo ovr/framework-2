@@ -220,11 +220,13 @@ class Route implements RouteContract
      * Set route pattern
      *
      * @param  string $pattern
-     * @api
+     *
+     * @return \Brainwave\Routing\Route
      */
     public function setPattern($pattern)
     {
         $this->pattern = $pattern;
+
         return $this;
     }
 
@@ -239,18 +241,17 @@ class Route implements RouteContract
     {
         $matches = [];
         if (preg_match('!^([^\:])\:([[:alnum:]])$!', $callable, $matches)) {
-            $callable = [$matches[1], $matches[2]];
-        } else {
-            $callable = false;
+            return [$matches[1], $matches[2]];
         }
 
-        return $callable;
+        return false;
+
     }
 
     /**
      * [getControllerDependencies description]
      *
-     * @return [type] [description]
+     * @return array
      */
     public function getControllerDependencies()
     {

@@ -154,7 +154,7 @@ class Json implements EnginesContract
             $container['response']->write(json_encode($data, $option));
         }
 
-        $container->stop();
+        $container['app']->stop();
     }
 
     /**

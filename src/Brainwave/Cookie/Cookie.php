@@ -86,7 +86,7 @@ class Cookie implements FactoryContract
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
-        return $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
+        $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
     }
 
     public function session($value)

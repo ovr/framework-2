@@ -132,7 +132,7 @@ class FileCache implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return void
+     * @return bool
      */
     public function put($key, $value, $minutes)
     {
@@ -197,7 +197,7 @@ class FileCache implements AdapterContract
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return void
+     * @return bool
      */
     public function forever($key, $value)
     {
@@ -209,7 +209,7 @@ class FileCache implements AdapterContract
      *
      * @param  string $key
      *
-     * @return void
+     * @return bool
      */
     public function forget($key)
     {
@@ -218,6 +218,8 @@ class FileCache implements AdapterContract
         if ($this->files->exists($file)) {
             $this->files->delete($file);
         }
+
+        return false;
     }
 
     /**

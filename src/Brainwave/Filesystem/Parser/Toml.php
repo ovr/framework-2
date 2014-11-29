@@ -57,7 +57,7 @@ class Toml implements ParserContract
      * @param  string $filename
      * @param  string $group
      *
-     * @return array data
+     * @return array|null
      */
     public function load($filename, $group = null)
     {
@@ -80,6 +80,8 @@ class Toml implements ParserContract
 
             return $data;
         }
+
+        return null;
     }
 
     /**

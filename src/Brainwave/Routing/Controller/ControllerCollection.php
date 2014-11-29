@@ -19,7 +19,6 @@ namespace Brainwave\Routing\Controller;
  */
 
 use \Pimple\Container;
-use \Brainwave\Routing\RouteCollection;
 use \Brainwave\Routing\Controller\Controller;
 use \Brainwave\Routing\Controller\ControllerCollection;
 
@@ -31,7 +30,7 @@ use \Brainwave\Routing\Controller\ControllerCollection;
  * @since   0.9.3-dev
  *
  */
-class ControllerCollection extends RouteCollection
+class ControllerCollection
 {
     /**
      * All registred controllers
@@ -108,8 +107,7 @@ class ControllerCollection extends RouteCollection
     /**
      * Persists and freezes staged controllers.
      *
-     * @param string $prefix
-     * @return RouteCollection A RouteCollection instance
+     * @param  string $prefix
      */
     public function flush($prefix = '')
     {
@@ -127,8 +125,9 @@ class ControllerCollection extends RouteCollection
      * Call Route functions and controller function
      *
      * @param  string $method
-     * @param  array $arguments
-     * @return RouteCollection A RouteCollection instance
+     * @param  array  $arguments
+     *
+     * @return ControllerCollection instance
      */
     public function __call($method, array $arguments)
     {

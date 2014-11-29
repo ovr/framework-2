@@ -56,7 +56,7 @@ class Xml implements ParserContract
      * @param  string $filename
      * @param  string $group
      *
-     * @return array data
+     * @return array|null
      */
     public function load($filename, $group = null)
     {
@@ -76,6 +76,8 @@ class Xml implements ParserContract
 
             return $data;
         }
+
+        return null;
     }
 
     /**

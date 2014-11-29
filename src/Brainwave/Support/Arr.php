@@ -555,7 +555,8 @@ class Arr
      * Return the given object. Useful for chaining.
      *
      * @param  $object
-     * @return void
+     *
+     * @return $object
      */
     protected static function with($object)
     {

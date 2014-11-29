@@ -71,27 +71,25 @@ class Headers extends Collection implements HeadersContract
     /**
      * Parse provided headers into this collection
      *
-     * @param  \Traversable $environment
+     * @param  \Brainwave\Contracts\Application\Environment $environment
      *
      * @return void
      */
-    public function parseHeaders(\Traversable $environment)
+    public function parseHeaders(EnvironmentContract $environment)
     {
-        if ($environment instanceof EnvironmentContract) {
-            foreach ($environment as $key => $value) {
-                $key = strtoupper($key);
+        foreach ($environment as $key => $value) {
+            $key = strtoupper($key);
 
-                if (
-                    strpos($key, 'HTTP_') === 0 ||
-                    strpos($key, 'REDIRECT_') === 0 ||
-                    in_array($key, $this->special)
-                ) {
-                    if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
-                        continue;
-                    }
-
-                    parent::set($this->normalizeKey($key), [$value]);
+            if (
+                strpos($key, 'HTTP_') === 0 ||
+                strpos($key, 'REDIRECT_') === 0 ||
+                in_array($key, $this->special)
+            ) {
+                if ($key === 'HTTP_CONTENT_TYPE' || $key === 'HTTP_CONTENT_LENGTH') {
+                    continue;
                 }
+
+                parent::set($this->normalizeKey($key), [$value]);
             }
         }
     }

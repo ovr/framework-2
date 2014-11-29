@@ -118,13 +118,13 @@ class ViewServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     *
      * Alias for PhpEngine
      *
+     * @method registerPhpEngine
      */
     protected function registerPhtmlEngine($engines)
     {
-        return $this->registerPhpEngine($engines);
+        $this->registerPhpEngine($engines);
     }
 
     /**

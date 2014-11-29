@@ -20,7 +20,7 @@ namespace Brainwave\Cache\Adapter;
 
 use \Predis\Client as Client;
 use \Brainwave\Cache\Store\TaggableStore;
-use \\Predis\Connection\ConnectionException;
+use \Predis\Connection\ConnectionException;
 use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
@@ -198,11 +198,11 @@ class RedisCache extends TaggableStore implements AdapterContract
      *
      * @param  string $key
      *
-     * @return void
+     * @return bool
      */
     public function forget($key)
     {
-        return $this->connection()->del($this->prefix.$key);
+        return (bool) $this->connection()->del($this->prefix.$key);
     }
 
     /**
@@ -212,7 +212,7 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function flush()
     {
-        return $this->connection()->flushDB();
+        $this->connection()->flushdb();
     }
 
     /**

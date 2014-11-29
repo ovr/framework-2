@@ -29,3 +29,5 @@ tools:
         excluded_dirs: [vendor, test]
     php_analyzer: true
     php_pdepend: true
+    sensiolabs_security_checker: true
+    php_mess_detector: true

@@ -24,7 +24,7 @@ use \Brainwave\Support\Arr;
 use \Brainwave\Database\Grammar\Builder;
 use \Brainwave\Cache\Manager as CacheManager;
 use \Brainwave\Database\Exception\ConnectException;
-use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
+use \Brainwave\Contracts\Database\Connection as ConnectionContract;
 
 /**
  * Connection
@@ -34,7 +34,7 @@ use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
  * @since   0.9.2-dev
  *
  */
-class Connection implements ConnectionInterface
+class Connection implements ConnectionContract
 {
     /**
      * The active PDO connection.
@@ -321,7 +321,7 @@ class Connection implements ConnectionInterface
     /**
      * Reconnect to the database.
      *
-     * @return void
+     * @return mixed
      *
      * @throws \LogicException
      */

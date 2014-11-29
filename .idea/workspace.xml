@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a29c1010-b844-4664-90ef-8fdf2ddfe22a" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/narrowspark-framework.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\CacheManager.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\AbstractCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\ApcCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\ArrayCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\FileCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\MemcacheCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\MemcachedCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\RedisCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\WincacheCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Driver\XcacheCache.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Cache\Interfaces\CacheInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Collection\Interfaces\CollectionInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Configuration.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\ConfigurationHandler.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\IniDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\Interfaces\DriverInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\JsonDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\PhpDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\TomlDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\XmlDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Driver\YamlDriver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\FileLoader.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Interfaces\ConfigurationHandlerInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Interfaces\ConfigurationInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Config\Interfaces\LoaderInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\Crypt.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\CryptHash.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\CryptRand.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\CryptServiceProvider.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\Interfaces\CryptInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Crypt\README.md" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Database\RedBeanServiceProvider.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Environment\Environment.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Environment\EnvironmentDetector.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Environment\Interfaces\EnvironmentInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\EventManager.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\EventServiceProvider.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\Interfaces\EventManagerInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Event\README.md" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\CacheException\CacheException.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\ExceptionDisplayerInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\ExceptionHandler.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\FatalErrorException.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\PlainDisplayer.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\WhoopsDisplayer.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Exception\WhoopsResources\css\whoops.base.css" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\.travis.yml" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Cookies.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Interfaces\CookiesInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Interfaces\HeadersInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Interfaces\HttpExceptionInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Interfaces\RequestInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\Interfaces\ResponseInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\LICENSE" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Http\README.md" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Log\MonologWriter.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Log\composer.json" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Middleware\Interfaces\MiddlewareInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Resolvers\CallableResolver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Resolvers\ContainerResolver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Resolvers\DependencyResolver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Resolvers\Interfaces\CallableResolverInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Routing\Controller.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Routing\ControllerCollection.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Routing\Interfaces\ControllerProviderInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Routing\Interfaces\RouteInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Routing\Interfaces\RouterInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Session\Interfaces\SegmentHandlerInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\ContractsInterfaces\ArrayableInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\ContractsInterfaces\JsonableInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\App.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Config.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Event.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Log.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Mail.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Request.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Resource.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Response.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Route.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Services.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\Trans.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Support\Facades\View.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Translator\Interfaces\TranslatorInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Translator\TranslatorManager.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Compilers\Interfaces\CompilerInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Engines\Interfaces\EnginesInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Engines\JsonEngine.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Engines\PhpEngine.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Engines\Plates\PlatesEngine.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Interfaces\ArrayableInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Interfaces\ViewFactoryInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\Interfaces\ViewInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\View\ViewFactory.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\Exception\Pass.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\Exception\Stop.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\Interfaces\BootableProviderInterface.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\StaticalProxy.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\StaticalProxyManager.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\StaticalProxyResolver.php" afterPath="" />
+      <change type="DELETED" beforePath="D:\Projekte php\narrowspark-framework\src\Brainwave\Workbench\Workbench.php" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitattributes" afterPath="$PROJECT_DIR$/.gitattributes" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.travis.yml" afterPath="$PROJECT_DIR$/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Cache/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Cache/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Config/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Config/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Exception/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Exception/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Session/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Support/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Translator/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/Translator/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/.travis.yml" afterPath="$PROJECT_DIR$/src/Brainwave/View/.travis.yml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/Arr.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/Arr.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/Autoloader/Autoloader.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/Autoloader/Autoloader.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/Facades/Autoloader.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/Facades/Autoloader.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/Autoloader/AutoloaderServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/Autoloader/AutoloaderServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Cache/CacheServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Cache/CacheServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Collection/Collection.php" afterPath="$PROJECT_DIR$/src/Brainwave/Collection/Collection.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/Engines/CompilerEngine.php" afterPath="$PROJECT_DIR$/src/Brainwave/View/Engines/CompilerEngine.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Config/ConfigServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Config/ConfigServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/Exception/ControllerFrozenException.php" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/Exception/ControllerFrozenException.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/CsrfToken/CsrfTokenFactory.php" afterPath="$PROJECT_DIR$/src/Brainwave/Session/CsrfToken/CsrfTokenFactory.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/Engines/EngineResolver.php" afterPath="$PROJECT_DIR$/src/Brainwave/View/Engines/EngineResolver.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Http/Headers.php" afterPath="$PROJECT_DIR$/src/Brainwave/Http/Headers.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Http/Exception/HttpException.php" afterPath="$PROJECT_DIR$/src/Brainwave/Http/Exception/HttpException.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LICENSE" afterPath="$PROJECT_DIR$/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Cache/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Cache/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Config/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Config/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Exception/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Exception/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Session/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Support/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Translator/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/Translator/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/LICENSE" afterPath="$PROJECT_DIR$/src/Brainwave/View/LICENSE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Log/LoggerServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Log/LoggerServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/MailServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/MailServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/Mailer.php" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/Mailer.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/Message.php" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/Message.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Middleware/Middleware.php" afterPath="$PROJECT_DIR$/src/Brainwave/Middleware/Middleware.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Http/Exception/NotFoundHttpException.php" afterPath="$PROJECT_DIR$/src/Brainwave/Http/Exception/NotFoundHttpException.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Cache/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Cache/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Config/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Config/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Exception/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Exception/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Session/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Support/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Translator/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/Translator/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/README.md" afterPath="$PROJECT_DIR$/src/Brainwave/View/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Http/Request.php" afterPath="$PROJECT_DIR$/src/Brainwave/Http/Request.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Http/Response.php" afterPath="$PROJECT_DIR$/src/Brainwave/Http/Response.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/Route.php" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/Route.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/Exception/RouteException.php" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/Exception/RouteException.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/RouteFactory.php" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/RouteFactory.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Routing/Router.php" afterPath="$PROJECT_DIR$/src/Brainwave/Routing/Router.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/SegmentHandler.php" afterPath="$PROJECT_DIR$/src/Brainwave/Session/SegmentHandler.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/SerializableClosure.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/SerializableClosure.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/SessionManager.php" afterPath="$PROJECT_DIR$/src/Brainwave/Session/SessionManager.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/SessionServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Session/SessionServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/Str.php" afterPath="$PROJECT_DIR$/src/Brainwave/Support/Str.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Translator/TranslatorServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/Translator/TranslatorServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/View/ViewServiceProvider.php" afterPath="$PROJECT_DIR$/src/Brainwave/View/ViewServiceProvider.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/brainwave-split-full.sh" afterPath="$PROJECT_DIR$/build/brainwave-split-full.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/brainwave-split.sh" afterPath="$PROJECT_DIR$/build/brainwave-split.sh" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Cache/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Cache/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Config/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Config/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Mail/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Mail/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Session/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Session/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Support/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Support/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Brainwave/Translator/composer.json" afterPath="$PROJECT_DIR$/src/Brainwave/Translator/composer.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/phpunit.php" afterPath="$PROJECT_DIR$/phpunit.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/phpunit.xml" afterPath="$PROJECT_DIR$/phpunit.xml" />
+    </list>
+    <ignored path="narrowspark-framework.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="narrowspark-framework" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="ArrayCache.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/ArrayCache.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-8.961538" vertical-offset="1790" max-vertical-offset="2720">
+              <caret line="119" column="36" selection-start-line="119" selection-start-column="36" selection-end-line="119" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ViewServiceProvider.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Brainwave/View/ViewServiceProvider.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.24444444" vertical-offset="1790" max-vertical-offset="3043">
+              <caret line="121" column="6" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="6" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="true" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/Brainwave/Support/Autoloader/Autoloader.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Xml.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Toml.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Yaml.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/ApcCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Application/AliasLoader.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Routing/Controller/ControllerCollection.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Database/Migrations/Driver/FileDriver.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Config/Manager.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/WincacheCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/XcacheCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Application/StaticalProxyManager.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/View/Engines/Adapter/Plates.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Events/Dispatcher.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/MemcachedCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Mail/Mailer.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Support/Helpers.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/RedisCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/FileCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Exception/ExceptionServiceProvider.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Exception/Handler.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Http/Response.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/FileLoader.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/FilesystemAdapter.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Routing/Router.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Support/Arr.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Http/Request.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Config/Repository.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Ini.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Translator/TranslatorManager.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Routing/Route.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Database/Connection/Connection.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Database/Connection/ConnectionResolver.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cookie/Cookie.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Mail/MailServiceProvider.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/Cache/Adapter/ArrayCache.php" />
+        <option value="$PROJECT_DIR$/src/Brainwave/View/ViewServiceProvider.php" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1062" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Brainwave" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Brainwave" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Contracts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="narrowspark-framework" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Brainwave" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Contracts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Database" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="options.lastSelected" value="preferences.externalTools" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a29c1010-b844-4664-90ef-8fdf2ddfe22a" name="Default" comment="" />
+      <created>1417271378838</created>
+      <option name="number" value="Default" />
+      <updated>1417271378838</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1912" y="-8" width="1936" height="1062" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32948583" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23504722" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Support/Autoloader/Autoloader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.576923" vertical-offset="788" max-vertical-offset="2295">
+          <caret line="61" column="21" selection-start-line="61" selection-start-column="21" selection-end-line="61" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Xml.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.6923077" vertical-offset="873" max-vertical-offset="2363">
+          <caret line="58" column="25" selection-start-line="58" selection-start-column="25" selection-end-line="58" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Toml.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8745174" vertical-offset="924" max-vertical-offset="1938">
+          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Yaml.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.3513513" vertical-offset="159" max-vertical-offset="1938">
+          <caret line="83" column="20" selection-start-line="83" selection-start-column="20" selection-end-line="83" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/ApcCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.67760617" vertical-offset="1111" max-vertical-offset="3196">
+          <caret line="87" column="20" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Application/AliasLoader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7104247" vertical-offset="1213" max-vertical-offset="3417">
+          <caret line="93" column="20" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Application/ApplicationServiceProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3938224" vertical-offset="748" max-vertical-offset="1292">
+          <caret line="60" column="34" selection-start-line="60" selection-start-column="23" selection-end-line="60" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Routing/Controller/ControllerCollection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.14671814" vertical-offset="247" max-vertical-offset="2754">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#552#574#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Database/Migrations/Driver/FileDriver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33204633" vertical-offset="1528" max-vertical-offset="2618">
+          <caret line="101" column="23" selection-start-line="101" selection-start-column="23" selection-end-line="101" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Exception/Adapter/Whoops.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.076923" vertical-offset="680" max-vertical-offset="1224">
+          <caret line="61" column="12" selection-start-line="61" selection-start-column="12" selection-end-line="61" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Config/Manager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.615385" vertical-offset="1790" max-vertical-offset="4947">
+          <caret line="122" column="34" selection-start-line="122" selection-start-column="34" selection-end-line="122" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/WincacheCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.153847" vertical-offset="1705" max-vertical-offset="2890">
+          <caret line="126" column="19" selection-start-line="126" selection-start-column="19" selection-end-line="126" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/XcacheCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="5.423077" vertical-offset="1603" max-vertical-offset="2890">
+          <caret line="87" column="19" selection-start-line="87" selection-start-column="19" selection-end-line="87" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Contracts/Cache/Adapter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3220859" vertical-offset="385" max-vertical-offset="1853">
+          <caret line="35" column="28" selection-start-line="35" selection-start-column="28" selection-end-line="35" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/MemcachedCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44592592" vertical-offset="2997" max-vertical-offset="3672">
+          <caret line="195" column="7" selection-start-line="195" selection-start-column="7" selection-end-line="195" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Support/Helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6725926" vertical-offset="2759" max-vertical-offset="3434">
+          <caret line="189" column="21" selection-start-line="189" selection-start-column="21" selection-end-line="189" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Mail/Mailer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52148145" vertical-offset="2691" max-vertical-offset="6800">
+          <caret line="185" column="21" selection-start-line="185" selection-start-column="21" selection-end-line="185" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Application/StaticalProxyManager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37037036" vertical-offset="2079" max-vertical-offset="4505">
+          <caret line="138" column="18" selection-start-line="138" selection-start-column="18" selection-end-line="138" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/View/Engines/Adapter/Plates.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.26962963" vertical-offset="2181" max-vertical-offset="2856">
+          <caret line="144" column="0" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Events/Dispatcher.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.32" vertical-offset="2460" max-vertical-offset="4233">
+          <caret line="133" column="25" selection-start-line="133" selection-start-column="25" selection-end-line="133" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/FileCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.79851854" vertical-offset="2011" max-vertical-offset="4930">
+          <caret line="152" column="46" selection-start-line="152" selection-start-column="46" selection-end-line="152" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/RedisCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.62222224" vertical-offset="2980" max-vertical-offset="4284">
+          <caret line="203" column="5" selection-start-line="203" selection-start-column="5" selection-end-line="203" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Exception/ExceptionServiceProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.961538" vertical-offset="3337" max-vertical-offset="4182">
+          <caret line="218" column="24" selection-start-line="218" selection-start-column="24" selection-end-line="218" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Http/Response.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.961538" vertical-offset="3558" max-vertical-offset="9707">
+          <caret line="230" column="17" selection-start-line="230" selection-start-column="17" selection-end-line="230" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/FileLoader.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.5" vertical-offset="4017" max-vertical-offset="6273">
+          <caret line="261" column="18" selection-start-line="261" selection-start-column="18" selection-end-line="261" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Routing/Router.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.653846" vertical-offset="8768" max-vertical-offset="9503">
+          <caret line="533" column="20" selection-start-line="533" selection-start-column="20" selection-end-line="533" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Support/Arr.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.269231" vertical-offset="9176" max-vertical-offset="9894">
+          <caret line="557" column="6" selection-start-line="557" selection-start-column="6" selection-end-line="557" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Exception/Handler.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-32.192307" vertical-offset="234" max-vertical-offset="7310">
+          <caret line="66" column="18" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Contracts/Database/ConnectionResolver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/Adapters/AwsS3Connector.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32" vertical-offset="107" max-vertical-offset="2244">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding>
+            <element signature="e#553#574#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Database/Connection/ConnectionResolver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.75555557" vertical-offset="0" max-vertical-offset="2108">
+          <caret line="30" column="62" selection-start-line="30" selection-start-column="62" selection-end-line="30" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Routing/Route.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3451852" vertical-offset="4068" max-vertical-offset="12223">
+          <caret line="253" column="20" selection-start-line="253" selection-start-column="20" selection-end-line="253" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Http/Request.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="12797" max-vertical-offset="15351">
+          <caret line="772" column="17" selection-start-line="772" selection-start-column="17" selection-end-line="772" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Config/Repository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.69777775" vertical-offset="923" max-vertical-offset="4505">
+          <caret line="83" column="7" selection-start-line="83" selection-start-column="7" selection-end-line="83" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/Parser/Ini.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.47111112" vertical-offset="1331" max-vertical-offset="2380">
+          <caret line="98" column="19" selection-start-line="98" selection-start-column="19" selection-end-line="98" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Filesystem/FilesystemAdapter.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6103704" vertical-offset="5385" max-vertical-offset="6086">
+          <caret line="341" column="30" selection-start-line="341" selection-start-column="30" selection-end-line="341" selection-end-column="30" />
+          <folding>
+            <element signature="e#543#580#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Database/Grammar/WhereClause.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.9496296" vertical-offset="6652" max-vertical-offset="7429">
+          <caret line="429" column="4" selection-start-line="429" selection-start-column="4" selection-end-line="429" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Database/Connection/Connection.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.56" vertical-offset="166" max-vertical-offset="14229">
+          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
+          <folding>
+            <element signature="e#553#562#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cookie/Cookie.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3451852" vertical-offset="1229" max-vertical-offset="2890">
+          <caret line="88" column="8" selection-start-line="88" selection-start-column="8" selection-end-line="88" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Mail/MailServiceProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.0548148" vertical-offset="2674" max-vertical-offset="4845">
+          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/Cache/Adapter/ArrayCache.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.961538" vertical-offset="1790" max-vertical-offset="2720">
+          <caret line="119" column="36" selection-start-line="119" selection-start-column="36" selection-end-line="119" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Brainwave/View/ViewServiceProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24444444" vertical-offset="1790" max-vertical-offset="3043">
+          <caret line="121" column="6" selection-start-line="121" selection-start-column="6" selection-end-line="121" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+

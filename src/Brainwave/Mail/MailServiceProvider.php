@@ -42,7 +42,49 @@ use \Brainwave\Mail\Transport\Mandrill as MandrillTransport;
 class MailServiceProvider implements ServiceProviderInterface
 {
     /**
+     * Register the Swift Transport instance.
+     *
+     * @param  Container $container
+     * @param  array     $config
+     *
+     * @return \Swift_Transport
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function registerSwiftTransport(Container $container, $config)
+    {
+        switch ($config['mail::driver'])
+        {
+            case 'smtp':
+                return $this->registerSmtpTransport($container, $config);
+
+            case 'sendmail':
+                return $this->registerSendmailTransport($container, $config);
+
+            case 'mail':
+                return $this->registerMailTransport($container);
+
+            case 'mailgun':
+                return $this->registerMailgunTransport($container, $config);
+
+            case 'mandrill':
+                return $this->registerMandrillTransport($container, $config);
+
+            case 'ses':
+                return $this->registerSesTransport($container, $config);
+
+            case 'log':
+                return $this->registerLogTransport($container);
+
+            default:
+                throw new \InvalidArgumentException('Invalid mail driver.');
+        }
+    }
+
+    /**
      * Register the service provider.
+     *
+     * @param  Container $container
      *
      * @return void
      */
@@ -79,6 +121,7 @@ class MailServiceProvider implements ServiceProviderInterface
      * Register the Swift Mailer instance.
      *
      * @param Container $container
+     *
      * @return void
      */
     public function registerSwiftMailer(Container $container)
@@ -94,51 +137,14 @@ class MailServiceProvider implements ServiceProviderInterface
     }
 
     /**
-     * Register the Swift Transport instance.
-     *
-     * @param  array  $config
-     * @param Container $container
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function registerSwiftTransport(Container $container, $config)
-    {
-        switch ($config['mail::driver'])
-        {
-            case 'smtp':
-                return $this->registerSmtpTransport($container, $config);
-
-            case 'sendmail':
-                return $this->registerSendmailTransport($container, $config);
-
-            case 'mail':
-                return $this->registerMailTransport($container);
-
-            case 'mailgun':
-                return $this->registerMailgunTransport($container, $config);
-
-            case 'mandrill':
-                return $this->registerMandrillTransport($container, $config);
-
-            case 'ses':
-                return $this->registerSesTransport($container, $config);
-
-            case 'log':
-                return $this->registerLogTransport($container);
-
-            default:
-                throw new \InvalidArgumentException('Invalid mail driver.');
-        }
-    }
-
-    /**
      * Register the SMTP Swift Transport instance.
      *
-     * @param  array  $config
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \Swift_SmtpTransport
+     *
+     * @throw  \InvalidArgumentException
      */
     protected function registerSmtpTransport(Container $container, $config)
     {
@@ -190,9 +196,10 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the SES Swift Transport instance.
      *
-     * @param  array $config
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \SesTransport
      */
     protected function registerSesTransport(Container $container, $config)
     {
@@ -206,9 +213,10 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Sendmail Swift Transport instance.
      *
-     * @param  array $config
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \Swift_SendmailTransport
      */
     protected function registerSendmailTransport(Container $container, $config)
     {
@@ -220,8 +228,9 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mail Swift Transport instance.
      *
+     * @param  Container $container
      *
-     * @return void
+     * @return \Swift_MailTransport
      */
     protected function registerMailTransport(Container $container)
     {
@@ -233,9 +242,10 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mailgun Swift Transport instance.
      *
-     * @param  array $config
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \MailgunTransport
      */
     protected function registerMailgunTransport(Container $container, $config)
     {
@@ -249,9 +259,10 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mandrill Swift Transport instance.
      *
-     * @param  array $config
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \MandrillTransport
      */
     protected function registerMandrillTransport(Container $container, $config)
     {
@@ -265,8 +276,10 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the "Log" Swift Transport instance.
      *
+     * @param  Container $container
+     * @param  array     $config
      *
-     * @return void
+     * @return \LogTransport
      */
     protected function registerLogTransport(Container $container)
     {

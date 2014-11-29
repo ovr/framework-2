@@ -235,6 +235,9 @@ class Application extends Container implements ApplicationContract
 
         // Middleware stack
         $this['middleware'] = [$this];
+
+        // Application
+        $this['app'] = $this;
     }
 
     /**

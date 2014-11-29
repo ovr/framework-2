@@ -124,14 +124,14 @@ class Dispatcher implements EventsContract
     }
 
     /**
-     * Triger a chained hook
+     * Trigger a chained hook
      * the first callback to return a non-null value will be returned
      *
      * @param string $name    the hook name
      * @param mixed  $hookArg (Optional) Argument for hooked functions,
      *                         can specify multiple arguments.
      *
-     * @return mixed|void
+     * @return mixed|null
      */
     public function applyChain($name, $hookArg = null)
     {
@@ -140,6 +140,7 @@ class Dispatcher implements EventsContract
         if (!isset($hooks[$name])) {
             $hooks[$name] = [[]];
         }
+
         if (!empty($hooks[$name])) {
             // Sort by priority, low to hight, if there's more than one priority
             if (count($hooks[$name]) > 1) {
@@ -157,6 +158,8 @@ class Dispatcher implements EventsContract
                 }
             }
         }
+
+        return null;
     }
 
     /**
