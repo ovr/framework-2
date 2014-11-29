@@ -132,7 +132,7 @@ class FileCache implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return bool
+     * @return boolean|null
      */
     public function put($key, $value, $minutes)
     {
@@ -197,7 +197,7 @@ class FileCache implements AdapterContract
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return bool
+     * @return boolean|null
      */
     public function forever($key, $value)
     {

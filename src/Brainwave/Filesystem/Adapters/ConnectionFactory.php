@@ -60,7 +60,7 @@ class ConnectionFactory
      *
      * @param  array $config
      *
-     * @return \Brainwave\Contracts\Filesystem\Connector
+     * @return string
      *
      * @throws \InvalidArgumentException
      */

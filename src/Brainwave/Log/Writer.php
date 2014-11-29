@@ -267,7 +267,7 @@ class Writer
      * @param  string $formatter
      * @param  string $formatterInput
      *
-     * @return int
+     * @return \Monolog\Formatter\FormatterInterface
      *
      * @throws \InvalidArgumentException
      */
@@ -288,7 +288,7 @@ class Writer
      * @param  string $level
      * @param  string $formatter
      *
-     * @return int
+     * @return boolean|null
      *
      * @throws \InvalidArgumentException
      */
@@ -320,7 +320,7 @@ class Writer
      * @param  string $path
      * @param  string $level
      *
-     * @return boolean
+     * @return boolean|null
      */
     protected function isSocket($handler, $path = '', $level = '')
     {

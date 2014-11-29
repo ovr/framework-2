@@ -277,7 +277,6 @@ class MailServiceProvider implements ServiceProviderInterface
      * Register the "Log" Swift Transport instance.
      *
      * @param  Container $container
-     * @param  array     $config
      *
      * @return \LogTransport
      */
