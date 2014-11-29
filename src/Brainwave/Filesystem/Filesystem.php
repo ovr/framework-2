@@ -97,7 +97,7 @@ class Filesystem
      * @param  string $path
      * @param  string $contents
      *
-     * @return boolean
+     * @return integer
      */
     public function put($path, $contents)
     {

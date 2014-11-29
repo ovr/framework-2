@@ -95,7 +95,7 @@ class Factory extends Collection implements FactoryContract
      * Constructor
      *
      * @param \Brainwave\View\Engines\EngineResolver          $engines
-     * @param \Brainwave\View\Interfaces\ViewFinderInterface  $finder
+     * @param ViewFinderInterface  $finder
      * @param \Brainwave\Contracts\Events\Dispatcher          $events
      */
     public function __construct(

@@ -134,7 +134,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return bool
+     * @return boolean|null
      */
     public function put($key, $value, $minutes)
     {
@@ -171,7 +171,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return bool
+     * @return boolean|null
      */
     public function forever($key, $value)
     {
@@ -192,7 +192,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Remove all items from the cache.
      *
-     * @return bool
+     * @return boolean|null
      */
     public function flush()
     {

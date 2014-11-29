@@ -183,7 +183,7 @@ class Handler
      *
      * @param  \Exception $exception
      *
-     * @return void
+     * @return string
      */
     public function handleConsole($exception)
     {

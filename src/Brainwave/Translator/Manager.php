@@ -357,7 +357,7 @@ class Manager implements TranslatorContract
      * @param string $search
      * @param string $replacement
      *
-     * @return \Brainwave\Translator\TranslatorManager
+     * @return Manager
      */
     public function addReplacement($search, $replacement)
     {
@@ -370,7 +370,7 @@ class Manager implements TranslatorContract
      *
      * @param string $search
      *
-     * @return \Brainwave\Translator\TranslatorManager
+     * @return Manager
      *
      * @throws \Exception
      */
@@ -452,7 +452,7 @@ class Manager implements TranslatorContract
      *
      * @param string|boolean $checkLang
      *
-     * @return boolean
+     * @return boolean|null
      *
      * @throw InvalidArgumentException
      */
