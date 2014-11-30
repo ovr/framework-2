@@ -120,7 +120,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $path
      * @param  string $visibility
      *
-     * @return void
+     * @return boolean
      */
     public function setVisibility($path, $visibility)
     {
@@ -190,7 +190,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $from
      * @param  string $to
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function move($from, $to)
     {
