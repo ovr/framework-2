@@ -59,7 +59,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return bool
+     * @return boolean
      */
     public function exists($path)
     {
@@ -71,7 +71,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return string
+     * @return false|string
      *
      * @throws \Brainwave\Contracts\Filesystem\FileNotFoundException;
      */
@@ -91,11 +91,11 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $contents
      * @param  string $visibility
      *
-     * @return bool
+     * @return boolean
      */
     public function put($path, $contents, $visibility = null)
     {
-        return $this->driver->put($path, $contents, $this->parseVisibility($visibility));
+        return $this->driver->put($path, $contents, ['visibility' => $this->parseVisibility($visibility)]);
     }
 
     /**
@@ -120,7 +120,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $path
      * @param  string $visibility
      *
-     * @return boolean
+     * @return void
      */
     public function setVisibility($path, $visibility)
     {
@@ -177,7 +177,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $from
      * @param  string $to
      *
-     * @return bool
+     * @return boolean
      */
     public function copy($from, $to)
     {
@@ -190,7 +190,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * @param  string $from
      * @param  string $to
      *
-     * @return boolean|null
+     * @return boolean
      */
     public function move($from, $to)
     {
@@ -204,7 +204,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return integer
+     * @return false|integer
      */
     public function size($path)
     {
@@ -216,7 +216,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return integer
+     * @return false|integer
      */
     public function lastModified($path)
     {
@@ -255,7 +255,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Get all of the directories within a given directory.
      *
      * @param  string|null $directory
-     * @param  bool        $recursive
+     * @param  boolean     $recursive
      *
      * @return array
      */
@@ -270,7 +270,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      * Get all (recursive) of the directories within a given directory.
      *
      * @param  string|null $directory
-     * @param  bool        $recursive
+     * @param  boolean     $recursive
      *
      * @return array
      */
@@ -284,7 +284,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $path
      *
-     * @return bool
+     * @return boolean
      */
     public function makeDirectory($path)
     {
@@ -296,7 +296,7 @@ class FilesystemAdapter implements CloudFilesystemContract
      *
      * @param  string $directory
      *
-     * @return bool
+     * @return boolean
      */
     public function deleteDirectory($directory)
     {

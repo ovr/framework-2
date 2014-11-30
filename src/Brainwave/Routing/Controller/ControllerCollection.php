@@ -33,6 +33,13 @@ use \Brainwave\Routing\Controller\ControllerCollection;
 class ControllerCollection
 {
     /**
+     * Container instance
+     *
+     * @var \Pimple\Container
+     */
+    protected $container;
+
+    /**
      * All registred controllers
      *
      * @var array
@@ -60,8 +67,7 @@ class ControllerCollection
      */
     public function __construct(Container $container)
     {
-        parent::__construct($container);
-
+        $this->$container    = $container;
         $this->defaultRouter = $container['router'];
     }
 

@@ -18,6 +18,8 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
+use \Brainwave\Contracts\Collection\Collection;
+
 /**
  * Environment
  *
@@ -26,7 +28,7 @@ namespace Brainwave\Contracts\Application;
  * @since   0.9.4-dev
  *
  */
-interface Environment
+interface Environment extends collection
 {
     /**
      * @return void
@@ -44,7 +46,7 @@ interface Environment
      * @param  array|string $environments
      * @param  array|null   $consoleArgs
      *
-     * @return string
+     * @return bool
      */
     public function detect($environments, $consoleArgs = null);
 

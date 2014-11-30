@@ -62,7 +62,7 @@ class Xml implements ParserContract
     {
         if ($this->files->exists($filename)) {
             $data = simplexml_load_file($filename);
-            $data = unserialize(serialize(json_decode(json_encode((array) $data), 1)));
+            $data = unserialize(serialize(json_decode(json_encode((array) $data), true)));
 
             $groupData = [];
 

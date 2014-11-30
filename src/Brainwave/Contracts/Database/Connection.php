@@ -33,6 +33,7 @@ interface Connection
      *
      * @param  string $table table name
      * @param  string $alias alias name
+     *
      * @return bool
      */
     public function setAlias($table, $alias);
@@ -41,6 +42,7 @@ interface Connection
      * Get alias for table
      *
      * @param  string $table
+     *
      * @return string|array
      */
     public function getAlias($table);
@@ -48,9 +50,10 @@ interface Connection
     /**
      * Run a SQL statement and log its execution context.
      *
-     * @param  string    $query
-     * @param  array     $bindings
-     * @param  \Closure  $callback
+     * @param  string   $query
+     * @param  array    $bindings
+     * @param  \Closure $callback
+     *
      * @return mixed
      *
      * @throws \Brainwave\Database\Exception\ConnectException
@@ -69,7 +72,8 @@ interface Connection
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return mixed
      *
      * @throws \Exception
@@ -107,7 +111,8 @@ interface Connection
     /**
      * Set the PDO connection.
      *
-     * @param  \PDO|null  $pdo
+     * @param  \PDO|null $pdo
+     *
      * @return $this
      */
     public function setPdo($pdo);
@@ -129,7 +134,8 @@ interface Connection
     /**
      * Get an option from the configuration options.
      *
-     * @param  string  $option
+     * @param  string $option
+     *
      * @return mixed
      */
     public function getConfig($option);
@@ -144,7 +150,8 @@ interface Connection
     /**
      * Execute the given callback in "dry run" mode.
      *
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
+     *
      * @return array
      */
     public function pretend(\Closure $callback);
@@ -161,7 +168,8 @@ interface Connection
      *
      * @param  string  $query
      * @param  array   $bindings
-     * @param  double $time
+     * @param  double  $time
+     *
      * @return void
      */
     public function logQuery($query, $bindings, $time = null);
@@ -211,7 +219,8 @@ interface Connection
     /**
      * Set the name of the connected database.
      *
-     * @param  string  $database
+     * @param  string $database
+     *
      * @return string
      */
     public function setDatabaseName($database);
@@ -226,7 +235,8 @@ interface Connection
     /**
      * Set the table prefix in use by the connection.
      *
-     * @param  string  $prefix
+     * @param  string $prefix
+     *
      * @return void
      */
     public function setTablePrefix($prefix);
@@ -241,7 +251,8 @@ interface Connection
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Closure  $cache
+     * @param  \Brainwave\Cache\Manager|\Closure $cache
+     *
      * @return void
      */
     public function setCacheManager($cache);

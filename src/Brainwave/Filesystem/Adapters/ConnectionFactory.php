@@ -23,6 +23,7 @@ use \Brainwave\Filesystem\Adapters\NullConnector;
 use \Brainwave\Filesystem\Adapters\AwsS3Connector;
 use \Brainwave\Filesystem\Adapters\LocalConnector;
 use \Brainwave\Filesystem\Adapters\RackspaceConnector;
+use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -60,7 +61,7 @@ class ConnectionFactory
      *
      * @param  array $config
      *
-     * @return string
+     * @return ConnectorContract
      *
      * @throws \InvalidArgumentException
      */
@@ -71,7 +72,7 @@ class ConnectionFactory
         }
 
         if (isset($this->defaultDriver[$config['driver']])) {
-            return new $this->defaultDriver[$config['driver']].Connector();
+            new $this->defaultDriver[$config['driver']].Connector();
         }
 
         throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");

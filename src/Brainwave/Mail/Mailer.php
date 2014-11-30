@@ -84,8 +84,6 @@ class Mailer implements MailerContract
      * @param \Swift_Mailer                          $swift
      * @param \Brainwave\Contracts\View\Factory      $view
      * @param \Brainwave\Contracts\Events\Dispatcher $events
-     *
-     * @return type
      */
     public function __construct(
         Swift_Mailer $swift,
@@ -151,7 +149,7 @@ class Mailer implements MailerContract
      *
      * @return void
      */
-    protected function addContent(Message $message, $view, $plain, $raw, $data)
+    protected function addContent($message, $view, $plain, $raw, $data)
     {
         if (isset($view)) {
             $message->setBody($this->getView($view, $data), 'text/html');
@@ -173,7 +171,7 @@ class Mailer implements MailerContract
      *
      * @return int
      */
-    protected function sendSwiftMessage(\Swift_Message $message)
+    protected function sendSwiftMessage($message)
     {
         if ($this->events) {
             $this->events->fire('mailer.sending', array($message));
@@ -196,7 +194,7 @@ class Mailer implements MailerContract
      *
      * @return void
      */
-    protected function logMessage(\Swift_Message $message)
+    protected function logMessage($message)
     {
         $emails = implode(', ', array_keys((array) $message->getTo()));
 
@@ -395,6 +393,7 @@ class Mailer implements MailerContract
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
+
         return $this;
     }
 }

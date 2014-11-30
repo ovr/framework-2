@@ -15,9 +15,9 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "pimple/pimple": "2.*",
-        "brainwave/config": "self.version",
-        "symfony/serializer": "2.6.*@dev"
+        "predis/predis": "~1.0",
+        "pimple/pimple": "~3.0.0",
+        "brainwave/config": "self.version"
     },
     "autoload": {
         "psr-4": {

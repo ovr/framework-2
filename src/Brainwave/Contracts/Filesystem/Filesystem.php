@@ -47,7 +47,7 @@ interface Filesystem
      *
      * @param  string $path
      *
-     * @return bool
+     * @return boolean
      */
     public function exists($path);
 
@@ -56,7 +56,7 @@ interface Filesystem
      *
      * @param  string $path
      *
-     * @return string
+     * @return false|string
      *
      * @throws FileNotFoundException
      */
@@ -69,7 +69,7 @@ interface Filesystem
      * @param  string $contents
      * @param  string $visibility
      *
-     * @return bool
+     * @return boolean
      */
     public function put($path, $contents, $visibility = null);
 
@@ -98,7 +98,7 @@ interface Filesystem
      * @param  string $path
      * @param  string $data
      *
-     * @return int
+     * @return boolean
      */
     public function prepend($path, $data);
 
@@ -108,7 +108,7 @@ interface Filesystem
      * @param  string $path
      * @param  string $data
      *
-     * @return int
+     * @return boolean
      */
     public function append($path, $data);
 
@@ -117,7 +117,7 @@ interface Filesystem
      *
      * @param  string|array $paths
      *
-     * @return bool
+     * @return boolean
      */
     public function delete($paths);
 
@@ -127,7 +127,7 @@ interface Filesystem
      * @param  string $from
      * @param  string $to
      *
-     * @return bool
+     * @return boolean
      */
     public function copy($from, $to);
 
@@ -137,7 +137,7 @@ interface Filesystem
      * @param  string $from
      * @param  string $to
      *
-     * @return bool
+     * @return boolean
      */
     public function move($from, $to);
 
@@ -146,7 +146,7 @@ interface Filesystem
      *
      * @param  string $path
      *
-     * @return int
+     * @return false|integer
      */
     public function size($path);
 
@@ -155,7 +155,7 @@ interface Filesystem
      *
      * @param  string $path
      *
-     * @return int
+     * @return false|integer
      */
     public function lastModified($path);
 
@@ -163,7 +163,7 @@ interface Filesystem
      * Get an array of all files in a directory.
      *
      * @param  string|null $directory
-     * @param  bool        $recursive
+     * @param  boolean     $recursive
      *
      * @return array
      */
@@ -182,7 +182,7 @@ interface Filesystem
      * Get all of the directories within a given directory.
      *
      * @param  string|null $directory
-     * @param  bool        $recursive
+     * @param  boolean     $recursive
      *
      * @return array
      */
@@ -202,7 +202,7 @@ interface Filesystem
      *
      * @param  string $path
      *
-     * @return bool
+     * @return boolean
      */
     public function makeDirectory($path);
 
@@ -211,7 +211,7 @@ interface Filesystem
      *
      * @param  string $directory
      *
-     * @return bool
+     * @return boolean
      */
     public function deleteDirectory($directory);
 }

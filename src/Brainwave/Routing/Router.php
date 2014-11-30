@@ -107,7 +107,7 @@ class Router implements RouterContract
     /**
      * Get any matched route params
      *
-     * @return string
+     * @return array|string
      */
     public function getParam($key = false)
     {
@@ -194,8 +194,9 @@ class Router implements RouterContract
     /**
      * Return all route objects that addRoute the given URI
      *
-     * @param  string                          $pattern The pattern to addRoute against
-     * @return array[\Brainwave\Routing\Route]
+     * @param  string $pattern The pattern to addRoute against
+     *
+     * @return array Route
      */
     public function getAllRoutes($pattern = null)
     {
@@ -217,7 +218,8 @@ class Router implements RouterContract
     /**
      * Return array of methods avaliable for the current pattern
      *
-     * @param  string   $pattern The pattern to addRoute against
+     * @param  string $pattern The pattern to addRoute against
+     *
      * @return string[]
      */
     public function getMethodsAvailable($pattern)
@@ -261,6 +263,7 @@ class Router implements RouterContract
      * Route::get('/foo'[, middleware, middleware, ...], callable);
      *
      * @param  array
+     *
      * @return Route
      */
     protected function addRoute($args)
@@ -401,7 +404,7 @@ class Router implements RouterContract
      *
      * This method registers a RouteContract object with the router.
      *
-     * @param  RouteContract $route The route object
+     * @param RouteContract $route The route object
      */
     public function map(RouteContract $route)
     {
@@ -489,7 +492,7 @@ class Router implements RouterContract
      * Add named route
      *
      * @param  string               $name   The route name
-     * @param  RouteContract       $route  The route object
+     * @param  RouteContract        $route  The route object
      *
      * @throws \RuntimeException    If a named route already exists with the same name
      */

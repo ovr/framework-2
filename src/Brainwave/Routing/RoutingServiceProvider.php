@@ -134,7 +134,7 @@ class RoutingServiceProvider implements ServiceProviderInterface, BootableProvid
      */
     protected function registerControllersFactory(Container $container)
     {
-        $container['controller.factory'] = function ($class) {
+        $container['controller.factory'] = function () {
             return function ($class) {
                 return new $class;
             };

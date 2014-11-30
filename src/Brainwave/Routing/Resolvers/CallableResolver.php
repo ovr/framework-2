@@ -31,9 +31,13 @@ use \Brainwave\Contracts\Routing\CallableResolver as CallableResolverContract;
 class CallableResolver implements CallableResolverContract
 {
     /**
-     * [build description]
-     * @param  [type] $callable [description]
-     * @return [type]           [description]
+     * Build callable
+     *
+     * @param  mixed $callable
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function build($callable)
     {

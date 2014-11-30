@@ -49,10 +49,13 @@ class ContainerResolver implements CallableResolverContract
     }
 
     /**
-     * [build description]
+     * Build callable
      *
-     * @param  [type] $callable [description]
-     * @return [type]           [description]
+     * @param  mixed $callable
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function build($callable)
     {
