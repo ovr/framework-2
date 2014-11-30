@@ -40,8 +40,7 @@ class SessionServiceProvider implements ServiceProviderInterface
         $container['deleteCookie'] = null;
         $container['session'] = function ($container) {
             $session = new SessionManager(
-                new SegmentFactory,
-                new CsrfTokenFactory($container['encrypter']),
+                new Factory,
                 new Str,
                 $_COOKIE,
                 $container['deleteCookie']
@@ -50,6 +49,26 @@ class SessionServiceProvider implements ServiceProviderInterface
             $session->start();
 
             return $session;
+        };
+
+        $this->registerCsrf($container);
+        $this->registerFlash($container);
+    }
+
+    protected function registerFlash(Container $container)
+    {
+        $container['flash'] = function ($container) {
+            return new Flash($container['session']);
+        };
+    }
+
+    public function registerCsrf(Container $container)
+    {
+        $container['csrf'] = function ($container) {
+            return new CsrfTokenFactory(
+                $container['rand'],
+                $container['session']->getSegment('Brainwave\Session\Token\Csrf')
+            );
         };
     }
 }

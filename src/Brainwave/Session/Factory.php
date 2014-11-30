@@ -18,40 +18,43 @@ namespace Brainwave\Session;
  *
  */
 
-use \Brainwave\Session\SessionManager;
-use \Brainwave\Session\Interfaces\SegmentHandlerInterface;
+use \Brainwave\Session\Manager as Session;
+use \Brainwave\Contracts\Session\Factory as FactoryContract;
 
 /**
- * SegmentFactory
+ * Factory
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class SegmentHandler implements SegmentHandlerInterface
+class Factory implements FactoryContract
 {
     /**
      * The session manager.
+     *
      * @var Manager
      */
     protected $session;
 
     /**
      * The segment name.
+     *
      * @var string
      */
     protected $name;
 
     /**
      * Constructor.
-     * @param SessionManager $session The session manager.
-     * @param string $name The segment name.
+     *
+     * @param Session $session The session manager.
+     * @param string  $name    The segment name.
      */
-    public function __construct(SessionManager $session, $name)
+    public function __construct(Session $session, $name)
     {
         $this->session = $session;
-        $this->name = $name;
+        $this->name    = $name;
     }
 
     /**
@@ -102,7 +105,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function setFlash($key, $val)
     {
         $this->resumeOrStartSession();
-        $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key] = $val;
+        $_SESSION[Session::FLASH_NEXT][$this->name][$key] = $val;
     }
 
     /**
@@ -115,8 +118,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function getFlash($key, $alt = null)
     {
         $this->resumeSession();
-        return isset($_SESSION[SessionManager::FLASH_NOW][$this->name][$key])
-            ? $_SESSION[SessionManager::FLASH_NOW][$this->name][$key]
+        return isset($_SESSION[Session::FLASH_NOW][$this->name][$key])
+            ? $_SESSION[Session::FLASH_NOW][$this->name][$key]
             : $alt;
     }
 
@@ -128,7 +131,7 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlash()
     {
         if ($this->resumeSession()) {
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
+            $_SESSION[Session::FLASH_NEXT][$this->name] = [];
         }
     }
 
@@ -142,8 +145,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function getFlashNext($key, $alt = null)
     {
         $this->resumeSession();
-        return isset($_SESSION[SessionManager::FLASH_NEXT][$this->name][$key])
-            ? $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key]
+        return isset($_SESSION[Session::FLASH_NEXT][$this->name][$key])
+            ? $_SESSION[Session::FLASH_NEXT][$this->name][$key]
             : $alt;
     }
 
@@ -157,8 +160,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function setFlashNow($key, $val)
     {
         $this->resumeOrStartSession();
-        $_SESSION[SessionManager::FLASH_NOW][$this->name][$key] = $val;
-        $_SESSION[SessionManager::FLASH_NEXT][$this->name][$key] = $val;
+        $_SESSION[Session::FLASH_NOW][$this->name][$key] = $val;
+        $_SESSION[Session::FLASH_NEXT][$this->name][$key] = $val;
     }
 
     /**
@@ -169,8 +172,8 @@ class SegmentHandler implements SegmentHandlerInterface
     public function clearFlashNow()
     {
         if ($this->resumeSession()) {
-            $_SESSION[SessionManager::FLASH_NOW][$this->name] = [];
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
+            $_SESSION[Session::FLASH_NOW][$this->name] = [];
+            $_SESSION[Session::FLASH_NEXT][$this->name] = [];
         }
     }
 
@@ -183,9 +186,9 @@ class SegmentHandler implements SegmentHandlerInterface
     public function keepFlash()
     {
         if ($this->resumeSession()) {
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = array_merge(
-                $_SESSION[SessionManager::FLASH_NEXT][$this->name],
-                $_SESSION[SessionManager::FLASH_NOW][$this->name]
+            $_SESSION[Session::FLASH_NEXT][$this->name] = array_merge(
+                $_SESSION[Session::FLASH_NEXT][$this->name],
+                $_SESSION[Session::FLASH_NOW][$this->name]
             );
         }
     }
@@ -231,12 +234,12 @@ class SegmentHandler implements SegmentHandlerInterface
             $_SESSION[$this->name] = [];
         }
 
-        if (!isset($_SESSION[SessionManager::FLASH_NOW][$this->name])) {
-            $_SESSION[SessionManager::FLASH_NOW][$this->name] = [];
+        if (!isset($_SESSION[Session::FLASH_NOW][$this->name])) {
+            $_SESSION[Session::FLASH_NOW][$this->name] = [];
         }
 
-        if (!isset($_SESSION[SessionManager::FLASH_NEXT][$this->name])) {
-            $_SESSION[SessionManager::FLASH_NEXT][$this->name] = [];
+        if (!isset($_SESSION[Session::FLASH_NEXT][$this->name])) {
+            $_SESSION[Session::FLASH_NEXT][$this->name] = [];
         }
     }
 
@@ -251,5 +254,18 @@ class SegmentHandler implements SegmentHandlerInterface
             $this->session->start();
             $this->load();
         }
+    }
+
+    /**
+     * Creates a session segment object.
+     *
+     * @param Session $session
+     * @param string  $name
+     *
+     * @return Factory
+     */
+    public function newInstance(Session $session, $name)
+    {
+        return new Factory($session, $name);
     }
 }

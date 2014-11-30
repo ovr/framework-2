@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Session\CsrfToken;
+namespace Brainwave\Session\Token;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,8 +18,8 @@ namespace Brainwave\Session\CsrfToken;
  *
  */
 
-use \Brainwave\Crypt\Crypt;
-use \Brainwave\Session\Interfaces\SegmentHandlerInterface;
+use \RandomLib\Factory as RandomLib;
+use \Brainwave\Contracts\Session\Factory as Session;
 
 /**
  * CsrfTokenFactory
@@ -29,34 +29,34 @@ use \Brainwave\Session\Interfaces\SegmentHandlerInterface;
  * @since   0.8.0-dev
  *
  */
-class CsrfTokenFactory
+class Csrf
 {
     /**
-     * A cryptographically-secure random value generator.
+     * Generator instance.
      *
-     * @var RandvalInterface
+     * @var RandomLib
      */
-    protected $randval;
+    protected $rand;
 
     /**
      * Session segment for values in this class.
      *
      * @var Segment
      */
-    protected $segment;
+    protected $session;
 
     /**
      * Constructor.
      *
-     * @param SegmentHandlerInterface $segment A segment for values in this class.
-     * @param Crypt $randval A cryptographically-secure random
-     * value generator.
+     * @param RandomLib $container
+     * @param Session   $session A session for values in this class.
      */
-    public function __construct(SegmentHandlerInterface $segment, Crypt $randval)
+    public function __construct(RandomLib $rand, Session $session)
     {
-        $this->segment = $segment;
-        $this->randval = $randval;
-        if (! isset($this->segment->value)) {
+        $this->rand    = $rand;
+        $this->session = $session;
+
+        if (!$this->session->value) {
             $this->regenerateValue();
         }
     }
@@ -65,7 +65,8 @@ class CsrfTokenFactory
      * Checks whether an incoming CSRF token value is valid.
      *
      * @param string $value The incoming token value.
-     * @return bool True if valid, false if not.
+     *
+     * @return bool
      */
     public function isValid($value)
     {
@@ -79,7 +80,7 @@ class CsrfTokenFactory
      */
     public function getValue()
     {
-        return $this->segment->value;
+        return $this->session->value;
     }
 
     /**
@@ -89,6 +90,23 @@ class CsrfTokenFactory
      */
     public function regenerateValue()
     {
-        $this->segment->value = $this->randval->rand()->str('128');
+        $this->session->value = $this->rand->generate(128);
+    }
+
+    /**
+     * Regenerates and replaces the current session id; also regenerates the
+     * CSRF token value if one exists.
+     *
+     * @return bool
+     */
+    public function regenerateId()
+    {
+        $result = $this->phpfunc->session_regenerate_id(true);
+
+        if ($result) {
+            $this->regenerateValue();
+        }
+
+        return $result;
     }
 }

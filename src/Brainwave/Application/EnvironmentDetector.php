@@ -117,7 +117,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      *
      * @param  mixed
      *
-     * @return string
+     * @return boolean|string
      */
     public function environment()
     {
@@ -188,7 +188,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * @param  array|string $environments
      * @param  array|null   $consoleArgs
      *
-     * @return string
+     * @return boolean
      */
     public function detect($environments, $consoleArgs = null)
     {

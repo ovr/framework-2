@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Encrypter;
+namespace Brainwave\Hashing;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -20,7 +20,7 @@ namespace Brainwave\Encrypter;
 
 use \Brainwave\Support\Helpers;
 use \RandomLib\Factory as RandomLib;
-use \Brainwave\Contracts\Encrypter\Generator as HashContract;
+use \Brainwave\Contracts\Hashing\Generator as HashContract;
 
 /**
  * Generator

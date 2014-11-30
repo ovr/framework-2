@@ -211,21 +211,13 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     {
         $container['whoops.handler.info'] = function ($container) {
 
-            try {
-                $request = $container['request'];
-            } catch (\RuntimeException $e) {
-                // This error occurred too early in the application's life
-                // and the request instance is not yet available.
-                return '';
-            }
-
             $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 
             $container['whoops.handler']->addDataTable('Narrowspark Application', [
-                'Charset'          => $request->getContentCharset(),
-                'Locale'           => $request->getContentCharset() ?: '<none>',
-                'Route Class'      => $container['settings']['http::route.class'],
-                'Application Class'=> get_class($container)
+                'Charset'           => $request->getContentCharset(),
+                'Locale'            => $request->getContentCharset() ?: '<none>',
+                'Route Class'       => $container['settings']['http::route.class'],
+                'Application Class' => get_class($container)
             ]);
 
             $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [

@@ -19,30 +19,25 @@ namespace Brainwave\Session;
  */
 
 use \Brainwave\Support\Str;
-use \SessionHandlerInterface;
-use \Brainwave\Session\segmentHandler;
+use \Brainwave\Session\Factory;
 use \Brainwave\Session\CsrfToken\CsrfTokenFactory;
 
 /**
- * SessionFactory
+ * Manger
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class SessionManager implements SessionHandlerInterface
+class Manager implements \SessionHandlerInterface
 {
-
-    const FLASH_NEXT = 'Brainwave\Session\Flash\Next';
-    const FLASH_NOW = 'Brainwave\Session\Flash\Now';
-
     /**
      * A session segment factory.
      *
-     * @var segmentHandler
+     * @var Factory
      */
-    protected $segmentHandler;
+    protected $factory;
 
     /**
      * The CSRF token for this session.
@@ -53,6 +48,7 @@ class SessionManager implements SessionHandlerInterface
 
     /**
      * A CSRF token factory, for lazy-creating the CSRF token.
+     *
      * @var CsrfTokenFactory
      */
     protected $csrfTokenFactory;
@@ -60,18 +56,28 @@ class SessionManager implements SessionHandlerInterface
     /**
      * Incoming cookies from the client, typically a copy of the $_COOKIE
      * superglobal.
+     *
      * @var array
      */
     protected $cookies;
 
     /**
+     * A callable to invoke when deleting the session cookie.
+     *
+     * @see setDeleteCookie()
+     */
+    protected $deleteCookie;
+
+    /**
      * Session cookie parameters.
+     *
      * @var array
      */
-    protected $cookie_params = [];
+    protected $cookieParams = [];
 
     /**
      * Reference to Phpfunc
+     *
      * @var \Brainwave\Support\Phpfunc
      */
     protected $phpfunc;
@@ -79,49 +85,48 @@ class SessionManager implements SessionHandlerInterface
     /**
      * Constructor
      *
-     * @param segmentHandler $segmentHandler A session segment factory.
+     * @param factory $factory A session segment factory.
      * @param CsrfTokenFactory A CSRF token factory.
      * @param array $cookies An arry of cookies from the client, typically a
      * copy of $_COOKIE.
      */
     public function __construct(
-        SegmentHandler $segmentHandler,
+        Factory $factory,
         CsrfTokenFactory $csrfTokenFactory,
-        Str $phpfunc,
         array $cookies = [],
         $delete_cookie = null
     ) {
-        $this->segmentHandler     = $segmentHandler;
-        $this->csrfTokenFactory   = $csrfTokenFactory;
-        $this->phpfunc            = $phpfunc;
-        $this->cookies            = $cookies;
+        $this->factory          = $factory;
+        $this->csrfTokenFactory = $csrfTokenFactory;
+        $this->cookies          = $cookies;
 
         $this->setDeleteCookie($delete_cookie);
 
-        $this->cookie_params = $this->phpfunc->session_get_cookie_params();
+        $this->cookieParams = $this->call('session_get_cookie_params');
     }
 
     /**
-     * [setDeleteCookie description]
+     * Sets the delete-cookie callable.
      *
-     * @param [type] $delete_cookie [description]
+     * @param callable $delete_cookie The callable to invoke when deleting the
+     * session cookie.
      */
-    public function setDeleteCookie($delete_cookie)
+    public function setDeleteCookie($deleteCookie)
     {
-        $this->delete_cookie = $delete_cookie;
-        if (! $this->delete_cookie) {
+        $this->deleteCookie = $deleteCookie;
+
+        if (!$this->deleteCookie) {
             $phpfunc = $this->phpfunc;
-            $this->delete_cookie = function (
+            $this->deleteCookie = function (
                 $name,
-                $path,
-                $domain
+                $params
             ) use ($phpfunc) {
                 $phpfunc->setcookie(
                     $name,
                     '',
                     time() - 42000,
-                    $path,
-                    $domain
+                    $params['path'],
+                    $params['domain']
                 );
             };
         }
@@ -135,11 +140,12 @@ class SessionManager implements SessionHandlerInterface
      *
      * @param string $name The name of the session segment, typically a
      * fully-qualified class name.
+     *
      * @return Segment
      */
     public function getSegment($name)
     {
-        return $this->segmentHandler->newInstance($this, $name);
+        return $this->factory->newInstance($this, $name);
     }
 
     /**
@@ -170,17 +176,17 @@ class SessionManager implements SessionHandlerInterface
     }
 
     /**
-     * [sessionStatus description]
+     * Returns the session status.
      *
      * PHP 5.3 implementation of session_status for only active/none.
      * Relies on the fact that ini setting 'session.use_trans_sid' cannot be
      * changed when a session is active.
      *
-     * ini_set raises a warning when we attempt to change this setting
+     * PHP ini_set() raises a warning when we attempt to change this setting
      * and session is active. note that the attempted change is to the
      * pre-existing value, so nothing will actually change on success.
      *
-     * @return [type] [description]
+     * @return boolean
      */
     protected function sessionStatus()
     {
@@ -189,20 +195,8 @@ class SessionManager implements SessionHandlerInterface
         $level   = $this->phpfunc->error_reporting(0);
         $result  = $this->phpfunc->ini_set($setting, $current);
         $this->phpfunc->error_reporting($level);
-        return $result !== $current;
-    }
 
-    /**
-     * [moveFlash description]
-     * @return [type] [description]
-     */
-    protected function moveFlash()
-    {
-        if (! isset($_SESSION[SessionManager::FLASH_NEXT])) {
-            $_SESSION[SessionManager::FLASH_NEXT] = [];
-        }
-        $_SESSION[SessionManager::FLASH_NOW] = $_SESSION[SessionManager::FLASH_NEXT];
-        $_SESSION[SessionManager::FLASH_NEXT] = [];
+        return $result !== $current;
     }
 
     /**
@@ -245,7 +239,9 @@ class SessionManager implements SessionHandlerInterface
      */
     public function clear()
     {
-        return $this->phpfunc->session_unset();
+        if ($this->resumeSession()) {
+            $_SESSION[$this->name] = array();
+        }
     }
 
     /**
@@ -273,16 +269,13 @@ class SessionManager implements SessionHandlerInterface
 
         $name = $this->getName();
         $params = $this->getCookieParams();
+
         $this->clear();
 
         $destroyed = $this->phpfunc->session_destroy();
+
         if ($destroyed) {
-            call_user_func(
-                $this->delete_cookie,
-                $name,
-                $params['path'],
-                $params['domain']
-            );
+            call_user_func($this->deleteCookie, $name, $params);
         }
 
         return $destroyed;
@@ -316,7 +309,7 @@ class SessionManager implements SessionHandlerInterface
      */
     public function read($session_id)
     {
-        # code...
+
     }
 
     /**
@@ -326,22 +319,6 @@ class SessionManager implements SessionHandlerInterface
      */
     public function write($session_id, $session_data)
     {
-        # code...
-    }
-
-    /**
-     * Returns the CSRF token, creating it if needed (and thereby starting a
-     * session).
-     *
-     * @return CsrfToken
-     */
-    public function getCsrfToken()
-    {
-        if (! $this->csrfToken) {
-            $this->csrfToken = $this->csrfTokenFactory->newInstance($this);
-        }
-
-        return $this->csrfToken;
     }
 
     /**
@@ -420,13 +397,13 @@ class SessionManager implements SessionHandlerInterface
      */
     public function setCookieParams(array $params)
     {
-        $this->cookie_params = array_merge($this->cookie_params, $params);
+        $this->cookieParams = array_merge($this->cookieParams, $params);
         $this->phpfunc->session_set_cookie_params(
-            $this->cookie_params['lifetime'],
-            $this->cookie_params['path'],
-            $this->cookie_params['domain'],
-            $this->cookie_params['secure'],
-            $this->cookie_params['httponly']
+            $this->cookieParams['lifetime'],
+            $this->cookieParams['path'],
+            $this->cookieParams['domain'],
+            $this->cookieParams['secure'],
+            $this->cookieParams['httponly']
         );
     }
 
@@ -437,7 +414,7 @@ class SessionManager implements SessionHandlerInterface
      */
     public function getCookieParams()
     {
-        return $this->cookie_params;
+        return $this->cookieParams;
     }
 
     /**
@@ -449,21 +426,6 @@ class SessionManager implements SessionHandlerInterface
     public function getId()
     {
         return $this->phpfunc->session_id();
-    }
-
-    /**
-     * Regenerates and replaces the current session id; also regenerates the
-     * CSRF token value if one exists.
-     *
-     * @return bool True if regeneration worked, false if not.
-     */
-    public function regenerateId()
-    {
-        $result = $this->phpfunc->session_regenerate_id(true);
-        if ($result && $this->csrfToken) {
-            $this->csrfToken->regenerateValue();
-        }
-        return $result;
     }
 
     /**
@@ -512,5 +474,18 @@ class SessionManager implements SessionHandlerInterface
     public function getSavePath()
     {
         return $this->phpfunc->session_save_path();
+    }
+
+    /**
+     * Call to intercept any function pass to it.
+     *
+     * @param string $func The function to call.
+     * @param array $args Arguments passed to the function.
+     *
+     * @return mixed The result of the function call.
+     */
+    public function call($func, $args)
+    {
+        return call_user_func_array($func, $args);
     }
 }

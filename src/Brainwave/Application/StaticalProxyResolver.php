@@ -35,16 +35,16 @@ class StaticalProxyResolver
      *
      * @param  string $facade
      *
-     * @return resolved class
+     * @return string
      */
     public function resolve($facade)
     {
         if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
             $rootClass = get_class($facade::getFacadeRoot());
             return "The registered facade '{$this->getFacadeNameFromInput($facade)}' maps to {$rootClass}";
-        } else {
-            return "Facade not found";
         }
+
+        return "Facade not found";
     }
 
     /**

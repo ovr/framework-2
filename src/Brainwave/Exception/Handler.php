@@ -122,7 +122,7 @@ class Handler
      */
     protected function registerExceptionHandler()
     {
-        set_exception_handler([$this, 'handleException']);
+        set_exception_handler([$this, 'handleUncaughtException']);
     }
 
     /**
