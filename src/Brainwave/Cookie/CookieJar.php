@@ -18,7 +18,7 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Brainwave\Collection\Collection;
+use \Brainwave\Support\Collection;
 use \Brainwave\Contracts\Http\Headers as HeadersContract;
 use \Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
 use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
@@ -35,7 +35,7 @@ use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
  * HTTP headers.
  *
  * Like many other Brainwave application objects, \Brainwave\Cookie\CookieJar extends
- * \Brainwave\Collection\Collection so you have access to a simple and common interface
+ * \Brainwave\Support\Collection so you have access to a simple and common interface
  * to manipulate HTTP cookies.
  *
  * @package Narrowspark/framework

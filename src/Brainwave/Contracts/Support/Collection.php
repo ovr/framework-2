@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Collection;
+namespace Brainwave\Contracts\Support;
 
 /**
  * Narrowspark - a PHP 5 framework

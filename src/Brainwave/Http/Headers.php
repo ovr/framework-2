@@ -18,7 +18,7 @@ namespace Brainwave\Http;
  *
  */
 
-use \Brainwave\Collection\Collection;
+use \Brainwave\Support\Collection;
 use \Brainwave\Contracts\Http\Headers as HeadersContract;
 use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 

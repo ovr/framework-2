@@ -33,16 +33,16 @@ class Flash
     /**
      * Session key for the "next" flash values.
      *
-     * @const string
+     * @param string
      */
-    const FLASH_NEXT = 'Brainwave\Session\Flash\Next';
+    protected $flashNext = 'Brainwave\Session\Flash\Next';
 
      /**
       * Session key for the "current" flash values.
       *
-      * @const string
+      * @param string
       */
-    const FLASH_NOW = 'Brainwave\Session\Flash\Now';
+    protected $flashNow = 'Brainwave\Session\Flash\Now';
 
     /**
      * Handler instance.
@@ -58,7 +58,7 @@ class Flash
      */
     public function __construct(SessionHandlerInterface $manager)
     {
-        $this->manger = $manger;
+        $this->manager = $manager;
     }
 
     /**
@@ -81,7 +81,7 @@ class Flash
      * Sets a flash value for the *next* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $val The flash value itself.
+     * @param mixed  $val The flash value itself.
      */
     public function set($key, $val)
     {

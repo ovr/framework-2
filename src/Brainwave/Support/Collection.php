@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Collection;
+namespace Brainwave\Support;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -22,7 +22,7 @@ use \Brainwave\Support\Arr;
 use \Brainwave\Contracts\Support\Jsonable as JsonableContract;
 use \Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
-use \Brainwave\Contracts\Collection\Collection as CollectionContract;
+use \Brainwave\Contracts\Support\Collection as CollectionContract;
 
 /**
  * Collection
@@ -159,7 +159,7 @@ class Collection implements
     /**
      * Diff the collection with the given items.
      *
-     * @param  \Brainwave\Collection\Collection|
+     * @param  \Brainwave\Support\Collection|
      *         ArrayableContract|
      *         array $items
      *
@@ -391,7 +391,7 @@ class Collection implements
     /**
      * Push an item onto the end of the collection.
      *
-     * @param  \Brainwave\Collection\Collection $value
+     * @param  \Brainwave\Support\Collection $value
      *
      * @return void
      */
@@ -403,7 +403,7 @@ class Collection implements
     /**
      * Merge the collection with the given items.
      *
-     * @param  \Brainwave\Collection\Collection|
+     * @param  \Brainwave\Support\Collection|
      *         ArrayableContract|
      *         array $items
      *
@@ -832,7 +832,7 @@ class Collection implements
     /**
      * Intersect the collection with the given items.
      *
-     * @param  \Brainwave\Collection\Collection|
+     * @param  \Brainwave\Support\Collection|
      *         ArrayableContract|
      *         array $items
      *
@@ -966,7 +966,7 @@ class Collection implements
     /**
      * Results array of items from Collection or Arrayable.
      *
-     * @param  \Brainwave\Collection\Collection|
+     * @param  \Brainwave\Support\Collection|
      *         ArrayableContract|
      *         array $items
      *

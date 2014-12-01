@@ -17,7 +17,7 @@ namespace Brainwave\Filesystem;
  * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
  *
  */
-use \Brainwave\Collection\Collection;
+use \Brainwave\Support\Collection;
 use \League\Flysystem\AdapterInterface;
 use \League\Flysystem\FilesystemInterface;
 use \League\Flysystem\FileNotFoundException;

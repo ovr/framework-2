@@ -41,7 +41,7 @@ class Csrf
     /**
      * Session segment for values in this class.
      *
-     * @var Segment
+     * @var Session
      */
     protected $session;
 
@@ -101,12 +101,25 @@ class Csrf
      */
     public function regenerateId()
     {
-        $result = $this->phpfunc->session_regenerate_id(true);
+        $result = $this->call('session_regenerate_id', [true]);
 
         if ($result) {
             $this->regenerateValue();
         }
 
         return $result;
+    }
+
+    /**
+     * Call to intercept any function pass to it.
+     *
+     * @param string $func The function to call.
+     * @param array $args Arguments passed to the function.
+     *
+     * @return mixed The result of the function call.
+     */
+    public function call($func, array $args = [])
+    {
+        return call_user_func_array($func, $args);
     }
 }

@@ -76,13 +76,6 @@ class Manager implements \SessionHandlerInterface
     protected $cookieParams = [];
 
     /**
-     * Reference to Phpfunc
-     *
-     * @var \Brainwave\Support\Phpfunc
-     */
-    protected $phpfunc;
-
-    /**
      * Constructor
      *
      * @param factory $factory A session segment factory.
@@ -484,7 +477,7 @@ class Manager implements \SessionHandlerInterface
      *
      * @return mixed The result of the function call.
      */
-    public function call($func, $args)
+    public function call($func, array $args = [])
     {
         return call_user_func_array($func, $args);
     }

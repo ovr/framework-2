@@ -191,7 +191,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             $handler = new PrettyPageHandler();
             $handler->setEditor($container['settings']->get('app::whoops.editor', 'sublime'));
 
-            $handler->setResourcesPath(dirname(__DIR__).'/Resources');
+            $handler->addCustomCss(dirname(__DIR__).'/Resources/css/whoops.base.css');
 
             return $handler;
         };
@@ -210,6 +210,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     protected function registerPrettyWhoopsHandlerInfo(Container $container)
     {
         $container['whoops.handler.info'] = function ($container) {
+
+            $request = $container['request'];
 
             $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 

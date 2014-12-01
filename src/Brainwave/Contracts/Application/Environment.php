@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Brainwave\Contracts\Collection\Collection;
+use \Brainwave\Contracts\Support\Collection;
 
 /**
  * Environment
@@ -28,7 +28,7 @@ use \Brainwave\Contracts\Collection\Collection;
  * @since   0.9.4-dev
  *
  */
-interface Environment extends collection
+interface Environment extends Collection
 {
     /**
      * @return void

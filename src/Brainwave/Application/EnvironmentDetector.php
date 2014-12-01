@@ -21,7 +21,7 @@ namespace Brainwave\Application\Environment;
 use \Pimple\Container;
 use \Brainwave\Support\Str;
 use \Brainwave\Support\Arr;
-use \Brainwave\Collection\Collection;
+use \Brainwave\Support\Collection;
 use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
 
 /**
@@ -102,101 +102,32 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * This method will parse a mock environment array and add the data to
      * this collection
      *
+     * @param  array  $settings
+     *
      * @return void
      */
     public function mock(array $settings = [])
     {
         $this->mocked['REQUEST_TIME'] = time();
-        $settings = array_merge($this->mocked, $settings);
 
-        $this->parse($settings);
-    }
-
-    /**
-     * Get or check the current application environment.
-     *
-     * @param  mixed
-     *
-     * @return boolean|string
-     */
-    public function environment()
-    {
-        if (func_num_args() > 0) {
-            $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
-
-            foreach ($patterns as $pattern) {
-                if (str_is($pattern, $this['env'])) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return $this->container['env'];
+        $this->parse(array_merge($this->mocked, $settings));
     }
 
     /**
      * Detect the application's current environment.
      *
-     * @param  array|string $envs
-     *
-     * @return string
-     */
-    public function detectEnvironment($envs)
-    {
-        $args = isset($_SERVER['argv']) ? $_SERVER['argv'] : null;
-
-        return $this->container['env'] = $this->detect($envs, $args);
-    }
-
-    /**
-     * Determine if we are running unit tests.
-     *
-     * @return string
-     */
-    public function runningUnitTests()
-    {
-        return $this->container['env'] = 'testing';
-    }
-
-    /**
-     * Determine if we are running console.
+     * @param  \Closure   $environments
+     * @param  array|null $consoleArgs
      *
      * @return boolean
      */
-    public function runningInConsole()
-    {
-        return php_sapi_name() === 'cli';
-    }
-
-    /**
-     * Determine if the name matches the machine name.
-     *
-     * @param  string $name
-     *
-     * @return bool
-     */
-    public function isMachine($name)
-    {
-        return Str::is($name, gethostname());
-    }
-
-    /**
-     * Detect the application's current environment.
-     *
-     * @param  array|string $environments
-     * @param  array|null   $consoleArgs
-     *
-     * @return boolean
-     */
-    public function detect($environments, $consoleArgs = null)
+    public function detect(\Closure $callback, $consoleArgs = null)
     {
         if ($consoleArgs) {
-            return $this->detectConsoleEnvironment($environments, $consoleArgs);
+            return $this->detectConsoleEnvironment($callback, $consoleArgs);
         }
 
-        return $this->detectWebEnvironment($environments);
+        return $this->detectWebEnvironment($callback);
     }
 
     /**
@@ -257,44 +188,24 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Set the application environment for a web request.
      *
-     * @param  array|string $environments
+     * @param  \Closure $callback
      *
      * @return string
      */
-    protected function detectWebEnvironment($environments)
+    protected function detectWebEnvironment(\Closure $callback)
     {
-        // If the given environment is just a Closure, we will defer the environment check
-        // to the Closure the developer has provided, which allows them to totally swap
-        // the webs environment detection logic with their own custom Closure's code.
-        if ($environments instanceof \Closure) {
-            return call_user_func($environments);
-        }
-
-        if (is_array($environments)) {
-            foreach ($environments as $environment => $hosts) {
-                // To determine the current environment, we'll simply iterate through the possible
-                // environments and look for the host that matches the host for this request we
-                // are currently processing here, then return back these environment's names.
-                foreach ((array) $hosts as $host) {
-                    if ($this->isMachine($host)) {
-                        return $environment;
-                    }
-                }
-            }
-        }
-
-        return 'production';
+        return call_user_func($callback);
     }
 
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param  mixed $environments
-     * @param  array $args
+     * @param  \Closure $callback
+     * @param  array    $args
      *
      * @return string
      */
-    protected function detectConsoleEnvironment($environments, array $args)
+    protected function detectConsoleEnvironment(\Closure $callback, array $args)
     {
         // First we will check if an environment argument was passed via console arguments
         // and if it was that automatically overrides as the environment. Otherwise, we
@@ -305,7 +216,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
             return reset($arr);
         }
 
-        return $this->detectWebEnvironment($environments);
+        return $this->detectWebEnvironment($callback);
     }
 
     /**
