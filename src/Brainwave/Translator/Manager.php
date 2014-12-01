@@ -423,7 +423,7 @@ class Manager implements TranslatorContract
     /**
      * Gets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @return String
+     * @return string
      */
     public function getLocale()
     {
@@ -433,7 +433,7 @@ class Manager implements TranslatorContract
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @param String $defaultLang A string representing the default language to translate into. (e.g. 'en').
+     * @param  string $defaultLang A string representing the default language to translate into. (e.g. 'en').
      *
      * @return self
      */
@@ -451,7 +451,7 @@ class Manager implements TranslatorContract
     /**
      * Check if lang is valid
      *
-     * @param string|boolean $checkLang
+     * @param  string|boolean $checkLang
      *
      * @return boolean|null
      *

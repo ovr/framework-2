@@ -381,9 +381,9 @@ class Application extends Container implements ApplicationContract
     /**
      * Mounts controllers under the given route prefix.
      *
-     * @param  string                      $prefix      The route prefix
+     * @param  string                      $prefix     The route prefix
      * @param  ControllerCollection|
-     *         ControllerContractInterface $controllers A ControllerCollection or a ControllerContractInterface instance
+     *         ControllerContract $controllers A ControllerCollection or a ControllerContract instance
      *
      * @return Application
      *
@@ -396,14 +396,14 @@ class Application extends Container implements ApplicationContract
 
             if (!$controllers instanceof ControllerCollection) {
                 throw new \LogicException(
-                    'The "connect" method of the ControllerContractInterface must return a ControllerCollection.'
+                    'The "connect" method of the ControllerProvider must return a ControllerCollection.'
                 );
             }
         }
 
         if (!$controllers instanceof ControllerCollection) {
             throw new \LogicException(
-                'The "mount" method takes either a ControllerCollection or a ControllerContractInterface instance.'
+                'The "mount" method takes either a ControllerCollection or a ControllerProvider instance.'
             );
         }
 

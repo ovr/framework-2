@@ -33,7 +33,8 @@ class Str
     /**
      * Transliterate a UTF-8 value to ASCII.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function ascii($value)
@@ -44,7 +45,8 @@ class Str
     /**
      * Convert a value to camel case.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function camel($value)
@@ -55,14 +57,15 @@ class Str
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string        $haystack
-     * @param  string  $needles
+     * @param  string $haystack
+     * @param  string $needles
+     *
      * @return bool
      */
     public static function contains($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
-            if ($needle != '' && strpos($haystack, $needle) !== false) {
+            if ($needle !== '' && strpos($haystack, $needle) !== false) {
                 return true;
             }
         }
@@ -73,14 +76,15 @@ class Str
     /**
      * Determine if a given string ends with a given substring.
      *
-     * @param string $haystack
+     * @param string       $haystack
      * @param string|array $needles
+     *
      * @return bool
      */
     public static function endsWith($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
-            if ($needle == substr($haystack, -strlen($needle))) {
+            if ($needle === substr($haystack, -strlen($needle))) {
                 return true;
             }
         }
@@ -91,8 +95,9 @@ class Str
     /**
      * Cap a string with a single instance of a given value.
      *
-     * @param  string  $value
-     * @param  string  $cap
+     * @param  string $value
+     * @param  string $cap
+     *
      * @return string
      */
     public static function finish($value, $cap)
@@ -105,8 +110,9 @@ class Str
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param  string  $pattern
-     * @param  string  $value
+     * @param  string $pattern
+     * @param  string $value
+     *
      * @return bool
      */
     public static function is($pattern, $value)
@@ -128,7 +134,8 @@ class Str
     /**
      * Return the length of the given string.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return int
      */
     public static function length($value)
@@ -139,9 +146,10 @@ class Str
     /**
      * Limit the number of characters in a string.
      *
-     * @param  string  $value
-     * @param  int     $limit
-     * @param  string  $end
+     * @param  string $value
+     * @param  int    $limit
+     * @param  string $end
+     *
      * @return string
      */
     public static function limit($value, $limit = 100, $end = '...')
@@ -156,7 +164,8 @@ class Str
     /**
      * Convert the given string to lower-case.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function lower($value)
@@ -167,20 +176,17 @@ class Str
     /**
      * Limit the number of words in a string.
      *
-     * @param  string  $value
-     * @param  int     $words
-     * @param  string  $end
+     * @param  string $value
+     * @param  int    $words
+     * @param  string $end
+     *
      * @return string
      */
     public static function words($value, $words = 100, $end = '...')
     {
         preg_match('/^\s*+(?:\S++\s*+){1,'.$words.'}/u', $value, $matches);
 
-        if (!isset($matches[0])) {
-            return $value;
-        }
-
-        if (strlen($value) == strlen($matches[0])) {
+        if (!isset($matches[0]) || strlen($value) === strlen($matches[0])) {
             return $value;
         }
 
@@ -190,8 +196,9 @@ class Str
     /**
      * Parse a Class@method style callback into class and method.
      *
-     * @param  string  $callback
-     * @param  string  $default
+     * @param  string $callback
+     * @param  string $default
+     *
      * @return array
      */
     public static function parseCallback($callback, $default)
@@ -202,7 +209,8 @@ class Str
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param  int     $length
+     * @param  int $length
+     *
      * @return string
      *
      * @throws \RuntimeException
@@ -227,7 +235,8 @@ class Str
      *
      * Should not be considered sufficient for cryptography, etc.
      *
-     * @param  int  $length
+     * @param  int $length
+     *
      * @return string
      */
     public static function quickRandom($length = 16)
@@ -240,7 +249,8 @@ class Str
     /**
      * Convert the given string to upper-case.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function upper($value)
@@ -251,7 +261,8 @@ class Str
     /**
      * Convert the given string to title case.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function title($value)
@@ -262,9 +273,10 @@ class Str
     /**
     * Get all of the given string except for a specified string of items.
     *
-    * @param  string  $value
-    * @param  string|array  $except
-    * @param  bool    $trim
+    * @param  string       $value
+    * @param  string|array $except
+    * @param  bool         $trim
+    *
     * @return string
     */
     public static function except($value, $except, $trim = true)
@@ -277,8 +289,9 @@ class Str
     /**
      * Generate a URL friendly "slug" from a given string.
      *
-     * @param  string  $title
-     * @param  string  $separator
+     * @param  string $title
+     * @param  string $separator
+     *
      * @return string
      */
     public static function slug($title, $separator = '-')
@@ -302,8 +315,9 @@ class Str
     /**
      * Convert a string to snake case.
      *
-     * @param  string  $value
-     * @param  string  $delimiter
+     * @param  string $value
+     * @param  string $delimiter
+     *
      * @return string
      */
     public static function snake($value, $delimiter = '_')
@@ -316,14 +330,15 @@ class Str
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string  $needles
+     * @param  string $haystack
+     * @param  string $needles
+     *
      * @return bool
      */
     public static function startsWith($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
-            if ($needle != '' && strpos($haystack, $needle) === 0) {
+            if ($needle !== '' && strpos($haystack, $needle) === 0) {
                 return true;
             }
         }
@@ -334,7 +349,8 @@ class Str
     /**
      * Convert a value to studly caps case.
      *
-     * @param  string  $value
+     * @param  string $value
+     *
      * @return string
      */
     public static function studly($value)
