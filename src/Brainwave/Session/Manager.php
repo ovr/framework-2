@@ -101,7 +101,7 @@ class Manager implements \SessionHandlerInterface
     /**
      * Sets the delete-cookie callable.
      *
-     * @param callable $delete_cookie The callable to invoke when deleting the
+     * @param callable $deleteCookie The callable to invoke when deleting the
      * session cookie.
      */
     public function setDeleteCookie($deleteCookie)
@@ -134,7 +134,7 @@ class Manager implements \SessionHandlerInterface
      * @param string $name The name of the session segment, typically a
      * fully-qualified class name.
      *
-     * @return Segment
+     * @return Factory
      */
     public function getSegment($name)
     {
