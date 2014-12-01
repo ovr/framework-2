@@ -93,7 +93,7 @@ class Manager implements TranslatorContract
     /**
      * A string dictating the default language to translate into. (e.g. 'en').
      *
-     * @var String
+     * @var string
      */
     protected $defaultLang = 'en';
 
@@ -156,7 +156,7 @@ class Manager implements TranslatorContract
     /**
      * Get all translation information for a given language.
      *
-     * @param  String $language The name of language that this information is made up of.
+     * @param  string $language The name of language that this information is made up of.
      *
      * @return array            The language that the translations are written in. (e.g. 'en').
      */
@@ -222,10 +222,11 @@ class Manager implements TranslatorContract
     /**
      * Description
      *
-     * @param type $str
-     * @param type $count
+     * @param string $str
+     * @param initer $count
+     * @param string $language
      *
-     * @return type
+     * @return string
      */
     protected function plurals($str, $count = null, $language = null)
     {
@@ -454,7 +455,7 @@ class Manager implements TranslatorContract
      *
      * @return boolean|null
      *
-     * @throw InvalidArgumentException
+     * @throw \InvalidArgumentException
      */
     protected function checkLang($checkLang)
     {

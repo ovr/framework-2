@@ -48,7 +48,7 @@ class Csrf
     /**
      * Constructor.
      *
-     * @param RandomLib $container
+     * @param RandomLib $rand
      * @param Session   $session A session for values in this class.
      */
     public function __construct(RandomLib $rand, Session $session)
@@ -108,18 +108,5 @@ class Csrf
         }
 
         return $result;
-    }
-
-    /**
-     * Call to intercept any function pass to it.
-     *
-     * @param string $func The function to call.
-     * @param array $args Arguments passed to the function.
-     *
-     * @return mixed The result of the function call.
-     */
-    public function call($func, array $args = [])
-    {
-        return call_user_func_array($func, $args);
     }
 }

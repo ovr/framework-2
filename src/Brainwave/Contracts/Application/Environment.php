@@ -49,13 +49,4 @@ interface Environment extends Collection
      * @return bool
      */
     public function detect($environments, $consoleArgs = null);
-
-    /**
-     * Determine if the name matches the machine name.
-     *
-     * @param  string  $name
-     *
-     * @return bool
-     */
-    public function isMachine($name);
 }

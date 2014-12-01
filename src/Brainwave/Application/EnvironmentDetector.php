@@ -102,7 +102,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * This method will parse a mock environment array and add the data to
      * this collection
      *
-     * @param  array  $settings
+     * @param  array $settings
      *
      * @return void
      */
@@ -116,10 +116,10 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Detect the application's current environment.
      *
-     * @param  \Closure   $environments
+     * @param  \Closure   $callback
      * @param  array|null $consoleArgs
      *
-     * @return boolean
+     * @return string
      */
     public function detect(\Closure $callback, $consoleArgs = null)
     {

@@ -36,6 +36,7 @@ interface Translator
      * @param String  $language The language that the translations are written in. (e.g. 'en').
      * @param Boolean $merge    True or false depending on whether the array should be
      *                          merged with existing data for this language if there is any.
+     *
      * @return void
      */
     public function setTranslations(array $info, $language, $merge = false);
@@ -44,6 +45,7 @@ interface Translator
      * Get all translation information for a given language.
      *
      * @param  String $language The name of language that this information is made up of.
+     *
      * @return array            The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslations($language);
@@ -54,6 +56,7 @@ interface Translator
      * @param String $orig        The original string.
      * @param String $translation The translation.
      * @param String $language    The language that the translation is written in. (e.g. 'en').
+     *
      * @return \Brainwave\Translator\Manager
      */
     public function setTranslation($orig, $translation, $language);
@@ -62,6 +65,7 @@ interface Translator
      * Get all translation information for a given language.
      *
      * @param  String $language The name of language that this information is made up of.
+     *
      * @return string|false            The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslation($orig, $language = false);
@@ -69,7 +73,7 @@ interface Translator
     /**
      * Gets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @return String
+     * @return string
      */
     public function getLocale();
 
