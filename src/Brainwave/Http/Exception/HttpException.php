@@ -18,50 +18,76 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
+use \Brainwave\Http\JsonResponse;
 
 /**
  * HttpException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class HttpException extends \RuntimeException implements HttpExceptionContract
+class HttpException extends \Exception implements Exception\HttpExceptionInterface
 {
-    private $statusCode;
-    private $headers;
+    /**
+     * @var integer
+     */
+    protected $status;
 
     /**
-     * Create a new http exception instance.
+     * @var array
+     */
+    protected $headers = [];
+
+    /**
+     * Constructor
      *
-     * @param integer    $statusCode
+     * @param integer    $status
      * @param string     $message
      * @param \Exception $previous
      * @param array      $headers
-     * @param integer   $code
+     * @param integer    $code
      */
     public function __construct(
-        $statusCode,
+        $status,
         $message = null,
         \Exception $previous = null,
         array $headers = [],
         $code = 0
     ) {
-        $this->statusCode = $statusCode;
+        $this->status  = $status;
         $this->headers = $headers;
 
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getStatusCode()
     {
-        return $this->statusCode;
+        return $this->status;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getHeaders()
     {
         return $this->headers;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getJsonResponse()
+    {
+        $body = [
+            'status_code' => $this->getStatusCode(),
+            'message'     => $this->getMessage()
+        ];
+
+        return new JsonResponse($body, $this->getStatusCode(), $this->getHeaders());
     }
 }

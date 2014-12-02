@@ -1,0 +1,31 @@
+{
+    "name": "brainwave/http",
+    "type": "library",
+    "description": "Narrowspark Framework for Creative People.",
+    "keywords": ["narrowspark", "brainwave", "http", "request", "response"],
+    "license": "MIT",
+    "homepage": "http://github.com/n-brainwave/http",
+    "authors": [
+        {
+          "name": "Daniel Bannert",
+          "email": "d.bannert@anolilab.de",
+          "homepage": "http://www.anolilab.de",
+          "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/http-foundation": "~2.6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainwave\\Http\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9.4-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

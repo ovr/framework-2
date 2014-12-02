@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Http;
+namespace Brainwave\Http\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,35 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
+use \Brainwave\Http\Exception\HttpException;
+
 /**
- * Response
+ * MethodNotAllowedException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Response
+class MethodNotAllowedException extends HttpException
 {
     /**
-     * Send HTTP headers and body
+     * Constructor
      *
-     * @return \Brainwave\Contracts\Http\Response
+     * @param string     $message
+     * @param \Exception $previous
+     * @param integer    $code
      */
-    public function send();
+    public function __construct(
+        array $allowed = [],
+        $message = 'Method Not Allowed',
+        \Exception $previous = null,
+        $code = 0
+    ) {
+        $headers = [
+            'Allow' => implode(', ', $allowed)
+        ];
+
+        parent::__construct(405, $message, $previous, $headers, $code);
+    }
 }

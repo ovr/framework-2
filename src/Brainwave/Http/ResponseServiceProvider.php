@@ -42,12 +42,6 @@ class ResponseServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['response'] = function ($container) {
-            $headers = new Headers();
-            $cookieJar = new CookieJar();
-            $response = new Response($headers, $cookieJar);
-            $response->setProtocolVersion('HTTP/' . $container['settings']->get('http::version', '1.1'));
-
-            return $response;
         };
     }
 }

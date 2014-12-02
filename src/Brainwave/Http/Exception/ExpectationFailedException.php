@@ -21,31 +21,24 @@ namespace Brainwave\Http\Exception;
 use \Brainwave\Http\Exception\HttpException;
 
 /**
- * MethodNotAllowedHttpException
+ * ExpectationFailedException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.1-dev
+ * @since   0.9.4-dev
  *
  */
-class MethodNotAllowedHttpException extends HttpException
+class ExpectationFailedException extends HttpException
 {
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param array      $allow    An array of allowed methods
-     * @param string     $message  The internal exception message
-     * @param \Exception $previous The previous exception
-     * @param int        $code     The internal exception code
+     * @param string     $message
+     * @param \Exception $previous
+     * @param integer    $code
      */
-    public function __construct(
-        array $allow,
-        $message = null,
-        \Exception $previous = null,
-        $code = 0
-    ) {
-        $headers = ['Allow' => strtoupper(implode(', ', $allow))];
-
-        parent::__construct(405, $message, $previous, $headers, $code);
+    public function __construct($message = 'Expectation Failed', \Exception $previous = null, $code = 0)
+    {
+        parent::__construct(417, $message, $previous, [], $code);
     }
 }

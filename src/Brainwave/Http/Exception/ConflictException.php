@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Http;
+namespace Brainwave\Http\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,27 +18,27 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
+use \Brainwave\Http\Exception\HttpException;
+
 /**
- * HttpException
+ * ConflictException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface HttpException
+class ConflictException extends HttpException
 {
     /**
-     * Returns the status code.
+     * Constructor
      *
-     * @return integer An HTTP response status code
+     * @param string     $message
+     * @param \Exception $previous
+     * @param integer    $code
      */
-    public function getStatusCode();
-
-    /**
-     * Returns response headers.
-     *
-     * @return array Response headers
-     */
-    public function getHeaders();
+    public function __construct($message = 'Conflict', \Exception $previous = null, $code = 0)
+    {
+        parent::__construct(409, $message, $previous, [], $code);
+    }
 }

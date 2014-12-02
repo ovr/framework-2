@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http\Exception;
+namespace Brainwave\Http\JsonResponse;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,30 +18,25 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Exception\HttpException;
+use \Brainwave\Http\JsonResponse;
 
 /**
- * NotFoundHttpException
+ * ResetContentJsonResponse
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class NotFoundHttpException extends HttpException
+class ResetContentJsonResponse extends JsonResponse
 {
     /**
-     * Constructor.
+     * Constructor
      *
-     * @param string     $message  The internal exception message
-     * @param \Exception $previous The previous exception
-     * @param integer    $code     The internal exception code
+     * @param array $headers
      */
-    public function __construct(
-        $message = null,
-        \Exception $previous = null,
-        $code = 0
-    ) {
-        parent::__construct(404, $message, $previous, [], $code);
+    public function __construct(array $headers = [])
+    {
+        parent::__construct('', 205, $headers);
     }
 }

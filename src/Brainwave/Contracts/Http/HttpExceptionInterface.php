@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http\Facades;
+namespace Brainwave\Contracts\Http;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,26 @@ namespace Brainwave\Http\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
-
-/**
- * Response
- *
- * @package Narrowspark/framework
- * @author  Daniel Bannert
- * @since   0.8.0-dev
- *
- */
-class Response extends StaticalProxyManager
+interface HttpExceptionInterface
 {
-    protected static function getFacadeAccessor()
-    {
-        return 'response';
-    }
+    /**
+     * Return the status code of the http exceptions
+     *
+     * @return integer
+     */
+    public function getStatusCode();
+
+    /**
+     * Return an array of headers provided when the exception was thrown
+     *
+     * @return array
+     */
+    public function getHeaders();
+
+    /**
+     * Returns a response built from the thrown exception
+     *
+     * @return \Orno\Http\Response
+     */
+    public function getJsonResponse();
 }

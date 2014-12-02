@@ -2,7 +2,7 @@
     "name": "narrowspark/framework",
     "type": "framework",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["framework", "narrowspark", "slim", "router", "brainwave"],
+    "keywords": ["framework", "narrowspark", "http", "request", "response", "brainwave"],
     "license": "MIT",
     "homepage": "https://github.com/narrowspark/framework",
     "authors": [
@@ -27,9 +27,9 @@
         "league/fractal": "~0.10.0",
         "vlucas/phpdotenv": "~1.0.9",
         "monolog/monolog": "~1.11.0",
-        "guzzlehttp/streams": "~3.0",
         "doctrine/annotations": "~1.2.1",
         "swiftmailer/swiftmailer": "~5.2",
+        "symfony/http-foundation": "~2.6.0",
         "jeremeamia/superclosure": "~1.0.1",
         "classpreloader/classpreloader": "~1.0.2"
     },

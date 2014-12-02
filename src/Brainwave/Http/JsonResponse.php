@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http\Facades;
+namespace Brainwave\Http;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,22 @@ namespace Brainwave\Http\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use \Symfony\Component\HttpFoundation;
+use \Brainwave\Http\ResponseParameterTrait;
+use \Brainwave\Contracts\Http\Response as ResponseContract;
 
 /**
- * Response
+ * JsonResponse
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Response extends StaticalProxyManager
+class JsonResponse extends HttpFoundation\JsonResponse implements ResponseContract
 {
-    protected static function getFacadeAccessor()
-    {
-        return 'response';
-    }
+    /**
+     * Parameter encapsulation
+     */
+    use ResponseParameterTrait;
 }

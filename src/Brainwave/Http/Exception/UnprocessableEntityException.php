@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http\Facades;
+namespace Brainwave\Http\Exception;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,27 @@ namespace Brainwave\Http\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use \Brainwave\Http\Exception\HttpException;
 
 /**
- * Response
+ * UnprocessableEntityException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class Response extends StaticalProxyManager
+class UnprocessableEntityException extends HttpException
 {
-    protected static function getFacadeAccessor()
+    /**
+     * Constructor
+     *
+     * @param string     $message
+     * @param \Exception $previous
+     * @param integer    $code
+     */
+    public function __construct($message = 'Unprocessable Entity', \Exception $previous = null, $code = 0)
     {
-        return 'response';
+        parent::__construct(422, $message, $previous, [], $code);
     }
 }
