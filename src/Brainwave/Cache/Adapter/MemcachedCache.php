@@ -46,6 +46,13 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     protected $prefix;
 
     /**
+     * Time of a stored item
+     *
+     * @var array
+     */
+    protected $minutes = [];
+
+    /**
      * Check if the cache driver is supported
      *
      * @return bool Returns TRUE if supported or FALSE if not.
@@ -120,7 +127,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     {
         $value = $this->memcached->get($this->prefix.$key);
 
-        if ($this->memcached->getResultCode() == 0) {
+        if ($this->memcached->getResultCode() === 0) {
             return $value;
         }
 
@@ -138,6 +145,8 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
+        $this->minutes[$key] = $minutes;
+
         $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
     }
 
@@ -207,5 +216,17 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     public function getPrefix()
     {
         return $this->prefix;
+    }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return $this->minutes[$key];
     }
 }

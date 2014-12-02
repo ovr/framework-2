@@ -46,6 +46,13 @@ class ApcCache extends TaggableStore implements AdapterContract
     protected $prefix;
 
     /**
+     * Time of a stored item
+     *
+     * @var array
+     */
+    protected $minutes = [];
+
+    /**
      * Create a new APC store.
      *
      * @param  string $prefix
@@ -54,7 +61,7 @@ class ApcCache extends TaggableStore implements AdapterContract
      */
     public function __construct($prefix = '')
     {
-        $this->apcu = function_exists('apcu_fetch');
+        $this->apcu   = function_exists('apcu_fetch');
         $this->prefix = $prefix;
     }
 
@@ -99,6 +106,8 @@ class ApcCache extends TaggableStore implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
+        $this->minutes[$key] = $minutes;
+
         $this->apcu ?
         apcu_store($this->prefix.$key, $value, $minutes * 60) :
         apc_store($this->prefix.$key, $value, $minutes * 60);
@@ -179,5 +188,17 @@ class ApcCache extends TaggableStore implements AdapterContract
     public function getPrefix()
     {
         return $this->prefix;
+    }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return $this->minutes[$key];
     }
 }

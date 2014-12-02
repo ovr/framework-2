@@ -18,6 +18,8 @@ namespace Brainwave\Session\Handler;
  *
  */
 
+use \Brainwave\Filesystem\Filesystem;
+
 /**
  * Session
  *
@@ -26,3 +28,84 @@ namespace Brainwave\Session\Handler;
  * @since   0.9.4-dev
  *
  */
+class FileSessionHandler implements \SessionHandlerInterface
+{
+    /**
+     * The filesystem instance.
+     *
+     * @var \Brainwave\Filesystem\Filesystem
+     */
+    protected $files;
+
+    /**
+     * The path where sessions should be stored.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
+     * Create a new file driven handler instance.
+     *
+     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param  string                           $path
+     *
+     * @return void
+     */
+    public function __construct(Filesystem $files, $path)
+    {
+        $this->path = $path;
+        $this->files = $files;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function open($savePath, $sessionName)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function close()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function read($sessionId)
+    {
+        if ($this->files->exists($path = $this->path.'/'.$sessionId)) {
+            return $this->files->get($path);
+        }
+        return '';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function write($sessionId, $data)
+    {
+        $this->files->put($this->path.'/'.$sessionId, $data);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy($sessionId)
+    {
+        $this->files->delete($this->path.'/'.$sessionId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gc($lifetime)
+    {
+        //TODO
+    }
+}

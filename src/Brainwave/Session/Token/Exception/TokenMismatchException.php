@@ -26,3 +26,7 @@ namespace Brainwave\Session\Token\Exception;
  * @since   0.9.4-dev
  *
  */
+class TokenMismatchException extends \Exception
+{
+
+}

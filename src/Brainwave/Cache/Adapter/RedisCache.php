@@ -53,6 +53,13 @@ class RedisCache extends TaggableStore implements AdapterContract
     protected $connection;
 
     /**
+     * Time of a stored item
+     *
+     * @var array
+     */
+    protected $minutes = [];
+
+    /**
      * Check if the cache driver is supported
      *
      * @return bool Returns TRUE if supported or FALSE if not.
@@ -147,6 +154,8 @@ class RedisCache extends TaggableStore implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
+        $this->minutes[$key] = $minutes;
+
         $value = is_numeric($value) ? $value : serialize($value);
 
         $this->connection()->setex($this->prefix.$key, $minutes * 60, $value);
@@ -245,5 +254,17 @@ class RedisCache extends TaggableStore implements AdapterContract
     public function getPrefix()
     {
         return $this->prefix;
+    }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return $this->minutes[$key];
     }
 }

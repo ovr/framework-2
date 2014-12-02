@@ -47,6 +47,13 @@ class FileCache implements AdapterContract
     protected $directory;
 
     /**
+     * Time of a stored item
+     *
+     * @var array
+     */
+    protected $minutes = [];
+
+    /**
      * Check if the cache driver is supported
      *
      * @return bool Returns TRUE if supported or FALSE if not.
@@ -66,7 +73,7 @@ class FileCache implements AdapterContract
      */
     public function __construct(FilesystemInterface $files, $directory)
     {
-        $this->files = $files;
+        $this->files     = $files;
         $this->directory = $directory;
     }
 
@@ -136,6 +143,8 @@ class FileCache implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
+        $this->minutes[$key] = $minutes;
+
         $value = $this->expiration($minutes).serialize($value);
 
         $this->createCacheDirectory($path = $this->path($key));
@@ -282,5 +291,17 @@ class FileCache implements AdapterContract
     public function getPrefix()
     {
         return '';
+    }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return $this->minutes[$key];
     }
 }

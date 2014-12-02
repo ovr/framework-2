@@ -38,6 +38,13 @@ class ArrayCache implements AdapterContract
     private $storage = [];
 
     /**
+     * Time of a stored item
+     *
+     * @var array
+     */
+    protected $minutes = [];
+
+    /**
      * Check if the cache driver is supported
      *
      * @return bool Returns TRUE if supported or FALSE if not.
@@ -74,6 +81,7 @@ class ArrayCache implements AdapterContract
      */
     public function put($key, $value, $minutes)
     {
+        $this->minutes[$key] = $minutes;
         $this->storage[$key] = $value;
     }
 
@@ -150,5 +158,17 @@ class ArrayCache implements AdapterContract
     public function getPrefix()
     {
         return '';
+    }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return $this->minutes[$key];
     }
 }

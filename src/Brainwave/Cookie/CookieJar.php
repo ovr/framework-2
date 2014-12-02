@@ -114,6 +114,7 @@ class CookieJar extends Collection implements CookiesJarContract
     {
         $settings['value'] = '';
         $settings['expires'] = time() - 86400;
+
         $this->set($key, array_replace($this->defaults, $settings));
     }
 
@@ -167,9 +168,9 @@ class CookieJar extends Collection implements CookiesJarContract
         if (is_array($value)) {
 
             $headerArray = [
-                'domain' => ' domain=',
-                'path' => ' path=',
-                'secure' => ' secure',
+                'domain'   => ' domain=',
+                'path'     => ' path=',
+                'secure'   => ' secure',
                 'httponly' => ' HttpOnly'
             ];
 
@@ -253,9 +254,9 @@ class CookieJar extends Collection implements CookiesJarContract
             $name,
             array_merge(
                 [
-                    'value' => '',
-                    'path' => null,
-                    'domain' => null,
+                    'value'   => '',
+                    'path'    => null,
+                    'domain'  => null,
                     'expires' => time() - 100
                 ],
                 $value

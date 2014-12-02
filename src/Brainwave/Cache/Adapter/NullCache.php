@@ -144,4 +144,16 @@ class NullCache extends TaggableStore implements AdapterContract
     {
         return '';
     }
+
+    /**
+     * Get the stored time of a item
+     *
+     * @param  string $key
+     *
+     * @return int
+     */
+    public function getStoredItemTime($key)
+    {
+        return 0;
+    }
 }

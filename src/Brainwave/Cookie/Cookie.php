@@ -32,11 +32,16 @@ use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
  */
 class Cookie implements FactoryContract
 {
+    /**
+     * Container instance
+     *
+     * @var \Pimple\Container
+     */
     protected $container;
 
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**
@@ -87,11 +92,6 @@ class Cookie implements FactoryContract
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
         $this->make($name, $value, 2628000, $path, $domain, $secure, $httpOnly);
-    }
-
-    public function session($value)
-    {
-        //TODO
     }
 
     /**

@@ -18,6 +18,9 @@ namespace Brainwave\Session\Handler;
  *
  */
 
+use \Brainwave\Contracts\Http\Request as RequestContract;
+use \Brainwave\Contracts\Cookie\Factory as CookieContract;
+
 /**
  * Session
  *
@@ -26,3 +29,93 @@ namespace Brainwave\Session\Handler;
  * @since   0.9.4-dev
  *
  */
+class CookieSessionHandler implements \SessionHandlerInterface
+{
+    /**
+     * The cookie jar instance.
+     *
+     * @var CookieContract
+     */
+    protected $cookie;
+
+    /**
+     * The request instance.
+     *
+     * @var RequestContract
+     */
+    protected $request;
+
+    /**
+     * Create a new cookie driven handler instance.
+     *
+     * @param  CookieContract $cookie
+     * @param  int            $minutes
+     *
+     * @return void
+     */
+    public function __construct(CookieContract $cookie, $minutes)
+    {
+        $this->cookie = $cookie;
+        $this->minutes = $minutes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function open($savePath, $sessionName)
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function close()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function read($sessionId)
+    {
+        return $this->request->getCookie($sessionId) ?: '';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function write($sessionId, $data)
+    {
+        //TODO
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function destroy($sessionId)
+    {
+        $this->cookie->remove($sessionId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function gc($lifetime)
+    {
+        return true;
+    }
+
+    /**
+     * Set the request instance.
+     *
+     * @param  RequestContract $request
+     *
+     * @return void
+     */
+    public function setRequest(RequestContract $request)
+    {
+        $this->request = $request;
+    }
+}
