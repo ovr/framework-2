@@ -32,6 +32,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @param string $key
+     * @param string $value
      *
      * @return void
      */
@@ -39,6 +40,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * @param string $key
+     * @param string $default
      */
     public function get($key, $default = null);
 

@@ -134,7 +134,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
      * @param  mixed  $value
      * @param  int    $minutes
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function put($key, $value, $minutes)
     {
@@ -175,7 +175,7 @@ class MemcacheCache extends TaggableStore implements AdapterContract
      * @param  string $key
      * @param  mixed  $value
      *
-     * @return boolean
+     * @return boolean|null
      */
     public function forever($key, $value)
     {
