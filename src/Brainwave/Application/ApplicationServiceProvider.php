@@ -22,7 +22,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * EnvironmentServiceProvider
+ * ApplicationServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
