@@ -18,14 +18,13 @@ namespace Brainwave\View;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Str;
-use \Brainwave\Support\Arr;
-use \Brainwave\Support\Collection;
-use \Brainwave\View\Engines\EngineResolver;
-use \Brainwave\Contracts\Events\Dispatcher;
-use \Brainwave\Contracts\View\Factory as FactoryContract;
-use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
+use Pimple\Container;
+use Brainwave\Support\Str;
+use Brainwave\Support\Arr;
+use Brainwave\Support\Collection;
+use Brainwave\View\Engines\EngineResolver;
+use Brainwave\Contracts\Events\Dispatcher;
+use Brainwave\Contracts\View\Factory as FactoryContract;
 
 /**
  * Factory
@@ -81,7 +80,7 @@ class Factory extends Collection implements FactoryContract
         'php'   => 'php',
         'phtml' => 'php',
         'html'  => 'html',
-        'json'  => 'json'
+        'json'  => 'json',
     ];
 
     /**
@@ -94,9 +93,9 @@ class Factory extends Collection implements FactoryContract
     /**
      * Constructor
      *
-     * @param \Brainwave\View\Engines\EngineResolver          $engines
-     * @param ViewFinderInterface  $finder
-     * @param \Brainwave\Contracts\Events\Dispatcher          $events
+     * @param \Brainwave\View\Engines\EngineResolver $engines
+     * @param ViewFinderInterface                    $finder
+     * @param \Brainwave\Contracts\Events\Dispatcher $events
      */
     public function __construct(
         EngineResolver $engines,
@@ -117,7 +116,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Get the appropriate view engine for the given path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return \Brainwave\View\Engines\Interfaces\EngineInterface
      *
@@ -137,7 +136,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Determine if a given view exists.
      *
-     * @param  string $view
+     * @param string $view
      *
      * @return bool
      */
@@ -155,9 +154,9 @@ class Factory extends Collection implements FactoryContract
     /**
      * Add a listener to the event dispatcher.
      *
-     * @param  string   $name
-     * @param  \Closure $callback
-     * @param  integer  $priority
+     * @param string   $name
+     * @param \Closure $callback
+     * @param integer  $priority
      *
      * @return void
      */
@@ -173,9 +172,9 @@ class Factory extends Collection implements FactoryContract
     /**
      * Register a valid view extension and its engine.
      *
-     * @param  string   $extension
-     * @param  string   $engine
-     * @param  \Closure $resolver
+     * @param string   $extension
+     * @param string   $engine
+     * @param \Closure $resolver
      *
      * @return void
      */
@@ -205,7 +204,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Get the extension used by the view file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -241,7 +240,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Set the view finder instance.
      *
-     * @param  ViewFinderInterface $finder
+     * @param ViewFinderInterface $finder
      *
      * @return void
      */
@@ -284,7 +283,7 @@ class Factory extends Collection implements FactoryContract
     /**
      * Set the pimple container instance.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -297,7 +296,7 @@ class Factory extends Collection implements FactoryContract
      * Share a piece of data across all views.
      *
      * @param string $name
-     * @param mixed $data the data
+     * @param mixed  $data the data
      *
      * @return self
      */

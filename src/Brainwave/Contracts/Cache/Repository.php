@@ -31,7 +31,7 @@ interface Repository
     /**
      * Fetch a stored variable from the cache
      *
-     * @param  string $key The key used to store the value
+     * @param string $key The key used to store the value
      *
      * @return mixed The stored variable
      */
@@ -40,7 +40,7 @@ interface Repository
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return void
      */
@@ -49,9 +49,9 @@ interface Repository
     /**
      * Store variable in the cache
      *
-     * @param  string  $key The key to use to set the value
-     * @param  mixed   $value The variable to set
-     * @param  integer $minutes
+     * @param string  $key     The key to use to set the value
+     * @param mixed   $value   The variable to set
+     * @param integer $minutes
      *
      * @return void
      */
@@ -60,7 +60,7 @@ interface Repository
     /**
      * Determine if an item exists in the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -69,8 +69,8 @@ interface Repository
     /**
      * Retrieve an item from the cache and delete it.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -79,9 +79,9 @@ interface Repository
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string   $key
-     * @param  integer  $minutes
-     * @param  \Closure $callback
+     * @param string   $key
+     * @param integer  $minutes
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -90,8 +90,8 @@ interface Repository
     /**
      * Get an item from the cache, or store the default value forever.
      *
-     * @param  string   $key
-     * @param  \Closure $callback
+     * @param string   $key
+     * @param \Closure $callback
      *
      * @return mixed
      */

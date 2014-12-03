@@ -18,9 +18,9 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Cookie\Cookie;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Brainwave\Cookie\Cookie;
+use Pimple\ServiceProviderInterface;
 
 /**
  * CookieServiceProvider

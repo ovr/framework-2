@@ -18,8 +18,8 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use \Brainwave\Cache\Store\TaggableStore;
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Cache\Store\TaggableStore;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * MemcachedCache
@@ -65,7 +65,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Create a new Memcached connection.
      *
-     * @param  array $servers
+     * @param  array      $servers
      * @return \Memcached
      *
      * @throws \RuntimeException
@@ -99,14 +99,14 @@ class MemcachedCache extends TaggableStore implements AdapterContract
      */
     protected static function getMemcached()
     {
-        return new \Memcached;
+        return new \Memcached();
     }
 
     /**
      * Create a new Memcached store.
      *
-     * @param  \Memcached $memcached
-     * @param  string     $prefix
+     * @param \Memcached $memcached
+     * @param string     $prefix
      *
      * @return AdapterContract
      */
@@ -119,7 +119,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -131,15 +131,15 @@ class MemcachedCache extends TaggableStore implements AdapterContract
             return $value;
         }
 
-        return null;
+        return;
     }
 
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
      *
      * @return boolean|null
      */
@@ -177,8 +177,8 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return boolean|null
      */
@@ -221,7 +221,7 @@ class MemcachedCache extends TaggableStore implements AdapterContract
     /**
      * Get the stored time of a item
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return int
      */

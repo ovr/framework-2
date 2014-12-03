@@ -45,7 +45,7 @@ interface Filesystem
     /**
      * Determine if a file exists.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return boolean
      */
@@ -54,7 +54,7 @@ interface Filesystem
     /**
      * Get the contents of a file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|string
      *
@@ -65,9 +65,9 @@ interface Filesystem
     /**
      * Write the contents of a file.
      *
-     * @param  string $path
-     * @param  string $contents
-     * @param  string $visibility
+     * @param string $path
+     * @param string $contents
+     * @param string $visibility
      *
      * @return boolean
      */
@@ -76,7 +76,7 @@ interface Filesystem
     /**
      * Get the visibility for the given path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -85,8 +85,8 @@ interface Filesystem
     /**
      * Set the visibility for the given path.
      *
-     * @param  string $path
-     * @param  string $visibility
+     * @param string $path
+     * @param string $visibility
      *
      * @return void
      */
@@ -95,8 +95,8 @@ interface Filesystem
     /**
      * Prepend to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return boolean
      */
@@ -105,8 +105,8 @@ interface Filesystem
     /**
      * Append to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return boolean
      */
@@ -115,7 +115,7 @@ interface Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array $paths
+     * @param string|array $paths
      *
      * @return boolean
      */
@@ -124,8 +124,8 @@ interface Filesystem
     /**
      * Copy a file to a new location.
      *
-     * @param  string $from
-     * @param  string $to
+     * @param string $from
+     * @param string $to
      *
      * @return boolean
      */
@@ -134,8 +134,8 @@ interface Filesystem
     /**
      * Move a file to a new location.
      *
-     * @param  string $from
-     * @param  string $to
+     * @param string $from
+     * @param string $to
      *
      * @return boolean
      */
@@ -144,7 +144,7 @@ interface Filesystem
     /**
      * Get the file size of a given file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|integer
      */
@@ -153,7 +153,7 @@ interface Filesystem
     /**
      * Get the file's last modification time.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|integer
      */
@@ -162,8 +162,8 @@ interface Filesystem
     /**
      * Get an array of all files in a directory.
      *
-     * @param  string|null $directory
-     * @param  boolean     $recursive
+     * @param string|null $directory
+     * @param boolean     $recursive
      *
      * @return array
      */
@@ -172,7 +172,7 @@ interface Filesystem
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param  string|null $directory
+     * @param string|null $directory
      *
      * @return array
      */
@@ -181,8 +181,8 @@ interface Filesystem
     /**
      * Get all of the directories within a given directory.
      *
-     * @param  string|null $directory
-     * @param  boolean     $recursive
+     * @param string|null $directory
+     * @param boolean     $recursive
      *
      * @return array
      */
@@ -191,7 +191,7 @@ interface Filesystem
     /**
      * Get all (recursive) of the directories within a given directory.
      *
-     * @param  string|null $directory
+     * @param string|null $directory
      *
      * @return array
      */
@@ -200,7 +200,7 @@ interface Filesystem
     /**
      * Create a directory.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return boolean
      */
@@ -209,7 +209,7 @@ interface Filesystem
     /**
      * Recursively delete a directory.
      *
-     * @param  string $directory
+     * @param string $directory
      *
      * @return boolean
      */

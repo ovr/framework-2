@@ -18,7 +18,7 @@ namespace Brainwave\Application\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Services

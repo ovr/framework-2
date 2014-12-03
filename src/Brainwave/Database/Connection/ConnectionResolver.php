@@ -18,7 +18,7 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use \Brainwave\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
+use Brainwave\Contracts\Database\ConnectionResolver as ConnectionResolverContract;
 
 /**
  * ConnectionResolver
@@ -47,7 +47,7 @@ class ConnectionResolver implements ConnectionResolverContract
     /**
      * Create a new connection resolver instance.
      *
-     * @param  array  $connections
+     * @param  array $connections
      * @return void
      */
     public function __construct(array $connections = array())
@@ -60,7 +60,7 @@ class ConnectionResolver implements ConnectionResolverContract
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
+     * @param  string                         $name
      * @return \Brainwave\Database\Connection
      */
     public function connection($name = null)
@@ -75,8 +75,8 @@ class ConnectionResolver implements ConnectionResolverContract
     /**
      * Add a connection to the resolver.
      *
-     * @param  string  $name
-     * @param  Connection  $connection
+     * @param  string     $name
+     * @param  Connection $connection
      * @return void
      */
     public function addConnection($name, Connection $connection)
@@ -87,7 +87,7 @@ class ConnectionResolver implements ConnectionResolverContract
     /**
      * Check if a connection has been registered.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     public function hasConnection($name)
@@ -108,7 +108,7 @@ class ConnectionResolver implements ConnectionResolverContract
     /**
      * Set the default connection name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setDefaultConnection($name)

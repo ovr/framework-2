@@ -28,5 +28,4 @@ namespace Brainwave\Database\Migrations;
  */
 class Migrator
 {
-
 }

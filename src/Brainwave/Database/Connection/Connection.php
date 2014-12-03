@@ -18,13 +18,13 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use \PDO;
-use \Brainwave\Support\Str;
-use \Brainwave\Support\Arr;
-use \Brainwave\Database\Grammar\Builder;
-use \Brainwave\Cache\Manager as CacheManager;
-use \Brainwave\Database\Exception\ConnectException;
-use \Brainwave\Contracts\Database\Connection as ConnectionContract;
+use PDO;
+use Brainwave\Support\Str;
+use Brainwave\Support\Arr;
+use Brainwave\Database\Grammar\Builder;
+use Brainwave\Cache\Manager as CacheManager;
+use Brainwave\Database\Exception\ConnectException;
+use Brainwave\Contracts\Database\Connection as ConnectionContract;
 
 /**
  * Connection
@@ -130,10 +130,10 @@ class Connection implements ConnectionContract
     /**
      * Create a new database connection instance.
      *
-     * @param  \PDO    $pdo
-     * @param  string  $database
-     * @param  string  $tablePrefix
-     * @param  array   $config
+     * @param \PDO   $pdo
+     * @param string $database
+     * @param string $tablePrefix
+     * @param array  $config
      *
      * @return void
      */
@@ -158,8 +158,8 @@ class Connection implements ConnectionContract
     /**
      * Create a alias for tableprefix in query
      *
-     * @param  string $table table name
-     * @param  string $alias alias name
+     * @param string $table table name
+     * @param string $alias alias name
      *
      * @return boolean|null
      */
@@ -171,7 +171,7 @@ class Connection implements ConnectionContract
     /**
      * Get alias for table
      *
-     * @param  string $table
+     * @param string $table
      *
      * @return string|array
      */
@@ -185,9 +185,9 @@ class Connection implements ConnectionContract
     /**
      * Run a SQL statement and log its execution context.
      *
-     * @param  string   $query
-     * @param  array    $bindings
-     * @param  \Closure $callback
+     * @param string   $query
+     * @param array    $bindings
+     * @param \Closure $callback
      *
      * @return mixed
      *
@@ -226,9 +226,9 @@ class Connection implements ConnectionContract
     /**
      * Run a SQL statement.
      *
-     * @param  string   $query
-     * @param  array    $bindings
-     * @param  \Closure $callback
+     * @param string   $query
+     * @param array    $bindings
+     * @param \Closure $callback
      *
      * @return mixed
      *
@@ -259,9 +259,9 @@ class Connection implements ConnectionContract
     /**
      * Handle a query exception that occurred during query execution.
      *
-     * @param  \Brainwave\Database\Exception\ConnectException $e
-     * @param  string                                         $query
-     * @param  \Closure                                       $callback
+     * @param \Brainwave\Database\Exception\ConnectException $e
+     * @param string                                         $query
+     * @param \Closure                                       $callback
      *
      * @return mixed
      *
@@ -307,7 +307,7 @@ class Connection implements ConnectionContract
     /**
      * Set the reconnect instance on the connection.
      *
-     * @param  callable $reconnector
+     * @param callable $reconnector
      *
      * @return $this
      */
@@ -349,7 +349,7 @@ class Connection implements ConnectionContract
     /**
          * Execute a Closure within a transaction.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return mixed
      *
@@ -446,7 +446,7 @@ class Connection implements ConnectionContract
     /**
      * Set the default fetch mode for the connection.
      *
-     * @param  int $fetchMode
+     * @param int $fetchMode
      *
      * @return int
      */
@@ -458,7 +458,7 @@ class Connection implements ConnectionContract
     /**
      * Set the PDO connection.
      *
-     * @param  \PDO|null $pdo
+     * @param \PDO|null $pdo
      *
      * @return $this
      */
@@ -514,7 +514,7 @@ class Connection implements ConnectionContract
     /**
      * Get an option from the configuration options.
      *
-     * @param  string $option
+     * @param string $option
      *
      * @return mixed
      */
@@ -536,7 +536,7 @@ class Connection implements ConnectionContract
     /**
      * Execute the given callback in "dry run" mode.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return array
      */
@@ -569,7 +569,7 @@ class Connection implements ConnectionContract
     /**
      * Prepare the query bindings for execution.
      *
-     * @param  array $bindings
+     * @param array $bindings
      *
      * @return array
      */
@@ -594,8 +594,8 @@ class Connection implements ConnectionContract
     /**
      * Execute an SQL statement and return the boolean result.
      *
-     * @param  string $query
-     * @param  array  $bindings
+     * @param string $query
+     * @param array  $bindings
      *
      * @return bool
      */
@@ -615,8 +615,8 @@ class Connection implements ConnectionContract
     /**
      * Run an SQL statement and get the number of rows affected.
      *
-     * @param  string $query
-     * @param  array  $bindings
+     * @param string $query
+     * @param array  $bindings
      *
      * @return int
      */
@@ -641,9 +641,9 @@ class Connection implements ConnectionContract
     /**
      * Log a query in the connection's query log.
      *
-     * @param  string $query
-     * @param  array  $bindings
-     * @param  double $time
+     * @param string $query
+     * @param array  $bindings
+     * @param double $time
      *
      * @return void
      */
@@ -655,7 +655,7 @@ class Connection implements ConnectionContract
 
         if ($time === null) {
             $date = new \DateTime();
-            $query = $date->format("Y-m-d H:i:s:u") . $query;
+            $query = $date->format("Y-m-d H:i:s:u").$query;
         }
 
         $this->queryLog[] = compact('query', 'bindings', 'time');
@@ -724,7 +724,7 @@ class Connection implements ConnectionContract
     /**
      * Set the name of the connected database.
      *
-     * @param  string $database
+     * @param string $database
      *
      * @return string
      */
@@ -746,7 +746,7 @@ class Connection implements ConnectionContract
     /**
      * Set the table prefix in use by the connection.
      *
-     * @param  string $prefix
+     * @param string $prefix
      *
      * @return void
      */
@@ -774,7 +774,7 @@ class Connection implements ConnectionContract
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Brainwave\Cache\Manager|\Closure $cache
+     * @param \Brainwave\Cache\Manager|\Closure $cache
      *
      * @return void
      */
@@ -788,7 +788,7 @@ class Connection implements ConnectionContract
     /**
      * Get the elapsed time since a given starting point.
      *
-     * @param  int $start
+     * @param int $start
      *
      * @return float
      */
@@ -807,11 +807,11 @@ class Connection implements ConnectionContract
         ($this->config['driver'] === 'sqlite') ?
         $pdoInfo = [
             'file' => 'SERVER_INFO',
-            'file status' => 'CONNECTION_STATUS'
+            'file status' => 'CONNECTION_STATUS',
         ] :
         $pdoInfo = [
             'server' => 'SERVER_INFO',
-            'connection' => 'CONNECTION_STATUS'
+            'connection' => 'CONNECTION_STATUS',
         ];
 
         $output = [
@@ -823,7 +823,7 @@ class Connection implements ConnectionContract
         $output = array_merge($pdoInfo, $output);
 
         foreach ($output as $key => $value) {
-            $output[$key] = $this->pdo->getAttribute(constant('PDO::ATTR_' . $value));
+            $output[$key] = $this->pdo->getAttribute(constant('PDO::ATTR_'.$value));
         }
 
         return $output;

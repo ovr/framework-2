@@ -18,7 +18,7 @@ namespace Brainwave\Session\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Session
@@ -28,7 +28,7 @@ use \Brainwave\Application\StaticalProxyManager;
  * @since   0.9.4-dev
  *
  */
-class Session extends StaticalProxyManager
+class Sessions extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {

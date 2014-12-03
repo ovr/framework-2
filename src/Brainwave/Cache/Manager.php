@@ -18,21 +18,21 @@ namespace Brainwave\Cache;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Cache\Repository;
-use \Brainwave\Cache\Adapter\ApcCache;
-use \Brainwave\Cache\Adapter\NullCache;
-use \Brainwave\Cache\Adapter\FileCache;
-use \Brainwave\Cache\Adapter\ArrayCache;
-use \Brainwave\Cache\Adapter\RedisCache;
-use \Brainwave\Cache\Adapter\XCacheCache;
-use \Brainwave\Cache\Adapter\WinCacheCache;
-use \Brainwave\Cache\Adapter\MemcacheCache;
-use \Brainwave\Cache\Adapter\MemcachedCache;
-use \Brainwave\Cache\Exception\CacheException;
-use \Brainwave\Cache\Exception\InvalidArgumentException;
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
-use \Brainwave\Contracts\Cache\Factory as FactoryContract;
+use Pimple\Container;
+use Brainwave\Cache\Repository;
+use Brainwave\Cache\Adapter\ApcCache;
+use Brainwave\Cache\Adapter\NullCache;
+use Brainwave\Cache\Adapter\FileCache;
+use Brainwave\Cache\Adapter\ArrayCache;
+use Brainwave\Cache\Adapter\RedisCache;
+use Brainwave\Cache\Adapter\XCacheCache;
+use Brainwave\Cache\Adapter\WinCacheCache;
+use Brainwave\Cache\Adapter\MemcacheCache;
+use Brainwave\Cache\Adapter\MemcachedCache;
+use Brainwave\Cache\Exception\CacheException;
+use Brainwave\Cache\Exception\InvalidArgumentException;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Contracts\Cache\Factory as FactoryContract;
 
 /**
  * Manager
@@ -77,8 +77,8 @@ class Manager implements FactoryContract
      *
      * @param \Pimple\Container $container
      * @param array             $supportedDrivers
-     *                          The list of available drivers,
-     *                          key=driver name, value=driver class
+     *                                            The list of available drivers,
+     *                                            key=driver name, value=driver class
      */
     public function __construct(Container $container, array $supportedDrivers = [])
     {
@@ -89,7 +89,7 @@ class Manager implements FactoryContract
     /**
      * Builder.
      *
-     * @param  string $driver The cache driver to use
+     * @param string $driver The cache driver to use
      *
      * @return mixed
      */
@@ -149,7 +149,7 @@ class Manager implements FactoryContract
     /**
      * Call a custom driver creator.
      *
-     * @param  string $driver
+     * @param string $driver
      *
      * @return mixed
      */
@@ -161,8 +161,8 @@ class Manager implements FactoryContract
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string   $driver
-     * @param  \Closure $callback
+     * @param string   $driver
+     * @param \Closure $callback
      *
      * @return $this
      */
@@ -186,7 +186,7 @@ class Manager implements FactoryContract
     /**
      * Check if the given driver is supported
      *
-     * @param  string $driver
+     * @param string $driver
      *
      * @return bool
      */
@@ -212,13 +212,13 @@ class Manager implements FactoryContract
      */
     protected function createArrayDriver()
     {
-        return $this->repository(new ArrayCache);
+        return $this->repository(new ArrayCache());
     }
 
     /**
      * Create an instance of the file cache driver.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return Repository
      */
@@ -236,7 +236,7 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Memcached cache driver.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return Repository
      */
@@ -256,7 +256,7 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Memcache cache driver.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return Repository
      */
@@ -276,7 +276,7 @@ class Manager implements FactoryContract
     /**
      * Create an instance of the Redis cache driver.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return Repository
      */
@@ -312,7 +312,7 @@ class Manager implements FactoryContract
      */
     protected function createNullDriver()
     {
-        return $this->repository(new NullCache);
+        return $this->repository(new NullCache());
     }
 
     /**
@@ -348,7 +348,7 @@ class Manager implements FactoryContract
     /**
      * Set the cache "prefix" value.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return void
      */
@@ -360,7 +360,7 @@ class Manager implements FactoryContract
     /**
      * Create a new cache repository with the given implementation.
      *
-     * @param  AdapterContract $Cache
+     * @param AdapterContract $Cache
      *
      * @return \Brainwave\Cache\Repository
      */
@@ -382,7 +382,7 @@ class Manager implements FactoryContract
     /**
      * Set the default cache driver name.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return void
      */

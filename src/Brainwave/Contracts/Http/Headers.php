@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
-use \Brainwave\Contracts\Support\Collection;
+use Brainwave\Contracts\Support\Collection;
 
 /**
  * Headers

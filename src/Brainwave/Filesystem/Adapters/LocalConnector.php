@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use \League\Flysystem\Adapter\Local;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use League\Flysystem\Adapter\Local;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -34,7 +34,7 @@ class LocalConnector implements ConnectorContract
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\Local
      */
@@ -48,7 +48,7 @@ class LocalConnector implements ConnectorContract
     /**
      * Get the configuration.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return array
      *
@@ -66,7 +66,7 @@ class LocalConnector implements ConnectorContract
     /**
      * Get the local adapter.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\Local
      */

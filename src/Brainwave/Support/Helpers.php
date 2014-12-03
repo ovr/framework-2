@@ -18,7 +18,7 @@ namespace Brainwave\Support;
  *
  */
 
-    use \Brainwave\Application\StaticalProxyManager;
+    use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Helpers
@@ -33,7 +33,7 @@ class Helpers
     /**
      * Escape HTML entities in a string.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class Helpers
     /**
      * Get the root Facade application instance.
      *
-     * @param  string $make
+     * @param string $make
      *
      * @return mixed
      */
@@ -61,7 +61,7 @@ class Helpers
     /**
      * Get the path to the application folder.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -73,7 +73,7 @@ class Helpers
     /**
      * Get the path to the storage folder.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -85,7 +85,7 @@ class Helpers
     /**
      * Get the class "basename" of the given object / class.
      *
-     * @param  string|object $class
+     * @param string|object $class
      *
      * @return string
      */
@@ -99,9 +99,9 @@ class Helpers
     /**
      * Replace a given value in the string sequentially with an array.
      *
-     * @param  string $search
-     * @param  array  $replace
-     * @param  string $subject
+     * @param string $search
+     * @param array  $replace
+     * @param string $subject
      *
      * @return string
      */
@@ -117,7 +117,7 @@ class Helpers
     /**
      * Returns all traits used by a class, it's subclasses and trait of their traits
      *
-     * @param  string $class
+     * @param string $class
      *
      * @return array
      */
@@ -168,9 +168,9 @@ class Helpers
     /**
      * You can call private/protected methods with getClosure
      *
-     * @param  object $object Class
-     * @param  string $method private/protected method
-     * @param  array  $args
+     * @param object $object Class
+     * @param string $method private/protected method
+     * @param array  $args
      *
      * @return mixed
      */

@@ -18,12 +18,7 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use \Brainwave\Filesystem\Adapters\FtpConnector;
-use \Brainwave\Filesystem\Adapters\NullConnector;
-use \Brainwave\Filesystem\Adapters\AwsS3Connector;
-use \Brainwave\Filesystem\Adapters\LocalConnector;
-use \Brainwave\Filesystem\Adapters\RackspaceConnector;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -35,7 +30,6 @@ use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
  */
 class ConnectionFactory
 {
-
     protected $defaultDriver = [
         'awss3'     => 'AwsS3',
         'local'     => 'Local',
@@ -47,7 +41,7 @@ class ConnectionFactory
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\AdapterInterface
      */
@@ -59,7 +53,7 @@ class ConnectionFactory
     /**
      * Create a connector instance based on the configuration.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return ConnectorContract
      *
@@ -72,7 +66,7 @@ class ConnectionFactory
         }
 
         if (isset($this->defaultDriver[$config['driver']])) {
-            new $this->defaultDriver[$config['driver']].Connector();
+            new $this->defaultDriver[$config['driver']]().Connector();
         }
 
         throw new \InvalidArgumentException("Unsupported driver [{$config['driver']}]");

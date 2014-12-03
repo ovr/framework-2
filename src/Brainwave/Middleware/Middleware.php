@@ -18,7 +18,7 @@ namespace Brainwave\Middleware;
  *
  */
 
-use \Brainwave\Contracts\Middleware\Middleware as MiddlewareContract;
+use Brainwave\Contracts\Middleware\Middleware as MiddlewareContract;
 
 /**
  * Middleware
@@ -50,11 +50,11 @@ abstract class Middleware implements MiddlewareContract
      * This method injects the primary Brainwave Application instance into
      * this middleware.
      *
-     * @param  \Brainwave\Application\Application $containerlication
+     * @param \Brainwave\Application\Application $containerlication
      */
     final public function setApplication($containerlication)
     {
-        $this->container= $containerlication;
+        $this->container = $containerlication;
     }
 
     /**

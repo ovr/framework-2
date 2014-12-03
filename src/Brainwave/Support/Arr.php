@@ -18,7 +18,7 @@ namespace Brainwave\Support;
  *
  */
 
-use \ArrayAccess;
+use ArrayAccess;
 
 /**
  * Arr
@@ -33,9 +33,9 @@ class Arr
     /**
      * Add an element to an array if it doesn't exist.
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  string   $value
+     * @param  array  $array
+     * @param  string $key
+     * @param  string $value
      * @return array
      */
     public static function arrayAdd($array, $key, $value)
@@ -50,8 +50,8 @@ class Arr
     /**
      * Build a new array using a callback.
      *
-     * @param  array  $array
-     * @param  \Closure  $callback
+     * @param  array    $array
+     * @param  \Closure $callback
      * @return array
      */
     public static function arrayBuild($array, \Closure $callback)
@@ -70,7 +70,7 @@ class Arr
     /**
      * Swap two elements between positions
      *
-     * @param  array $array  array to swap
+     * @param  array  $array array to swap
      * @param  string $swapA
      * @param  string $swapB
      * @return array
@@ -83,7 +83,7 @@ class Arr
     /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
-     * @param  array  $array
+     * @param  array $array
      * @return array
      */
     public static function arrayDivide($array)
@@ -94,8 +94,8 @@ class Arr
     /**
      * Flatten a multi-dimensional associative array with dots.
      *
-     * @param  array   $array
-     * @param  string  $prepend
+     * @param  array  $array
+     * @param  string $prepend
      * @return array
      */
     public static function arrayDot($array, $prepend = '')
@@ -116,8 +116,8 @@ class Arr
      /**
      * Get all of the given array except for a specified array of items.
      *
-     * @param  array  $array
-     * @param  string[]  $keys
+     * @param  array    $array
+     * @param  string[] $keys
      * @return array
      */
     public static function arrayExcept($array, $keys)
@@ -128,8 +128,8 @@ class Arr
     /**
      * Fetch a flattened array of a nested array element.
      *
-     * @param  array   $array
-     * @param  string  $key
+     * @param  array  $array
+     * @param  string $key
      * @return array
      */
     public static function arrayFetch($array, $key)
@@ -153,7 +153,7 @@ class Arr
      * Return the first element in an array passing a given truth test.
      *
      * @param  array    $array
-     * @param  \Closure  $callback
+     * @param  \Closure $callback
      * @param  mixed    $default
      * @return mixed
      */
@@ -171,9 +171,9 @@ class Arr
     /**
      * Return the last element in an array passing a given truth test.
      *
-     * @param  array    $array
-     * @param  Closure  $callback
-     * @param  mixed    $default
+     * @param  array   $array
+     * @param  Closure $callback
+     * @param  mixed   $default
      * @return mixed
      */
     public static function arrayLast($array, $callback, $default = null)
@@ -184,7 +184,7 @@ class Arr
     /**
      * Flatten a multi-dimensional array into a single level.
      *
-     * @param  array  $array
+     * @param  array $array
      * @return array
      */
     public static function arrayFlatten($array)
@@ -201,8 +201,8 @@ class Arr
     /**
      * Remove an array item from a given array using "dot" notation.
      *
-     * @param  array   $array
-     * @param  string  $key
+     * @param  array  $array
+     * @param  string $key
      * @return void
      */
     public static function arrayForget(&$array, $key)
@@ -216,7 +216,7 @@ class Arr
                 return;
             }
 
-            $array =& $array[$key];
+            $array = & $array[$key];
         }
 
         unset($array[array_shift($keys)]);
@@ -225,9 +225,9 @@ class Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  array  $array
+     * @param  string $key
+     * @param  mixed  $default
      * @return mixed
      */
     public static function arrayGet($array, $key, $default = null)
@@ -254,8 +254,8 @@ class Arr
      /**
      * Get a subset of the items from the given array.
      *
-     * @param  array  $array
-     * @param  array  $keys
+     * @param  array $array
+     * @param  array $keys
      * @return array
      */
     public static function arrayOnly($array, $keys)
@@ -266,9 +266,9 @@ class Arr
     /**
      * Pluck an array of values from an array.
      *
-     * @param  array   $array
-     * @param  string  $value
-     * @param  string  $key
+     * @param  array  $array
+     * @param  string $value
+     * @param  string $key
      * @return array
      */
     public static function arrayPluck($array, $value, $key = null)
@@ -296,9 +296,9 @@ class Arr
     /**
      * Get a value from the array, and remove it.
      *
-     * @param  array  $array
-     * @param  string $key
-     * @param  mixed  $default
+     * @param array  $array
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -316,9 +316,9 @@ class Arr
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  array  $array
+     * @param  string $key
+     * @param  mixed  $value
      * @return array
      */
     public static function arraySet(&$array, $key, $value)
@@ -339,7 +339,7 @@ class Arr
                 $array[$key] = [];
             }
 
-            $array =& $array[$key];
+            $array = & $array[$key];
         }
 
         $array[array_shift($keys)] = $value;
@@ -350,8 +350,8 @@ class Arr
     /**
      * Filter the array using the given Closure.
      *
-     * @param  array  $array
-     * @param  \Closure  $callback
+     * @param  array    $array
+     * @param  \Closure $callback
      * @return array
      */
     public static function arrayWhere($array, \Closure $callback)
@@ -373,25 +373,25 @@ class Arr
      * a defined set of rules.
      *
      * @param array $array
-     *   Array to check.
+     *                     Array to check.
      *
      * @param array $structure
-     *   Expected array structure. Defined for example like this:
-     *   array(
-     *     'string' => array(
-     *       'callback' => 'strlen',
-     *       'params'   => array('%val'),
-     *       'match'    => 3,
-     *     ),
-     *     'not allowed' = false, // Only makes sense with $strict = false
-     *     'needed'      = true,
-     *   ),
+     *                         Expected array structure. Defined for example like this:
+     *                         array(
+     *                         'string' => array(
+     *                         'callback' => 'strlen',
+     *                         'params'   => array('%val'),
+     *                         'match'    => 3,
+     *                         ),
+     *                         'not allowed' = false, // Only makes sense with $strict = false
+     *                         'needed'      = true,
+     *                         ),
      *
      * @param bool $strict
-     *   If strict is set to false we will allow keys that's not defined in the structure.
+     *                     If strict is set to false we will allow keys that's not defined in the structure.
      *
      * @return bool
-     *   Returns true on match, and false on mismatch.
+     *              Returns true on match, and false on mismatch.
      */
     public static function arrayCheck($array, $structure, $strict = true)
     {
@@ -440,15 +440,16 @@ class Arr
                 }
             }
         }
+
         return $success;
     }
 
     /**
      * Get an item from an array or object using "dot" notation.
      *
-     * @param  mixed   $target
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  mixed  $target
+     * @param  string $key
+     * @param  mixed  $default
      * @return mixed
      */
     public static function dataGet($target, $key, $default = null)
@@ -503,7 +504,7 @@ class Arr
     /**
      * Get the first element of an array. Useful for method chaining.
      *
-     * @param  array  $array
+     * @param  array $array
      * @return mixed
      */
     public static function head($array)
@@ -514,7 +515,7 @@ class Arr
     /**
      * Get the last element from an array.
      *
-     * @param  array  $array
+     * @param  array $array
      * @return mixed
      */
     public static function last($array)
@@ -525,9 +526,9 @@ class Arr
     /**
      * Replace a given pattern with each value in the array in sequentially.
      *
-     * @param  string  $pattern
-     * @param  array   $replacements
-     * @param  string  $subject
+     * @param  string $pattern
+     * @param  array  $replacements
+     * @param  string $subject
      * @return string
      */
     public static function pregReplaceSub($pattern, &$replacements, $subject)
@@ -566,7 +567,7 @@ class Arr
     /**
      * Return the default value of the given value.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return mixed
      */
     public static function value($value)

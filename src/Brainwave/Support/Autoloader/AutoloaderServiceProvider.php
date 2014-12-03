@@ -18,9 +18,9 @@ namespace Brainwave\Support\Autoloader;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Support\Autoloader\Autoloader;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Support\Autoloader\Autoloader;
 
 /**
  * AutoloaderServiceProvider
@@ -32,10 +32,9 @@ use \Brainwave\Support\Autoloader\Autoloader;
  */
 class AutoloaderServiceProvider implements ServiceProviderInterface
 {
-
     /**
      * Register Classloader
-     * @return  \Brainwave\Support\Autoloader\Autoloader
+     * @return \Brainwave\Support\Autoloader\Autoloader
      */
     public function register(Container $container)
     {

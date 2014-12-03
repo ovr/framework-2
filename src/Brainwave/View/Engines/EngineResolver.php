@@ -46,8 +46,8 @@ class EngineResolver
      * Register a new engine resolver.
      * The engine string typically corresponds to a file extension.
      *
-     * @param  string   $engine
-     * @param  \Closure  $resolver
+     * @param string   $engine
+     * @param \Closure $resolver
      *
      * @return void
      */
@@ -59,7 +59,7 @@ class EngineResolver
     /**
      * Resolver an engine instance by name.
      *
-     * @param  string  $engine
+     * @param string $engine
      *
      * @return \Brainwave\Contracts\View\Engines
      */

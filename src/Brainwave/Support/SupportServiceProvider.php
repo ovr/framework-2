@@ -18,11 +18,11 @@ namespace Brainwave\Support;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Arr;
-use \Brainwave\Support\Str;
-use \Brainwave\Support\Helpers;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Brainwave\Support\Arr;
+use Brainwave\Support\Str;
+use Brainwave\Support\Helpers;
+use Pimple\ServiceProviderInterface;
 
 /**
  * SupportServiceProvider

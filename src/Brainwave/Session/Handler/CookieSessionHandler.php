@@ -18,8 +18,8 @@ namespace Brainwave\Session\Handler;
  *
  */
 
-use \Brainwave\Contracts\Http\Request as RequestContract;
-use \Brainwave\Contracts\Cookie\Factory as CookieContract;
+use Brainwave\Contracts\Http\Request as RequestContract;
+use Brainwave\Contracts\Cookie\Factory as CookieContract;
 
 /**
  * Session
@@ -48,8 +48,8 @@ class CookieSessionHandler implements \SessionHandlerInterface
     /**
      * Create a new cookie driven handler instance.
      *
-     * @param  CookieContract $cookie
-     * @param  int            $minutes
+     * @param CookieContract $cookie
+     * @param int            $minutes
      *
      * @return void
      */
@@ -110,7 +110,7 @@ class CookieSessionHandler implements \SessionHandlerInterface
     /**
      * Set the request instance.
      *
-     * @param  RequestContract $request
+     * @param RequestContract $request
      *
      * @return void
      */

@@ -18,9 +18,9 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \PDO;
-use \Brainwave\Database\Connectors\Connectors;
-use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use PDO;
+use Brainwave\Database\Connectors\Connectors;
+use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
  * SqlServerConnector
@@ -47,7 +47,7 @@ class SqlServerConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return \PDO
      */
     public function connect(array $config)
@@ -58,7 +58,7 @@ class SqlServerConnector extends Connectors implements ConnectorInterface
     /**
      * Create a DSN string from a configuration.
      *
-     * @param  array   $config
+     * @param  array  $config
      * @return string
      */
     protected function getDsn(array $config)

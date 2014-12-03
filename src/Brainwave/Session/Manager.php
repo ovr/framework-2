@@ -18,9 +18,8 @@ namespace Brainwave\Session;
  *
  */
 
-use \Brainwave\Support\Str;
-use \Brainwave\Session\Factory;
-use \Brainwave\Session\CsrfToken\CsrfTokenFactory;
+use Brainwave\Session\Factory;
+use Brainwave\Session\CsrfToken\CsrfTokenFactory;
 
 /**
  * Manger
@@ -80,8 +79,8 @@ class Manager implements \SessionHandlerInterface
      *
      * @param factory $factory A session segment factory.
      * @param CsrfTokenFactory A CSRF token factory.
-     * @param array $cookies An arry of cookies from the client, typically a
-     * copy of $_COOKIE.
+     * @param array   $cookies An arry of cookies from the client, typically a
+     *                         copy of $_COOKIE.
      */
     public function __construct(
         Factory $factory,
@@ -102,7 +101,7 @@ class Manager implements \SessionHandlerInterface
      * Sets the delete-cookie callable.
      *
      * @param callable $deleteCookie The callable to invoke when deleting the
-     * session cookie.
+     *                               session cookie.
      */
     public function setDeleteCookie($deleteCookie)
     {
@@ -132,7 +131,7 @@ class Manager implements \SessionHandlerInterface
      * For good or bad, this a function of how $_SESSION works.
      *
      * @param string $name The name of the session segment, typically a
-     * fully-qualified class name.
+     *                     fully-qualified class name.
      *
      * @return Factory
      */
@@ -149,6 +148,7 @@ class Manager implements \SessionHandlerInterface
     public function isResumable()
     {
         $name = $this->getName();
+
         return isset($this->cookies[$name]);
     }
 
@@ -203,6 +203,7 @@ class Manager implements \SessionHandlerInterface
         if ($result) {
             $this->moveFlash();
         }
+
         return $result;
     }
 
@@ -278,7 +279,7 @@ class Manager implements \SessionHandlerInterface
      * TODO
      * [gc description]
      * @param  [type] $maxlifetime [description]
-     * @return [type]              [description]
+     * @return [type] [description]
      */
     public function gc($maxlifetime)
     {
@@ -288,7 +289,7 @@ class Manager implements \SessionHandlerInterface
     /**
      * TODO
      * [gc description]
-     * @return [type]              [description]
+     * @return [type] [description]
      */
     public function open($save_path, $name)
     {
@@ -298,17 +299,16 @@ class Manager implements \SessionHandlerInterface
     /**
      * TODO
      * [gc description]
-     * @return [type]              [description]
+     * @return [type] [description]
      */
     public function read($session_id)
     {
-
     }
 
     /**
      * TODO
      * [gc description]
-     * @return [type]              [description]
+     * @return [type] [description]
      */
     public function write($session_id, $session_data)
     {
@@ -317,7 +317,7 @@ class Manager implements \SessionHandlerInterface
     /**
      * Sets the session cache expire time.
      *
-     * @param int $expire The expiration time in seconds.
+     * @param  int $expire The expiration time in seconds.
      * @return int
      *
      * @see session_cache_expire()
@@ -383,7 +383,7 @@ class Manager implements \SessionHandlerInterface
      * 'httponly' : If set to TRUE then PHP will attempt to send the httponly
      *  flag when setting the session cookie.
      *
-     * @param array $params The array of session cookie param keys and values.
+     * @param  array $params The array of session cookie param keys and values.
      * @return null
      *
      * @see session_set_cookie_params()
@@ -424,7 +424,7 @@ class Manager implements \SessionHandlerInterface
     /**
      * Sets the current session name.
      *
-     * @param string $name The session name to use.
+     * @param  string $name The session name to use.
      * @return string
      *
      * @see session_name()
@@ -447,7 +447,7 @@ class Manager implements \SessionHandlerInterface
     /**
      * Sets the session save path.
      *
-     * @param string $path The new save path.
+     * @param  string $path The new save path.
      * @return string
      *
      * @see session_save_path()
@@ -473,7 +473,7 @@ class Manager implements \SessionHandlerInterface
      * Call to intercept any function pass to it.
      *
      * @param string $func The function to call.
-     * @param array $args Arguments passed to the function.
+     * @param array  $args Arguments passed to the function.
      *
      * @return mixed The result of the function call.
      */

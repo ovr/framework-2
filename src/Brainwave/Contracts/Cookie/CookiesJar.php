@@ -18,8 +18,8 @@ namespace Brainwave\Contracts\Cookie;
  *
  */
 
-use \Brainwave\Contracts\Support\Collection;
-use \Brainwave\Contracts\Http\Headers as HeadersContract;
+use Brainwave\Contracts\Support\Collection;
+use Brainwave\Contracts\Http\Headers as HeadersContract;
 
 /**
  * CookiesJar
@@ -34,7 +34,7 @@ interface CookiesJar extends Collection
     /**
      * Serialize this collection of cookies into a raw HTTP header
      *
-     * @param HeadersContract $headers
+     * @param  HeadersContract $headers
      * @return void
      */
     public function setHeaders(HeadersContract $headers);
@@ -47,8 +47,8 @@ interface CookiesJar extends Collection
      * the client-side cache to remove its cookie with the given name
      * and settings.
      *
-     * @param string $key      Cookie name
-     * @param array  $settings Optional cookie settings
+     * @param  string $key      Cookie name
+     * @param  array  $settings Optional cookie settings
      * @return void
      */
     public function remove($key, array $settings = []);
@@ -65,9 +65,9 @@ interface CookiesJar extends Collection
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param HeadersContract $headers
-     * @param string          $name
-     * @param string|array    $value
+     * @param  HeadersContract $headers
+     * @param  string          $name
+     * @param  string|array    $value
      * @return void
      */
     public function setHeader(HeadersContract $headers, $name, $value);
@@ -85,9 +85,9 @@ interface CookiesJar extends Collection
      * first argument; this method directly modifies this object instead of
      * returning a value.
      *
-     * @param HeadersContract $headers
-     * @param string          $name
-     * @param array           $value
+     * @param  HeadersContract $headers
+     * @param  string          $name
+     * @param  array           $value
      * @return void
      */
     public function deleteHeader(HeadersContract $headers, $name, $value = []);
@@ -98,7 +98,7 @@ interface CookiesJar extends Collection
      * This method will parse the HTTP request's `Cookie` header
      * and extract an associative array of cookie names and values.
      *
-     * @param  string $header
+     * @param string $header
      *
      * @return array
      */

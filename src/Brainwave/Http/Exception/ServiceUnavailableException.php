@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Exception\HttpException;
+use Brainwave\Http\Exception\HttpException;
 
 /**
  * UnauthorizedException
@@ -28,7 +28,7 @@ use \Brainwave\Http\Exception\HttpException;
  * @since   0.9.4-dev
  *
  */
-class UnauthorizedException extends HttpException
+class ServiceUnavailableException extends HttpException
 {
     /**
      * Constructor.

@@ -18,7 +18,7 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
+use Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Php
@@ -33,8 +33,8 @@ class Php implements EnginesContract
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array  $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
@@ -46,8 +46,8 @@ class Php implements EnginesContract
     /**
      * Get the evaluated contents of the view at the given path.
      *
-     * @param  string  $path
-     * @param  array   $data
+     * @param  string $path
+     * @param  array  $data
      * @return string
      */
     protected function evaluatePath($path, array $data)
@@ -81,7 +81,7 @@ class Php implements EnginesContract
     /**
      * Handle a view exception.
      *
-     * @param  \Exception  $e
+     * @param  \Exception $e
      * @return void
      * @throws $e
      */

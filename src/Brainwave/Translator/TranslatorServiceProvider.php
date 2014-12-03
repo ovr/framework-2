@@ -18,10 +18,10 @@ namespace Brainwave\Translator;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Translator\Manager;
-use \Brainwave\Filesystem\FileLoader;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Brainwave\Translator\Manager;
+use Brainwave\Filesystem\FileLoader;
+use Pimple\ServiceProviderInterface;
 
 /**
  * TranslatorServiceProvider
@@ -49,6 +49,7 @@ class TranslatorServiceProvider implements ServiceProviderInterface
                     $container['translator.path']
                 )
             );
+
             return $translator;
         };
     }

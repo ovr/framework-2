@@ -18,8 +18,8 @@ namespace Brainwave\Session\Token;
  *
  */
 
-use \RandomLib\Factory as RandomLib;
-use \Brainwave\Contracts\Session\Factory as Session;
+use RandomLib\Factory as RandomLib;
+use Brainwave\Contracts\Session\Factory as Session;
 
 /**
  * CsrfTokenFactory

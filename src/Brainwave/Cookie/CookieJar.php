@@ -18,10 +18,10 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Brainwave\Support\Collection;
-use \Brainwave\Contracts\Http\Headers as HeadersContract;
-use \Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
-use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Brainwave\Support\Collection;
+use Brainwave\Contracts\Http\Headers as HeadersContract;
+use Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
+use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Cookies
@@ -59,7 +59,7 @@ class CookieJar extends Collection implements CookiesJarContract
         'Expires'  => null,
         'Secure'   => false,
         'Discard'  => false,
-        'HttpOnly' => false
+        'HttpOnly' => false,
     ];
 
     /**
@@ -166,18 +166,17 @@ class CookieJar extends Collection implements CookiesJarContract
         $values = [];
 
         if (is_array($value)) {
-
             $headerArray = [
                 'domain'   => ' domain=',
                 'path'     => ' path=',
                 'secure'   => ' secure',
-                'httponly' => ' HttpOnly'
+                'httponly' => ' HttpOnly',
             ];
 
             foreach ($headerArray as $variable => $valueHeader) {
                 if (isset($value[$variable]) && $value[$variable]) {
                     $erg = ($value[$variable] === true) ? '' : $value[$variable];
-                    $values[] = ';'. $valueHeader . $erg;
+                    $values[] = ';'.$valueHeader.$erg;
                 }
             }
 
@@ -189,17 +188,17 @@ class CookieJar extends Collection implements CookiesJarContract
                 }
 
                 if ($timestamp !== 0) {
-                    $values[] = '; expires=' . gmdate('D, d-M-Y H:i:s e', $timestamp);
+                    $values[] = '; expires='.gmdate('D, d-M-Y H:i:s e', $timestamp);
                 }
             }
 
-            $value = (string)$value['value'];
+            $value = (string) $value['value'];
         }
 
         $cookie = sprintf(
             '%s=%s',
             urlencode($name),
-            urlencode((string) $value) . implode('', $values)
+            urlencode((string) $value).implode('', $values)
         );
 
         if (!$headers->has('Set-Cookie') || $headers->get('Set-Cookie') === '') {
@@ -257,7 +256,7 @@ class CookieJar extends Collection implements CookiesJarContract
                     'value'   => '',
                     'path'    => null,
                     'domain'  => null,
-                    'expires' => time() - 100
+                    'expires' => time() - 100,
                 ],
                 $value
             )
@@ -270,7 +269,7 @@ class CookieJar extends Collection implements CookiesJarContract
      * This method will parse the HTTP request's `Cookie` header
      * and extract an associative array of cookie names and values.
      *
-     * @param  string $header
+     * @param string $header
      *
      * @return array
      */

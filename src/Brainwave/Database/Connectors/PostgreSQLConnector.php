@@ -18,9 +18,9 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \PDO;
-use \Brainwave\Database\Connectors\Connectors;
-use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use PDO;
+use Brainwave\Database\Connectors\Connectors;
+use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
  * PostgreSQLConnector
@@ -47,7 +47,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return \PDO
      */
     public function connect(array $config)
@@ -78,7 +78,7 @@ class PostgreSQLConnector extends Connectors implements ConnectorInterface
     /**
      * Create a DSN string from a configuration.
      *
-     * @param  array   $config
+     * @param  array  $config
      * @return string
      */
     protected function getDsn(array $config)

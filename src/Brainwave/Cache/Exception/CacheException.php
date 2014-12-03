@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Exception;
  *
  */
 
-use \Brainwave\Contracts\Cache\CacheException as ExceptionContract;
+use Brainwave\Contracts\Cache\CacheException as ExceptionContract;
 
 /**
  * CacheException
@@ -30,5 +30,4 @@ use \Brainwave\Contracts\Cache\CacheException as ExceptionContract;
  */
 class CacheException extends \Exception implements ExceptionContract
 {
-
 }

@@ -18,8 +18,8 @@ namespace Brainwave\Exception\Displayer;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
+use Pimple\Container;
+use Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
 
 /**
  * PlainDisplayer
@@ -29,7 +29,7 @@ use \Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
  * @since   0.8.0-dev
  *
  */
-class PlainDisplayer implements ExceptionDisplayerInterface
+class Plain implements ExceptionDisplayerInterface
 {
     /**
      * App
@@ -60,7 +60,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
     /**
      * Show Exception
      *
-     * @param  string $exception [description]
+     * @param  string      $exception [description]
      * @return string|null
      */
     public function display($exception = '')
@@ -71,7 +71,7 @@ class PlainDisplayer implements ExceptionDisplayerInterface
         $this->container['response']->setStatus(500);
         $title = 'Brainwave Application Error';
         $header = 'The application could not run because of the following error:';
-        $footer = 'Copyright &copy; ' . date('Y') .  $this->container['settings']->get('app::footer', 'narrowspark');
+        $footer = 'Copyright &copy; '.date('Y').$this->container['settings']->get('app::footer', 'narrowspark');
 
         if ($exception instanceof \Exception || $exception instanceof \ErrorException) {
             $code = $exception->getCode();
@@ -121,7 +121,6 @@ EOF;
 <pre>$trace</pre>
 EOF;
             }
-
         } else {
             $content = $exception;
         }
@@ -143,7 +142,7 @@ EOF;
      */
     public function decorate($title, $header, $content, $footer = '', $css = '', $js = '')
     {
-        $footer = 'Copyright &copy; ' . date('Y') . ' ' . $this->container['settings']->get('app::footer', 'narrowspark');
+        $footer = 'Copyright &copy; '.date('Y').' '.$this->container['settings']->get('app::footer', 'narrowspark');
 
         print <<<EOF
 <!DOCTYPE html>
@@ -206,7 +205,7 @@ EOF;
             $css .= 'max-height: 619px;';
         }
 
-           return <<<EOF
+        return <<<EOF
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:300, 400);
 body {
     font: 12px/1.5 "Open Sans", Helvetica, Arial, Verdana, sans-serif;

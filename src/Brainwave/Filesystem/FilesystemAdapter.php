@@ -17,12 +17,12 @@ namespace Brainwave\Filesystem;
  * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
  *
  */
-use \Brainwave\Support\Collection;
-use \League\Flysystem\AdapterInterface;
-use \League\Flysystem\FilesystemInterface;
-use \League\Flysystem\FileNotFoundException;
-use \Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract ;
-use \Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
+use Brainwave\Support\Collection;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\FileNotFoundException;
+use Brainwave\Contracts\Filesystem\Filesystem as CloudFilesystemContract;
+use Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 
 /**
  * FilesystemAdapter
@@ -34,7 +34,6 @@ use \Brainwave\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoun
  */
 class FilesystemAdapter implements CloudFilesystemContract
 {
-
     /**
      * The Flysystem filesystem implementation.
      *
@@ -45,7 +44,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Create a new filesystem adapter instance.
      *
-     * @param  \League\Flysystem\FilesystemInterface $driver
+     * @param \League\Flysystem\FilesystemInterface $driver
      *
      * @return void
      */
@@ -57,7 +56,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Determine if a file exists.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return boolean
      */
@@ -69,7 +68,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get the contents of a file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|string
      *
@@ -87,9 +86,9 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Write the contents of a file.
      *
-     * @param  string $path
-     * @param  string $contents
-     * @param  string $visibility
+     * @param string $path
+     * @param string $contents
+     * @param string $visibility
      *
      * @return boolean
      */
@@ -101,7 +100,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get the visibility for the given path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -117,8 +116,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Set the visibility for the given path.
      *
-     * @param  string $path
-     * @param  string $visibility
+     * @param string $path
+     * @param string $visibility
      *
      * @return boolean
      */
@@ -130,33 +129,33 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Prepend to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return boolean
      */
     public function prepend($path, $data)
     {
-        return $this->put($path, $data . PHP_EOL . $this->get($path));
+        return $this->put($path, $data.PHP_EOL.$this->get($path));
     }
 
     /**
      * Append to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return boolean
      */
     public function append($path, $data)
     {
-        return $this->put($path, $this->get($path) . PHP_EOL . $data);
+        return $this->put($path, $this->get($path).PHP_EOL.$data);
     }
 
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array $paths
+     * @param string|array $paths
      *
      * @return boolean
      */
@@ -174,8 +173,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Copy a file to a new location.
      *
-     * @param  string $from
-     * @param  string $to
+     * @param string $from
+     * @param string $to
      *
      * @return boolean
      */
@@ -187,8 +186,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Move a file to a new location.
      *
-     * @param  string $from
-     * @param  string $to
+     * @param string $from
+     * @param string $to
      *
      * @return boolean|null
      */
@@ -202,7 +201,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get the file size of a given file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|integer
      */
@@ -214,7 +213,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get the file's last modification time.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return false|integer
      */
@@ -226,9 +225,9 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get an array of all files in a directory.
      *
-     * @param  string|null $directory
+     * @param string|null $directory
      *
-     * @param  bool $recursive
+     * @param bool $recursive
      *
      * @return array
      */
@@ -242,7 +241,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get all of the files from the given directory (recursive).
      *
-     * @param  string|null $directory
+     * @param string|null $directory
      *
      * @return array
      */
@@ -254,8 +253,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get all of the directories within a given directory.
      *
-     * @param  string|null $directory
-     * @param  boolean     $recursive
+     * @param string|null $directory
+     * @param boolean     $recursive
      *
      * @return array
      */
@@ -269,8 +268,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Get all (recursive) of the directories within a given directory.
      *
-     * @param  string|null $directory
-     * @param  boolean     $recursive
+     * @param string|null $directory
+     * @param boolean     $recursive
      *
      * @return array
      */
@@ -282,7 +281,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Create a directory.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return boolean
      */
@@ -294,7 +293,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Recursively delete a directory.
      *
-     * @param  string $directory
+     * @param string $directory
      *
      * @return boolean
      */
@@ -306,8 +305,8 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Filter directory contents by type.
      *
-     * @param  array  $contents
-     * @param  string $type
+     * @param array  $contents
+     * @param string $type
      *
      * @return array
      */
@@ -327,7 +326,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     /**
      * Parse the given visibility value.
      *
-     * @param  string|null $visibility
+     * @param string|null $visibility
      *
      * @return null|string
      *
@@ -336,7 +335,7 @@ class FilesystemAdapter implements CloudFilesystemContract
     protected function parseVisibility($visibility)
     {
         if (is_null($visibility)) {
-            return null;
+            return;
         }
 
         switch ($visibility) {
@@ -347,6 +346,6 @@ class FilesystemAdapter implements CloudFilesystemContract
                 return AdapterInterface::VISIBILITY_PRIVATE;
         }
 
-        throw new \InvalidArgumentException('Unknown visibility: ' . $visibility);
+        throw new \InvalidArgumentException('Unknown visibility: '.$visibility);
     }
 }

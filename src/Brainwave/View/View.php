@@ -18,11 +18,11 @@ namespace Brainwave\View;
  *
  */
 
-use \Brainwave\Support\Str;
-use \Brainwave\Support\Collection;
-use \Brainwave\View\Engines\EngineInterface;
-use \Brainwave\Contracts\View\View as ViewContract;
-use \Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
+use Brainwave\Support\Str;
+use Brainwave\Support\Collection;
+use Brainwave\View\Engines\EngineInterface;
+use Brainwave\Contracts\View\View as ViewContract;
+use Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
 
 /**
  * View
@@ -37,11 +37,11 @@ class View extends Collection implements ViewContract
     /**
      * Create a new view instance.
      *
-     * @param  \Brainwave\View\Factory  $factory
-     * @param  \Brainwave\View\Engines\EngineInterface $engine
-     * @param  string                                  $view
-     * @param  string                                  $path
-     * @param  array                                   $data
+     * @param \Brainwave\View\Factory                 $factory
+     * @param \Brainwave\View\Engines\EngineInterface $engine
+     * @param string                                  $view
+     * @param string                                  $path
+     * @param array                                   $data
      *
      * @return void
      */
@@ -77,7 +77,7 @@ class View extends Collection implements ViewContract
      *
      * @var    string $template Pathname of template file relative to templates directory
      *
-     * @return string           The rendered template
+     * @return string The rendered template
      */
     public function fetch($engine = 'php', $template = null, array $data = [])
     {
@@ -88,7 +88,7 @@ class View extends Collection implements ViewContract
      * Get the evaluated contents of the view.
      *
      * @var    string $template Pathname of template file relative to templates directory
-     * @param  string $template
+     * @param string $template
      *
      * @return string
      */
@@ -97,7 +97,6 @@ class View extends Collection implements ViewContract
         $this->with($data);
 
         if (is_string($template) && $engine === 'php' && $engine !== 'json') {
-
             $explodeTemplate = explode('::', $template, 2);
 
             if (!empty($explodeTemplate[0]) && !empty($explodeTemplate[1])) {
@@ -118,7 +117,7 @@ class View extends Collection implements ViewContract
         } elseif ($engine == 'json') {
             $path = $template;
         } else {
-            $path = $template . $this->getExtensions();
+            $path = $template.$this->getExtensions();
         }
 
         //Replace data
@@ -132,8 +131,8 @@ class View extends Collection implements ViewContract
     /**
      * Add a piece of data to the view.
      *
-     * @param  string|array $key
-     * @param  mixed        $value
+     * @param string|array $key
+     * @param mixed        $value
      *
      * @return View
      */
@@ -153,9 +152,9 @@ class View extends Collection implements ViewContract
     /**
      * Add a view instance to the view data.
      *
-     * @param  string $key
-     * @param  string $view
-     * @param  array  $data
+     * @param string $key
+     * @param string $view
+     * @param array  $data
      *
      * @return $this
      */
@@ -167,8 +166,8 @@ class View extends Collection implements ViewContract
     /**
      * Dynamically bind parameters to the view.
      *
-     * @param  string $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array  $parameters
      *
      * @return View
      *
@@ -196,8 +195,8 @@ class View extends Collection implements ViewContract
     /**
      * Set a piece of data on the view.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -209,7 +208,7 @@ class View extends Collection implements ViewContract
     /**
      * Check if a piece of data is bound to the view.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -221,7 +220,7 @@ class View extends Collection implements ViewContract
     /**
      * Remove a piece of bound data from the view.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean|null
      */

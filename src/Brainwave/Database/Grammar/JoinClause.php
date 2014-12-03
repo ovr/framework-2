@@ -28,5 +28,4 @@ namespace Brainwave\Database\Grammar;
  */
 class JoinClause
 {
-
 }

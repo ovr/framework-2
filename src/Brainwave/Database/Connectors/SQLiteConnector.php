@@ -18,8 +18,8 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \Brainwave\Database\Connectors\Connectors;
-use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use Brainwave\Database\Connectors\Connectors;
+use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
  * SQLiteConnector
@@ -34,7 +34,7 @@ class SQLiteConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return \PDO
      *
      * @throws \InvalidArgumentException

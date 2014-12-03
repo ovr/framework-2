@@ -18,7 +18,7 @@ namespace Brainwave\Session;
  *
  */
 
-use \SessionHandlerInterface;
+use SessionHandlerInterface;
 
 /**
  * Flash
@@ -93,13 +93,14 @@ class Flash
      * Gets the flash value for a key in the *current* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $alt An alternative value to return if the key is not set.
+     * @param mixed  $alt An alternative value to return if the key is not set.
      *
      * @return mixed The flash value itself.
      */
     public function get($key, $alt = null)
     {
         $this->resumeSession();
+
         return isset($_SESSION[self::FLASH_NOW][$this->name][$key])
              ? $_SESSION[self::FLASH_NOW][$this->name][$key]
              : $alt;
@@ -121,7 +122,7 @@ class Flash
      * Gets the flash value for a key in the *next* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $alt An alternative value to return if the key is not set.
+     * @param mixed  $alt An alternative value to return if the key is not set.
      *
      * @return mixed The flash value itself.
      */
@@ -140,7 +141,7 @@ class Flash
      * Sets a flash value for the *next* request *and* the current one.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $val The flash value itself.
+     * @param mixed  $val The flash value itself.
      */
     public function setNow($key, $val)
     {

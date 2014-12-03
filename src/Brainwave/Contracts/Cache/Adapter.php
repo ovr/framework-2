@@ -38,7 +38,7 @@ interface Adapter
     /**
      * Fetch a stored variable from the cache
      *
-     * @param  string $key The key used to store the value
+     * @param string $key The key used to store the value
      *
      * @return mixed The stored variable
      */
@@ -47,8 +47,8 @@ interface Adapter
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -57,7 +57,7 @@ interface Adapter
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return void
      */
@@ -66,8 +66,8 @@ interface Adapter
     /**
      * Store variable in the cache
      *
-     * @param string  $key The key to use to put the value
-     * @param mixed   $value The variable to put
+     * @param string  $key     The key to use to put the value
+     * @param mixed   $value   The variable to put
      * @param integer $minutes
      *
      * @return void
@@ -77,8 +77,8 @@ interface Adapter
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */
@@ -87,8 +87,8 @@ interface Adapter
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */

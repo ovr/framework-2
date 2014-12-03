@@ -28,5 +28,4 @@ namespace Brainwave\Security\Firewall;
  */
 class Firewall
 {
-
 }

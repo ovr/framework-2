@@ -28,5 +28,4 @@ namespace Brainwave\Contracts\Cache;
  */
 interface CacheException
 {
-
 }

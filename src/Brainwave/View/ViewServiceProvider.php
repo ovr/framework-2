@@ -18,13 +18,13 @@ namespace Brainwave\View;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\View\Factory;
-use \Brainwave\View\ViewFinder;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\View\Engines\EngineResolver;
-use \Brainwave\View\Engines\Adapter\Php as PhpEngine;
-use \Brainwave\View\Engines\Adapter\Json as JsonEngine;
+use Pimple\Container;
+use Brainwave\View\Factory;
+use Brainwave\View\ViewFinder;
+use Pimple\ServiceProviderInterface;
+use Brainwave\View\Engines\EngineResolver;
+use Brainwave\View\Engines\Adapter\Php as PhpEngine;
+use Brainwave\View\Engines\Adapter\Json as JsonEngine;
 
 /**
  * ViewServiceProvider
@@ -57,7 +57,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the engine engines instance.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return void
      */
@@ -73,7 +73,6 @@ class ViewServiceProvider implements ServiceProviderInterface
         }
 
         if ($container['settings']['view::compilers'] !== null) {
-
             foreach ($container['settings']['view::compilers'] as $compilerName => $compilerClass) {
                 if ($compilerName === $compilerClass[0]) {
                     $this->registercustomEngine(
@@ -83,7 +82,6 @@ class ViewServiceProvider implements ServiceProviderInterface
                     );
                 }
             }
-
         }
     }
 
@@ -106,7 +104,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the PHP engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver $engines
+     * @param \Brainwave\View\Engines\EngineResolver $engines
      *
      * @return void
      */
@@ -130,7 +128,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the Json engine implementation.
      *
-     * @param  \Brainwave\View\Engines\EngineResolver $engines
+     * @param \Brainwave\View\Engines\EngineResolver $engines
      *
      * @return void
      */
@@ -144,7 +142,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the view finder implementation.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return void
      */
@@ -158,7 +156,7 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the view environment.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return void
      */

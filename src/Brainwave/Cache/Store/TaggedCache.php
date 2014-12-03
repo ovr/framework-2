@@ -18,10 +18,10 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use \Carbon\Carbon;
-use \Brainwave\Cache\Store\TagSet;
-use \Brainwave\Contracts\Cache\Adapter;
-use \Brainwave\Cache\Store\Interfaces\StoreInterface;
+use Carbon\Carbon;
+use Brainwave\Cache\Store\TagSet;
+use Brainwave\Contracts\Cache\Adapter;
+use Brainwave\Cache\Store\Interfaces\StoreInterface;
 
 /**
  * TaggedCache
@@ -50,8 +50,8 @@ class TaggedCache implements StoreInterface
     /**
      * Create a new tagged cache instance.
      *
-     * @param  \Brainwave\Cache\Store\TaggableStore $store
-     * @param  \Brainwave\Cache\Store\TagSet        $tags
+     * @param \Brainwave\Cache\Store\TaggableStore $store
+     * @param \Brainwave\Cache\Store\TagSet        $tags
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class TaggedCache implements StoreInterface
     /**
      * Determine if an item exists in the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -81,8 +81,8 @@ class TaggedCache implements StoreInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -96,9 +96,9 @@ class TaggedCache implements StoreInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param \DateTime|int $minutes
      *
      * @return void
      */
@@ -114,9 +114,9 @@ class TaggedCache implements StoreInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param \DateTime|int $minutes
      *
      * @return void
      */
@@ -132,9 +132,9 @@ class TaggedCache implements StoreInterface
     /**
      * Store an item in the cache if the key does not exist.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param \DateTime|int $minutes
      *
      * @return bool
      */
@@ -142,6 +142,7 @@ class TaggedCache implements StoreInterface
     {
         if (is_null($this->get($key))) {
             $this->set($key, $value, $minutes);
+
             return true;
         }
 
@@ -151,8 +152,8 @@ class TaggedCache implements StoreInterface
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */
@@ -164,8 +165,8 @@ class TaggedCache implements StoreInterface
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */
@@ -177,8 +178,8 @@ class TaggedCache implements StoreInterface
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -190,7 +191,7 @@ class TaggedCache implements StoreInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean|null
      */
@@ -212,9 +213,9 @@ class TaggedCache implements StoreInterface
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string        $key
-     * @param  \DateTime|int $minutes
-     * @param  \Closure      $callback
+     * @param string        $key
+     * @param \DateTime|int $minutes
+     * @param \Closure      $callback
      *
      * @return mixed
      */
@@ -235,8 +236,8 @@ class TaggedCache implements StoreInterface
     /**
      * Get an item from the cache, or store the default value forever.
      *
-     * @param  string   $key
-     * @param  \Closure $callback
+     * @param string   $key
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -257,7 +258,7 @@ class TaggedCache implements StoreInterface
     /**
      * Get a fully qualified key for a tagged item.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return string
      */
@@ -279,7 +280,7 @@ class TaggedCache implements StoreInterface
     /**
      * Calculate the number of minutes with the given duration.
      *
-     * @param  \DateTime|int $duration
+     * @param \DateTime|int $duration
      *
      * @return int|null
      */

@@ -18,7 +18,7 @@ namespace Brainwave\Cookie\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Cookie

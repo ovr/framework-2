@@ -18,7 +18,7 @@ namespace Brainwave\Hashing;
  *
  */
 
-use \Brainwave\Contracts\Hashing\Password as PasswordContract;
+use Brainwave\Contracts\Hashing\Password as PasswordContract;
 
 /**
  * Password
@@ -40,8 +40,8 @@ class Password implements PasswordContract
     /**
      * Hash the given value.
      *
-     * @param  string $value
-     * @param  array  $options
+     * @param string $value
+     * @param array  $options
      *
      * @return string
      *
@@ -62,9 +62,9 @@ class Password implements PasswordContract
     /**
      * Check the given plain value against a hash.
      *
-     * @param  string $value
-     * @param  string $hashedValue
-     * @param  array  $options
+     * @param string $value
+     * @param string $hashedValue
+     * @param array  $options
      *
      * @return bool
      */
@@ -76,8 +76,8 @@ class Password implements PasswordContract
     /**
      * Check if the given hash has been hashed using the given options.
      *
-     * @param  string $hashedValue
-     * @param  array  $options
+     * @param string $hashedValue
+     * @param array  $options
      *
      * @return bool
      */

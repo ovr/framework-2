@@ -18,8 +18,8 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \PDO;
-use \Brainwave\Support\Arr;
+use PDO;
+use Brainwave\Support\Arr;
 
 /**
  * Connector
@@ -47,7 +47,7 @@ class Connectors
     /**
      * Get the PDO options based on the configuration.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return array
      */
     public function getOptions(array $config)
@@ -60,9 +60,9 @@ class Connectors
     /**
      * Create a new PDO connection.
      *
-     * @param  string  $dsn
-     * @param  array   $config
-     * @param  array   $options
+     * @param  string $dsn
+     * @param  array  $config
+     * @param  array  $options
      * @return \PDO
      */
     public function createConnection($dsn, array $config, array $options)
@@ -87,7 +87,7 @@ class Connectors
     /**
      * Set the default PDO connection options.
      *
-     * @param  array  $options
+     * @param  array $options
      * @return void
      */
     public function setDefaultOptions(array $options)

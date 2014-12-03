@@ -18,9 +18,9 @@ namespace Brainwave\Encrypter;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Arr;
-use \Brainwave\Contracts\Encrypter as EncrypterContract;
+use Pimple\Container;
+use Brainwave\Support\Arr;
+use Brainwave\Contracts\Encrypter as EncrypterContract;
 
 /**
  * Encrypter
@@ -88,10 +88,10 @@ class Encrypter implements EncrypterContract
     /**
      * Constructor
      *
-     * @param  \Pimple\Container $container
-     * @param  string            $key    Encryption key
-     * @param  string            $cipher Encryption algorithm
-     * @param  string            $mode   Encryption mode
+     * @param \Pimple\Container $container
+     * @param string            $key       Encryption key
+     * @param string            $cipher    Encryption algorithm
+     * @param string            $mode      Encryption mode
      */
     public function __construct(Container $container, $key, $cipher = MCRYPT_RIJNDAEL_256, $mode = 'cbc')
     {
@@ -117,11 +117,11 @@ class Encrypter implements EncrypterContract
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param  mixed  $data Data to encrypt.
-     * @param  string $key  Key to encrypt data with.
+     * @param mixed  $data Data to encrypt.
+     * @param string $key  Key to encrypt data with.
      *
-     * @return string       Serialized array containing the encrypted data
-     *                      along with some meta data.
+     * @return string Serialized array containing the encrypted data
+     *                along with some meta data.
      */
     public function encrypt($data, $key = null)
     {
@@ -185,10 +185,10 @@ class Encrypter implements EncrypterContract
      * Strip PKCS7 padding and decrypt
      * data encrypted by encrypt().
      *
-     * @param  string $data JSON string containing the encrypted data and meta information in the
-     *                      excact format as returned by encrypt().
+     * @param string $data JSON string containing the encrypted data and meta information in the
+     *                     excact format as returned by encrypt().
      *
-     * @return mixed        Decrypted data in it's original form.
+     * @return mixed Decrypted data in it's original form.
      */
     public function decrypt($data, $key = null)
     {
@@ -235,14 +235,13 @@ class Encrypter implements EncrypterContract
 
         // Return decrypted data.
         return unserialize($decrypted);
-
     }
 
     /**
      * Validate encryption key based on valid key sizes for selected cipher and cipher mode
      *
-     * @param  string   $key    Encryption key
-     * @param  resource $module Encryption module
+     * @param string   $key    Encryption key
+     * @param resource $module Encryption module
      *
      * @return void
      *
@@ -258,7 +257,7 @@ class Encrypter implements EncrypterContract
         if ($validKeySizes) {
             if (!in_array($keySize, $validKeySizes)) {
                 throw new \InvalidArgumentException(
-                    'Encryption key length must be one of: ' . implode(', ', $validKeySizes)
+                    'Encryption key length must be one of: '.implode(', ', $validKeySizes)
                 );
             }
         } else {
@@ -278,10 +277,10 @@ class Encrypter implements EncrypterContract
      * PKCS7 padding adds bytes with the same value that the number of bytes that are added.
      * @see http://tools.ietf.org/html/rfc5652#section-6.3
      *
-     * @param  integer $block Block size.
-     * @param  string  $data  Data to pad.
+     * @param integer $block Block size.
+     * @param string  $data  Data to pad.
      *
-     * @return string         Padded data.
+     * @return string Padded data.
      */
     public function pad($block, $data)
     {
@@ -294,17 +293,17 @@ class Encrypter implements EncrypterContract
     /**
      * Strip PKCS7-padding.
      *
-     * @param  integer $block Block size.
-     * @param  string  $data  Padded data.
+     * @param integer $block Block size.
+     * @param string  $data  Padded data.
      *
-     * @return string         Original data.
+     * @return string Original data.
      */
     public function stripPadding($block, $data)
     {
         $pad = ord($data[(strlen($data)) - 1]);
 
         // Check that what we have at the end of the string really is padding, and if it is remove it.
-        if ($pad && $pad < $block && preg_match('/' . chr($pad) . '{' . $pad . '}$/', $data)) {
+        if ($pad && $pad < $block && preg_match('/'.chr($pad).'{'.$pad.'}$/', $data)) {
             return substr($data, 0, -$pad);
         }
 
@@ -314,7 +313,7 @@ class Encrypter implements EncrypterContract
     /**
      * Set the encryption key.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return void
      */
     public function setKey($key)
@@ -324,7 +323,7 @@ class Encrypter implements EncrypterContract
     /**
      * Set the encryption cipher.
      *
-     * @param  string  $cipher
+     * @param  string $cipher
      * @return void
      */
     public function setCipher($cipher)
@@ -335,7 +334,7 @@ class Encrypter implements EncrypterContract
     /**
      * Set the encryption mode.
      *
-     * @param  string  $mode
+     * @param  string $mode
      * @return void
      */
     public function setMode($mode)

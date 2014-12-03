@@ -31,16 +31,16 @@ interface Factory
     /**
      * Create HTTP cookie to be sent with the HTTP response
      *
-     * @param  string     $name     The cookie name
-     * @param  string     $value    The cookie value
-     * @param  int|string $time     The duration of the cookie;
-     *                              If integer, should be UNIX timestamp;
-     *                              If string, converted to UNIX timestamp with `strtotime`;
-     * @param  string     $path     The path on the server in which the cookie will be available on
-     * @param  string     $domain   The domain that the cookie is available to
-     * @param  bool       $secure   Indicates that the cookie should only be transmitted over a secure
-     *                              HTTPS connection to/from the client
-     * @param  bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param string     $name     The cookie name
+     * @param string     $value    The cookie value
+     * @param int|string $time     The duration of the cookie;
+     *                             If integer, should be UNIX timestamp;
+     *                             If string, converted to UNIX timestamp with `strtotime`;
+     * @param string     $path     The path on the server in which the cookie will be available on
+     * @param string     $domain   The domain that the cookie is available to
+     * @param bool       $secure   Indicates that the cookie should only be transmitted over a secure
+     *                             HTTPS connection to/from the client
+     * @param bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      *
      * @return void
      */
@@ -57,12 +57,12 @@ interface Factory
     /**
      * Create a cookie that lasts "forever" (five years).
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  string  $path
-     * @param  string  $domain
-     * @param  bool    $secure
-     * @param  bool    $httpOnly
+     * @param string $name
+     * @param string $value
+     * @param string $path
+     * @param string $domain
+     * @param bool   $secure
+     * @param bool   $httpOnly
      *
      * @return void
      */
@@ -82,7 +82,7 @@ interface Factory
      * or return NULL if cookie does not exist. Cookies created during
      * the current request will not be available until the next request.
      *
-     * @param  string      $name The cookie name
+     * @param string $name The cookie name
      *
      * @return string|null
      */
@@ -91,7 +91,7 @@ interface Factory
     /**
      * Does this request have a given cookie?
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return bool
      */
@@ -106,12 +106,12 @@ interface Factory
      * removed. If any of this method's arguments are omitted or set to NULL, the
      * default Cookie setting values (set during Brainwave::init) will be used instead.
      *
-     * @param  string $name     The cookie name
-     * @param  string $path     The path on the server in which the cookie will be available on
-     * @param  string $domain   The domain that the cookie is available to
-     * @param  bool   $secure   Indicates that the cookie should only be transmitted over a secure
-     *                          HTTPS connection from the client
-     * @param  bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param string $name     The cookie name
+     * @param string $path     The path on the server in which the cookie will be available on
+     * @param string $domain   The domain that the cookie is available to
+     * @param bool   $secure   Indicates that the cookie should only be transmitted over a secure
+     *                         HTTPS connection from the client
+     * @param bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      *
      * @return void
      */

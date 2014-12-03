@@ -18,10 +18,10 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use \Swift_Transport;
-use \Aws\Ses\SesClient;
-use \Swift_Mime_Message;
-use \Swift_Events_EventListener;
+use Swift_Transport;
+use Aws\Ses\SesClient;
+use Swift_Mime_Message;
+use Swift_Events_EventListener;
 
 /**
  * Ses
@@ -43,7 +43,7 @@ class Ses implements Swift_Transport
     /**
      * Create a new SES transport instance.
      *
-     * @param  \Aws\Ses\SesClient $ses
+     * @param \Aws\Ses\SesClient $ses
      *
      * @return void
      */
@@ -79,8 +79,8 @@ class Ses implements Swift_Transport
     /**
      * Send Email
      *
-     * @param  \Swift_Mime_Message $message
-     * @param  string              $failedRecipients
+     * @param \Swift_Mime_Message $message
+     * @param string              $failedRecipients
      *
      * @return log
      */
@@ -90,8 +90,8 @@ class Ses implements Swift_Transport
             'Source' => $message->getSender(),
             'Destinations' => $this->getTo($message),
             'RawMessage' => [
-                'Data' => base64_encode((string) $message)
-            ]
+                'Data' => base64_encode((string) $message),
+            ],
         ]);
     }
 
@@ -106,7 +106,7 @@ class Ses implements Swift_Transport
     /**
      * Get the "to" payload field for the API request.
      *
-     * @param  \Swift_Mime_Message $message
+     * @param \Swift_Mime_Message $message
      *
      * @return array
      */

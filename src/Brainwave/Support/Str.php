@@ -18,7 +18,7 @@ namespace Brainwave\Support;
  *
  */
 
-use \Patchwork\Utf8;
+use Patchwork\Utf8;
 
 /**
  * Str
@@ -33,7 +33,7 @@ class Str
     /**
      * Transliterate a UTF-8 value to ASCII.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class Str
     /**
      * Convert a value to camel case.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -57,8 +57,8 @@ class Str
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string $haystack
-     * @param  string $needles
+     * @param string $haystack
+     * @param string $needles
      *
      * @return bool
      */
@@ -95,8 +95,8 @@ class Str
     /**
      * Cap a string with a single instance of a given value.
      *
-     * @param  string $value
-     * @param  string $cap
+     * @param string $value
+     * @param string $cap
      *
      * @return string
      */
@@ -110,8 +110,8 @@ class Str
     /**
      * Determine if a given string matches a given pattern.
      *
-     * @param  string $pattern
-     * @param  string $value
+     * @param string $pattern
+     * @param string $value
      *
      * @return bool
      */
@@ -134,7 +134,7 @@ class Str
     /**
      * Return the length of the given string.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return int
      */
@@ -146,9 +146,9 @@ class Str
     /**
      * Limit the number of characters in a string.
      *
-     * @param  string $value
-     * @param  int    $limit
-     * @param  string $end
+     * @param string $value
+     * @param int    $limit
+     * @param string $end
      *
      * @return string
      */
@@ -164,7 +164,7 @@ class Str
     /**
      * Convert the given string to lower-case.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -176,9 +176,9 @@ class Str
     /**
      * Limit the number of words in a string.
      *
-     * @param  string $value
-     * @param  int    $words
-     * @param  string $end
+     * @param string $value
+     * @param int    $words
+     * @param string $end
      *
      * @return string
      */
@@ -196,8 +196,8 @@ class Str
     /**
      * Parse a Class@method style callback into class and method.
      *
-     * @param  string $callback
-     * @param  string $default
+     * @param string $callback
+     * @param string $default
      *
      * @return array
      */
@@ -209,7 +209,7 @@ class Str
     /**
      * Generate a more truly "random" alpha-numeric string.
      *
-     * @param  int $length
+     * @param int $length
      *
      * @return string
      *
@@ -235,7 +235,7 @@ class Str
      *
      * Should not be considered sufficient for cryptography, etc.
      *
-     * @param  int $length
+     * @param int $length
      *
      * @return string
      */
@@ -249,7 +249,7 @@ class Str
     /**
      * Convert the given string to upper-case.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -261,7 +261,7 @@ class Str
     /**
      * Convert the given string to title case.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
@@ -289,8 +289,8 @@ class Str
     /**
      * Generate a URL friendly "slug" from a given string.
      *
-     * @param  string $title
-     * @param  string $separator
+     * @param string $title
+     * @param string $separator
      *
      * @return string
      */
@@ -315,8 +315,8 @@ class Str
     /**
      * Convert a string to snake case.
      *
-     * @param  string $value
-     * @param  string $delimiter
+     * @param string $value
+     * @param string $delimiter
      *
      * @return string
      */
@@ -330,8 +330,8 @@ class Str
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string $haystack
-     * @param  string $needles
+     * @param string $haystack
+     * @param string $needles
      *
      * @return bool
      */
@@ -349,7 +349,7 @@ class Str
     /**
      * Convert a value to studly caps case.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */

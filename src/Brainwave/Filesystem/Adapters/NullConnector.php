@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use \League\Flysystem\Adapter\NullAdapter;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use League\Flysystem\Adapter\NullAdapter;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * NullConnector
@@ -31,11 +31,10 @@ use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
  */
 class NullConnector implements ConnectorContract
 {
-
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\NullAdapter
      */

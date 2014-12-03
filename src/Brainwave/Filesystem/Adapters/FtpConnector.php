@@ -19,7 +19,7 @@ namespace Brainwave\Filesystem\Adapters;
  */
 
 use League\Flysystem\Adapter\Ftp;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * FtpConnector
@@ -34,7 +34,7 @@ class FtpConnector implements ConnectorContract
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\Ftp
      */
@@ -45,7 +45,7 @@ class FtpConnector implements ConnectorContract
     /**
      * Get the ftp adapter.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\Ftp
      */

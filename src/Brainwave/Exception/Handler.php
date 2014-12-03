@@ -18,10 +18,10 @@ namespace Brainwave\Exception;
  *
  */
 
-use \Pimple\Container;
-use \Psr\Log\LoggerInterface;
-use \Brainwave\Contracts\Exception\FatalErrorException as FatalError;
-use \Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
+use Pimple\Container;
+use Psr\Log\LoggerInterface;
+use Brainwave\Contracts\Exception\FatalErrorException as FatalError;
+use Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
 
 /**
  * ExceptionHandler
@@ -152,10 +152,10 @@ class Handler
      * these ErrorException objects are then thrown and caught by Brainwave's
      * built-in or custom error handlers.
      *
-     * @param  int    $level   The numeric type of the Error
-     * @param  string $message The error message
-     * @param  string $file    The absolute path to the affected file
-     * @param  int    $line    The line number of the error in the affected file
+     * @param int    $level   The numeric type of the Error
+     * @param string $message The error message
+     * @param string $file    The absolute path to the affected file
+     * @param int    $line    The line number of the error in the affected file
      *
      * @throws ErrorException
      */
@@ -169,7 +169,7 @@ class Handler
     /**
      * Handle an uncaught exception.
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return void
      */
@@ -181,7 +181,7 @@ class Handler
     /**
      * Handle a console exception.
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return string
      */
@@ -193,7 +193,7 @@ class Handler
     /**
      * Handle the given exception.
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return string
      */
@@ -255,7 +255,7 @@ class Handler
     /**
      * Format an exception thrown by a handler.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return string
      */
@@ -263,6 +263,7 @@ class Handler
     {
         if ($this->debug) {
             $location = $e->getMessage().' in '.$e->getFile().':'.$e->getLine();
+
             return 'Error in exception handler: '.$location;
         }
 
@@ -272,7 +273,7 @@ class Handler
     /**
      * Register an application error handler.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -284,7 +285,7 @@ class Handler
     /**
      * Register an application error handler at the bottom of the stack.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -293,11 +294,10 @@ class Handler
         $this->handlers[] = $callback;
     }
 
-
     /**
      * Handle an exception for the application.
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return \Brainwave\Http\Response
      */
@@ -321,7 +321,7 @@ class Handler
     /**
      * Display the given exception to the user.
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return void
      */
@@ -329,7 +329,7 @@ class Handler
     {
         $settings = $this->container['settings'];
 
-        if ($settings->get('app::mode', 'production') === 'development'||
+        if ($settings->get('app::mode', 'production') === 'development' ||
             $settings->get('app::mode', 'production') === 'testing'
         ) {
             $displayer = $this->debug ? $this->container['exception.debug'] : $this->container['exception.plain'];
@@ -343,7 +343,7 @@ class Handler
     /**
      * Logs Exception if debug is false
      *
-     * @param  \Exception $exception
+     * @param \Exception $exception
      *
      * @return void
      */
@@ -384,7 +384,7 @@ EOF;
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int $type
+     * @param int $type
      *
      * @return bool
      */
@@ -396,8 +396,8 @@ EOF;
     /**
      * Determine if the given handler handles this exception.
      *
-     * @param  \Closure   $handler
-     * @param  \Exception $exception
+     * @param \Closure   $handler
+     * @param \Exception $exception
      *
      * @return bool
      */
@@ -411,8 +411,8 @@ EOF;
     /**
      * Determine if the given handler type hints the exception.
      *
-     * @param  \ReflectionFunction $reflection
-     * @param  \Exception          $exception
+     * @param \ReflectionFunction $reflection
+     * @param \Exception          $exception
      *
      * @return boolean
      */

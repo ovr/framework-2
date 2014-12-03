@@ -28,7 +28,7 @@ namespace Brainwave\Contracts\Encrypter;
  */
 interface Encrypter
 {
-   /**
+    /**
      * Encrypt data returning a JSON encoded array safe for storage in a database
      * or file. The array has the following structure before it is encoded:
      *
@@ -40,8 +40,8 @@ interface Encrypter
      *   'mac'   => 'Message Authentication Code'
      * ]
      *
-     * @param  mixed $data Data to encrypt.
-     * @param  string $key Key to encrypt data with.
+     * @param mixed  $data Data to encrypt.
+     * @param string $key  Key to encrypt data with.
      *
      * @return string Serialized array containing the encrypted data
      *                along with some meta data.
@@ -52,10 +52,10 @@ interface Encrypter
      * Strip PKCS7 padding and decrypt
      * data encrypted by encrypt().
      *
-     * @param  string $data  JSON string containing the encrypted data and meta information in the
-     *                      excact format as returned by encrypt().
+     * @param string $data JSON string containing the encrypted data and meta information in the
+     *                     excact format as returned by encrypt().
      *
-     * @return mixed        Decrypted data in it's original form.
+     * @return mixed Decrypted data in it's original form.
      */
     public function decrypt($data, $key = null);
 }

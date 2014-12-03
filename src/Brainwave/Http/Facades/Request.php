@@ -18,7 +18,7 @@ namespace Brainwave\Http\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Request

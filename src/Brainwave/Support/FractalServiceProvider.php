@@ -18,12 +18,12 @@ namespace Brainwave\Support;
  *
  */
 
-use \Pimple\Container;
-use \League\Fractal\Manager;
-use \Pimple\ServiceProviderInterface;
-use \League\Fractal\Serializer\ArraySerializer;
-use \League\Fractal\Serializer\JsonApiSerializer;
-use \League\Fractal\Serializer\DataArraySerializer;
+use Pimple\Container;
+use League\Fractal\Manager;
+use Pimple\ServiceProviderInterface;
+use League\Fractal\Serializer\ArraySerializer;
+use League\Fractal\Serializer\JsonApiSerializer;
+use League\Fractal\Serializer\DataArraySerializer;
 
 /**
  * FractalServiceProvider
@@ -47,6 +47,7 @@ class FractalServiceProvider implements ServiceProviderInterface
     {
         $container['fractal'] = function ($container) {
             $manager = new Manager();
+
             return $manager;
         };
     }
@@ -56,6 +57,7 @@ class FractalServiceProvider implements ServiceProviderInterface
         $container['fractal.json'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
+
             return $manager;
         };
     }
@@ -65,6 +67,7 @@ class FractalServiceProvider implements ServiceProviderInterface
         $container['fractal.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
+
             return $manager;
         };
     }
@@ -74,6 +77,7 @@ class FractalServiceProvider implements ServiceProviderInterface
         $container['fractal.data.array'] = function ($container) {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
+
             return $manager;
         };
     }

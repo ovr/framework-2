@@ -18,8 +18,8 @@ namespace Brainwave\Database\Migrations\Driver;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
 
 /**
  * FileDriver
@@ -70,7 +70,7 @@ class FileDriver implements DriverInterface
     /**
      * Up
      *
-     * @param Migration $migration
+     * @param  Migration       $migration
      * @return null|FileDriver
      */
     public function up(Migration $migration)
@@ -78,7 +78,7 @@ class FileDriver implements DriverInterface
         $versions = $this->fetchAll();
 
         if (in_array($migration->getVersion(), $versions)) {
-            return null;
+            return;
         }
 
         $versions[] = $migration->getVersion();
@@ -91,7 +91,7 @@ class FileDriver implements DriverInterface
     /**
      * Down
      *
-     * @param Migration $migration
+     * @param  Migration       $migration
      * @return null|FileDriver
      */
     public function down(Migration $migration)
@@ -99,7 +99,7 @@ class FileDriver implements DriverInterface
         $versions = $this->fetchAll();
 
         if (!in_array($migration->getVersion(), $versions)) {
-            return null;
+            return;
         }
 
         unset($versions[array_search($migration->getVersion(), $versions)]);

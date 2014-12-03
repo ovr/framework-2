@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Support;
  *
  */
 
-use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Collection

@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Brainwave\Application\Application as App;
+use Brainwave\Application\Application as App;
 
 /**
  * BootableProvider Interface

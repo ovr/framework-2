@@ -18,7 +18,7 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \Brainwave\Database\Connectors\MySqlConnector;
+use Brainwave\Database\Connectors\MySqlConnector;
 
 /**
  * MariaDBConnector

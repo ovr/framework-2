@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Pimple\ServiceProviderInterface;
+use Pimple\ServiceProviderInterface;
 
 /**
  * Application Interface
@@ -64,7 +64,7 @@ interface Application
     /**
      * Register a new boot listener.
      *
-     * @param  mixed  $callback
+     * @param  mixed $callback
      * @return void
      */
     public function booting($callback);
@@ -72,7 +72,7 @@ interface Application
     /**
      * Register a new "booted" listener.
      *
-     * @param  mixed  $callback
+     * @param  mixed $callback
      * @return void
      */
     public function booted($callback);

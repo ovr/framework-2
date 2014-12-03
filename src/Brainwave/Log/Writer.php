@@ -18,12 +18,12 @@ namespace Brainwave\Log;
  *
  */
 
-use \Monolog\Handler\StreamHandler;
-use \Monolog\Logger as MonologLogger;
-use \Monolog\Handler\ErrorLogHandler;
-use \Monolog\Handler\RotatingFileHandler;
-use \Brainwave\Contracts\Support\Jsonable as JsonableContract;
-use \Brainwave\Contracts\Support\Arrayable as ArrayableContract;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger as MonologLogger;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Brainwave\Contracts\Support\Jsonable as JsonableContract;
+use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 
 /**
  * Writer
@@ -55,7 +55,7 @@ class Writer
         'error'     => MonologLogger::ERROR,
         'critical'  => MonologLogger::CRITICAL,
         'alert'     => MonologLogger::ALERT,
-        'emergency' => MonologLogger::EMERGENCY
+        'emergency' => MonologLogger::EMERGENCY,
     ];
 
     /**
@@ -76,7 +76,7 @@ class Writer
         'ZendMonitor'   => '\Monolog\Handler\ZendMonitorHandler',
         'NewRelic'      => '\Monolog\Handler\NewRelicHandler',
         'Loggly'        => '\Monolog\Handler\LogglyHandler',
-        'SyslogUdp'     => '\Monolog\Handler\SyslogUdpHandler'
+        'SyslogUdp'     => '\Monolog\Handler\SyslogUdpHandler',
     ];
 
     /**
@@ -94,7 +94,7 @@ class Writer
         'Chrome'     => '\Monolog\Formatter\ChromePHPFormatter',
         'Gelf'       => '\Monolog\Formatter\GelfFormatter',
         'Logstash'   => '\Monolog\Formatter\LogstashFormatter',
-        'Elastica'   => '\Monolog\Formatter\ElasticaFormatter'
+        'Elastica'   => '\Monolog\Formatter\ElasticaFormatter',
     ];
 
     /**
@@ -112,7 +112,7 @@ class Writer
     /**
      * Create a new log writer instance.
      *
-     * @param  \Monolog\Logger $monolog
+     * @param \Monolog\Logger $monolog
      *
      * @return void
      */
@@ -141,8 +141,8 @@ class Writer
     /**
      * Register a file log handler.
      *
-     * @param  string $path
-     * @param  string $level
+     * @param string $path
+     * @param string $level
      *
      * @return void
      */
@@ -164,8 +164,8 @@ class Writer
     /**
      * Register a file log handler.
      *
-     * @param  string $path
-     * @param  string $level
+     * @param string $path
+     * @param string $level
      *
      * @return void
      */
@@ -181,9 +181,9 @@ class Writer
     /**
      * Register a daily file log handler.
      *
-     * @param  string $path
-     * @param  int    $days
-     * @param  string $level
+     * @param string $path
+     * @param int    $days
+     * @param string $level
      *
      * @return void
      */
@@ -205,8 +205,8 @@ class Writer
     /**
      * Register an error_log handler.
      *
-     * @param  string  $level
-     * @param  integer $messageType
+     * @param string  $level
+     * @param integer $messageType
      *
      * @return void
      */
@@ -246,7 +246,7 @@ class Writer
     /**
      * Parse the string level into a Monolog constant.
      *
-     * @param  string $level
+     * @param string $level
      *
      * @return int
      *
@@ -264,8 +264,8 @@ class Writer
     /**
      * Parse the formatter into a Monolog constant.
      *
-     * @param  string $formatter
-     * @param  string $formatterInput
+     * @param string $formatter
+     * @param string $formatterInput
      *
      * @return \Monolog\Formatter\FormatterInterface
      *
@@ -283,10 +283,10 @@ class Writer
     /**
      * Parse the handler into a Monolog constant.
      *
-     * @param  string $handler
-     * @param  string $path
-     * @param  string $level
-     * @param  string $formatter
+     * @param string $handler
+     * @param string $path
+     * @param string $level
+     * @param string $formatter
      *
      * @return boolean|null
      *
@@ -299,7 +299,6 @@ class Writer
         }
 
         if (isset($this->handler[$handler])) {
-
             $customHandler = new $this->handler[$handler]($path, $level);
 
             if (!empty($formatter)) {
@@ -307,7 +306,6 @@ class Writer
             }
 
             return $this->monolog->pushHandler($customHandler);
-
         }
 
         throw new \InvalidArgumentException("Invalid handler.");
@@ -316,9 +314,9 @@ class Writer
     /**
      * Check if handler is a Socket Handler
      *
-     * @param  string $handler
-     * @param  string $path
-     * @param  string $level
+     * @param string $handler
+     * @param string $path
+     * @param string $level
      *
      * @return boolean|null
      */
@@ -333,15 +331,14 @@ class Writer
     /**
      * AddRecord to monolog
      *
-     * @param  string $level monolog log level
-     * @param  string $value log text
+     * @param string $level monolog log level
+     * @param string $value log text
      *
      * @throws \InvalidArgumentException
      */
     public function addRecord($level, $value)
     {
-        switch ($level)
-        {
+        switch ($level) {
             case 'debug':
                 return $this->monolog->addDebug($value);
 
@@ -398,8 +395,8 @@ class Writer
     /**
      * Dynamically handle error additions.
      *
-     * @param  string $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array  $parameters
      *
      * @return mixed
      *
@@ -408,7 +405,6 @@ class Writer
     public function __call($method, $parameters)
     {
         if (in_array($method, $this->levels)) {
-
             $this->formatParameters($parameters);
 
             $method = 'add'.ucfirst($method);
@@ -422,7 +418,7 @@ class Writer
     /**
      * Format the parameters for the logger.
      *
-     * @param  mixed $parameters
+     * @param mixed $parameters
      *
      * @return void
      */

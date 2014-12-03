@@ -18,7 +18,7 @@ namespace Brainwave\Database\Grammar;
  *
  */
 
-use \Brainwave\Database\Grammar\Expression;
+use Brainwave\Database\Grammar\Expression;
 
 /**
  * Builder
@@ -95,7 +95,7 @@ class Builder
     /**
      * Create a new builder instance.
      *
-     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface $connection
      * @return void
      */
     public function __construct(ConnectionInterface $connection)
@@ -117,7 +117,7 @@ class Builder
     /**
      * Determine if the given value is a raw expression.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return bool
      */
     public function isExpression($value)
@@ -138,7 +138,7 @@ class Builder
     /**
      * Wrap a single string in keyword identifiers.
      *
-     * @param  string  $value
+     * @param  string $value
      * @return string
      */
     public function wrapValue($value)
@@ -164,7 +164,7 @@ class Builder
     /**
      * Wrap a array value
      *
-     * @param  array $array
+     * @param  array  $array
      * @return string
      */
     public function wrapArray(array $array)
@@ -226,7 +226,7 @@ class Builder
                 } else {
                     array_push(
                         $stack,
-                        $this->wrapColumn($match[1]) . ' AS ' . $this->wrapColumn($match[2])
+                        $this->wrapColumn($match[1]).' AS '.$this->wrapColumn($match[2])
                     );
                 }
             } else {
@@ -299,7 +299,7 @@ class Builder
     /**
      * Set the grammar's table prefix.
      *
-     * @param  string  $prefix
+     * @param  string $prefix
      * @return $this
      */
     public function setTablePrefix($prefix)

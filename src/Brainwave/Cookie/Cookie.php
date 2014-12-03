@@ -18,9 +18,9 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Contracts\Cookie\Factory as FactoryContract;
-use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Pimple\Container;
+use Brainwave\Contracts\Cookie\Factory as FactoryContract;
+use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 
 /**
  * Cookie
@@ -47,16 +47,16 @@ class Cookie implements FactoryContract
     /**
      * Create HTTP cookie to be sent with the HTTP response
      *
-     * @param  string     $name     The cookie name
-     * @param  string     $value    The cookie value
-     * @param  int|string $time     The duration of the cookie;
-     *                              If integer, should be UNIX timestamp;
-     *                              If string, converted to UNIX timestamp with `strtotime`;
-     * @param  string     $path     The path on the server in which the cookie will be available on
-     * @param  string     $domain   The domain that the cookie is available to
-     * @param  bool       $secure   Indicates that the cookie should only be transmitted over a secure
-     *                              HTTPS connection to/from the client
-     * @param  bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param string     $name     The cookie name
+     * @param string     $value    The cookie value
+     * @param int|string $time     The duration of the cookie;
+     *                             If integer, should be UNIX timestamp;
+     *                             If string, converted to UNIX timestamp with `strtotime`;
+     * @param string     $path     The path on the server in which the cookie will be available on
+     * @param string     $domain   The domain that the cookie is available to
+     * @param bool       $secure   Indicates that the cookie should only be transmitted over a secure
+     *                             HTTPS connection to/from the client
+     * @param bool       $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      */
     public function make(
         $name,
@@ -73,7 +73,7 @@ class Cookie implements FactoryContract
             'path' => ($path === null) ? $this->container['settings']['cookies::path'] : $path,
             'domain' => ($domain === null) ? $this->container['settings']['cookies::domain'] : $domain,
             'secure' => ($secure === null) ? $this->container['settings']['cookies::secure'] : $secure,
-            'httponly' => ($httponly === null) ? $this->container['settings']['cookies::httponly'] : $httponly
+            'httponly' => ($httponly === null) ? $this->container['settings']['cookies::httponly'] : $httponly,
         ];
 
         $this->container['response']->setCookie($name, $settings);
@@ -82,12 +82,12 @@ class Cookie implements FactoryContract
     /**
      * Create a cookie that lasts "forever" (five years).
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  string  $path
-     * @param  string  $domain
-     * @param  bool    $secure
-     * @param  bool    $httpOnly
+     * @param string $name
+     * @param string $value
+     * @param string $path
+     * @param string $domain
+     * @param bool   $secure
+     * @param bool   $httpOnly
      */
     public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true)
     {
@@ -101,7 +101,7 @@ class Cookie implements FactoryContract
      * or return NULL if cookie does not exist. Cookies created during
      * the current request will not be available until the next request.
      *
-     * @param  string $name The cookie name
+     * @param string $name The cookie name
      *
      * @return string|null
      */
@@ -113,7 +113,7 @@ class Cookie implements FactoryContract
     /**
      * Does this request have a given cookie?
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return bool
      */
@@ -141,12 +141,12 @@ class Cookie implements FactoryContract
      * removed. If any of this method's arguments are omitted or set to NULL, the
      * default Cookie setting values (set during Brainwave::init) will be used instead.
      *
-     * @param  string $name     The cookie name
-     * @param  string $path     The path on the server in which the cookie will be available on
-     * @param  string $domain   The domain that the cookie is available to
-     * @param  bool   $secure   Indicates that the cookie should only be transmitted over a secure
-     *                          HTTPS connection from the client
-     * @param  bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
+     * @param string $name     The cookie name
+     * @param string $path     The path on the server in which the cookie will be available on
+     * @param string $domain   The domain that the cookie is available to
+     * @param bool   $secure   Indicates that the cookie should only be transmitted over a secure
+     *                         HTTPS connection from the client
+     * @param bool   $httponly When TRUE the cookie will be made accessible only through the HTTP protocol
      */
     public function forget(
         $name,
@@ -159,7 +159,7 @@ class Cookie implements FactoryContract
             'domain'   => is_null($domain) ? $this->container['settings']['cookies::domain'] : $domain,
             'path'     => is_null($path) ? $this->container['settings']['cookies::path'] : $path,
             'secure'   => is_null($secure) ? $this->container['settings']['cookies::secure'] : $secure,
-            'httponly' => is_null($httponly) ? $this->container['settings']['cookies::httponly'] : $httponly
+            'httponly' => is_null($httponly) ? $this->container['settings']['cookies::httponly'] : $httponly,
         ];
         $this->container['response']->removeCookie($name, $settings);
     }

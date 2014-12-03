@@ -18,7 +18,7 @@ namespace Brainwave\Crypter\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Crypt
@@ -28,7 +28,7 @@ use \Brainwave\Application\StaticalProxyManager;
  * @since   0.9.4-dev
  *
  */
-class Crypt extends StaticalProxyManager
+class Hash extends StaticalProxyManager
 {
     protected static function getFacadeAccessor()
     {

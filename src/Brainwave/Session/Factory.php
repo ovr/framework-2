@@ -18,8 +18,8 @@ namespace Brainwave\Session;
  *
  */
 
-use \Brainwave\Session\Manager as Session;
-use \Brainwave\Contracts\Session\Factory as FactoryContract;
+use Brainwave\Session\Manager as Session;
+use Brainwave\Contracts\Session\Factory as FactoryContract;
 
 /**
  * Factory
@@ -67,6 +67,7 @@ class Factory implements FactoryContract
     public function get($key, $alt = null)
     {
         $this->resumeSession();
+
         return isset($_SESSION[$this->name][$key])
             ? $_SESSION[$this->name][$key]
             : $alt;
@@ -76,7 +77,7 @@ class Factory implements FactoryContract
      * Sets the value of a key in the segment.
      *
      * @param string $key The key to set.
-     * @param mixed $val The value to set it to.
+     * @param mixed  $val The value to set it to.
      */
     public function set($key, $val)
     {
@@ -100,7 +101,7 @@ class Factory implements FactoryContract
      * Sets a flash value for the *next* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $val The flash value itself.
+     * @param mixed  $val The flash value itself.
      */
     public function setFlash($key, $val)
     {
@@ -118,6 +119,7 @@ class Factory implements FactoryContract
     public function getFlash($key, $alt = null)
     {
         $this->resumeSession();
+
         return isset($_SESSION[Session::FLASH_NOW][$this->name][$key])
             ? $_SESSION[Session::FLASH_NOW][$this->name][$key]
             : $alt;
@@ -145,6 +147,7 @@ class Factory implements FactoryContract
     public function getFlashNext($key, $alt = null)
     {
         $this->resumeSession();
+
         return isset($_SESSION[Session::FLASH_NEXT][$this->name][$key])
             ? $_SESSION[Session::FLASH_NEXT][$this->name][$key]
             : $alt;
@@ -217,6 +220,7 @@ class Factory implements FactoryContract
 
         if ($this->session->isStarted() || $this->session->resume()) {
             $this->load();
+
             return true;
         }
 

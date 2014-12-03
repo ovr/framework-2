@@ -18,9 +18,9 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Yosymfony\Toml\Toml as TomlParser;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Yosymfony\Toml\Toml as TomlParser;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Toml
@@ -42,7 +42,7 @@ class Toml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -54,8 +54,8 @@ class Toml implements ParserContract
     /**
      * Loads a TOML file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array|null
      */
@@ -81,13 +81,13 @@ class Toml implements ParserContract
             return $data;
         }
 
-        return null;
+        return;
     }
 
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -99,7 +99,7 @@ class Toml implements ParserContract
     /**
      * Format a toml file for saving. [NOT IMPLEMENTED]
      *
-     * @param  array $data data
+     * @param array $data data
      *
      * @return string data export
      */

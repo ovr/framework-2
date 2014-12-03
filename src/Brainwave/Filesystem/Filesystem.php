@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use \FilesystemIterator;
-use \Brainwave\Filesystem\Exception\FileNotFoundException;
+use FilesystemIterator;
+use Brainwave\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Filesystem
@@ -34,7 +34,7 @@ class Filesystem
     /**
      * Determine if a file exists.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return bool
      */
@@ -46,7 +46,7 @@ class Filesystem
     /**
      * Get the contents of a file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      *
@@ -64,7 +64,7 @@ class Filesystem
     /**
      * Get the returned value of a file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return mixed
      *
@@ -82,7 +82,7 @@ class Filesystem
     /**
      * Require the given file once.
      *
-     * @param  string $file
+     * @param string $file
      *
      * @return mixed
      */
@@ -94,8 +94,8 @@ class Filesystem
     /**
      * Write the contents of a file.
      *
-     * @param  string $path
-     * @param  string $contents
+     * @param string $path
+     * @param string $contents
      *
      * @return integer
      */
@@ -107,8 +107,8 @@ class Filesystem
     /**
      * Prepend to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return int
      */
@@ -124,8 +124,8 @@ class Filesystem
     /**
      * Append to a file.
      *
-     * @param  string $path
-     * @param  string $data
+     * @param string $path
+     * @param string $data
      *
      * @return int
      */
@@ -137,7 +137,7 @@ class Filesystem
     /**
      * Delete the file at a given path.
      *
-     * @param  string|array $paths
+     * @param string|array $paths
      *
      * @return bool
      */
@@ -159,8 +159,8 @@ class Filesystem
     /**
      * Move a file to a new location.
      *
-     * @param  string $path
-     * @param  string $target
+     * @param string $path
+     * @param string $target
      *
      * @return bool
      */
@@ -172,8 +172,8 @@ class Filesystem
     /**
      * Copy a file to a new location.
      *
-     * @param  string $path
-     * @param  string $target
+     * @param string $path
+     * @param string $target
      *
      * @return bool
      */
@@ -185,7 +185,7 @@ class Filesystem
     /**
      * Extract the file extension from a file path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -197,7 +197,7 @@ class Filesystem
     /**
      * Get the file type of a given file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -209,7 +209,7 @@ class Filesystem
     /**
      * Get the file size of a given file.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return int
      */
@@ -221,7 +221,7 @@ class Filesystem
     /**
      * Get the file's last modification time.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return int
      */
@@ -233,7 +233,7 @@ class Filesystem
     /**
      * Determine if the given path is a directory.
      *
-     * @param  string $directory
+     * @param string $directory
      *
      * @return bool
      */
@@ -245,7 +245,7 @@ class Filesystem
     /**
      * Determine if the given path is writable.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return bool
      */
@@ -257,7 +257,7 @@ class Filesystem
     /**
      * Determine if the given path is a file.
      *
-     * @param  string $file
+     * @param string $file
      *
      * @return bool
      */
@@ -269,8 +269,8 @@ class Filesystem
     /**
      * Find path names matching a given pattern.
      *
-     * @param  string $pattern
-     * @param  int    $flags
+     * @param string $pattern
+     * @param int    $flags
      *
      * @return array
      */
@@ -282,7 +282,7 @@ class Filesystem
     /**
      * Get an array of all files in a directory.
      *
-     * @param  string $directory
+     * @param string $directory
      *
      * @return array
      */
@@ -305,10 +305,10 @@ class Filesystem
     /**
      * Create a directory.
      *
-     * @param  string $path
-     * @param  int    $mode
-     * @param  bool   $recursive
-     * @param  bool   $force
+     * @param string $path
+     * @param int    $mode
+     * @param bool   $recursive
+     * @param bool   $force
      *
      * @return bool
      */
@@ -324,9 +324,9 @@ class Filesystem
     /**
      * Copy a directory from one location to another.
      *
-     * @param  string $directory
-     * @param  string $destination
-     * @param  int    $options
+     * @param string $directory
+     * @param string $destination
+     * @param int    $options
      *
      * @return bool
      */
@@ -378,8 +378,8 @@ class Filesystem
      *
      * The directory itself may be optionally preserved.
      *
-     * @param  string $directory
-     * @param  bool   $preserve
+     * @param string $directory
+     * @param bool   $preserve
      *
      * @return bool
      */
@@ -416,7 +416,7 @@ class Filesystem
     /**
      * Empty the specified directory of all files and folders.
      *
-     * @param  string $directory
+     * @param string $directory
      *
      * @return bool
      */

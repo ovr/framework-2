@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Exception\HttpException;
+use Brainwave\Http\Exception\HttpException;
 
 /**
  * ForbiddenException

@@ -28,5 +28,4 @@ namespace Brainwave\Contracts\Encrypter;
  */
 class DecryptException extends \RuntimeException
 {
-
 }

@@ -28,5 +28,4 @@ namespace Brainwave\Contracts\Exception;
  */
 class FatalErrorException extends \ErrorException
 {
-
 }

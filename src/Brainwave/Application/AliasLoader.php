@@ -52,7 +52,7 @@ class AliasLoader
     /**
      * Create a new AliasLoader instance.
      *
-     * @param  array  $aliases
+     * @param array $aliases
      */
     public function __construct(array $aliases = [])
     {
@@ -62,7 +62,7 @@ class AliasLoader
     /**
      * Get or create the singleton alias loader instance.
      *
-     * @param  array  $aliases
+     * @param  array                              $aliases
      * @return \Brainwave\Application\AliasLoader
      */
     public static function getInstance(array $aliases = array())
@@ -81,7 +81,7 @@ class AliasLoader
     /**
      * Load a class alias if it is registered.
      *
-     * @param  string  $alias
+     * @param string $alias
      *
      * @return boolean|null
      */
@@ -91,14 +91,14 @@ class AliasLoader
             return class_alias($this->aliases[$alias], $alias);
         }
 
-        return null;
+        return;
     }
 
     /**
      * Add an alias to the loader.
      *
-     * @param  string  $class
-     * @param  string  $alias
+     * @param  string $class
+     * @param  string $alias
      * @return void
      */
     public function alias($class, $alias)
@@ -143,7 +143,7 @@ class AliasLoader
     /**
      * Set the registered aliases.
      *
-     * @param  array  $aliases
+     * @param  array $aliases
      * @return void
      */
     public function setAliases(array $aliases)
@@ -164,7 +164,7 @@ class AliasLoader
     /**
      * Set the "registered" state of the loader.
      *
-     * @param  bool  $value
+     * @param  bool $value
      * @return void
      */
     public function setRegistered($value)
@@ -175,7 +175,7 @@ class AliasLoader
     /**
      * Set the value of the singleton alias loader.
      *
-     * @param  \Brainwave\Application\AliasLoader  $loader
+     * @param  \Brainwave\Application\AliasLoader $loader
      * @return void
      */
     public static function setInstance($loader)

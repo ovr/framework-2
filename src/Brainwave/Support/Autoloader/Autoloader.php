@@ -55,6 +55,7 @@ class Autoloader
         foreach (self::getDirectories() as $directory) {
             if (file_exists($path = $directory.DIRECTORY_SEPARATOR.$class)) {
                 require_once $path;
+
                 return true;
             }
         }
@@ -65,7 +66,7 @@ class Autoloader
     /**
      * Get the normal file name for a class.
      *
-     * @param  string  $class
+     * @param  string $class
      * @return string
      */
     public static function normalizeClass($class)
@@ -94,7 +95,7 @@ class Autoloader
     /**
      * Add directories to the class loader.
      *
-     * @param  string|array  $directories
+     * @param  string|array $directories
      * @return void
      */
     public static function addDirectories($directories)
@@ -105,7 +106,7 @@ class Autoloader
     /**
      * Remove directories from the class loader.
      *
-     * @param  string|array  $directories
+     * @param  string|array $directories
      * @return void
      */
     public static function removeDirectories($directories = null)

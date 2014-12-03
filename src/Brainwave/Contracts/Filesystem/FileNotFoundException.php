@@ -28,5 +28,4 @@ namespace Brainwave\Contracts\Filesystem;
  */
 class FileNotFoundException extends \Exception
 {
-
 }

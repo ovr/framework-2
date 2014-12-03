@@ -32,7 +32,7 @@ interface Repository extends \ArrayAccess
      * Set an array of configuration options
      * Merge provided values with the defaults to ensure all required values are set
      *
-     * @param array $values
+     * @param  array $values
      * @required
      * @return void
      */

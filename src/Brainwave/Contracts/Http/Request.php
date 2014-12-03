@@ -18,7 +18,6 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
-use \GuzzleHttp\Stream\StreamInterface;
 
 /**
  * Request

@@ -18,7 +18,7 @@ namespace Brainwave\Cookie;
  *
  */
 
-use \Brainwave\Cookie\CookieJar;
+use Brainwave\Cookie\CookieJar;
 
 /**
  * FileCookieJar
@@ -42,7 +42,7 @@ class FileCookieJar extends CookieJar
     /**
      * Create a new FileCookieJar object
      *
-     * @param  string $cookieFile File to store the cookie data
+     * @param string $cookieFile File to store the cookie data
      *
      * @throws RuntimeException if the file cannot be found or created
      */
@@ -66,7 +66,7 @@ class FileCookieJar extends CookieJar
     /**
      * Save the contents of the data array to the file
      *
-     * @param string $filename File to save
+     * @param  string           $filename File to save
      * @throws RuntimeException if the file cannot be found or created
      */
     protected function save($filename)
@@ -79,7 +79,7 @@ class FileCookieJar extends CookieJar
         }
 
         if (false === file_put_contents($filename, json_encode($json))) {
-            throw new \RuntimeException('Unable to open file ' . $filename);
+            throw new \RuntimeException('Unable to open file '.$filename);
         }
     }
 
@@ -96,7 +96,7 @@ class FileCookieJar extends CookieJar
         $json = file_get_contents($this->filename);
 
         if (false === $json) {
-            throw new \RuntimeException('Unable to open file ' . $this->filename);
+            throw new \RuntimeException('Unable to open file '.$this->filename);
         }
 
         $this->unserialize($json);

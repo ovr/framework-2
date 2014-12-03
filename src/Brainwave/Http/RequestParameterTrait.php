@@ -31,7 +31,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from $_GET
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -47,7 +47,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from $_POST
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -63,7 +63,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from $_SERVER
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -79,7 +79,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from $_FILES
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -95,7 +95,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from $_COOKIE
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -111,7 +111,7 @@ trait RequestParameterTrait
     /**
      * Return array or single key from headers taken from $_SERVER
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */

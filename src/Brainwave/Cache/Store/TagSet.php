@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use \Brainwave\Contracts\Cache\Adapter;
+use Brainwave\Contracts\Cache\Adapter;
 
 /**
  * TagSet
@@ -47,8 +47,8 @@ class TagSet
     /**
      * Create a new TagSet instance.
      *
-     * @param  \Brainwave\Contracts\Cache\Adapter $store
-     * @param  array                              $names
+     * @param \Brainwave\Contracts\Cache\Adapter $store
+     * @param array                              $names
      *
      * @return TagSet
      */
@@ -71,7 +71,7 @@ class TagSet
     /**
      * Get the unique tag identifier for a given tag.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
      */
@@ -103,7 +103,7 @@ class TagSet
     /**
      * Reset the tag and return the new tag identifier
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
      */
@@ -117,7 +117,7 @@ class TagSet
     /**
      * Get the tag identifier key for a given tag.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
      */

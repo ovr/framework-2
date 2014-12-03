@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\JsonResponse;
+use Brainwave\Http\JsonResponse;
 
 /**
  * HttpException
@@ -85,7 +85,7 @@ class HttpException extends \Exception implements Exception\HttpExceptionInterfa
     {
         $body = [
             'status_code' => $this->getStatusCode(),
-            'message'     => $this->getMessage()
+            'message'     => $this->getMessage(),
         ];
 
         return new JsonResponse($body, $this->getStatusCode(), $this->getHeaders());

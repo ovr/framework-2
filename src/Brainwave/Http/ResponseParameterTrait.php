@@ -31,7 +31,7 @@ trait ResponseParameterTrait
     /**
      * Return array or single key from $_COOKIE
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -47,7 +47,7 @@ trait ResponseParameterTrait
     /**
      * Return array or single key from headers taken from $_SERVER
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */

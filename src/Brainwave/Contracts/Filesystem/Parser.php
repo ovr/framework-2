@@ -31,8 +31,8 @@ interface Parser
     /**
      * Loads a file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array|null
      */
@@ -41,7 +41,7 @@ interface Parser
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -50,7 +50,7 @@ interface Parser
     /**
      * Format a data file for saving.
      *
-     * @param  array $data data
+     * @param array $data data
      *
      * @return string|false data export
      */

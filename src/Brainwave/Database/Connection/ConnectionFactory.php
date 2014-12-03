@@ -18,18 +18,18 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Arr;
-use \Brainwave\Database\Connection\Connection;
-use \Brainwave\Database\Connectors\MSSQLConnector;
-use \Brainwave\Database\Connectors\MySqlConnector;
-use \Brainwave\Database\Connectors\OracleConnector;
-use \Brainwave\Database\Connectors\SQLiteConnector;
-use \Brainwave\Database\Connectors\SybaseConnector;
-use \Brainwave\Database\Connectors\MariaDBConnector;
-use \Brainwave\Database\Connectors\SqlServerConnector;
-use \Brainwave\Database\Connectors\PostgreSQLConnector;
-use \Brainwave\Database\Connectors\GoogleCloudConnector;
+use Pimple\Container;
+use Brainwave\Support\Arr;
+use Brainwave\Database\Connection\Connection;
+use Brainwave\Database\Connectors\MSSQLConnector;
+use Brainwave\Database\Connectors\MySqlConnector;
+use Brainwave\Database\Connectors\OracleConnector;
+use Brainwave\Database\Connectors\SQLiteConnector;
+use Brainwave\Database\Connectors\SybaseConnector;
+use Brainwave\Database\Connectors\MariaDBConnector;
+use Brainwave\Database\Connectors\SqlServerConnector;
+use Brainwave\Database\Connectors\PostgreSQLConnector;
+use Brainwave\Database\Connectors\GoogleCloudConnector;
 
 /**
  * ConnectionFactory
@@ -41,7 +41,7 @@ use \Brainwave\Database\Connectors\GoogleCloudConnector;
  */
 class ConnectionFactory
 {
-   /**
+    /**
      * The container instance.
      *
      * @var \Pimple\Container
@@ -51,7 +51,7 @@ class ConnectionFactory
     /**
      * Create a new connection factory instance.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -63,8 +63,8 @@ class ConnectionFactory
     /**
      * Establish a PDO connection based on the configuration.
      *
-     * @param  array  $config
-     * @param  string $name
+     * @param array  $config
+     * @param string $name
      *
      * @return Connection
      */
@@ -78,8 +78,8 @@ class ConnectionFactory
     /**
      * Parse and prepare the database configuration.
      *
-     * @param  array  $config
-     * @param  string $name
+     * @param array  $config
+     * @param string $name
      *
      * @return array
      */
@@ -91,7 +91,7 @@ class ConnectionFactory
     /**
      * Create a single database connection instance.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return Connection
      */
@@ -110,7 +110,7 @@ class ConnectionFactory
     /**
      * Create a connector instance based on the configuration.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \Brainwave\Database\Connectors\Interfaces\ConnectorInterface
      *
@@ -122,8 +122,7 @@ class ConnectionFactory
             throw new \InvalidArgumentException("A driver must be specified.");
         }
 
-        switch ($config['driver'])
-        {
+        switch ($config['driver']) {
             case 'mysql':
                 $connector = new MySqlConnector();
                 break;
@@ -165,10 +164,10 @@ class ConnectionFactory
     /**
      * Create a new connection instance.
      *
-     * @param  \PDO    $connection
-     * @param  string  $database
-     * @param  string  $prefix
-     * @param  array   $config
+     * @param \PDO   $connection
+     * @param string $database
+     * @param string $prefix
+     * @param array  $config
      *
      * @return Connection
      *

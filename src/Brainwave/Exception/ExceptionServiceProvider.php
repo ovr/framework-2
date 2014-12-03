@@ -18,15 +18,15 @@ namespace Brainwave\Exception;
  *
  */
 
-use \Whoops\Run;
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Whoops\Handler\PlainTextHandler;
-use \Whoops\Handler\PrettyPageHandler;
-use \Whoops\Handler\JsonResponseHandler;
-use \Brainwave\Exception\Adapter\PlainDisplayer;
-use \Brainwave\Exception\Handler as ExceptionHandler;
-use \Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
+use Whoops\Run;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Whoops\Handler\PlainTextHandler;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Handler\JsonResponseHandler;
+use Brainwave\Exception\Adapter\PlainDisplayer;
+use Brainwave\Exception\Handler as ExceptionHandler;
+use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
 
 /**
  * ExceptionServiceProvider
@@ -139,7 +139,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     {
         if ($this->shouldReturnJson($container)) {
             $container['whoops.handler'] = function () {
-                return new JsonResponseHandler;
+                return new JsonResponseHandler();
             };
         } else {
             $this->registerPlainTextHandler($container);
@@ -227,7 +227,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
                 'URI'         => $request->getScriptName(),
                 'Request URI' => $request->getPathInfo(),
                 'Path'        => $request->getPath(),
-                'Query String'=> $request->params() ?: '<none>',
+                'Query String' => $request->params() ?: '<none>',
                 'HTTP Method' => $request->getMethod(),
                 'Script Name' => $request->getScriptName(),
                 'Scheme'      => $request->getScheme(),

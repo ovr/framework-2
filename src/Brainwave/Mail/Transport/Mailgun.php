@@ -18,11 +18,11 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use \Swift_Transport;
-use \GuzzleHttp\Client;
-use \Swift_Mime_Message;
-use \GuzzleHttp\Post\PostFile;
-use \Swift_Events_EventListener;
+use Swift_Transport;
+use GuzzleHttp\Client;
+use Swift_Mime_Message;
+use GuzzleHttp\Post\PostFile;
+use Swift_Events_EventListener;
 
 /**
  * Mailgun
@@ -58,8 +58,8 @@ class Mailgun implements Swift_Transport
     /**
      * Create a new Mailgun transport instance.
      *
-     * @param  string $key
-     * @param  string $domain
+     * @param string $key
+     * @param string $domain
      *
      * @return void
      */
@@ -97,8 +97,8 @@ class Mailgun implements Swift_Transport
     /**
      * Send Email
      *
-     * @param  \Swift_Mime_Message $message
-     * @param  string[]            $failedRecipients
+     * @param \Swift_Mime_Message $message
+     * @param string[]            $failedRecipients
      *
      * @return log
      */
@@ -126,7 +126,7 @@ class Mailgun implements Swift_Transport
     /**
      * Get the "to" payload field for the API request.
      *
-     * @param  \Swift_Mime_Message $message
+     * @param \Swift_Mime_Message $message
      *
      * @return string
      */
@@ -154,7 +154,7 @@ class Mailgun implements Swift_Transport
      */
     protected function getHttpClient()
     {
-        return new Client;
+        return new Client();
     }
 
     /**
@@ -170,7 +170,7 @@ class Mailgun implements Swift_Transport
     /**
      * Set the API key being used by the transport.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return string
      */
@@ -192,7 +192,7 @@ class Mailgun implements Swift_Transport
     /**
      * Set the domain being used by the transport.
      *
-     * @param  string $domain
+     * @param string $domain
      *
      * @return string
      */

@@ -18,7 +18,7 @@ namespace Brainwave\Http\JsonResponse;
  *
  */
 
-use \Brainwave\Http\JsonResponse;
+use Brainwave\Http\JsonResponse;
 
 /**
  * AcceptedJsonResponse

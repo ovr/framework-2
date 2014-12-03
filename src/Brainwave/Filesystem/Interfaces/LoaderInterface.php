@@ -31,10 +31,10 @@ interface LoaderInterface
     /**
      * Load the given configuration group.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param  string $file
+     * @param  string $namespace
+     * @param  string $environment
+     * @param  string $group
      * @return array
      */
     public function load($file, $group = null, $environment = null, $namespace = null);
@@ -42,10 +42,10 @@ interface LoaderInterface
     /**
      * Determine if the given file exists.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param  string     $file
+     * @param  string     $namespace
+     * @param  string     $environment
+     * @param  string     $group
      * @return bool|array
      */
     public function exists($file, $group = null, $environment = null, $namespace = null);
@@ -53,10 +53,10 @@ interface LoaderInterface
     /**
      * Apply any cascades to an array of package options.
      *
-     * @param  string  $env
-     * @param  string  $package
-     * @param  string  $group
-     * @param  array   $items
+     * @param  string $env
+     * @param  string $package
+     * @param  string $group
+     * @param  array  $items
      * @return array
      */
     public function cascadePackage($file, $package, $group, $env, $items, $namespace = 'packages');

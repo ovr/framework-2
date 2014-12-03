@@ -40,7 +40,7 @@ interface CustomStrategy
      *     - \Closure (controller is an anonymous function)
      *
      * @param  string|array|\Closure $controller
-     * @param  array                 $vars - named wildcard segments of the matched route
+     * @param  array                 $vars       - named wildcard segments of the matched route
      * @return mixed
      */
     public function dispatch($controller, array $vars);

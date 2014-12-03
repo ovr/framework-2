@@ -18,8 +18,8 @@ namespace Brainwave\Database\Exception;
  *
  */
 
-use \PDOException;
-use \Brainwave\Support\Helpers;
+use PDOException;
+use Brainwave\Support\Helpers;
 
 /**
  * ConnectException
@@ -55,8 +55,8 @@ class ConnectException extends PDOException
     /**
      * Create a new query exception instance.
      *
-     * @param  string  $sql
-     * @param  array  $bindings
+     * @param  string     $sql
+     * @param  array      $bindings
      * @param  \Exception $previous
      * @return void
      */
@@ -78,8 +78,8 @@ class ConnectException extends PDOException
     /**
      * Format the SQL error message.
      *
-     * @param  string  $sql
-     * @param  array  $bindings
+     * @param  string     $sql
+     * @param  array      $bindings
      * @param  \Exception $previous
      * @return string
      */

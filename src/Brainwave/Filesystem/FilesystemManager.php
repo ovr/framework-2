@@ -18,11 +18,11 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use \Pimple\Container;
-use \League\Flysystem\FilesystemInterface;
-use \League\Flysystem\Filesystem as Flysystem;
-use \Brainwave\Filesystem\Adapters\ConnectionFactory;
-use \Brainwave\Contracts\FilesystemManager as Manager;
+use Pimple\Container;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem as Flysystem;
+use Brainwave\Filesystem\Adapters\ConnectionFactory;
+use Brainwave\Contracts\FilesystemManager as Manager;
 
 /**
  * FilesystemManager
@@ -58,8 +58,8 @@ class FilesystemManager implements Manager
     /**
      * Create a new filesystem manager instance.
      *
-     * @param  \Pimple\Container                                $container
-     * @param  \Brainwave\Filesystem\Adapters\ConnectionFactory $factory
+     * @param \Pimple\Container                                $container
+     * @param \Brainwave\Filesystem\Adapters\ConnectionFactory $factory
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class FilesystemManager implements Manager
     /**
      * Get an OAuth provider implementation.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
@@ -86,7 +86,7 @@ class FilesystemManager implements Manager
     /**
      * Attempt to get the disk from the local cache.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return \Brainwave\Filesystem\Interfaces\FilesystemInterface
      */
@@ -98,7 +98,7 @@ class FilesystemManager implements Manager
     /**
      * Resolve the given disk.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return FilesystemAdapter
      */
@@ -112,7 +112,7 @@ class FilesystemManager implements Manager
     /**
      * Adapt the filesystem implementation.
      *
-     * @param  \League\Flysystem\FilesystemInterface $filesystem
+     * @param \League\Flysystem\FilesystemInterface $filesystem
      *
      * @return \Brainwave\Contracts\Filesystem\Filesystem
      */
@@ -124,7 +124,7 @@ class FilesystemManager implements Manager
     /**
      * Get the filesystem connection configuration.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return array
      */

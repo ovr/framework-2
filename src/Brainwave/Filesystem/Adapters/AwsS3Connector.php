@@ -18,9 +18,9 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use \Aws\S3\S3Client;
-use \League\Flysystem\Adapter\AwsS3;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use Aws\S3\S3Client;
+use League\Flysystem\Adapter\AwsS3;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * AwsS3Connector
@@ -35,7 +35,7 @@ class AwsS3Connector implements ConnectorContract
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\AwsS3
      */
@@ -51,7 +51,7 @@ class AwsS3Connector implements ConnectorContract
     /**
      * Get the authentication data.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return array
      *
@@ -81,7 +81,7 @@ class AwsS3Connector implements ConnectorContract
     /**
      * Get the awss3 client.
      *
-     * @param  array $auth
+     * @param array $auth
      *
      * @return \Aws\S3\S3Client
      */
@@ -114,8 +114,8 @@ class AwsS3Connector implements ConnectorContract
     /**
      * Get the awss3 adapter.
      *
-     * @param  \Aws\S3\S3Client $client
-     * @param  array            $config
+     * @param \Aws\S3\S3Client $client
+     * @param array            $config
      *
      * @return \League\Flysystem\Adapter\AwsS3
      */

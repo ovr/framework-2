@@ -31,8 +31,8 @@ interface Connection
     /**
      * Create a alias for tableprefix in query
      *
-     * @param  string $table table name
-     * @param  string $alias alias name
+     * @param string $table table name
+     * @param string $alias alias name
      *
      * @return bool
      */
@@ -41,7 +41,7 @@ interface Connection
     /**
      * Get alias for table
      *
-     * @param  string $table
+     * @param string $table
      *
      * @return string|array
      */
@@ -50,9 +50,9 @@ interface Connection
     /**
      * Run a SQL statement and log its execution context.
      *
-     * @param  string   $query
-     * @param  array    $bindings
-     * @param  \Closure $callback
+     * @param string   $query
+     * @param array    $bindings
+     * @param \Closure $callback
      *
      * @return mixed
      *
@@ -72,7 +72,7 @@ interface Connection
     /**
      * Execute a Closure within a transaction.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return mixed
      *
@@ -111,7 +111,7 @@ interface Connection
     /**
      * Set the PDO connection.
      *
-     * @param  \PDO|null $pdo
+     * @param \PDO|null $pdo
      *
      * @return $this
      */
@@ -134,7 +134,7 @@ interface Connection
     /**
      * Get an option from the configuration options.
      *
-     * @param  string $option
+     * @param string $option
      *
      * @return mixed
      */
@@ -150,7 +150,7 @@ interface Connection
     /**
      * Execute the given callback in "dry run" mode.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return array
      */
@@ -166,9 +166,9 @@ interface Connection
     /**
      * Log a query in the connection's query log.
      *
-     * @param  string  $query
-     * @param  array   $bindings
-     * @param  double  $time
+     * @param string $query
+     * @param array  $bindings
+     * @param double $time
      *
      * @return void
      */
@@ -219,7 +219,7 @@ interface Connection
     /**
      * Set the name of the connected database.
      *
-     * @param  string $database
+     * @param string $database
      *
      * @return string
      */
@@ -235,7 +235,7 @@ interface Connection
     /**
      * Set the table prefix in use by the connection.
      *
-     * @param  string $prefix
+     * @param string $prefix
      *
      * @return void
      */
@@ -251,7 +251,7 @@ interface Connection
     /**
      * Set the cache manager instance on the connection.
      *
-     * @param  \Brainwave\Cache\Manager|\Closure $cache
+     * @param \Brainwave\Cache\Manager|\Closure $cache
      *
      * @return void
      */

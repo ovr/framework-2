@@ -31,7 +31,7 @@ class Application
     /**
      * Create and boot a new Console application.
      *
-     * @param  \Brainwave\Application\Application $container
+     * @param \Brainwave\Application\Application $container
      *
      * @return \Brainwave\Console\Application
      */
@@ -43,14 +43,13 @@ class Application
     /**
      * Create a new Console application.
      *
-     * @param  \Brainwave\Application\Application $container
+     * @param \Brainwave\Application\Application $container
      *
      * @return \Brainwave\Console\Application
      */
     public static function make($container)
     {
         $container->boot();
-
     }
 
     protected static function registerCommandStartInfo($command)

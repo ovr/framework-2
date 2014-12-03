@@ -18,8 +18,8 @@ namespace Brainwave\Config;
  *
  */
 
-use \Brainwave\Support\Arr;
-use \Brainwave\Contracts\Config\Repository as RepositoryContract;
+use Brainwave\Support\Arr;
+use Brainwave\Contracts\Config\Repository as RepositoryContract;
 
 /**
  * Repository
@@ -119,6 +119,7 @@ class Repository implements RepositoryContract
     public function getKeys()
     {
         $flattened = Arr::flattenArray($this->values, $this->separator);
+
         return array_keys($flattened);
     }
 
@@ -136,8 +137,8 @@ class Repository implements RepositoryContract
     /**
      * Set nested array values based on a separated key
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
      * @return array
      */
     public function offsetSet($key, $value)
@@ -153,13 +154,13 @@ class Repository implements RepositoryContract
      */
     public function offsetExists($key)
     {
-        return (bool)$this->getValue($key, $this->values);
+        return (bool) $this->getValue($key, $this->values);
     }
 
     /**
      * Remove nested array value based on a separated key
      *
-     * @param  string  $key
+     * @param string $key
      */
     public function offsetUnset($key)
     {
@@ -173,7 +174,7 @@ class Repository implements RepositoryContract
                 return;
             }
 
-            $array =& $array[$key];
+            $array = & $array[$key];
         }
 
         unset($array[array_shift($keys)]);
@@ -182,8 +183,8 @@ class Repository implements RepositoryContract
     /**
      * Parse a separated key and cache the result
      *
-     * @param  string $key
-     * @param  string $separator
+     * @param string $key
+     * @param string $separator
      *
      * @return array
      */
@@ -218,9 +219,9 @@ class Repository implements RepositoryContract
     /**
      * Set nested array values based on a separated key
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  array   $array
+     * @param  string $key
+     * @param  mixed  $value
+     * @param  array  $array
      * @return array
      */
     protected function setValue($key, $value, array &$array = [])
@@ -235,6 +236,7 @@ class Repository implements RepositoryContract
         }
 
         $pointer = $value;
+
         return $array;
     }
 

@@ -18,8 +18,8 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
+use Pimple\Container;
+use Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Json
@@ -55,7 +55,7 @@ class Json implements EnginesContract
     /**
      * Construct
      *
-     * @param \Pimple\Container                                  $container
+     * @param \Pimple\Container                   $container
      * @param \Brainwave\View\ViewServiceProvider $factory
      */
     public function __construct(Container $container, ViewFactory $factory)
@@ -67,8 +67,8 @@ class Json implements EnginesContract
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array  $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
@@ -90,14 +90,14 @@ class Json implements EnginesContract
     /**
      * Get the evaluated contents of the view at the given status.
      *
-     * @param  integer $status
-     * @param  array   $data
+     * @param integer $status
+     * @param array   $data
      *
      * @return string
      */
     protected function evaluateStatus($status = 200, array $data = [], $option = 0)
     {
-        $container= $this->container;
+        $container = $this->container;
         $factory = $this->factory;
 
         //append error bool
@@ -112,7 +112,7 @@ class Json implements EnginesContract
             $data['msg'] = 'Invalid route';
         } elseif ($status == 500) {
             $data['status'] = 500;
-            $data['msg'] ='Empty response';
+            $data['msg'] = 'Empty response';
         } else {
             //append status code
             $data['status'] = $status;
@@ -160,7 +160,7 @@ class Json implements EnginesContract
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return void
      *

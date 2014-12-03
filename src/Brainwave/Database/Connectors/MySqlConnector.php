@@ -18,8 +18,8 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \Brainwave\Database\Connectors\Connectors;
-use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use Brainwave\Database\Connectors\Connectors;
+use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
  * MySqlConnector
@@ -34,7 +34,7 @@ class MySqlConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return \PDO
      */
     public function connect(array $config)
@@ -75,7 +75,7 @@ class MySqlConnector extends Connectors implements ConnectorInterface
      * Create a DSN string from a configuration. Chooses socket or host/port based on
      * the 'unix_socket' config value
      *
-     * @param  array   $config
+     * @param  array  $config
      * @return string
      */
     protected function getDsn(array $config)
@@ -86,7 +86,7 @@ class MySqlConnector extends Connectors implements ConnectorInterface
     /**
      * Determine if the given configuration array has a UNIX socket value.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return bool
      */
     protected function configHasSocket(array $config)

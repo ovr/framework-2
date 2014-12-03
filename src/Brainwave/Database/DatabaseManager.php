@@ -18,11 +18,11 @@ namespace Brainwave\Database;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Arr;
-use \Brainwave\Database\Connection\ConnectionFactory;
-use \Brainwave\Database\Connection\Interfaces\ConnectionInterface;
-use \Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
+use Pimple\Container;
+use Brainwave\Support\Arr;
+use Brainwave\Database\Connection\ConnectionFactory;
+use Brainwave\Database\Connection\Interfaces\ConnectionInterface;
+use Brainwave\Database\Connection\Interfaces\ConnectionResolverInterface;
 
 /**
  * DatabaseManager
@@ -65,8 +65,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Create a new database manager instance.
      *
-     * @param  \Pimple\Container  $container
-     * @param  \Brainwave\Database\Connection\ConnectionFactory  $factory
+     * @param  \Pimple\Container                                $container
+     * @param  \Brainwave\Database\Connection\ConnectionFactory $factory
      * @return void
      */
     public function __construct(Container $container, ConnectionFactory $factory)
@@ -78,7 +78,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
+     * @param  string                                    $name
      * @return \Brainwave\Database\Connection\Connection
      */
     public function connection($name = null)
@@ -98,7 +98,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database and remove from local cache.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function purge($name = null)
@@ -111,7 +111,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Disconnect from the given database.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function disconnect($name = null)
@@ -124,7 +124,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Reconnect to the given database.
      *
-     * @param  string  $name
+     * @param  string                                    $name
      * @return \Brainwave\Database\Connection\Connection
      */
     public function reconnect($name = null)
@@ -141,7 +141,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Refresh the PDO connections on a given connection.
      *
-     * @param  string  $name
+     * @param  string                                    $name
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function refreshPdoConnections($name)
@@ -154,7 +154,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Make the database connection instance.
      *
-     * @param  string  $name
+     * @param  string                                    $name
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function makeConnection($name)
@@ -183,7 +183,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Prepare the database connection instance.
      *
-     * @param  Connection\Connection  $connection
+     * @param  Connection\Connection                     $connection
      * @return \Brainwave\Database\Connection\Connection
      */
     protected function prepare(ConnectionInterface $connection)
@@ -212,7 +212,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Get the configuration for a connection.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return array
      *
      * @throws \InvalidArgumentException
@@ -246,7 +246,7 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Set the default connection name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setDefaultConnection($name)
@@ -257,8 +257,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Register an extension connection resolver.
      *
-     * @param  string    $name
-     * @param  callable  $resolver
+     * @param  string   $name
+     * @param  callable $resolver
      * @return void
      */
     public function extend($name, callable $resolver)
@@ -279,8 +279,8 @@ class DatabaseManager implements ConnectionResolverInterface
     /**
      * Dynamically pass methods to the default connection.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param  string $method
+     * @param  array  $parameters
      * @return mixed
      */
     public function __call($method, $parameters)

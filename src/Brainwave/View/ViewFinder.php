@@ -18,8 +18,8 @@ namespace Brainwave\View;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\View\Interfaces\ViewFinderInterface;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Contracts\View\Interfaces\ViewFinderInterface;
 
 /**
  * View
@@ -69,9 +69,9 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Create a new file view loader instance.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
-     * @param  array                            $paths
-     * @param  array                            $extensions
+     * @param \Brainwave\Filesystem\Filesystem $files
+     * @param array                            $paths
+     * @param array                            $extensions
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Get the fully qualified location of the view.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
      */
@@ -108,7 +108,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Get the path to a template with a named path.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return string
      */
@@ -122,7 +122,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Get the segments of a template with a named path.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return array
      *
@@ -146,8 +146,8 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Find the given view in the list of paths.
      *
-     * @param  string $name
-     * @param  array  $paths
+     * @param string $name
+     * @param array  $paths
      *
      * @return string
      *
@@ -169,7 +169,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Get an array of possible view files.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return array
      */
@@ -184,7 +184,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Add a location to the finder.
      *
-     * @param  string $location
+     * @param string $location
      *
      * @return void
      */
@@ -196,8 +196,8 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Add a namespace hint to the finder.
      *
-     * @param  string       $namespace
-     * @param  string|array $hints
+     * @param string       $namespace
+     * @param string|array $hints
      *
      * @return void
      */
@@ -215,8 +215,8 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Prepend a namespace hint to the finder.
      *
-     * @param  string       $namespace
-     * @param  string|array $hints
+     * @param string       $namespace
+     * @param string|array $hints
      *
      * @return void
      */
@@ -234,7 +234,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Register an extension with the view finder.
      *
-     * @param  string $extension
+     * @param string $extension
      *
      * @return void
      */
@@ -250,7 +250,7 @@ class ViewFinder implements ViewFinderInterface
     /**
      * Returns whether or not the view specify a hint information.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return bool
      */

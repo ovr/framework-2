@@ -18,7 +18,7 @@ namespace Brainwave\Database\Migrations\Driver;
  *
  */
 
-use \Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
+use Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
 
 /**
  * MongoDriver
@@ -44,7 +44,7 @@ class MongoDriver implements DriverInterface
      * Constructor
      *
      * @param \MongoDb $connection
-     * @param string $tableName
+     * @param string   $tableName
      */
     public function __construct(\MongoDb $connection, $tableName)
     {
@@ -72,13 +72,13 @@ class MongoDriver implements DriverInterface
     /**
      * Up
      *
-     * @param Migration $migration
+     * @param  Migration $migration
      * @return self
      */
     public function up(Migration $migration)
     {
         $this->connection->selectCollection($this->tableName)->insert(array(
-            'version' => $migration->getVersion()
+            'version' => $migration->getVersion(),
         ));
 
         return $this;
@@ -87,13 +87,13 @@ class MongoDriver implements DriverInterface
     /**
      * Down
      *
-     * @param Migration $migration
+     * @param  Migration $migration
      * @return self
      */
     public function down(Migration $migration)
     {
         $this->connection->selectCollection($this->tableName)->remove(array(
-            'version' => $migration->getVersion()
+            'version' => $migration->getVersion(),
         ));
 
         return $this;
@@ -107,6 +107,7 @@ class MongoDriver implements DriverInterface
     public function hasSchema()
     {
         $tableName = $this->tableName;
+
         return array_filter(
             $this->connection->getCollectionNames(),
             function ($collection) use ($tableName) {
@@ -126,6 +127,7 @@ class MongoDriver implements DriverInterface
             'version',
             array('unique' => 1)
         );
+
         return $this;
     }
 }

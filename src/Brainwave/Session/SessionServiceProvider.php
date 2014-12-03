@@ -18,12 +18,11 @@ namespace Brainwave\Session;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Str;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Session\SessionManager;
-use \Brainwave\Session\SegmentFactory;
-use \Brainwave\Session\CsrfTokenFactory;
+use Pimple\Container;
+use Brainwave\Support\Str;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Session\SessionManager;
+use Brainwave\Session\CsrfTokenFactory;
 
 /**
  * SessionServiceProvider
@@ -40,8 +39,8 @@ class SessionServiceProvider implements ServiceProviderInterface
         $container['deleteCookie'] = null;
         $container['session'] = function ($container) {
             $session = new SessionManager(
-                new Factory,
-                new Str,
+                new Factory(),
+                new Str(),
                 $_COOKIE,
                 $container['deleteCookie']
             );

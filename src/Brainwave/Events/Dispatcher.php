@@ -18,8 +18,8 @@ namespace Brainwave\Events;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Contracts\Events\Dispatcher as EventsContract;
+use Pimple\Container;
+use Brainwave\Contracts\Events\Dispatcher as EventsContract;
 
 /**
  * Manager
@@ -49,7 +49,7 @@ class Dispatcher implements EventsContract
         'before.dispatch' => [[]],
         'after.dispatch' => [[]],
         'after.router' => [[]],
-        'after' => [[]]
+        'after' => [[]],
     );
 
     /**
@@ -59,14 +59,14 @@ class Dispatcher implements EventsContract
      */
     public function __construct(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
     }
 
     /**
      * Assign hook
      *
-     * @param  callable $callable A callable object
-     * @param  int      $priority The hook priority; 0 = high, 10 = low
+     * @param callable $callable A callable object
+     * @param int      $priority The hook priority; 0 = high, 10 = low
      */
     public function hook($event, callable $callable, $priority = 10)
     {
@@ -82,9 +82,9 @@ class Dispatcher implements EventsContract
     /**
      * Alias for self::hook()
      *
-     * @param             $event
-     * @param callable    $callback
-     * @param int         $priority
+     * @param          $event
+     * @param callable $callback
+     * @param int      $priority
      *
      */
     public function addEventListener($event, callable $callback, $priority = 10)
@@ -95,9 +95,9 @@ class Dispatcher implements EventsContract
     /**
      * Invoke hook
      *
-     * @param  string $name    The hook name
-     * @param  mixed  $hookArg (Optional) Argument(s) for hooked functions,
-     *                         can specify multiple arguments.
+     * @param string $name    The hook name
+     * @param mixed  $hookArg (Optional) Argument(s) for hooked functions,
+     *                        can specify multiple arguments.
      *
      * @return mixed|void
      */
@@ -129,7 +129,7 @@ class Dispatcher implements EventsContract
      *
      * @param string $name    the hook name
      * @param mixed  $hookArg (Optional) Argument for hooked functions,
-     *                         can specify multiple arguments.
+     *                        can specify multiple arguments.
      *
      * @return mixed|null
      */
@@ -159,15 +159,15 @@ class Dispatcher implements EventsContract
             }
         }
 
-        return null;
+        return;
     }
 
     /**
      * Alias for self::applyHook()
      *
-     * @param  string $name    the hook name
-     * @param  mixed  $hookArg (Optional) Argument for hooked functions,
-     *                         can specify multiple arguments.
+     * @param string $name    the hook name
+     * @param mixed  $hookArg (Optional) Argument for hooked functions,
+     *                        can specify multiple arguments.
      *
      * @return mixed|void
      */
@@ -197,7 +197,7 @@ class Dispatcher implements EventsContract
      * Else, all listeners are returned as an associative array whose
      * keys are hook names and whose values are arrays of listeners.
      *
-     * @param  string $name A hook name (Optional)
+     * @param string $name A hook name (Optional)
      *
      * @return array|null
      */
@@ -213,7 +213,7 @@ class Dispatcher implements EventsContract
     /**
      * Alias for self::getHooks()
      *
-     * @param  string $name A hook name (Optional)
+     * @param string $name A hook name (Optional)
      *
      * @return array|null
      */
@@ -229,7 +229,7 @@ class Dispatcher implements EventsContract
      * a valid hook name, only the listeners attached
      * to that hook will be cleared.
      *
-     * @param  string $name A hook name (Optional)
+     * @param string $name A hook name (Optional)
      */
     public function clearHooks($name = null)
     {

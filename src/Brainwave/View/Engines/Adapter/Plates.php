@@ -18,12 +18,12 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use \Pimple\Container;
-use \League\Plates\Engine;
-use \League\Plates\Extension\URI;
-use \League\Plates\Extension\Asset;
-use \League\Plates\Template\Template;
-use \Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
+use Pimple\Container;
+use League\Plates\Engine;
+use League\Plates\Extension\URI;
+use League\Plates\Extension\Asset;
+use League\Plates\Template\Template;
+use Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
 
 /**
  * Plates
@@ -58,7 +58,7 @@ class Plates implements EnginesContract
     /**
      * Create a new view environment instance.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -96,8 +96,8 @@ class Plates implements EnginesContract
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array  $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
@@ -109,8 +109,8 @@ class Plates implements EnginesContract
     /**
      * Get the evaluated contents of the view at the given path.
      *
-     * @param  string $path
-     * @param  array  $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
@@ -153,7 +153,7 @@ class Plates implements EnginesContract
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return void
      *

@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Exception\HttpException;
+use Brainwave\Http\Exception\HttpException;
 
 /**
  * MethodNotAllowedException
@@ -44,7 +44,7 @@ class MethodNotAllowedException extends HttpException
         $code = 0
     ) {
         $headers = [
-            'Allow' => implode(', ', $allowed)
+            'Allow' => implode(', ', $allowed),
         ];
 
         parent::__construct(405, $message, $previous, $headers, $code);

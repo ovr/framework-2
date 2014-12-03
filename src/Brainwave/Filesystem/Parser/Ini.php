@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Ini
@@ -41,7 +41,7 @@ class Ini implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -53,8 +53,8 @@ class Ini implements ParserContract
     /**
      * Loads a INI file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array data data
      */
@@ -82,7 +82,7 @@ class Ini implements ParserContract
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -106,8 +106,8 @@ class Ini implements ParserContract
     /**
      * Format a ini file.
      *
-     * @param  array $data
-     * @param  array $parent
+     * @param array $data
+     * @param array $parent
      *
      * @return string data export
      */
@@ -121,12 +121,12 @@ class Ini implements ParserContract
                 //merge all the sections into one array...
                 $sec = array_merge($parent, $k);
                 //add section information to the output
-                $out .= '[' . join('.', $sec) . ']' . PHP_EOL;
+                $out .= '['.join('.', $sec).']'.PHP_EOL;
                 //recursively traverse deeper
                 $out .= $this->iniFormat($v, $sec);
             } else {
                 //plain key->value case
-                $out .= "$k=$v" . PHP_EOL;
+                $out .= "$k=$v".PHP_EOL;
             }
         }
 

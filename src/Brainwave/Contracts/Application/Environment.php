@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use \Brainwave\Contracts\Support\Collection;
+use Brainwave\Contracts\Support\Collection;
 
 /**
  * Environment
@@ -43,8 +43,8 @@ interface Environment extends Collection
     /**
      * Detect the application's current environment.
      *
-     * @param  array|string $environments
-     * @param  array|null   $consoleArgs
+     * @param array|string $environments
+     * @param array|null   $consoleArgs
      *
      * @return bool
      */

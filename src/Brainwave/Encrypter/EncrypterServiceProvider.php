@@ -18,9 +18,9 @@ namespace Brainwave\Encrypter;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Encrypter\Encrypter;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Brainwave\Encrypter\Encrypter;
+use Pimple\ServiceProviderInterface;
 
 /**
  * EncrypterServiceProvider

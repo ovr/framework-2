@@ -18,10 +18,10 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use \OpenCloud\OpenStack;
-use \League\Flysystem\Adapter\Rackspace;
-use \OpenCloud\ObjectStore\Resource\Container;
-use \Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use OpenCloud\OpenStack;
+use League\Flysystem\Adapter\Rackspace;
+use OpenCloud\ObjectStore\Resource\Container;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 
 /**
  * ConnectionFactory
@@ -36,7 +36,7 @@ class RackspaceConnector implements ConnectorContract
     /**
      * Establish an adapter connection.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return \League\Flysystem\Adapter\Rackspace
      */
@@ -51,7 +51,7 @@ class RackspaceConnector implements ConnectorContract
     /**
      * Get the authentication data.
      *
-     * @param  array $config
+     * @param array $config
      *
      * @return array
      *
@@ -73,7 +73,7 @@ class RackspaceConnector implements ConnectorContract
     /**
      * Get the rackspace client.
      *
-     * @param  array $auth
+     * @param array $auth
      *
      * @return \OpenCloud\ObjectStore\Resource\Container
      */
@@ -90,7 +90,7 @@ class RackspaceConnector implements ConnectorContract
     /**
      * Get the rackspace adapter.
      *
-     * @param  \OpenCloud\ObjectStore\Resource\Container $client
+     * @param \OpenCloud\ObjectStore\Resource\Container $client
      *
      * @return \League\Flysystem\Adapter\Rackspace
      */

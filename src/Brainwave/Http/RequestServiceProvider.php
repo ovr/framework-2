@@ -18,11 +18,9 @@ namespace Brainwave\Http;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Http\Request;
-use \Brainwave\Http\Headers;
-use \Brainwave\Cookie\CookieJar;
-use \Pimple\ServiceProviderInterface;
+use Pimple\Container;
+use Brainwave\Http\Request;
+use Pimple\ServiceProviderInterface;
 
 /**
  * RequestServiceProvider

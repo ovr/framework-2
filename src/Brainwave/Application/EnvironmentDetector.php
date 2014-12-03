@@ -18,11 +18,11 @@ namespace Brainwave\Application\Environment;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Str;
-use \Brainwave\Support\Arr;
-use \Brainwave\Support\Collection;
-use \Brainwave\Contracts\Application\Environment as EnvironmentContract;
+use Pimple\Container;
+use Brainwave\Support\Str;
+use Brainwave\Support\Arr;
+use Brainwave\Support\Collection;
+use Brainwave\Contracts\Application\Environment as EnvironmentContract;
 
 /**
  * EnvironmentDetector
@@ -61,7 +61,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
         'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
         'HTTP_USER_AGENT'      => 'Brainwave',
         'REMOTE_ADDR'          => '127.0.0.1',
-        'REQUEST_TIME'         => ''
+        'REQUEST_TIME'         => '',
     ];
 
     /**
@@ -85,7 +85,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * This method will parse an environment array and add the data to
      * this collection
      *
-     * @param  array $environment
+     * @param array $environment
      *
      * @return void
      */
@@ -102,7 +102,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
      * This method will parse a mock environment array and add the data to
      * this collection
      *
-     * @param  array $settings
+     * @param array $settings
      *
      * @return void
      */
@@ -116,8 +116,8 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Detect the application's current environment.
      *
-     * @param  \Closure   $callback
-     * @param  array|null $consoleArgs
+     * @param \Closure   $callback
+     * @param array|null $consoleArgs
      *
      * @return string
      */
@@ -188,7 +188,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Set the application environment for a web request.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return string
      */
@@ -200,8 +200,8 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Set the application environment from command-line arguments.
      *
-     * @param  \Closure $callback
-     * @param  array    $args
+     * @param \Closure $callback
+     * @param array    $args
      *
      * @return string
      */
@@ -222,7 +222,7 @@ class EnvironmentDetector extends Collection implements EnvironmentContract
     /**
      * Get the environment argument from the console.
      *
-     * @param  array $args
+     * @param array $args
      *
      * @return string|null
      */

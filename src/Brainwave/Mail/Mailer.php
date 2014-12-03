@@ -18,13 +18,13 @@ namespace Brainwave\Mail;
  *
  */
 
-use \Swift_Mailer;
-use \Brainwave\Log\Writer;
-use \Brainwave\Mail\Message;
-use \Psr\Log\LoggerInterface;
-use \Brainwave\Contracts\View\Factory;
-use \Brainwave\Contracts\Events\Dispatcher;
-use \Brainwave\Contracts\Mail\Mailer as MailerContract;
+use Swift_Mailer;
+use Brainwave\Log\Writer;
+use Brainwave\Mail\Message;
+use Psr\Log\LoggerInterface;
+use Brainwave\Contracts\View\Factory;
+use Brainwave\Contracts\Events\Dispatcher;
+use Brainwave\Contracts\Mail\Mailer as MailerContract;
 
 /**
  * Mailer
@@ -98,8 +98,8 @@ class Mailer implements MailerContract
     /**
      * Set the global from address and name.
      *
-     * @param  string $address
-     * @param  string $name
+     * @param string $address
+     * @param string $name
      *
      * @return void
      */
@@ -114,8 +114,8 @@ class Mailer implements MailerContract
     /**
      * Send a new message when only a raw text part.
      *
-     * @param  string $text
-     * @param  mixed  $callback
+     * @param string $text
+     * @param mixed  $callback
      *
      * @return int
      */
@@ -127,9 +127,9 @@ class Mailer implements MailerContract
     /**
      * Send a new message when only a plain part.
      *
-     * @param  string $view
-     * @param  array  $data
-     * @param  mixed  $callback
+     * @param string $view
+     * @param array  $data
+     * @param mixed  $callback
      *
      * @return int
      */
@@ -141,11 +141,11 @@ class Mailer implements MailerContract
     /**
      * Add the content to a given message.
      *
-     * @param  \Brainwave\Mail\Message $message
-     * @param  string                  $view
-     * @param  string                  $plain
-     * @param  string                  $raw
-     * @param  array                   $data
+     * @param \Brainwave\Mail\Message $message
+     * @param string                  $view
+     * @param string                  $plain
+     * @param string                  $raw
+     * @param array                   $data
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class Mailer implements MailerContract
     /**
      * Send a Swift Message instance.
      *
-     * @param  \Swift_Message $message
+     * @param \Swift_Message $message
      *
      * @return int
      */
@@ -181,6 +181,7 @@ class Mailer implements MailerContract
             return $this->swift->send($message, $this->failedRecipients);
         } elseif (isset($this->logger)) {
             $this->logMessage($message);
+
             return 1;
         }
 
@@ -190,7 +191,7 @@ class Mailer implements MailerContract
     /**
      * Log that a message was sent.
      *
-     * @param  \Swift_Message $message
+     * @param \Swift_Message $message
      *
      * @return void
      */
@@ -208,7 +209,7 @@ class Mailer implements MailerContract
      */
     protected function createMessage()
     {
-        $message = new Message(new \Swift_Message);
+        $message = new Message(new \Swift_Message());
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
@@ -223,8 +224,8 @@ class Mailer implements MailerContract
     /**
      * Call the provided message builder.
      *
-     * @param  \Closure|string         $callback
-     * @param  \Brainwave\Mail\Message $message
+     * @param \Closure|string         $callback
+     * @param \Brainwave\Mail\Message $message
      *
      * @return mixed
      *
@@ -244,8 +245,8 @@ class Mailer implements MailerContract
     /**
      * Render the given view.
      *
-     * @param  string $view
-     * @param  array  $data
+     * @param string $view
+     * @param array  $data
      *
      * @return \Brainwave\Contracts\View\Factory
      */
@@ -257,7 +258,7 @@ class Mailer implements MailerContract
     /**
      * Tell the mailer to not really send messages.
      *
-     * @param  bool $value
+     * @param bool $value
      *
      * @return void
      */
@@ -269,9 +270,9 @@ class Mailer implements MailerContract
     /**
      * Send a new message using a view.
      *
-     * @param  string|array   $view
-     * @param  array          $data
-     * @param  Closure|string $callback
+     * @param string|array   $view
+     * @param array          $data
+     * @param Closure|string $callback
      *
      * @return int
      */
@@ -294,13 +295,12 @@ class Mailer implements MailerContract
         $message = $message->getSwiftMessage();
 
         return $this->sendSwiftMessage($message);
-
     }
 
     /**
      * Parse the given view name or array.
      *
-     * @param  string|array  $view
+     * @param  string|array $view
      * @return array
      *
      * @throws \InvalidArgumentException
@@ -364,7 +364,7 @@ class Mailer implements MailerContract
     /**
      * Set the Swift Mailer instance.
      *
-     * @param  \Swift_Mailer $swift
+     * @param \Swift_Mailer $swift
      *
      * @return void
      */
@@ -386,7 +386,7 @@ class Mailer implements MailerContract
     /**
      * Set the log writer instance.
      *
-     * @param  \Psr\Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      *
      * @return \Brainwave\Mail\Mailer
      */

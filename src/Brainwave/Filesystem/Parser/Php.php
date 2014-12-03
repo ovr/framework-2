@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Php
@@ -41,7 +41,7 @@ class Php implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -53,8 +53,8 @@ class Php implements ParserContract
     /**
      * Loads a PHP file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array data
      */
@@ -78,7 +78,7 @@ class Php implements ParserContract
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -90,7 +90,7 @@ class Php implements ParserContract
     /**
      * Format a php file for saving.
      *
-     * @param  array $data data
+     * @param array $data data
      *
      * @return string data export
      */

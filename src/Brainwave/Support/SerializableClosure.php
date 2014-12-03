@@ -32,7 +32,6 @@ use Jeremeamia\SuperClosure\SerializableClosure as SuperClosure;
  */
 class SerializableClosure extends SuperClosure
 {
-
     /**
      * The code for the closure
      *
@@ -55,6 +54,7 @@ class SerializableClosure extends SuperClosure
     public function getCode()
     {
         $this->determineCodeAndVariables();
+
         return $this->code;
     }
 
@@ -66,6 +66,7 @@ class SerializableClosure extends SuperClosure
     public function getVariables()
     {
         $this->determineCodeAndVariables();
+
         return $this->variables;
     }
 

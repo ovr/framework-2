@@ -18,8 +18,8 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use \Brainwave\Cache\Store\TagSet;
-use \Brainwave\Cache\Store\TaggedCache;
+use Brainwave\Cache\Store\TagSet;
+use Brainwave\Cache\Store\TaggedCache;
 
 /**
  * TaggableStore
@@ -34,7 +34,7 @@ abstract class TaggableStore
     /**
      * Begin executing a new tags operation.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return \Brainwave\Cache\Store\TaggedCache
      */
@@ -46,7 +46,7 @@ abstract class TaggableStore
     /**
      * Begin executing a new tags operation.
      *
-     * @param  string $names
+     * @param string $names
      *
      * @return \Brainwave\Cache\Store\TaggedCache
      */

@@ -18,7 +18,7 @@ namespace Brainwave\Routing;
  *
  */
 
-use \Brainwave\Contracts\Routing\CustomStrategy;
+use Brainwave\Contracts\Routing\CustomStrategy;
 
 /**
  * RouteStrategyTrait
@@ -39,7 +39,7 @@ trait RouteStrategyTrait
      * Tells the implementor which strategy to use, this should override any higher
      * level setting of strategies, such as on specific routes
      *
-     * @param  integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
+     * @param integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
      *
      * @return void
      */
@@ -48,7 +48,7 @@ trait RouteStrategyTrait
         if (is_integer($strategy) || $strategy instanceof CustomStrategy) {
             $this->strategy = $strategy;
 
-            return null;
+            return;
         }
 
         throw new \InvalidArgumentException(

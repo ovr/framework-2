@@ -18,7 +18,7 @@ namespace Brainwave\Translator\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Lang

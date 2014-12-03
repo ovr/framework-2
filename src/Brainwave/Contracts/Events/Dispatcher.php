@@ -41,9 +41,9 @@ interface Dispatcher
     /**
      * Alias for self::hook()
      *
-     * @param             $event
-     * @param callable    $callback
-     * @param int         $priority
+     * @param           $event
+     * @param  callable $callback
+     * @param  int      $priority
      * @return void
      */
     public function addEventListener($event, callable $callback, $priority = 10);
@@ -51,8 +51,8 @@ interface Dispatcher
     /**
      * Trigger a hook
      *
-     * @param string $name
-     * @param mixed $hookArg
+     * @param  string $name
+     * @param  mixed  $hookArg
      * @return void
      */
     public function applyHook($name, $hookArg = null);
@@ -61,8 +61,8 @@ interface Dispatcher
      * Triger a chained hook
      * the first callback to return a non-null value will be returned
      *
-     * @param string $name the hook name
-     * @param mixed  $hookArg (Optional) Argument for hooked functions
+     * @param  string     $name    the hook name
+     * @param  mixed      $hookArg (Optional) Argument for hooked functions
      * @return mixed|void
      */
     public function applyChain($name, $hookArg = null);
@@ -70,8 +70,8 @@ interface Dispatcher
     /**
      * Alias for self::applyChain()
      *
-     * @param string $event Event name
-     * @param array  $args  Array of arguments to pass to callback
+     * @param  string     $event Event name
+     * @param  array      $args  Array of arguments to pass to callback
      * @return mixed|void
      */
     public function triggerChain($event, array $args = []);

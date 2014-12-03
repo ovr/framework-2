@@ -18,11 +18,11 @@ namespace Brainwave\Support;
  *
  */
 
-use \Brainwave\Support\Arr;
-use \Brainwave\Contracts\Support\Jsonable as JsonableContract;
-use \Brainwave\Contracts\Support\Arrayable as ArrayableContract;
-use \Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
-use \Brainwave\Contracts\Support\Collection as CollectionContract;
+use Brainwave\Support\Arr;
+use Brainwave\Contracts\Support\Jsonable as JsonableContract;
+use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
+use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Support\Collection as CollectionContract;
 
 /**
  * Collection
@@ -72,7 +72,7 @@ class Collection implements
     /**
      * Create a new collection instance if the value isn't one already.
      *
-     * @param  mixed $items
+     * @param mixed $items
      *
      * @return static
      */
@@ -84,10 +84,10 @@ class Collection implements
     /**
      * Get data value with key
      *
-     * @param  string $key     The data key
-     * @param  mixed  $default The value to return if data key does not exist
+     * @param string $key     The data key
+     * @param mixed  $default The value to return if data key does not exist
      *
-     * @return mixed           The data value, or the default value
+     * @return mixed The data value, or the default value
      */
     public function get($key, $default = null)
     {
@@ -143,15 +143,14 @@ class Collection implements
     /**
      * Determine if an item exists in the collection.
      *
-     * @param  mixed  $key
-     * @param  mixed  $value
+     * @param  mixed $key
+     * @param  mixed $value
      * @return bool
      */
     public function contains($key, $value = null)
     {
         if (func_num_args() == 2) {
-            return $this->contains(function($k, $item) use ($key, $value)
-            {
+            return $this->contains(function ($k, $item) use ($key, $value) {
                 return data_get($item, $key) == $value;
             });
         }
@@ -180,7 +179,7 @@ class Collection implements
     /**
      * Execute a callback over each item.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return $this
      */
@@ -194,7 +193,7 @@ class Collection implements
     /**
      * Fetch a nested element of the collection.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return static
      */
@@ -206,7 +205,7 @@ class Collection implements
     /**
      * Run a filter over each of the items.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return static
      */
@@ -218,13 +217,13 @@ class Collection implements
     /**
      * Filter items by the given key value pair.
      *
-     * @param  string  $key
+     * @param  string $key
      * @param  mixed  $value
      * @return static
      */
     public function where($key, $value)
     {
-        return $this->filter(function($item) use ($key, $value) {
+        return $this->filter(function ($item) use ($key, $value) {
             return data_get($item, $key) == $value;
         });
     }
@@ -232,8 +231,8 @@ class Collection implements
     /**
      * Get the first item from the collection.
      *
-     * @param  \Closure $callback
-     * @param  mixed    $default
+     * @param \Closure $callback
+     * @param mixed    $default
      *
      * @return mixed|null
      */
@@ -289,8 +288,8 @@ class Collection implements
     /**
      * Get an array with the values of a given key.
      *
-     * @param  string $value
-     * @param  string $key
+     * @param string $value
+     * @param string $key
      *
      * @return array
      */
@@ -302,7 +301,7 @@ class Collection implements
     /**
      * Does this set contain a key?
      *
-     * @param  string $key The data key
+     * @param string $key The data key
      *
      * @return boolean
      */
@@ -332,7 +331,7 @@ class Collection implements
     /**
      * Group an associative array by a field or Closure value.
      *
-     * @param  callable|string $groupBy
+     * @param callable|string $groupBy
      *
      * @return static
      */
@@ -350,9 +349,9 @@ class Collection implements
     /**
      * Get the "group by" key value.
      *
-     * @param  callable|string $groupBy
-     * @param  string          $key
-     * @param  mixed           $value
+     * @param callable|string $groupBy
+     * @param string          $key
+     * @param mixed           $value
      *
      * @return string
      */
@@ -368,7 +367,7 @@ class Collection implements
     /**
      * Key an associative array by a field.
      *
-     * @param  string $keyBy
+     * @param string $keyBy
      *
      * @return static
      */
@@ -388,7 +387,7 @@ class Collection implements
     /**
      * Run a map over each of the items.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return static
      */
@@ -400,7 +399,7 @@ class Collection implements
     /**
      * Push an item onto the beginning of the collection.
      *
-     * @param  mixed $value
+     * @param mixed $value
      *
      * @return void
      */
@@ -412,7 +411,7 @@ class Collection implements
     /**
      * Push an item onto the end of the collection.
      *
-     * @param  \Brainwave\Support\Collection $value
+     * @param \Brainwave\Support\Collection $value
      *
      * @return void
      */
@@ -448,8 +447,8 @@ class Collection implements
     /**
      * Pulls an item from the collection.
      *
-     * @param  mixed $key
-     * @param  mixed $default
+     * @param mixed $key
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -461,8 +460,8 @@ class Collection implements
     /**
      * Put an item in the collection by key.
      *
-     * @param  mixed $key
-     * @param  mixed $value
+     * @param mixed $key
+     * @param mixed $value
      *
      * @return void
      */
@@ -474,7 +473,7 @@ class Collection implements
     /**
      * Create a collection of all elements that do not pass a given truth test.
      *
-     * @param  \Closure|mixed $callback
+     * @param \Closure|mixed $callback
      *
      * @return static
      */
@@ -504,8 +503,8 @@ class Collection implements
     /**
      * Search the collection for a given value and return the corresponding key if successful.
      *
-     * @param  mixed $value
-     * @param  bool  $strict
+     * @param mixed $value
+     * @param bool  $strict
      *
      * @return mixed
      */
@@ -539,9 +538,9 @@ class Collection implements
     /**
      * Slice the underlying collection array.
      *
-     * @param  int   $offset
-     * @param  int   $length
-     * @param  bool  $preserveKeys
+     * @param int  $offset
+     * @param int  $length
+     * @param bool $preserveKeys
      *
      * @return static
      */
@@ -553,14 +552,14 @@ class Collection implements
     /**
      * Chunk the underlying collection array.
      *
-     * @param  int  $size
-     * @param  bool $preserveKeys
+     * @param int  $size
+     * @param bool $preserveKeys
      *
      * @return static
      */
     public function chunk($size, $preserveKeys = false)
     {
-        $chunks = new static;
+        $chunks = new static();
 
         foreach (array_chunk($this->data, $size, $preserveKeys) as $chunk) {
             $chunks->push(new static ($chunk));
@@ -572,7 +571,7 @@ class Collection implements
     /**
      * Sort through each item with a callback.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return self
      */
@@ -586,9 +585,9 @@ class Collection implements
     /**
      * Sort the collection using the given Closure.
      *
-     * @param  \Closure|string $callback
-     * @param  int             $options
-     * @param  bool            $descending
+     * @param \Closure|string $callback
+     * @param int             $options
+     * @param bool            $descending
      *
      * @return self
      */
@@ -625,8 +624,8 @@ class Collection implements
     /**
      * Sort the collection in descending order using the given Closure.
      *
-     * @param  \Closure|string $callback
-     * @param  int             $options
+     * @param \Closure|string $callback
+     * @param int             $options
      *
      * @return self
      */
@@ -638,9 +637,9 @@ class Collection implements
     /**
      * Splice portion of the underlying collection array.
      *
-     * @param  int   $offset
-     * @param  int   $length
-     * @param  mixed $replacement
+     * @param int   $offset
+     * @param int   $length
+     * @param mixed $replacement
      *
      * @return static
      */
@@ -652,7 +651,7 @@ class Collection implements
     /**
      * Get the sum of the given values.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -671,7 +670,7 @@ class Collection implements
     /**
      * Take the first or last {$limit} items.
      *
-     * @param  int $limit
+     * @param int $limit
      *
      * @return static
      */
@@ -687,7 +686,7 @@ class Collection implements
     /**
      * Transform each item in the collection using a callback.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return $this
      */
@@ -723,7 +722,7 @@ class Collection implements
     /**
      * Get a value retrieving callback.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return \Closure
      */
@@ -760,7 +759,7 @@ class Collection implements
     /**
      * Get the collection of items as JSON.
      *
-     * @param  int $options
+     * @param int $options
      *
      * @return string
      */
@@ -772,7 +771,7 @@ class Collection implements
     /**
      * Set Encrypter
      *
-     * @param  EncrypterContract $crypt
+     * @param EncrypterContract $crypt
      *
      * @return void
      */
@@ -786,7 +785,7 @@ class Collection implements
     /**
      * Set Decrypter
      *
-     * @param  EncrypterContract $crypt
+     * @param EncrypterContract $crypt
      *
      * @return void
      */
@@ -800,7 +799,7 @@ class Collection implements
     /**
      * Does this set contain a key?
      *
-     * @param  string $key The data key
+     * @param  string  $key The data key
      * @return boolean
      */
     public function offsetExists($key)
@@ -812,7 +811,7 @@ class Collection implements
      * Get data value with key
      *
      * @param  string $key The data key
-     * @return mixed       The data value
+     * @return mixed  The data value
      */
     public function offsetGet($key)
     {
@@ -867,8 +866,8 @@ class Collection implements
     /**
      * Concatenate values of a given key as a string.
      *
-     * @param  mixed  $value
-     * @param  string $glue
+     * @param mixed  $value
+     * @param string $glue
      *
      * @return string
      */
@@ -884,8 +883,8 @@ class Collection implements
     /**
      * Reduce the collection to a single value.
      *
-     * @param  callable $callback
-     * @param  integer  $initial
+     * @param callable $callback
+     * @param integer  $initial
      *
      * @return mixed
      */
@@ -907,7 +906,7 @@ class Collection implements
     /**
      * Get a CachingIterator instance.
      *
-     * @param  int $flags
+     * @param int $flags
      *
      * @return \CachingIterator
      */
@@ -940,8 +939,8 @@ class Collection implements
     /**
      * Set a piece of data on the view.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -953,7 +952,7 @@ class Collection implements
     /**
      * Check if a piece of data is bound to the view.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -965,7 +964,7 @@ class Collection implements
     /**
      * Remove a piece of bound data from the view.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean|null
      */

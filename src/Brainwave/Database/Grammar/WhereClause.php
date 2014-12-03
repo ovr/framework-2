@@ -18,7 +18,7 @@ namespace Brainwave\Database\Grammar;
  *
  */
 
-use \Brainwave\Database\Grammar\Builder;
+use Brainwave\Database\Grammar\Builder;
 
 /**
  * WhereClause
@@ -47,13 +47,13 @@ class WhereClause
         'GROUP',
         'ORDER',
         'HAVING',
-        'LIMIT'
+        'LIMIT',
     ];
 
     /**
      * Create a new where clause instance.
      *
-     * @param  \Brainwave\Database\Grammar\Builder  $query
+     * @param  \Brainwave\Database\Grammar\Builder $query
      * @return void
      */
     public function __construct(Builder $query)
@@ -99,7 +99,7 @@ class WhereClause
                 }
             }
         } elseif ($where !== null) {
-            $whereClause .= ' ' . $where;
+            $whereClause .= ' '.$where;
         }
 
         return $whereClause;
@@ -147,14 +147,15 @@ class WhereClause
      */
     protected function whereGroup(array $array, $whereClause)
     {
-        $group =$this->query->wrapColumn($array);
+        $group = $this->query->wrapColumn($array);
+
         return " GROUP BY {$group}";
     }
 
     /**
      * Where ORDER
      *
-     * @param  array $array
+     * @param  array  $array
      * @param  string $whereClause
      * @return string
      */
@@ -205,7 +206,7 @@ class WhereClause
     /**
      * Where LIMIT
      *
-     * @param  array $array
+     * @param  array  $array
      * @param  string $whereClause
      * @return string
      */
@@ -225,8 +226,8 @@ class WhereClause
     /**
      * Where LIKE
      *
-     * @param  array  $array
-     * @param  string $whereClause
+     * @param  array       $array
+     * @param  string      $whereClause
      * @return string|null
      */
     protected function whereLike($array, $whereClause)
@@ -275,7 +276,6 @@ class WhereClause
     protected function whereMatch(array $array, $whereClause)
     {
         if (is_array($array) && isset($array['columns'], $array['keyword'])) {
-
             $columns = $this->query->wrapValue(str_replace('.', '`.`', implode($array['columns'], '", "')));
             $keyword = $this->query->wrapValue($array['keyword']);
 
@@ -298,11 +298,9 @@ class WhereClause
             $type = gettype($value);
 
             if (preg_match("/^(AND|OR)\s*#?/i", $key, $relationMatch) && $type == 'array') {
-
                 $wheres[] = 0 !== count(array_diff_key($value, array_keys(array_keys($value)))) ?
-                "({$this->whereDataImplode($value, ' ' . $relationMatch[1])})" :
-                "({$this->innerConjunct($value, ' ' . $relationMatch[1], $conjunctor)})";
-
+                "({$this->whereDataImplode($value, ' '.$relationMatch[1])})" :
+                "({$this->innerConjunct($value, ' '.$relationMatch[1], $conjunctor)})";
             } else {
                 preg_match('/(#?)([\w\.]+)(\[(\>|\>\=|\<|\<\=|\!|\<\>|\>\<|\!?~)\])?/i', $key, $match);
                 $column = $this->query->wrapValue($match[2]);
@@ -332,10 +330,10 @@ class WhereClause
                         }
 
                         if (preg_match('/^[^%].+[^%]$/', $value)) {
-                            $value = '%' . $value . '%';
+                            $value = '%'.$value.'%';
                         }
 
-                        $wheres[] = $column . ' LIKE ' . $this->fn_quote($key, $value);
+                        $wheres[] = $column.' LIKE '.$this->fn_quote($key, $value);
                     }
 
                     if (in_array($operator, array('>', '>=', '<', '<='))) {
@@ -399,27 +397,32 @@ class WhereClause
         switch ($type) {
             case 'NULL':
                 $operator = ($not ? 'IS NOT NULL' : 'IS NULL');
+
                 return "{$column} {$operator}";
                 break;
 
             case 'array':
                 $operator = ($not ? 'NOT IN' : 'IN');
+
                 return "{$column} {$operator} ({$this->query->wrapArray($value)})";
                 break;
 
             case 'integer':
             case 'double':
                 $operator = ($not ? '!=' : '=');
+
                 return "{$column} {$operator} {$value}";
                 break;
 
             case 'boolean':
                 $operator = ($not ? '!=' : '=');
+
                 return "{$column} {$operator} {($value ? '1' : '0')}";
                 break;
 
             case 'string':
                 $operator = ($not ? '!=' : '=');
+
                 return "{$column} {$operator} {$this->query->wrapFunctionName($key, $value)}";
                 break;
 

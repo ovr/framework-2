@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\Middleware;
  *
  */
 
-use \Brainwave\Contracts\Application;
+use Brainwave\Contracts\Application;
 
 /**
  * Middleware

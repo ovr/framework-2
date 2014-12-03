@@ -26,7 +26,7 @@ namespace Brainwave\Contracts\Routing;
  * @since   0.9.4-dev
  *
  */
-interface RouteStrategyInterface
+interface RouteStrategy
 {
     /**
      * Types of route strategies
@@ -39,7 +39,7 @@ interface RouteStrategyInterface
      * Tells the implementor which strategy to use, this should override any higher
      * level setting of strategies, such as on specific routes
      *
-     * @param  integer $strategy
+     * @param integer $strategy
      *
      * @return void
      */

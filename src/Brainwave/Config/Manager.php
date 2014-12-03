@@ -18,9 +18,9 @@ namespace Brainwave\Config;
  *
  */
 
-use \Brainwave\Filesystem\FileLoader;
-use \Brainwave\Contracts\Config\Manager as ManagerContract;
-use \Brainwave\Contracts\Config\Repository as RepositoryContract;
+use Brainwave\Filesystem\FileLoader;
+use Brainwave\Contracts\Config\Manager as ManagerContract;
+use Brainwave\Contracts\Config\Repository as RepositoryContract;
 
 /**
  * Manager
@@ -155,9 +155,9 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Get a value
      *
-     * @param  string $key
+     * @param string $key
      *
-     * @return mixed  The value of a setting
+     * @return mixed The value of a setting
      */
     public function get($key, $default)
     {
@@ -195,7 +195,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Set path to config folder
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return self
      */
@@ -220,8 +220,8 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Call a method from repository
      *
-     * @param  string $method
-     * @param  array  $params
+     * @param string $method
+     * @param array  $params
      *
      * @return mixed
      */
@@ -233,7 +233,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Get a value
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -256,7 +256,7 @@ class Manager implements ManagerContract, \IteratorAggregate
     /**
      * Check a value exists
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean
      */

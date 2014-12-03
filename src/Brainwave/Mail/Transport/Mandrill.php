@@ -18,9 +18,9 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use \Swift_Transport;
-use \GuzzleHttp\Client;
-use \Swift_Events_EventListener;
+use Swift_Transport;
+use GuzzleHttp\Client;
+use Swift_Events_EventListener;
 
 /**
  * Mandrill
@@ -32,7 +32,6 @@ use \Swift_Events_EventListener;
  */
 class Mandrill implements Swift_Transport
 {
-
     /**
      * The Mandrill API key.
      *
@@ -43,7 +42,7 @@ class Mandrill implements Swift_Transport
     /**
      * Create a new Mandrill transport instance.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return void
      */
     public function __construct($key)
@@ -78,8 +77,8 @@ class Mandrill implements Swift_Transport
     /**
      * Send Email
      *
-     * @param  \Swift_Mime_Message $message
-     * @param  string              $failedRecipients
+     * @param \Swift_Mime_Message $message
+     * @param string              $failedRecipients
      *
      * @return log
      */
@@ -92,7 +91,7 @@ class Mandrill implements Swift_Transport
                 'key' => $this->key,
                 'raw_message' => (string) $message,
                 'async' => false,
-                'to' => $this->getToAddresses($message)
+                'to' => $this->getToAddresses($message),
             ],
         ]);
     }
@@ -138,7 +137,7 @@ class Mandrill implements Swift_Transport
      */
     protected function getHttpClient()
     {
-        return new Client;
+        return new Client();
     }
 
     /**
@@ -154,7 +153,7 @@ class Mandrill implements Swift_Transport
     /**
      * Set the API key being used by the transport.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return string
      */

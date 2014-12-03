@@ -18,31 +18,27 @@ namespace Brainwave\Application;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Support\Arr;
-use \Brainwave\Http\Headers;
-use \Brainwave\Http\Request;
-use \Brainwave\Routing\Route;
-use \Brainwave\Http\Response;
-use \GuzzleHttp\Stream\Stream;
-use \Brainwave\Cookie\CookieJar;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Middleware\Middleware;
-use \Brainwave\Http\RequestServiceProvider;
-use \Brainwave\Http\ResponseServiceProvider;
-use \Brainwave\Config\ConfigServiceProvider;
-use \Brainwave\Http\Exception\HttpException;
-use \Brainwave\Exception\FatalErrorException;
-use \Brainwave\Application\EnvironmentDetector;
-use \Brainwave\Application\StaticalProxyManager;
-use \Brainwave\Exception\ExceptionServiceProvider;
-use \Brainwave\Translator\TranslatorServiceProvider;
-use \Brainwave\Http\Exception\NotFoundHttpException;
-use \Brainwave\Application\ApplicationServiceProvider;
-use \Brainwave\Routing\Controller\ControllerCollection;
-use \Brainwave\Contracts\Application\Application as ApplicationContract;
-use \Brainwave\Contracts\Routing\ControllerProvider as ControllerContract;
-use \Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
+use Pimple\Container;
+use Brainwave\Support\Arr;
+use rainwave\Routing\Route;
+use Brainwave\Cookie\CookieJar;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Middleware\Middleware;
+use Brainwave\Http\RequestServiceProvider;
+use Brainwave\Http\ResponseServiceProvider;
+use Brainwave\Config\ConfigServiceProvider;
+use Brainwave\Http\Exception\HttpException;
+use Brainwave\Exception\FatalErrorException;
+use Brainwave\Application\EnvironmentDetector;
+use Brainwave\Application\StaticalProxyManager;
+use Brainwave\Exception\ExceptionServiceProvider;
+use Brainwave\Translator\TranslatorServiceProvider;
+use Brainwave\Http\Exception\NotFoundHttpException;
+use Brainwave\Application\ApplicationServiceProvider;
+use Brainwave\Routing\Controller\ControllerCollection;
+use Brainwave\Contracts\Application\Application as ApplicationContract;
+use Brainwave\Contracts\Routing\ControllerProvider as ControllerContract;
+use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 
 /**
  * Application

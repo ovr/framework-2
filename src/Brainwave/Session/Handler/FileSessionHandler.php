@@ -18,7 +18,7 @@ namespace Brainwave\Session\Handler;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
+use Brainwave\Filesystem\Filesystem;
 
 /**
  * Session
@@ -47,8 +47,8 @@ class FileSessionHandler implements \SessionHandlerInterface
     /**
      * Create a new file driven handler instance.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
-     * @param  string                           $path
+     * @param \Brainwave\Filesystem\Filesystem $files
+     * @param string                           $path
      *
      * @return void
      */
@@ -82,6 +82,7 @@ class FileSessionHandler implements \SessionHandlerInterface
         if ($this->files->exists($path = $this->path.'/'.$sessionId)) {
             return $this->files->get($path);
         }
+
         return '';
     }
 

@@ -18,9 +18,9 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use \Brainwave\Support\Arr;
-use \Brainwave\Filesystem\Interfaces\FilesystemInterface;
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Support\Arr;
+use Brainwave\Filesystem\Interfaces\FilesystemInterface;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * FileCache
@@ -66,8 +66,8 @@ class FileCache implements AdapterContract
     /**
      * Create a new file cache store instance.
      *
-     * @param  FilesystemInterface $files
-     * @param  string              $directory
+     * @param FilesystemInterface $files
+     * @param string              $directory
      *
      * @return AdapterContract
      */
@@ -80,7 +80,7 @@ class FileCache implements AdapterContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -92,7 +92,7 @@ class FileCache implements AdapterContract
     /**
      * Retrieve an item and expiry time from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return array
      */
@@ -135,9 +135,9 @@ class FileCache implements AdapterContract
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
      *
      * @return boolean|null
      */
@@ -155,7 +155,7 @@ class FileCache implements AdapterContract
     /**
      * Create the file cache directory if necessary.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return void
      */
@@ -171,8 +171,8 @@ class FileCache implements AdapterContract
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int
      */
@@ -190,8 +190,8 @@ class FileCache implements AdapterContract
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int
      */
@@ -203,8 +203,8 @@ class FileCache implements AdapterContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return boolean|null
      */
@@ -216,7 +216,7 @@ class FileCache implements AdapterContract
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -246,7 +246,7 @@ class FileCache implements AdapterContract
     /**
      * Get the full path for the given cache key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return string
      */
@@ -260,7 +260,7 @@ class FileCache implements AdapterContract
     /**
      * Get the expiration time based on the given minutes.
      *
-     * @param  int $minutes
+     * @param int $minutes
      *
      * @return int
      */
@@ -296,7 +296,7 @@ class FileCache implements AdapterContract
     /**
      * Get the stored time of a item
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return int
      */

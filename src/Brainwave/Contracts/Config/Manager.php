@@ -31,7 +31,7 @@ interface Manager extends \ArrayAccess
     /**
      * Set Brainwave's defaults using the handler
      *
-     * @param array $values
+     * @param  array $values
      * @return void
      */
     public function setArray(array $values);
@@ -39,10 +39,10 @@ interface Manager extends \ArrayAccess
     /**
      * Load the given configuration group.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param string $file
+     * @param string $namespace
+     * @param string $environment
+     * @param string $group
      *
      * @return void
      */
@@ -50,7 +50,7 @@ interface Manager extends \ArrayAccess
     /**
      * Determine if the given configuration value exists.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return bool
      */
     public function has($key);
@@ -58,9 +58,9 @@ interface Manager extends \ArrayAccess
     /**
      * Get a value
      *
-     * @param  string $key
+     * @param string $key
      *
-     * @return mixed       The value of a setting
+     * @return mixed The value of a setting
      */
     public function get($key, $default);
 
@@ -68,7 +68,7 @@ interface Manager extends \ArrayAccess
      * Set a value
      *
      * @param  string $key
-     * @param  mixed $value
+     * @param  mixed  $value
      * @return void
      */
     public function set($key, $value);

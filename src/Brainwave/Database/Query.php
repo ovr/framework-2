@@ -18,9 +18,9 @@ namespace Brainwave\Database;
  *
  */
 
-use \Brainwave\Database\Grammar\Builder;
-use \Brainwave\Database\Grammar\whereClause;
-use \Brainwave\Database\Interfaces\QueryInterface;
+use Brainwave\Database\Grammar\Builder;
+use Brainwave\Database\Grammar\whereClause;
+use Brainwave\Database\Interfaces\QueryInterface;
 
 /**
  * DatabaseQuery
@@ -64,13 +64,13 @@ class Query implements QueryInterface
         '>' => 'LEFT',
         '<' => 'RIGHT',
         '<>' => 'FULL',
-        '><' => 'INNER'
+        '><' => 'INNER',
     ];
 
     /**
      * Create a new query instance.
      *
-     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface  $connection
+     * @param  \Brainwave\Database\Connection\Interfaces\ConnectionInterface $connection
      * @return void
      */
     public function __construct(ConnectionInterface $connection)
@@ -89,7 +89,7 @@ class Query implements QueryInterface
      * @param  string $query         The SQL query
      * @param  array  $bindings      SQL bindings
      * @param  array  $driverOptions
-     * @return object                The PDOStatement object
+     * @return object The PDOStatement object
      */
     public function query($query, array $bindings = [], array $driverOptions = [])
     {
@@ -113,7 +113,7 @@ class Query implements QueryInterface
     /**
      * Set Bindings
      *
-     * @param  arrray $bindings
+     * @param  arrray                    $bindings
      * @return \Brainwave\Database\Query
      */
     public function bind(array $bindings)
@@ -136,11 +136,11 @@ class Query implements QueryInterface
     /**
      * Select data from database
      *
-     * @param  string          $table   The table name
-     * @param  array           $join    Table relativity for table joining.
-     *                                  Ignore it if no table joining required
-     * @param  string|array    $columns The target columns of data will be fetched
-     * @param  array           $where   The WHERE clause to filter records
+     * @param  string       $table   The table name
+     * @param  array        $join    Table relativity for table joining.
+     *                               Ignore it if no table joining required
+     * @param  string|array $columns The target columns of data will be fetched
+     * @param  array        $where   The WHERE clause to filter records
      * @return array
      */
     public function select($table, $join, $columns = null, $where = null)
@@ -159,8 +159,8 @@ class Query implements QueryInterface
     /**
      * Insert new records in table
      *
-     * @param  string $table The table name
-     * @param  mixed  $datas The data that will be inserted into table.
+     * @param  string  $table The table name
+     * @param  mixed   $datas The data that will be inserted into table.
      * @return integer
      */
     public function insert($table, $datas)
@@ -177,8 +177,7 @@ class Query implements QueryInterface
             foreach ($data as $key => $value) {
                 array_push($columns, $this->grammar->wrapColumn($key));
 
-                switch (gettype($value))
-                {
+                switch (gettype($value)) {
                     case 'NULL':
                         $values[] = 'NULL';
                         break;
@@ -223,10 +222,10 @@ class Query implements QueryInterface
     /**
      * Modify data in table
      *
-     * @param  string $table The table name
-     * @param  array  $data  The data that will be modified
-     * @param  array  $where The WHERE clause to filter record
-     * @return integer        The number of rows affected
+     * @param  string  $table The table name
+     * @param  array   $data  The data that will be modified
+     * @param  array   $where The WHERE clause to filter record
+     * @return integer The number of rows affected
      */
     public function update($table, $data, $where = null)
     {
@@ -243,8 +242,7 @@ class Query implements QueryInterface
             } else {
                 $column = $this->grammar->wrapColumn($key);
 
-                switch (gettype($value))
-                {
+                switch (gettype($value)) {
                     case 'NULL':
                         $fields[] = "{$column} = NULL";
                         break;
@@ -283,9 +281,9 @@ class Query implements QueryInterface
     /**
      * Delete data from table
      *
-     * @param  string $table The table name
-     * @param  array  $where The WHERE clause to filter records
-     * @return integer        The number of rows affected
+     * @param  string  $table The table name
+     * @param  array   $where The WHERE clause to filter records
+     * @return integer The number of rows affected
      */
     public function delete($table, $where)
     {
@@ -300,12 +298,12 @@ class Query implements QueryInterface
      /**
      * Replace old data into new one
      *
-     * @param  string        $table   The table name
-     * @param  string|array  $columns The target columns of data will be replaced
-     * @param  string        $search  The value being searched for
-     * @param  string        $replace The replacement value that replaces found search values
-     * @param  array         $where   The WHERE clause to filter records
-     * @return integer                The number of rows affected
+     * @param  string       $table   The table name
+     * @param  string|array $columns The target columns of data will be replaced
+     * @param  string       $search  The value being searched for
+     * @param  string       $replace The replacement value that replaces found search values
+     * @param  array        $where   The WHERE clause to filter records
+     * @return integer      The number of rows affected
      */
     public function replace($table, $columns, $search = null, $replace = null, $where = null)
     {
@@ -353,7 +351,7 @@ class Query implements QueryInterface
      * @param  string       $table   The table name
      * @param  string|array $columns The target columns of data will be fetch
      * @param  array        $where   The WHERE clause to filter records
-     * @return string|array          Return the data of the column
+     * @return string|array Return the data of the column
      */
     public function get($table, $columns, array $where)
     {
@@ -374,7 +372,7 @@ class Query implements QueryInterface
      * @param  string  $table The table name
      * @param  array   $join  Table relativity for table joining
      * @param  array   $where The WHERE clause to filter records
-     * @return boolean        True of False if the target data has been founded
+     * @return boolean True of False if the target data has been founded
      */
     public function has($table, $join, $where = null)
     {
@@ -395,7 +393,7 @@ class Query implements QueryInterface
      * @param  array   $join   Table relativity for table joining
      * @param  string  $column The target column will be counted
      * @param  array   $where  The WHERE clause to filter records
-     * @return integer          The number of rows
+     * @return integer The number of rows
      */
     public function count($table, $join = null, $column = null, $where = null)
     {
@@ -412,7 +410,7 @@ class Query implements QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The maximum number of the column
+     * @return number The maximum number of the column
      */
     public function max($table, $join, $column = null, $where = null)
     {
@@ -431,7 +429,7 @@ class Query implements QueryInterface
      * @param  array  $join   Table relativity for table joining
      * @param  string $column The target column will be calculated
      * @param  array  $where  The WHERE clause to filter records
-     * @return number         The minimum number of the column
+     * @return number The minimum number of the column
      */
     public function min($table, $join, $column = null, $where = null)
     {
@@ -446,11 +444,11 @@ class Query implements QueryInterface
     /**
      * Get the average value for the column
      *
-     * @param  string $table  The table name
-     * @param  array  $join   Table relativity for table joining
-     * @param  string $column The target column will be calculated
-     * @param  array  $where  The WHERE clause to filter records
-     * @return integer         The average number of the column
+     * @param  string  $table  The table name
+     * @param  array   $join   Table relativity for table joining
+     * @param  string  $column The target column will be calculated
+     * @param  array   $where  The WHERE clause to filter records
+     * @return integer The average number of the column
      */
     public function avg($table, $join, $column = null, $where = null)
     {
@@ -463,11 +461,11 @@ class Query implements QueryInterface
     /**
      * Get the total value for the column
      *
-     * @param  string $table  The table name
-     * @param  array  $join   Table relativity for table joining
-     * @param  string $column The target column will be calculated
-     * @param  array  $where  The WHERE clause to filter records
-     * @return integer         The total number of the column
+     * @param  string  $table  The table name
+     * @param  array   $join   Table relativity for table joining
+     * @param  string  $column The target column will be calculated
+     * @param  array   $where  The WHERE clause to filter records
+     * @return integer The total number of the column
      */
     public function sum($table, $join, $column = null, $where = null)
     {

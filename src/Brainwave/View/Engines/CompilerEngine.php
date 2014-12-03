@@ -18,7 +18,7 @@ namespace Brainwave\View\Engines;
  *
  */
 
-use \Brainwave\Contracts\View\Compiler as CompilerContract;
+use Brainwave\Contracts\View\Compiler as CompilerContract;
 
 /**
  * CompilerEngine
@@ -30,7 +30,6 @@ use \Brainwave\Contracts\View\Compiler as CompilerContract;
  */
 class CompilerEngine extends PhpEngine
 {
-
     /**
      * Compiler instance.
      *
@@ -48,7 +47,7 @@ class CompilerEngine extends PhpEngine
     /**
      * Create a view engine instance.
      *
-     * @param  CompilerContract $compiler
+     * @param CompilerContract $compiler
      *
      * @return void
      */
@@ -60,8 +59,8 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the evaluated contents of the view.
      *
-     * @param  string $path
-     * @param  array  $data
+     * @param string $path
+     * @param array  $data
      *
      * @return string
      */
@@ -91,7 +90,7 @@ class CompilerEngine extends PhpEngine
     /**
      * Handle a view exception.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return void
      *
@@ -107,7 +106,7 @@ class CompilerEngine extends PhpEngine
     /**
      * Get the exception message for an exception.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return string
      */

@@ -44,9 +44,9 @@ interface Translator
     /**
      * Get all translation information for a given language.
      *
-     * @param  String $language The name of language that this information is made up of.
+     * @param String $language The name of language that this information is made up of.
      *
-     * @return array            The language that the translations are written in. (e.g. 'en').
+     * @return array The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslations($language);
 
@@ -64,9 +64,9 @@ interface Translator
     /**
      * Get all translation information for a given language.
      *
-     * @param  String $language The name of language that this information is made up of.
+     * @param String $language The name of language that this information is made up of.
      *
-     * @return string|false            The language that the translations are written in. (e.g. 'en').
+     * @return string|false The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslation($orig, $language = false);
 

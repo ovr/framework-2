@@ -18,7 +18,7 @@ namespace Brainwave\Application;
  *
  */
 
-use \Brainwave\Support\Str;
+use Brainwave\Support\Str;
 
 /**
  * StaticalProxyResolver
@@ -33,7 +33,7 @@ class StaticalProxyResolver
     /**
      * Resolve a facade quickly to its root class
      *
-     * @param  string $facade
+     * @param string $facade
      *
      * @return string
      */
@@ -41,6 +41,7 @@ class StaticalProxyResolver
     {
         if ($this->isFacade($this->getFacadeNameFromInput($facade))) {
             $rootClass = get_class($facade::getFacadeRoot());
+
             return "The registered facade '{$this->getFacadeNameFromInput($facade)}' maps to {$rootClass}";
         }
 
@@ -50,7 +51,7 @@ class StaticalProxyResolver
     /**
      * Create a uppercase facade name if is not already
      *
-     * @param  string $facadeName
+     * @param string $facadeName
      *
      * @return string
      */
@@ -66,7 +67,7 @@ class StaticalProxyResolver
     /**
      * Checking if facade is a really facade of StaticalProxyManager
      *
-     * @param  string $facade
+     * @param string $facade
      *
      * @return boolean
      */
@@ -82,7 +83,7 @@ class StaticalProxyResolver
     /**
      * Checking if facade name is in uppercase
      *
-     * @param  string $string
+     * @param string $string
      *
      * @return boolean
      */

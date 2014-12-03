@@ -18,9 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Cache\Manager as CacheManager;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Cache\Manager as CacheManager;
 
 /**
  * CacheServiceProvider
@@ -36,7 +36,7 @@ class CacheServiceProvider implements ServiceProviderInterface
 
     public function register(Container $container)
     {
-        $this->container= $container;
+        $this->container = $container;
 
         $this->registerCacheFactory();
         $this->registerDefaultCache();
@@ -48,6 +48,7 @@ class CacheServiceProvider implements ServiceProviderInterface
         $this->container['cache.factory'] = function ($container) {
             $cacheFactory = new CacheManager($container, $container['settings']['cache::supported.drivers']);
             $cacheFactory->setPrefix($container['settings']['cache::prefix']);
+
             return $cacheFactory;
         };
     }

@@ -18,7 +18,7 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * ArrayCache
@@ -57,7 +57,7 @@ class ArrayCache implements AdapterContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -67,15 +67,15 @@ class ArrayCache implements AdapterContract
             return $this->storage[$key];
         }
 
-        return null;
+        return;
     }
 
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
      *
      * @return void
      */
@@ -88,8 +88,8 @@ class ArrayCache implements AdapterContract
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int
      */
@@ -103,8 +103,8 @@ class ArrayCache implements AdapterContract
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int
      */
@@ -118,8 +118,8 @@ class ArrayCache implements AdapterContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -131,7 +131,7 @@ class ArrayCache implements AdapterContract
     /**
      * Remove an item from the cache.
      *
-     * @param  string  $key
+     * @param string $key
      *
      * @return void
      */
@@ -163,7 +163,7 @@ class ArrayCache implements AdapterContract
     /**
      * Get the stored time of a item
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return int
      */

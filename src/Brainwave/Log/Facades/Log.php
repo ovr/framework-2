@@ -18,7 +18,7 @@ namespace Brainwave\Log\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Log

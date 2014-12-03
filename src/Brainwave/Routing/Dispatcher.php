@@ -18,16 +18,15 @@ namespace Brainwave\Routing;
  *
  */
 
-use \FastRoute;
-use \Pimple\Conatiner;
-use \Brainwave\Http\Response;
-use \Brainwave\Http\JsonResponse;
-use \Brainwave\Routing\RouteStrategyTrait;
-use \FastRoute\Dispatcher as FastDispatcher;
-use \Brainwave\Http\Exception as HttpException;
-use \Brainwave\Contracts\Http\Response as ResponseContract;
-use \FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
-use \Beainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Pimple\Conatiner;
+use Brainwave\Http\Response;
+use Brainwave\Http\JsonResponse;
+use Brainwave\Routing\RouteStrategyTrait;
+use FastRoute\Dispatcher as FastDispatcher;
+use Brainwave\Http\Exception as HttpException;
+use Brainwave\Contracts\Http\Response as ResponseContract;
+use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
+use Beainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 
 /**
  * Dispatcher
@@ -71,8 +70,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Match and dispatch a route matching the given http method and uri
      *
-     * @param  string $method
-     * @param  string $uri
+     * @param string $method
+     * @param string $uri
      *
      * @return ResponseContract
      */
@@ -86,6 +85,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
 
             case FastDispatcher::METHOD_NOT_ALLOWED:
                 $allowed  = (array) $match[1];
+
                 return $this->handleNotAllowed($allowed);
 
             case FastDispatcher::FOUND:
@@ -93,6 +93,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
                 $handler  = (isset($this->routes[$match[1]]['callback'])) ? $this->routes[$match[1]]['callback'] : $match[1];
                 $strategy = $this->routes[$match[1]]['strategy'];
                 $vars     = (array) $match[2];
+
                 return $this->handleFound($handler, $strategy, $vars);
         }
     }
@@ -100,9 +101,9 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handle dispatching of a found route
      *
-     * @param  string|\Closure                                     $handler
-     * @param  integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
-     * @param  array                                               $vars
+     * @param string|\Closure                                     $handler
+     * @param integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
+     * @param array                                               $vars
      *
      * @return \Brainwave\Contracts\Http\Response
      *
@@ -128,7 +129,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Check if handler is a controller
      *
-     * @param  string|\Closure $handler
+     * @param string|\Closure $handler
      *
      * @return \Brainwave\Contracts\Http\Response
      *
@@ -148,7 +149,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         // if controller method wasn't specified, throw exception.
-        if (!$controller){
+        if (!$controller) {
             throw new \RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
@@ -158,7 +159,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handle getting of response based on strategy
      *
-     * @param  int $strategy
+     * @param int $strategy
      *
      * @return ResponseContract
      */
@@ -183,8 +184,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Invoke a controller action
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param string|\Closure $controller
+     * @param array           $vars
      *
      * @return ResponseContract
      */
@@ -193,7 +194,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         if (is_array($controller)) {
             $controller = [
                 $this->container->get($controller[0]),
-                $controller[1]
+                $controller[1],
             ];
         }
 
@@ -203,8 +204,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to Request -> Response Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param string|\Closure $controller
+     * @param array           $vars
      *
      * @return ResponseContract
      */
@@ -228,8 +229,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to Restful Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param string|\Closure $controller
+     * @param array           $vars
      *
      * @return ResponseContract
      */
@@ -250,7 +251,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
             }
 
             throw new \RuntimeException(
-                'Your controller action must return a valid response for the Restful Strategy. ' .
+                'Your controller action must return a valid response for the Restful Strategy. '.
                 'Acceptable responses are of type: [Array], [ArrayObject] and [Brainwave\Http\JsonResponse]'
             );
         } catch (HttpException\HttpException $e) {
@@ -261,8 +262,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to URI Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param string|\Closure $controller
+     * @param array           $vars
      *
      * @return ResponseContract
      */
@@ -290,7 +291,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      */
     protected function handleNotFound()
     {
-        $exception = new HttpException\NotFoundException;
+        $exception = new HttpException\NotFoundException();
 
         if ($this->getStrategy() === RouteStrategyContract::RESTFUL_STRATEGY) {
             return $exception->getJsonResponse();
@@ -302,7 +303,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles a not allowed route
      *
-     * @param  array $allowed
+     * @param array $allowed
      *
      * @return ResponseContract
      */

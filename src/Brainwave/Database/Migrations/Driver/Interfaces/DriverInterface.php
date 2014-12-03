@@ -38,7 +38,7 @@ interface DriverInterface
     /**
      * Up
      *
-     * @param Migration $migration
+     * @param  Migration        $migration
      * @return AdapterInterface
      */
     public function up(Migration $migration);
@@ -46,7 +46,7 @@ interface DriverInterface
     /**
      * Down
      *
-     * @param Migration $migration
+     * @param  Migration        $migration
      * @return AdapterInterface
      */
     public function down(Migration $migration);

@@ -32,7 +32,7 @@ interface Factory
      * Returns the value of a key in the segment.
      *
      * @param string $key The key in the segment.
-     * @param mixed $alt An alternative value to return if the key is not set.
+     * @param mixed  $alt An alternative value to return if the key is not set.
      *
      * @return mixed
      */
@@ -41,8 +41,8 @@ interface Factory
     /**
      * Sets the value of a key in the segment.
      *
-     * @param string $key The key to set.
-     * @param mixed $val The value to set it to.
+     * @param  string $key The key to set.
+     * @param  mixed  $val The value to set it to.
      * @return void
      */
     public function set($key, $val);
@@ -57,8 +57,8 @@ interface Factory
     /**
      * Sets a flash value for the *next* request.
      *
-     * @param string $key The key for the flash value.
-     * @param mixed $val The flash value itself.
+     * @param  string $key The key for the flash value.
+     * @param  mixed  $val The flash value itself.
      * @return void
      */
     public function setFlash($key, $val);
@@ -67,7 +67,7 @@ interface Factory
      * Gets the flash value for a key in the *current* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $alt An alternative value to return if the key is not set.
+     * @param mixed  $alt An alternative value to return if the key is not set.
      *
      * @return mixed The flash value itself.
      */
@@ -82,7 +82,7 @@ interface Factory
      * Gets the flash value for a key in the *next* request.
      *
      * @param string $key The key for the flash value.
-     * @param mixed $alt An alternative value to return if the key is not set.
+     * @param mixed  $alt An alternative value to return if the key is not set.
      *
      * @return mixed The flash value itself.
      */
@@ -91,8 +91,8 @@ interface Factory
     /**
      * Sets a flash value for the *next* request *and* the current one.
      *
-     * @param string $key The key for the flash value.
-     * @param mixed $val The flash value itself.
+     * @param  string $key The key for the flash value.
+     * @param  mixed  $val The flash value itself.
      * @return void
      */
     public function setFlashNow($key, $val);

@@ -18,10 +18,10 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use \Predis\Client as Client;
-use \Brainwave\Cache\Store\TaggableStore;
-use \Predis\Connection\ConnectionException;
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Predis\Client as Client;
+use Brainwave\Cache\Store\TaggableStore;
+use Predis\Connection\ConnectionException;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 
 /**
  * RedisCache
@@ -111,14 +111,14 @@ class RedisCache extends TaggableStore implements AdapterContract
             $redis = new Client();
         }
 
-        return new $redis;
+        return new $redis();
     }
 
     /**
      * Create a new RedisCache store.
      *
-     * @param Client   $redis
-     * @param  string  $prefix
+     * @param Client $redis
+     * @param string $prefix
      *
      * @return AdapterContract
      */
@@ -132,7 +132,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -146,9 +146,9 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string  $key
-     * @param  mixed   $value
-     * @param  int     $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
      *
      * @return void
      */
@@ -164,8 +164,8 @@ class RedisCache extends TaggableStore implements AdapterContract
      /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer   $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int|bool
      */
@@ -177,8 +177,8 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return int|bool
      */
@@ -190,8 +190,8 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -205,7 +205,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -237,7 +237,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Set the connection name to be used.
      *
-     * @param  string $connection
+     * @param string $connection
      *
      * @return void
      */
@@ -259,7 +259,7 @@ class RedisCache extends TaggableStore implements AdapterContract
     /**
      * Get the stored time of a item
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return int
      */

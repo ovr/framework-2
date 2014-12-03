@@ -18,7 +18,7 @@ namespace Brainwave\Contracts\View;
  *
  */
 
-use \Brainwave\Contracts\Support\Collection as CollectionContract;
+use Brainwave\Contracts\Support\Collection as CollectionContract;
 
 /**
  * Factory
@@ -33,8 +33,8 @@ interface Factory extends CollectionContract
     /**
      * Add a piece of data to the view.
      *
-     * @param  string|array  $key
-     * @param  mixed   $value
+     * @param  string|array                $key
+     * @param  mixed                       $value
      * @return \Brainwave\View\ViewFactory
      */
     public function with($key, $value = null);
@@ -49,8 +49,8 @@ interface Factory extends CollectionContract
     /**
      * Set a piece of data on the view.
      *
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param  string $key
+     * @param  mixed  $value
      * @return void
      */
     public function __set($key, $value);
@@ -58,7 +58,7 @@ interface Factory extends CollectionContract
     /**
      * Check if a piece of data is bound to the view.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return bool
      */
     public function __isset($key);
@@ -66,7 +66,7 @@ interface Factory extends CollectionContract
     /**
      * Remove a piece of bound data from the view.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return bool
      */
     public function __unset($key);
@@ -74,8 +74,8 @@ interface Factory extends CollectionContract
     /**
      * Dynamically bind parameters to the view.
      *
-     * @param  string  $method
-     * @param  array   $parameters
+     * @param  string                      $method
+     * @param  array                       $parameters
      * @return \Brainwave\View\ViewFactory
      * @throws \BadMethodCallException
      */
@@ -91,8 +91,8 @@ interface Factory extends CollectionContract
     /**
      * Assign a variable to the template.
      *
-     * @param mixed $name
-     * @param mixed $data the data
+     * @param  mixed $name
+     * @param  mixed $data the data
      * @return self
      */
     public function share($name, $data = null);

@@ -18,9 +18,9 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Symfony\Component\Yaml\Yaml as YamlParser;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml as YamlParser;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * YamlAdapter
@@ -42,7 +42,7 @@ class Yaml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -54,8 +54,8 @@ class Yaml implements ParserContract
     /**
      * Loads a YAML file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array|null
      */
@@ -81,13 +81,13 @@ class Yaml implements ParserContract
             return (array) $data;
         }
 
-        return null;
+        return;
     }
 
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -99,7 +99,7 @@ class Yaml implements ParserContract
     /**
      * Format a yaml file for saving.
      *
-     * @param  array $data data
+     * @param array $data data
      *
      * @return string data export
      */

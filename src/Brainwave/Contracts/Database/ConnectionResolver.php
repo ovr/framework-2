@@ -31,7 +31,7 @@ interface ConnectionResolver
     /**
      * Get a database connection instance.
      *
-     * @param  string  $name
+     * @param  string                         $name
      * @return \Brainwave\Database\Connection
      */
     public function connection($name = null);
@@ -46,7 +46,7 @@ interface ConnectionResolver
     /**
      * Set the default connection name.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return void
      */
     public function setDefaultConnection($name);

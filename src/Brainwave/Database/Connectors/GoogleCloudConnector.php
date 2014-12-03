@@ -18,8 +18,8 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use \Brainwave\Database\Connectors\Connectors;
-use \Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use Brainwave\Database\Connectors\Connectors;
+use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**
  * GoogleCloudConnector
@@ -34,7 +34,7 @@ class GoogleCloudConnector extends Connectors implements ConnectorInterface
     /**
      * Establish a database connection.
      *
-     * @param  array  $config
+     * @param  array $config
      * @return \PDO
      */
     public function connect(array $config)
@@ -61,7 +61,7 @@ class GoogleCloudConnector extends Connectors implements ConnectorInterface
     /**
      * Create a DSN string from a configuration.
      *
-     * @param  array   $config
+     * @param  array  $config
      * @return string
      */
     protected function getDsn(array $config)

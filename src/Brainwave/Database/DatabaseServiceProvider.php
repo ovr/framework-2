@@ -18,11 +18,11 @@ namespace Brainwave\Database;
  *
  */
 
-use \Pimple\Container;
-use \Brainwave\Database\Query;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Database\DatabaseManager;
-use \Brainwave\Database\Connection\ConnectionFactory;
+use Pimple\Container;
+use Brainwave\Database\Query;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Database\DatabaseManager;
+use Brainwave\Database\Connection\ConnectionFactory;
 
 /**
  * Database ServiceProvider
@@ -53,6 +53,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface
                     $container,
                     $container['db.factory']
                 );
+
                 return $manager;
             };
 

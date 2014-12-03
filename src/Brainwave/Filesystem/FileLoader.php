@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Filesystem\Interfaces\LoaderInterface;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Filesystem\Interfaces\LoaderInterface;
 
 /**
  * FileLoader
@@ -71,8 +71,8 @@ class FileLoader implements LoaderInterface
     /**
      * Create a new file data loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
-     * @param  string                           $defaultPath
+     * @param \Brainwave\Filesystem\Filesystem $files
+     * @param string                           $defaultPath
      *
      * @return FileLoader
      */
@@ -85,10 +85,10 @@ class FileLoader implements LoaderInterface
     /**
      * Load the given data group.
      *
-     * @param  string $file
-     * @param  string $group
-     * @param  string $namespace
-     * @param  string $environment
+     * @param string $file
+     * @param string $group
+     * @param string $namespace
+     * @param string $environment
      *
      * @return array
      */
@@ -133,10 +133,10 @@ class FileLoader implements LoaderInterface
     /**
      * Determine if the given file exists.
      *
-     * @param  string $file
-     * @param  string $namespace
-     * @param  string $environment
-     * @param  string $group
+     * @param string $file
+     * @param string $namespace
+     * @param string $environment
+     * @param string $group
      *
      * @return bool|array
      */
@@ -186,10 +186,10 @@ class FileLoader implements LoaderInterface
     /**
      * Apply any cascades to an array of package options.
      *
-     * @param  string $packages
-     * @param  string $group
-     * @param  string $env
-     * @param  array  $items
+     * @param string $packages
+     * @param string $group
+     * @param string $env
+     * @param array  $items
      *
      * @return array
      */
@@ -205,7 +205,6 @@ class FileLoader implements LoaderInterface
         // folder. If it exists, we will load it and merge it with these original
         // options so that we will easily 'cascade' a package's datas.
         if ($this->exists($file, "{$namespace}/{$packages}/{$env}", null, $group)) {
-
             $items = $this->dataMerge(
                 $items,
                 $this->files->get(
@@ -229,10 +228,10 @@ class FileLoader implements LoaderInterface
     /**
      * Get the package path for an environment and group.
      *
-     * @param  string $env
-     * @param  string $package
-     * @param  string $group
-     * @param  string $namespace
+     * @param string $env
+     * @param string $package
+     * @param string $group
+     * @param string $namespace
      *
      * @return string
      */
@@ -247,7 +246,7 @@ class FileLoader implements LoaderInterface
     /**
      * Get the data path for a namespace.
      *
-     * @param  string $namespace
+     * @param string $namespace
      *
      * @return string
      */
@@ -265,8 +264,8 @@ class FileLoader implements LoaderInterface
     /**
      * Add a new namespace to the loader.
      *
-     * @param  string $namespace
-     * @param  string $hint
+     * @param string $namespace
+     * @param string $hint
      *
      * @return void
      */
@@ -315,7 +314,7 @@ class FileLoader implements LoaderInterface
     /**
      * Get a file's contents by requiring it.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return mixed
      */
@@ -337,8 +336,8 @@ class FileLoader implements LoaderInterface
     /**
      * Get the right Parser for data file
      *
-     * @param  string $ext  file extension
-     * @param  string $path file path
+     * @param string $ext  file extension
+     * @param string $path file path
      *
      * @return array
      *
@@ -354,11 +353,9 @@ class FileLoader implements LoaderInterface
             if ($parser->supports($path)) {
                 return $parser;
             }
-
         }
         throw new \RuntimeException(
             sprintf("Unable to find the right Parser for '%s'", $ext)
         );
-
     }
 }

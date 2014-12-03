@@ -18,10 +18,10 @@ namespace Brainwave\Log;
  *
  */
 
-use \Monolog\Logger;
-use \Pimple\Container;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Log\Writer as MonologWriter;
+use Monolog\Logger;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Log\Writer as MonologWriter;
 
 /**
  * LoggerServiceProvider

@@ -18,8 +18,8 @@ namespace Brainwave\Translator;
  *
  */
 
-use \Brainwave\Filesystem\FileLoader;
-use \Brainwave\Contracts\Translator\Translator as TranslatorContract;
+use Brainwave\Filesystem\FileLoader;
+use Brainwave\Contracts\Translator\Translator as TranslatorContract;
 
 /**
  * TranslatorManager
@@ -87,7 +87,7 @@ class Manager implements TranslatorContract
         'lv', //latvian
         'cy', //welsh
         'be', //belarusian
-        'bs'  //bosnian
+        'bs',  //bosnian
     ];
 
     /**
@@ -143,7 +143,6 @@ class Manager implements TranslatorContract
         $this->checkLang($language);
 
         if (isset($this->translations[$language]) && $merge) {
-
             $this->translations[$language] = array_merge(
                 $this->translations[$language],
                 $info
@@ -156,9 +155,9 @@ class Manager implements TranslatorContract
     /**
      * Get all translation information for a given language.
      *
-     * @param  string $language The name of language that this information is made up of.
+     * @param string $language The name of language that this information is made up of.
      *
-     * @return array            The language that the translations are written in. (e.g. 'en').
+     * @return array The language that the translations are written in. (e.g. 'en').
      */
     public function getTranslations($language)
     {
@@ -198,8 +197,8 @@ class Manager implements TranslatorContract
     /**
      * Get the translation for a given string.
      *
-     * @param  string         $orig     The original string.
-     * @param  boolean|string $language The language that the translation is written in. (e.g. 'en').
+     * @param string         $orig     The original string.
+     * @param boolean|string $language The language that the translation is written in. (e.g. 'en').
      *
      * @return string|false The translated string.
      */
@@ -230,7 +229,6 @@ class Manager implements TranslatorContract
      */
     protected function plurals($str, $count = null, $language = null)
     {
-
         $lang  = explode("|", $str);
 
         if (null === $count) {
@@ -239,16 +237,19 @@ class Manager implements TranslatorContract
 
         switch ($language) {
             case 'af': //afrikaans, nplurals=2
-                $s = ( ($count==1) ? 0 :  2);
+                $s = (($count == 1) ? 0 :  2);
+
                 return $lang[ $s ];
                 break;
             case 'ar': //arabic, nplurals=6
-                $s = ( ($count== 0) ? 0 : (($count==1) ? 1 : (($count==2) ? 2 : ((($count % 100 >= 3) && ($count % 100 <= 10) ) ? 3 : ((($count % 100 >= 11) && ($count % 100 <= 99) ) ? 4 : 5)))));
+                $s = (($count == 0) ? 0 : (($count == 1) ? 1 : (($count == 2) ? 2 : ((($count % 100 >= 3) && ($count % 100 <= 10)) ? 3 : ((($count % 100 >= 11) && ($count % 100 <= 99)) ? 4 : 5)))));
+
                 return $lang[ $s ];
                 break;
 
             case 'cz': //czech, nplurals=3
-                $s = ( ($count==1) ? '0' : ($count>=2 && $count<=4) ? 1 : 1);
+                $s = (($count == 1) ? '0' : ($count >= 2 && $count <= 4) ? 1 : 1);
+
                 return $lang[ $s ];
                 break;
             case 'de': //german
@@ -265,18 +266,22 @@ class Manager implements TranslatorContract
             case 'my': //malay
                        // nplurals=2;
                 $s = (($count != 1) ? '0' : 1);
+
                 return $lang[$s];
                 break;
             case 'pl': //polskiy, nplurals=3
-                $s = (($count == 1) ? 0 : (( ($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20) ) ? 1 : 2 ));
+                $s = (($count == 1) ? 0 : ((($count%10 >= 2) && ($count%10 <= 4) && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
+
                 return $lang[$s];
                 break;
             case 'ru': //russian, nplurals=3
-                $s = ((($count%10==1) && ($count%100!=11)) ? '0' : ((($count%10>=2) && ($count%10<=4) && ($count%100<10 || $count%100>=20)) ? 1 : 2 ));
+                $s = ((($count%10 == 1) && ($count%100 != 11)) ? '0' : ((($count%10 >= 2) && ($count%10 <= 4) && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
+
                 return $lang[$s];
                 break;
             case 'sk': //slovak, nplurals=3
-                $s = (($count==1) ? 1 : (($count>=2 && $count<=4) ? 1 : '0' ));
+                $s = (($count == 1) ? 1 : (($count >= 2 && $count <= 4) ? 1 : '0'));
+
                 return $lang[$s];
                 break;
             case 'fa': //farsi
@@ -288,40 +293,49 @@ class Manager implements TranslatorContract
             case 'kz': //Kazakh
                        //nplurals=1
                 $s = '0';
+
                 return $lang[$s];
                 break;
             case 'ua': //ukrainian, nplurals=3
-                $s = (($count%10==1 && $count%100!=11) ? '0' : ($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 1);
+                $s = (($count%10 == 1 && $count%100 != 11) ? '0' : ($count%10 >= 2 && $count%10 <= 4 && ($count%100<10 || $count%100 >= 20)) ? 1 : 1);
+
                 return $lang[$s];
                 break;
             case 'lt': //lithuanian, nplurals=3
-                $s = (($count%10==1 && $count%100!=11) ? '0' : ($count%10>=2 && ($count%100<10 || $count%100>=20)) ? 1 : 1 );
+                $s = (($count%10 == 1 && $count%100 != 11) ? '0' : ($count%10 >= 2 && ($count%100<10 || $count%100 >= 20)) ? 1 : 1);
+
                 return $lang[$s];
                 break;
             case 'fr': //french, nplurals=2
-                $s = ( $count > 1 ? '0' : 1 );
-                return $lang[$key. $s];
+                $s = ($count > 1 ? '0' : 1);
+
+                return $lang[$key.$s];
                 break;
             case 'ie': //irish, nplurals=5;
-                $s = (($count==1)? 0 : (($count==2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
+                $s = (($count == 1) ? 0 : (($count == 2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
+
                 return $lang[$s];
                 break;
-            case 'is': //icelandic, nplurals=2;
+            case 'is' : //icelandic, nplurals=2;
             case 'hr': //croatian, nplurals=3;
-                $s = ($count%10!=1 || $count%100==11) ? 0 : 1;
+                $s = ($count%10 != 1 || $count%100 == 11) ? 0 : 1;
+
                 return $lang[$s];
                 break;
             case 'lv': //latvian
-                $s = ( ($count%10==1 && $count%100!=11) ? 0 : (($count != 0) ? 1 : 2));
+                $s = (($count%10 == 1 && $count%100 != 11) ? 0 : (($count != 0) ? 1 : 2));
+
                 return $lang[$s];
                 break;
             case 'cy': //welsh, nplurals=4
-                $s =  (($count==1) ? 0 : (($count==2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
+                $s =  (($count == 1) ? 0 : (($count == 2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
+
                 return $lang[$s];
                 break;
             case 'be': //belarusian, nplurals=3
             case 'bs': //bosnian, nplurals=3
-                $s =  (($count%10==1 && $count%100!=11) ? 0 : (($count%10>=2 && $count%10<=4 && ($count%100<10 || $count%100>=20)) ? 1 : 2));
+                $s =  (($count%10 == 1 && $count%100 != 11) ? 0 : (($count%10 >= 2 && $count%10 <= 4 && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
+
                 return $lang[$s];
                 break;
         }
@@ -330,10 +344,10 @@ class Manager implements TranslatorContract
     /**
      * Load the given lang group.
      *
-     * @param  string  $file
-     * @param  string  $namespace
-     * @param  string  $environment
-     * @param  string  $group
+     * @param string $file
+     * @param string $namespace
+     * @param string $environment
+     * @param string $group
      *
      * @return void
      */
@@ -363,6 +377,7 @@ class Manager implements TranslatorContract
     public function addReplacement($search, $replacement)
     {
         $this->replacements[$search] = $replacement;
+
         return $this;
     }
 
@@ -382,6 +397,7 @@ class Manager implements TranslatorContract
         }
 
         unset($this->replacements[$search]);
+
         return $this;
     }
 
@@ -389,7 +405,7 @@ class Manager implements TranslatorContract
      * Description
      *
      * @param string $message
-     * @param array $args
+     * @param array  $args
      *
      * @return string
      */
@@ -403,7 +419,7 @@ class Manager implements TranslatorContract
 
         foreach ($replacements as $countame => $value) {
             if ($value !== false) {
-                $message = preg_replace('~%'. $countame. '%~', $value, $message);
+                $message = preg_replace('~%'.$countame.'%~', $value, $message);
             }
         }
 
@@ -433,7 +449,7 @@ class Manager implements TranslatorContract
     /**
      * Sets the string dictating the default language to translate into. (e.g. 'en').
      *
-     * @param  string $defaultLang A string representing the default language to translate into. (e.g. 'en').
+     * @param string $defaultLang A string representing the default language to translate into. (e.g. 'en').
      *
      * @return self
      */
@@ -451,7 +467,7 @@ class Manager implements TranslatorContract
     /**
      * Check if lang is valid
      *
-     * @param  string|boolean $checkLang
+     * @param string|boolean $checkLang
      *
      * @return boolean|null
      *
@@ -466,7 +482,7 @@ class Manager implements TranslatorContract
                 return true;
             }
 
-            throw new \InvalidArgumentException('You selected a invalid lang ' . '"' . $checkLang . '"');
+            throw new \InvalidArgumentException('You selected a invalid lang '.'"'.$checkLang.'"');
         }
     }
 }

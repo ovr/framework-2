@@ -18,9 +18,9 @@ namespace Brainwave\Hashing;
  *
  */
 
-use \Brainwave\Support\Helpers;
-use \RandomLib\Factory as RandomLib;
-use \Brainwave\Contracts\Hashing\Generator as HashContract;
+use Brainwave\Support\Helpers;
+use RandomLib\Factory as RandomLib;
+use Brainwave\Contracts\Hashing\Generator as HashContract;
 
 /**
  * Generator
@@ -43,7 +43,7 @@ class Generator implements HashContract
         'bcrypt.bc' => '$2a$',
         'sha256'    => '$5$',
         'sha512'    => '$6$',
-        'drupal'    => '$S$'
+        'drupal'    => '$S$',
     ];
 
     /**
@@ -114,7 +114,7 @@ class Generator implements HashContract
     /**
      * HashGenerator
      *
-     * @param RandGenerator     $randomLib
+     * @param RandGenerator $randomLib
      */
     public function __construct(RandomLib $randomLib)
     {
@@ -124,10 +124,10 @@ class Generator implements HashContract
     /**
      * Makes a salted hash from a string.
      *
-     * @param  string $str    string to hash.
-     * @param  string $method default method 'bcrypt'.
+     * @param string $str    string to hash.
+     * @param string $method default method 'bcrypt'.
      *
-     * @return string|false  returns hashed string, or false on error.
+     * @return string|false returns hashed string, or false on error.
      */
     public function make($str, $method = 'bcrypt')
     {
@@ -137,7 +137,7 @@ class Generator implements HashContract
 
         $hash = '';
 
-        switch($method) {
+        switch ($method) {
             case 'pbkdf2':
                 $hash = $this->makePbkdf2($str);
                 break;
@@ -166,7 +166,7 @@ class Generator implements HashContract
     /**
      * Create Pbkdf2 hash
      *
-     * @param  string $str string to hash.
+     * @param string $str string to hash.
      *
      * @return string
      */
@@ -199,7 +199,7 @@ class Generator implements HashContract
     /**
      * Create Bcrypt hash
      *
-     * @param  string $str string to hash.
+     * @param string $str string to hash.
      *
      * @return string
      */
@@ -214,7 +214,7 @@ class Generator implements HashContract
     /**
      * Create Drupal hash
      *
-     * @param  string $str string to hash.
+     * @param string $str string to hash.
      *
      * @return string
      */
@@ -230,8 +230,8 @@ class Generator implements HashContract
     /**
      * Create Sha hash
      *
-     * @param  string $str    string to hash.
-     * @param  string $method default method 'sha512'.
+     * @param string $str    string to hash.
+     * @param string $method default method 'sha512'.
      *
      * @return string
      */
@@ -257,7 +257,7 @@ class Generator implements HashContract
      * @param integer $dkLen    Derived key length.
      * @param string  $hashalgo A hash algorithm.
      *
-     * @return string           Derived key.
+     * @return string Derived key.
      */
     public function pbkdf2($password, $salt, $count, $dkLen, $hashalgo = 'sha256')
     {
@@ -273,9 +273,9 @@ class Generator implements HashContract
             throw new \InvalidArgumentException('Derived key too long');
         }
 
-        for ($block = 1; $block<=$length; $block ++) {
+        for ($block = 1; $block <= $length; $block ++) {
             // Initial hash for this block.
-            $ini_block = $hash_block = hash_hmac($hashalgo, $salt . pack('N', $block), $password, true);
+            $ini_block = $hash_block = hash_hmac($hashalgo, $salt.pack('N', $block), $password, true);
             // Do block iterations.
             for ($i = 1; $i<$count; $i ++) {
                 // XOR iteration.
@@ -298,10 +298,10 @@ class Generator implements HashContract
     {
         $hex = bin2hex($this->randomLib->generate(32));
         $str = substr($hex, 0, 16);
-        $str .= '-' . substr($hex, 16, 8);
-        $str .= '-' . substr($hex, 24, 8);
-        $str .= '-' . substr($hex, 32, 8);
-        $str .= '-' . substr($hex, 40, 24);
+        $str .= '-'.substr($hex, 16, 8);
+        $str .= '-'.substr($hex, 24, 8);
+        $str .= '-'.substr($hex, 32, 8);
+        $str .= '-'.substr($hex, 40, 24);
 
         return $str;
     }
@@ -309,17 +309,17 @@ class Generator implements HashContract
     /**
      * Check a string against a hash.
      *
-     * @param  string       $str  String to check.
-     * @param  string       $hash The hash to check the string against.
+     * @param string $str  String to check.
+     * @param string $hash The hash to check the string against.
      *
-     * @return boolean|null       Returns true on match.
+     * @return boolean|null Returns true on match.
      */
     public function check($str, $hash)
     {
         $hashInfo = $this->getEncoding($hash);
         $method = $this->registeredMethods;
 
-        switch($hashInfo['algo']) {
+        switch ($hashInfo['algo']) {
             case $method['pbkdf2']:
                 $this->checkPbkdf2($str, $hash);
                 break;
@@ -344,15 +344,15 @@ class Generator implements HashContract
     /**
      * Pbkdf2 format
      *
-     * @param  string $str  String to check.
-     * @param  string $hash The hash to check the string against.
+     * @param string $str  String to check.
+     * @param string $hash The hash to check the string against.
      *
      * @return boolean Returns true on match.
      */
     private function checkPbkdf2($str, $hash)
     {
         $param = [];
-        list( , , $params, $hash, $salt) = explode('$', $hash);
+        list(, , $params, $hash, $salt) = explode('$', $hash);
         parse_str($params, $param);
 
         return Helpers::timingSafe(
@@ -370,8 +370,8 @@ class Generator implements HashContract
     /**
      * Drupal format
      *
-     * @param  string $str  String to check.
-     * @param  string $hash The hash to check the string against.
+     * @param string $str  String to check.
+     * @param string $hash The hash to check the string against.
      *
      * @return boolean Returns true on match.
      */
@@ -389,8 +389,8 @@ class Generator implements HashContract
     /**
      * Bcrypt and sha format
      *
-     * @param  string $str  String to check.
-     * @param  string $hash The hash to check the string against.
+     * @param string $str  String to check.
+     * @param string $hash The hash to check the string against.
      *
      * @return boolean Returns true on match.
      */
@@ -403,8 +403,8 @@ class Generator implements HashContract
      * Not any of the supported formats.
      * Try plain hash methods.
      *
-     * @param  string $str  String to check.
-     * @param  string $hash The hash to check the string against.
+     * @param string $str  String to check.
+     * @param string $hash The hash to check the string against.
      *
      * @return boolean Returns true on match.
      */
@@ -412,7 +412,7 @@ class Generator implements HashContract
     {
         $hash = strlen($hash);
 
-        switch($hash) {
+        switch ($hash) {
             case 32:
                 $mode = 'md5';
                 break;
@@ -439,9 +439,9 @@ class Generator implements HashContract
     /**
      * Returns settings used to generate a hash.
      *
-     * @param  string $hash Hash to get settings for.
+     * @param string $hash Hash to get settings for.
      *
-     * @return array        Returns an array with settings used to make $hash.
+     * @return array Returns an array with settings used to make $hash.
      */
     public function getEncoding($hash)
     {
@@ -455,19 +455,19 @@ class Generator implements HashContract
 
         $info = [];
 
-        switch($method) {
+        switch ($method) {
             case $regMethod['sha256']:
             case $regMethod['sha512']:
             case $regMethod['pbkdf2']:
                 $param = [];
-                list( , , $params) = explode('$', $hash);
+                list(, , $params) = explode('$', $hash);
                 parse_str($params, $param);
                 $info['options'] = $param;
                 break;
 
             case $regMethod['bcrypt']:
             case $regMethod['bcrypt.bc']:
-                list( , , $cost) = explode('$', $hash);
+                list(, , $cost) = explode('$', $hash);
                 $info['options'] = ['cost' => $cost];
                 break;
         }
@@ -487,14 +487,14 @@ class Generator implements HashContract
         $setting = substr($setting, 0, 12);
         $salt    = substr($setting, 4, 8);
         $count   = 1 << strpos($this->charsets['itoa64'], $setting[3]);
-        $hash = hash($method, $salt . $password, true);
+        $hash = hash($method, $salt.$password, true);
 
         do {
-            $hash = hash($method, $hash . $password, true);
+            $hash = hash($method, $hash.$password, true);
         } while (--$count);
 
         $len = strlen($hash);
-        $output = $setting . $this->b64Encode($hash, $len);
+        $output = $setting.$this->b64Encode($hash, $len);
         $expected = 12 + ceil((8 * $len) / 6);
 
         return substr($output, 0, $expected);
@@ -503,8 +503,8 @@ class Generator implements HashContract
     /**
      * b64Encode
      *
-     * @param  string $input
-     * @param  integer $count
+     * @param string  $input
+     * @param integer $count
      *
      * @return string
      */

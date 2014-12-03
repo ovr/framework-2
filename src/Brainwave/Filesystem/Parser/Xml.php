@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Xml
@@ -41,7 +41,7 @@ class Xml implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -53,8 +53,8 @@ class Xml implements ParserContract
     /**
      * Loads a XML file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array|null
      */
@@ -77,13 +77,13 @@ class Xml implements ParserContract
             return $data;
         }
 
-        return null;
+        return;
     }
 
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -95,7 +95,7 @@ class Xml implements ParserContract
     /**
      * Format a xml file for saving.
      *
-     * @param  array $data data
+     * @param array $data data
      *
      * @return string|false data export
      */
@@ -113,8 +113,8 @@ class Xml implements ParserContract
     /**
      * Defination to convert array to xml [NOT IMPLEMENTED]
      *
-     * @param  array             $data data
-     * @param  \SimpleXMLElement $xml
+     * @param array             $data data
+     * @param \SimpleXMLElement $xml
      *
      * @return string
      */

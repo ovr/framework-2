@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
-use \Brainwave\Filesystem\Filesystem;
-use \Brainwave\Contracts\Filesystem\Parser as ParserContract;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Json
@@ -41,7 +41,7 @@ class Json implements ParserContract
     /**
      * Create a new file filesystem loader.
      *
-     * @param  \Brainwave\Filesystem\Filesystem $files
+     * @param \Brainwave\Filesystem\Filesystem $files
      *
      * @return void
      */
@@ -53,8 +53,8 @@ class Json implements ParserContract
     /**
      * Loads a JSON file and gets its' contents as an array
      *
-     * @param  string $filename
-     * @param  string $group
+     * @param string $filename
+     * @param string $group
      *
      * @return array data
      */
@@ -85,7 +85,7 @@ class Json implements ParserContract
     /**
      * Checking if file ist supported
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return boolean
      */
@@ -97,20 +97,21 @@ class Json implements ParserContract
     /**
      * Parse the json file
      *
-     * @param  string $filename
+     * @param string $filename
      *
      * @return array
      */
     private function parseJson($filename)
     {
         $json = $this->files->get($filename);
+
         return json_decode($json, true);
     }
 
     /**
      * Reporting all json erros
      *
-     * @param  integer $code all json errors
+     * @param integer $code all json errors
      *
      * @return string
      */
@@ -130,7 +131,7 @@ class Json implements ParserContract
     /**
      * Format a json file for saving.
      *
-     * @param  array  $data data
+     * @param array $data data
      *
      * @return string data export
      */

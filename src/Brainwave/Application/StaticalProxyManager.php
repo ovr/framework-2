@@ -18,8 +18,7 @@ namespace Brainwave\Application;
  *
  */
 
-use \Mockery\MockInterface;
-use \Brainwave\Application\Application;
+use Mockery\MockInterface;
 
 /**
  * StaticalProxyManager
@@ -48,7 +47,7 @@ abstract class StaticalProxyManager
     /**
      * Hotswap the underlying instance behind the facade.
      *
-     * @param  mixed $instance
+     * @param mixed $instance
      *
      * @return void
      */
@@ -82,7 +81,7 @@ abstract class StaticalProxyManager
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return \Mockery\MockInterface
      */
@@ -100,7 +99,7 @@ abstract class StaticalProxyManager
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return \Mockery\MockInterface
      */
@@ -164,7 +163,7 @@ abstract class StaticalProxyManager
     /**
      * Resolve the facade root instance from the app.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return mixed
      */
@@ -184,7 +183,7 @@ abstract class StaticalProxyManager
     /**
      * Clear a resolved facade instance.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return void
      */
@@ -216,7 +215,7 @@ abstract class StaticalProxyManager
     /**
      * Set the application instance.
      *
-     * @param  \Brainwave\Application\Application $app
+     * @param \Brainwave\Application\Application $app
      *
      * @return void
      */
@@ -228,8 +227,8 @@ abstract class StaticalProxyManager
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string $method
-     * @param  array  $args
+     * @param string $method
+     * @param array  $args
      *
      * @return mixed
      */

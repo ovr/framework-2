@@ -18,7 +18,7 @@ namespace Brainwave\Crypter\Facades;
  *
  */
 
-use \Brainwave\Application\StaticalProxyManager;
+use Brainwave\Application\StaticalProxyManager;
 
 /**
  * Crypt

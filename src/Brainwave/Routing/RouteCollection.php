@@ -18,13 +18,11 @@ namespace Brainwave\Routing;
  *
  */
 
-use \Pimple\Conatiner;
-use \FastRoute\RouteParser;
-use \FastRoute\DataGenerator;
-use \FastRoute\RouteCollector;
-use \Brainwave\Routing\RouteStrategyTrait;
-use \FastRoute\RouteParser\Std as StdRouteParser;
-use \FastRoute\DataGenerator\GroupCountBased as GroupCountBasedDataGenerator;
+use Pimple\Conatiner;
+use FastRoute\RouteParser;
+use FastRoute\DataGenerator;
+use FastRoute\RouteCollector;
+use Brainwave\Routing\RouteStrategyTrait;
 
 /**
  * RouteCollection
@@ -54,9 +52,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Constructor
      *
-     * @param \Pimple\Conatiner                      $container
-     * @param \FastRoute\RouteParser                 $parser
-     * @param \FastRoute\DataGenerator               $generator
+     * @param \Pimple\Conatiner        $container
+     * @param \FastRoute\RouteParser   $parser
+     * @param \FastRoute\DataGenerator $generator
      */
     public function __construct(
         ContainerInterface $container = null,
@@ -75,10 +73,10 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route to the collection
      *
-     * @param  string          $method
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $method
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -124,9 +122,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to GET HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -138,9 +136,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to POST HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -152,9 +150,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to PUT HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -166,9 +164,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to PATCH HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -180,9 +178,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to DELETE HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -194,9 +192,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to HEAD HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -208,9 +206,9 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     /**
      * Add a route that responds to OPTIONS HTTP method
      *
-     * @param  string          $route
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
+     * @param string          $route
+     * @param string|\Closure $handler
+     * @param integer         $strategy
      *
      * @return \Brainwave\Routing\RouteCollection
      */
@@ -230,7 +228,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
         $wildcards = [
             '/{(.+?):number}/'        => '{$1:[0-9]+}',
             '/{(.+?):word}/'          => '{$1:[a-zA-Z]+}',
-            '/{(.+?):alphanum_dash}/' => '{$1:[a-zA-Z0-9-_]+}'
+            '/{(.+?):alphanum_dash}/' => '{$1:[a-zA-Z0-9-_]+}',
         ];
 
         return preg_replace(array_keys($wildcards), array_values($wildcards), $route);

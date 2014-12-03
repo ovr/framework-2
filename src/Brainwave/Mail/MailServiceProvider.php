@@ -18,18 +18,18 @@ namespace Brainwave\Mail;
  *
  */
 
-use \Swift_Mailer;
-use \Swift_Message;
-use \Pimple\Container;
-use \Aws\Ses\SesClient;
-use \Swift_SmtpTransport;
-use \Swift_MailTransport;
-use \Swift_SendmailTransport;
-use \Pimple\ServiceProviderInterface;
-use \Brainwave\Mail\Transport\Log as LogTransport;
-use \Brainwave\Mail\Transport\Ses as SesTransport;
-use \Brainwave\Mail\Transport\Mailgun as MailgunTransport;
-use \Brainwave\Mail\Transport\Mandrill as MandrillTransport;
+use Swift_Mailer;
+use Swift_Message;
+use Pimple\Container;
+use Aws\Ses\SesClient;
+use Swift_SmtpTransport;
+use Swift_MailTransport;
+use Swift_SendmailTransport;
+use Pimple\ServiceProviderInterface;
+use Brainwave\Mail\Transport\Log as LogTransport;
+use Brainwave\Mail\Transport\Ses as SesTransport;
+use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
+use Brainwave\Mail\Transport\Mandrill as MandrillTransport;
 
 /**
  * MailServiceProvider
@@ -44,8 +44,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \Swift_Transport
      *
@@ -53,8 +53,7 @@ class MailServiceProvider implements ServiceProviderInterface
      */
     protected function registerSwiftTransport(Container $container, $config)
     {
-        switch ($config['mail::driver'])
-        {
+        switch ($config['mail::driver']) {
             case 'smtp':
                 return $this->registerSmtpTransport($container, $config);
 
@@ -84,7 +83,7 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the service provider.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return void
      */
@@ -98,7 +97,7 @@ class MailServiceProvider implements ServiceProviderInterface
             // for maximum testability on said classes instead of passing Closures.
             $mailer = new Mailer(
                 $container['swift.mailer'],
-                new Swift_Message,
+                new Swift_Message(),
                 $container['view']
             );
 
@@ -139,8 +138,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the SMTP Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \Swift_SmtpTransport
      *
@@ -161,31 +160,25 @@ class MailServiceProvider implements ServiceProviderInterface
             // switch between ssl, tls and normal
 
             if ($container['settings']['mail::entcryption'] === 'ssl') {
-
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
                       ->setPort($container['settings']['mail::port'])
                       ->setEncryption('ssl')
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
-
             } elseif ($container['settings']['mail::entcryption'] === 'tls') {
-
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
                       ->setPort($config['mail::port'])
                       ->setEncryption('tls')
                       ->setUsername($config['mail::smtp_username'])
                       ->setPassword($config['mail::smtp_password']);
-
             } elseif ($container['settings']['mail::entcryption'] === 0) {
-
                 return Swift_SmtpTransport::newInstance()
                     ->setHost($config['mail::host'])
                     ->setPort($config['mail::port'])
                     ->setUsername($config['mail::smtp_username'])
                     ->setPassword($config['mail::smtp_password']);
-
             }
 
             throw new \InvalidArgumentException('Invalid SMTP Encrypton.');
@@ -196,8 +189,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the SES Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \SesTransport
      */
@@ -213,8 +206,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Sendmail Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \Swift_SendmailTransport
      */
@@ -228,7 +221,7 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mail Swift Transport instance.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return \Swift_MailTransport
      */
@@ -242,8 +235,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mailgun Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \MailgunTransport
      */
@@ -259,8 +252,8 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the Mandrill Swift Transport instance.
      *
-     * @param  Container $container
-     * @param  array     $config
+     * @param Container $container
+     * @param array     $config
      *
      * @return \MandrillTransport
      */
@@ -276,7 +269,7 @@ class MailServiceProvider implements ServiceProviderInterface
     /**
      * Register the "Log" Swift Transport instance.
      *
-     * @param  Container $container
+     * @param Container $container
      *
      * @return \LogTransport
      */

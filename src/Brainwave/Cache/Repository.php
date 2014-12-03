@@ -18,9 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
-use \Carbon\Carbon;
-use \Brainwave\Contracts\Cache\Adapter as AdapterContract;
-use \Brainwave\Contracts\Cache\Repository as CacheContract;
+use Carbon\Carbon;
+use Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Contracts\Cache\Repository as CacheContract;
 
 /**
  * Repository
@@ -77,7 +77,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Determine if an item exists in the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -89,8 +89,8 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -104,8 +104,8 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Retrieve an item from the cache and delete it.
      *
-     * @param  string $key
-     * @param  mixed  $default
+     * @param string $key
+     * @param mixed  $default
      *
      * @return mixed
      */
@@ -121,9 +121,9 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Store an item in the cache.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param \DateTime|int $minutes
      *
      * @return void
      */
@@ -139,9 +139,9 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Store an item in the cache if the key does not exist.
      *
-     * @param  string        $key
-     * @param  mixed         $value
-     * @param  \DateTime|int $minutes
+     * @param string        $key
+     * @param mixed         $value
+     * @param \DateTime|int $minutes
      *
      * @return bool
      */
@@ -149,6 +149,7 @@ class Repository implements CacheContract, \ArrayAccess
     {
         if (is_null($this->get($key))) {
             $this->set($key, $value, $minutes);
+
             return true;
         }
 
@@ -158,9 +159,9 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  string        $key
-     * @param  integer $minutes
-     * @param  \Closure      $callback
+     * @param string   $key
+     * @param integer  $minutes
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -181,8 +182,8 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Get an item from the cache, or store the default value forever.
      *
-     * @param  string   $key
-     * @param  \Closure $callback
+     * @param string   $key
+     * @param \Closure $callback
      *
      * @return mixed
      */
@@ -203,7 +204,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean|null
      */
@@ -225,7 +226,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Set the default cache time in minutes.
      *
-     * @param  int  $minutes
+     * @param int $minutes
      *
      * @return void
      */
@@ -247,7 +248,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Determine if a cached value exists.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */
@@ -259,7 +260,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -271,8 +272,8 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Store an item in the cache for the default time.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -284,7 +285,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean|null
      */
@@ -296,7 +297,7 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Calculate the number of minutes with the given duration.
      *
-     * @param  \DateTime|int $duration
+     * @param \DateTime|int $duration
      *
      * @return int|null
      */
@@ -314,8 +315,8 @@ class Repository implements CacheContract, \ArrayAccess
     /**
      * Pass missing methods to the store.
      *
-     * @param  string $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array  $parameters
      *
      * @return mixed
      */

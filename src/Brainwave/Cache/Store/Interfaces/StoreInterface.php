@@ -31,7 +31,7 @@ interface StoreInterface
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return mixed
      */
@@ -40,9 +40,9 @@ interface StoreInterface
     /**
      * Store an item in the cache for a given number of minutes.
      *
-     * @param  string $key
-     * @param  mixed  $value
-     * @param  int    $minutes
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
      *
      * @return void
      */
@@ -51,8 +51,8 @@ interface StoreInterface
     /**
      * Increment the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */
@@ -61,8 +61,8 @@ interface StoreInterface
     /**
      * Decrement the value of an item in the cache.
      *
-     * @param  string  $key
-     * @param  integer $value
+     * @param string  $key
+     * @param integer $value
      *
      * @return void
      */
@@ -71,8 +71,8 @@ interface StoreInterface
     /**
      * Store an item in the cache indefinitely.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -81,7 +81,7 @@ interface StoreInterface
     /**
      * Remove an item from the cache.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return bool
      */

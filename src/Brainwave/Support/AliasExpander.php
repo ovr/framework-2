@@ -34,14 +34,13 @@ class AliasExpander
      * @param  string            class alias
      * @param  int               how deep is wrapped this method call
      *
-     * @return string            fully qualified class name
+     * @return string fully qualified class name
      *
      * @throws \RuntimeException when origin of call cannot be found in backtrace
      * @throws \LogicException   when empty alias name passed
      */
     public function expand($facade)
     {
-
     }
 
     /**
@@ -51,12 +50,11 @@ class AliasExpander
      * @param  string          file path
      * @param  int             line number
      *
-     * @return string          fully qualified class name
+     * @return string fully qualified class name
      *
      * @throws \LogicException when empty class alias name passed
      */
     public function expandExplicit($name, $file, $line = 0)
     {
-
     }
 }

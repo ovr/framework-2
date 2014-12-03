@@ -18,7 +18,7 @@ namespace Brainwave\Database\Migrations\Driver;
  *
  */
 
-use \Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
+use Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
 
 /**
  * PdoDriver
@@ -48,7 +48,7 @@ class PdoDriver implements DriverInterface
     /**
      * Constructor
      *
-     * @param \PDO $connection
+     * @param \PDO   $connection
      * @param string $tableName
      */
     public function __construct(\PDO $connection, $tableName)
@@ -78,7 +78,7 @@ class PdoDriver implements DriverInterface
     /**
      * Up
      *
-     * @param Migration $migration
+     * @param  Migration $migration
      * @return self
      */
     public function up(Migration $migration)
@@ -94,7 +94,7 @@ class PdoDriver implements DriverInterface
     /**
      * Down
      *
-     * @param Migration $migration
+     * @param  Migration $migration
      * @return self
      */
     public function down(Migration $migration)
@@ -149,7 +149,7 @@ class PdoDriver implements DriverInterface
      * which may or may not work for the given database.
      *
      * @param string $type
-     * The type of the query to retrieve
+     *                     The type of the query to retrieve
      *
      * @return string
      */
@@ -157,8 +157,7 @@ class PdoDriver implements DriverInterface
     {
         $queries = array();
 
-        switch($this->pdoDriverName)
-        {
+        switch ($this->pdoDriverName) {
             case 'sqlite':
                 $queries = array(
 

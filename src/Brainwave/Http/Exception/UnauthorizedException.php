@@ -18,7 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-use \Brainwave\Http\Exception\HttpException;
+use Brainwave\Http\Exception\HttpException;
 
 /**
  * UnauthorizedException
@@ -34,8 +34,8 @@ class UnauthorizedException extends HttpException
      * Constructor
      *
      * @param string     $message
-     * @param string $previous
-     * @param \Exception    $code
+     * @param string     $previous
+     * @param \Exception $code
      */
     public function __construct($message = 'Unauthorized', \Exception $previous = null, $code = 0)
     {
