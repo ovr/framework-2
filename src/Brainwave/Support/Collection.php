@@ -143,17 +143,24 @@ class Collection implements
     /**
      * Determine if an item exists in the collection.
      *
-     * @param  mixed $value
-     *
+     * @param  mixed  $key
+     * @param  mixed  $value
      * @return bool
      */
-    public function contains($value)
+    public function contains($key, $value = null)
     {
-        if ($value instanceof \Closure) {
-            return !is_null($this->first($value));
+        if (func_num_args() == 2) {
+            return $this->contains(function($k, $item) use ($key, $value)
+            {
+                return data_get($item, $key) == $value;
+            });
         }
 
-        return in_array($value, $this->data);
+        if ($key instanceof \Closure) {
+            return ! is_null($this->first($key));
+        }
+
+        return in_array($key, $this->items);
     }
 
     /**
@@ -206,6 +213,20 @@ class Collection implements
     public function filter(\Closure $callback)
     {
         return new static (array_filter($this->data, $callback));
+    }
+
+    /**
+     * Filter items by the given key value pair.
+     *
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return static
+     */
+    public function where($key, $value)
+    {
+        return $this->filter(function($item) use ($key, $value) {
+            return data_get($item, $key) == $value;
+        });
     }
 
     /**
@@ -642,7 +663,7 @@ class Collection implements
         }
 
         return $this->reduce(function ($result, $item) use ($callback) {
-            return $result += $callback($item);
+            return $result  = $callback($item);
 
         }, 0);
     }

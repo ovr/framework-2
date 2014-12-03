@@ -18,50 +18,37 @@ namespace Brainwave\Contracts\Routing;
  *
  */
 
-use \Brainwave\Contracts\Routing\Route as RouteContract;
-
 /**
- * RouteContractr
+ * CustomStrategy
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Router
+interface RouteStrategyInterface
 {
     /**
-     * @return RouteContract|null
+     * Types of route strategies
      */
-    public function getCurrentRoute();
+    const REQUEST_RESPONSE_STRATEGY = 0;
+    const RESTFUL_STRATEGY          = 1;
+    const URI_STRATEGY              = 2;
 
     /**
+     * Tells the implementor which strategy to use, this should override any higher
+     * level setting of strategies, such as on specific routes
+     *
+     * @param  integer $strategy
+     *
      * @return void
      */
-    public function map(RouteContract $route);
+    public function setStrategy($strategy);
 
     /**
-     * @return string
+     * Gets global strategy
+     *
+     * @return integer
      */
-    public function urlFor($name, $params = []);
-
-    /**
-     * @return void
-     */
-    public function addNamedRoute($name, RouteContract $route);
-
-    /**
-     * @return boolean
-     */
-    public function hasNamedRoute($name);
-
-    /**
-     * @return RouteContractInterface|null
-     */
-    public function getNamedRoute($name);
-
-    /**
-     * @return \ArrayIterator
-     */
-    public function getNamedRoutes();
+    public function getStrategy();
 }
