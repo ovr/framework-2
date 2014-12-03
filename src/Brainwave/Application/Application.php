@@ -18,14 +18,9 @@ namespace Brainwave\Application;
  *
  */
 
-use Brainwave\Application\ApplicationServiceProvider;
-use Brainwave\Application\EnvironmentDetector;
-use Brainwave\Application\StaticalProxyManager;
 use Brainwave\Config\ConfigServiceProvider;
 use Brainwave\Contracts\Application\Application as ApplicationContract;
 use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
-use Brainwave\Contracts\Routing\ControllerProvider as ControllerContract;
-use Brainwave\Cookie\CookieJar;
 use Brainwave\Exception\ExceptionServiceProvider;
 use Brainwave\Exception\FatalErrorException;
 use Brainwave\Http\Exception\HttpException;
@@ -33,12 +28,10 @@ use Brainwave\Http\Exception\NotFoundHttpException;
 use Brainwave\Http\RequestServiceProvider;
 use Brainwave\Http\ResponseServiceProvider;
 use Brainwave\Middleware\Middleware;
-use Brainwave\Routing\Controller\ControllerCollection;
 use Brainwave\Support\Arr;
 use Brainwave\Translator\TranslatorServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use rainwave\Routing\Route;
 
 /**
  * Application
@@ -51,30 +44,11 @@ use rainwave\Routing\Route;
 class Application extends Container implements ApplicationContract
 {
     /**
-     * Slim Version
-     *
-     * @const string
-     */
-    const VERSION = '3.0.0-dev';
-
-    /**
      * The Brainwave framework version.
      *
      * @var string
      */
     const BRAINWAVE_VERSION = '0.9.4-dev';
-
-    /**
-     * Has the app response been sent to the client?
-     *
-     * @var bool
-     */
-    protected $responded = false;
-
-    /**
-     * @var object The object context for dispatch closures
-     */
-    protected $dispatchContext;
 
     /**
      * All registered providers
@@ -112,43 +86,43 @@ class Application extends Container implements ApplicationContract
     protected $config = [
         'app' => [
             'ext' => 'php',
-            'group' => 'app'
+            'group' => 'app',
         ],
         'http' => [
             'ext' => 'php',
-            'group' => 'http'
+            'group' => 'http',
         ],
         'mail' => [
             'ext' => 'php',
-            'group' => 'mail'
+            'group' => 'mail',
         ],
         'cache' => [
             'ext' => 'php',
-            'group' => 'cache'
+            'group' => 'cache',
         ],
         'services' => [
             'ext' => 'php',
-            'group' => 'services'
+            'group' => 'services',
         ],
         'session' => [
             'ext' => 'php',
-            'group' => 'session'
+            'group' => 'session',
         ],
         'cookies' => [
             'ext' => 'php',
-            'group' => 'cookies'
+            'group' => 'cookies',
         ],
         'view' => [
             'ext' => 'php',
-            'group' => 'view'
+            'group' => 'view',
         ],
         'autoload' => [
             'ext' => 'php',
-            'group' => 'autoload'
+            'group' => 'autoload',
         ],
         'database' => [
             'ext' => 'php',
-            'group' => 'database'
+            'group' => 'database',
         ],
     ];
 
@@ -226,7 +200,7 @@ class Application extends Container implements ApplicationContract
 
         // Register providers
         foreach ($this['settings']['services::providers'] as $provider => $arr) {
-            $this->register(new $provider, $arr);
+            $this->register(new $provider(), $arr);
         }
 
         // Middleware stack
@@ -239,7 +213,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Bind the installation paths to the application.
      *
-     * @param  array $paths
+     * @param array $paths
      *
      * @return void
      */
@@ -304,7 +278,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a maintenance mode event listener.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -316,7 +290,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register an application error handler.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -328,7 +302,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register an error handler for fatal errors.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -342,9 +316,9 @@ class Application extends Container implements ApplicationContract
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int    $code
-     * @param  string $message
-     * @param  array  $headers
+     * @param int    $code
+     * @param string $message
+     * @param array  $headers
      *
      * @return void
      *
@@ -363,7 +337,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a 404 error handler.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
      *
      * @return void
      */
@@ -372,66 +346,6 @@ class Application extends Container implements ApplicationContract
         $this->error(function (NotFoundHttpException $e) use ($callback) {
             return call_user_func($callback, $e);
         });
-    }
-
-    /**
-     * Mounts controllers under the given route prefix.
-     *
-     * @param  string                      $prefix     The route prefix
-     * @param  ControllerCollection|
-     *         ControllerContract $controllers A ControllerCollection or a ControllerContract instance
-     *
-     * @return Application
-     *
-     * @throws \LogicException
-     */
-    public function mount($prefix, $controllers)
-    {
-        if ($controllers instanceof ControllerContract) {
-            $controllers = $controllers->connect($this);
-
-            if (!$controllers instanceof ControllerCollection) {
-                throw new \LogicException(
-                    'The "connect" method of the ControllerProvider must return a ControllerCollection.'
-                );
-            }
-        }
-
-        if (!$controllers instanceof ControllerCollection) {
-            throw new \LogicException(
-                'The "mount" method takes either a ControllerCollection or a ControllerProvider instance.'
-            );
-        }
-
-        $this['controllers']->mount($prefix, $controllers);
-
-        return $this;
-    }
-
-    /**
-     * Get controllers route
-     *
-     * @return Route
-     */
-    public function getControllersRoutes()
-    {
-        $route = [];
-        $controllers = $this['controllers']->getControllers();
-        foreach ($controllers as $controller) {
-            $route[] = $controller->getRouteName();
-        }
-
-        return $route;
-    }
-
-    /**
-     * Determine if application is in local environment.
-     *
-     * @return string
-     */
-    public function isLocal()
-    {
-        return $this['env'] = 'local';
     }
 
     /**
@@ -447,21 +361,22 @@ class Application extends Container implements ApplicationContract
     /**
      * Set the current application locale.
      *
-     * @param  string  $locale
+     * @param string $locale
      *
      * @return Application
      */
     public function setLocale($locale)
     {
         $this['settings']->set('app::locale', $locale);
+
         return $this;
     }
 
     /**
      * Resolve the given type from the container.
      *
-     * @param  string $abstract
-     * @param  array  $parameters
+     * @param string $abstract
+     * @param array  $parameters
      *
      * @return mixed
      */
@@ -472,7 +387,6 @@ class Application extends Container implements ApplicationContract
         if (!empty($parameters)) {
             //TODO
         } else {
-
         }
 
         return $this[$abstract];
@@ -486,162 +400,6 @@ class Application extends Container implements ApplicationContract
     public function getVersion()
     {
         return self::BRAINWAVE_VERSION;
-    }
-
-    /**
-     * Set the object context ($this) for dispatch callables
-     *
-     * @param object $context The object context ($this) in which
-     */
-    public function setDispatchContext($context)
-    {
-        $this->dispatchContext = $context;
-    }
-
-    /**
-     * Not Found Handler
-     *
-     * This method defines or invokes the application-wide Not Found handler.
-     * There are two contexts in which this method may be invoked:
-     *
-     * 1. When declaring the handler:
-     *
-     * If the $callable parameter is not null and is callable, this
-     * method will register the callable to be invoked when no
-     * Routing match the current HTTP request. It WILL NOT invoke the callable.
-     *
-     * 2. When invoking the handler:
-     *
-     * If the $callable parameter is null, Brainwave assumes you want
-     * to invoke an already-registered handler. If the handler has been
-     * registered and is callable, it is invoked and sends a 404 HTTP Response
-     * whose body is the output of the Not Found handler.
-     *
-     * @param mixed $callable Anything that returns true for is_callable()
-     */
-    public function notFound($callable = null)
-    {
-        if (is_callable($callable)) {
-            $this['notFound'] = function () use ($callable) {
-                return $callable;
-            };
-        } elseif (is_string($callable)) {
-            $callable = $this['route']::stringToCallable($callable);
-
-            if (!$callable) {
-                throw new NotFoundHttpException();
-            }
-
-            $this['notFound'] = function () use ($callable) {
-                return $callable;
-            };
-        } else {
-            ob_start();
-            if (is_array($this['notFound'])) {
-                call_user_func([new $this['notFound'][0], $this['notFound'][1]]);
-            } elseif (is_callable($this['notFound'])) {
-                call_user_func($this['notFound']);
-            } else {
-                call_user_func([$this['exception'], 'pageNotFound']);
-            }
-
-            $this->halt('404');
-        }
-    }
-
-    /**
-     * Set Last-Modified HTTP Response Header
-     *
-     * Set the HTTP 'Last-Modified' header and stop if a conditional
-     * GET request's `If-Modified-Since` header matches the last modified time
-     * of the resource. The `time` argument is a UNIX timestamp integer value.
-     * When the current request includes an 'If-Modified-Since' header that
-     * matches the specified last modified time, the application will stop
-     * and send a '304 Not Modified' response to the client.
-     *
-     * @param  int                       $time  The last modified UNIX timestamp
-     *
-     * @throws \InvalidArgumentException        If provided timestamp is not an integer
-     */
-    public function lastModified($time)
-    {
-        if (is_integer($time)) {
-            $this['response']->setHeader('Last-Modified', gmdate('D, d M Y H:i:s T', $time));
-
-            if ($time === strtotime($this['request']->getHeader('IF_MODIFIED_SINCE'))) {
-                $this->halt('304');
-            }
-
-        }
-
-        throw new \InvalidArgumentException(
-            'Brainwave::lastModified only accepts an integer UNIX timestamp value.'
-        );
-    }
-
-    /**
-     * Set ETag HTTP Response Header
-     *
-     * Set the etag header and stop if the conditional GET request matches.
-     * The `value` argument is a unique identifier for the current resource.
-     * The `type` argument indicates whether the etag should be used as a strong or
-     * weak cache validator.
-     *
-     * When the current request includes an 'If-None-Match' header with
-     * a matching etag, execution is immediately stopped. If the request
-     * method is GET or HEAD, a '304 Not Modified' response is sent.
-     *
-     * @param  string                    $value The etag value
-     * @param  string                    $type  The type of etag to create; either "strong" or "weak"
-     *
-     * @throws \InvalidArgumentException        If provided type is invalid
-     *
-     */
-    public function etag($value, $type = 'strong')
-    {
-        // Ensure type is correct
-        if (!in_array($type, ['strong', 'weak'])) {
-            throw new \InvalidArgumentException('Invalid Brainwave::etag type. Expected "strong" or "weak".');
-        }
-
-        // Set etag value
-        $value = "{$value}";
-
-        if ($type === 'weak') {
-            $value = 'W/'.$value;
-        }
-
-        $this['response']->setHeader('ETag', $value);
-
-        // Check conditional GET
-        if ($etagsHeader = $this['request']->getHeader('IF_NONE_MATCH')) {
-            $etags = preg_split('@\s*,\s*@', $etagsHeader);
-            if (in_array($value, $etags) || in_array('*', $etags)) {
-                $this->halt('304');
-            }
-        }
-    }
-
-    /**
-     * Set Expires HTTP response header
-     *
-     * The `Expires` header tells the HTTP client the time at which
-     * the current resource should be considered stale. At that time the HTTP
-     * client will send a conditional GET request to the server; the server
-     * may return a 200 OK if the resource has changed, else a 304 Not Modified
-     * if the resource has not changed. The `Expires` header should be used in
-     * conjunction with the `etag()` or `lastModified()` methods above.
-     *
-     * @param string|int $time If string, a time to be parsed by `strtotime()`;
-     *                         If int, a UNIX timestamp;
-     */
-    public function expires($time)
-    {
-        if (is_string($time)) {
-            $time = strtotime($time);
-        }
-
-        $this['response']->setHeader('Expires', gmdate('D, d M Y H:i:s T', $time));
     }
 
     /**
@@ -664,157 +422,6 @@ class Application extends Container implements ApplicationContract
         }
 
         return dirname($this['environment']->get('SCRIPT_FILENAME'));
-    }
-
-    /**
-     * Stop
-     *
-     * The thrown exception will be caught in application's `call()` method
-     * and the response will be sent as is to the HTTP client.
-     *
-     * @throws HttpException
-     */
-    public function stop()
-    {
-        throw new \Exception();
-    }
-
-    /**
-     * Halt
-     *
-     * Stop the application and immediately send the response with a
-     * specific status and body to the HTTP client. This may send any
-     * type of response: info, success, redirect, client error, or server error.
-     *
-     * @param int $status The HTTP response status
-     *
-     * @throws HtppException
-     */
-    public function halt($status, $message = '')
-    {
-        $this['response']->setStatus($status);
-        $this['response']->write($message, true);
-
-        $this->stop();
-    }
-
-    /**
-     * Pass
-     *
-     * The thrown exception is caught in the application's `call()` method causing
-     * the router's current iteration to stop and continue to the subsequent route if available.
-     * If no subsequent matching Routing are found, a 404 response will be sent to the client.
-     *
-     * @throws NotFoundHttpException
-     */
-    public function pass()
-    {
-        throw new NotFoundHttpException();
-    }
-
-    /**
-     * Set the HTTP response Content-Type
-     *
-     * @param string $type The Content-Type for the Response (ie. text/html)
-     */
-    public function contentType($type)
-    {
-        $this['response']->setHeader('Content-Type', $type);
-    }
-
-    /**
-     * Set the HTTP response status code
-     *
-     * @param int $code The HTTP response status code
-     */
-    public function status($code)
-    {
-        $this['response']->setStatus($code);
-    }
-
-    /**
-     * Send a File
-     *
-     * This method streams a local or remote file to the client
-     *
-     * @param string $file        The URI of the file, can be local or remote
-     * @param string $contentType Optional content type of the stream,
-     *                            if not specified Brainwave will attempt to get this
-     */
-    public function sendFile($file, $contentType = false)
-    {
-        $fp = fopen($file, "r");
-        $this['response']->setBody(new Stream($fp));
-
-        if ($contentType) {
-            $this['response']->setHeader("Content-Type", $contentType);
-        } else {
-            if (file_exists($file)) {
-                //Set Content-Type
-                if (extension_loaded('fileinfo')) {
-                    $finfo = new \finfo(FILEINFO_MIME_TYPE);
-                    $type = $finfo->file($file);
-                    $this['response']->setHeader("Content-Type", $type);
-                } else {
-                    $this['response']->setHeader("Content-Type", "application/octet-stream");
-                }
-
-                //Set Content-Length
-                $stat = fstat($fp);
-                $this['response']->setHeader("Content-Length", $stat['size']);
-            } else {
-                //Set Content-Type and Content-Length
-                $data = stream_get_meta_data($fp);
-
-                foreach ($data['wrapper_data'] as $header) {
-                    if (strpos($header, ':') === false) {
-                        continue;
-                    }
-
-                    list($k, $v) = explode(": ", $header, 2);
-
-                    if ($k === "Content-Type") {
-                        $this['response']->setHeader("Content-Type", $v);
-                    } elseif ($k === "Content-Length") {
-                        $this['response']->setHeader("Content-Length", $v);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Send a Process
-     *
-     * This method streams a process to a client
-     *
-     * @param string $command     The command to run
-     * @param string $contentType Optional content type of the stream
-     */
-    public function sendProcess($command, $contentType = "text/plain")
-    {
-        $this['response']->setBody(new Stream(popen($command, 'r')));
-        $this['response']->setHeader("Content-Type", $contentType);
-    }
-
-    /**
-     * Set Download
-     *
-     * This method triggers a download in the browser
-     *
-     * @param  string $filename Optional filename for the download
-     *
-     * @return \Brainwave\Http\Response
-     */
-    public function setDownload($filename = false)
-    {
-        $download = "attachment;";
-
-        if ($filename) {
-            $download .= "filename={$filename}";
-        }
-
-        $this['response']->setHeader("Content-Disposition", $download);
     }
 
     /**
@@ -896,7 +503,7 @@ class Application extends Container implements ApplicationContract
     /**
      * Register a new boot listener.
      *
-     * @param  mixed $callback
+     * @param mixed $callback
      *
      * @return void
      */
@@ -965,11 +572,8 @@ class Application extends Container implements ApplicationContract
         try {
             $this['middleware'][0]->call();
         } catch (\Exception $e) {
-            $this['response']->write($this['exception']->handleException($e), true);
+            $this['exception']->handleException($e);
         }
-
-        // Finalize and send response
-        $this->finalize();
 
         $this['events']->applyHook('after');
     }
@@ -983,31 +587,6 @@ class Application extends Container implements ApplicationContract
     {
         if (!$this->booted) {
             $this->boot();
-        }
-
-        // Set header for OPTIONS and all other routes
-        if ($this['router']->getCurrentRoute()) {
-            $this['response']->setHeader(
-                'Access-Control-Allow-Methods',
-                implode(
-                    ", ",
-                    $this['router']->getMethodsAvailable(
-                        $this['router']->getCurrentRoute()->getPattern()
-                    )
-                )
-            );
-        }
-
-        if (!$this->responded) {
-            $this->responded = true;
-
-            // Encrypt CookieJar
-            if ($this['settings']['cookie::encrypt']) {
-                $this['response']->encryptCookies($this['encrypter']);
-            }
-
-            // Send response
-            $this['response']->finalize($this['request'])->send();
         }
     }
 
@@ -1026,136 +605,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Dispatch request and build response
-     *
-     * This method will route the provided Request object against all available
-     * application Routing. The provided response will reflect the status, header, and body
-     * set by the invoked matching route.
-     *
-     * The provided Request and Response objects are updated by reference. There is no
-     * value returned by this method.
-     *
-     * @param Request  Request request instance
-     * @param Response Response response instance
-     */
-    protected function dispatchRequest(Request $request, Response $response)
-    {
-        try {
-            ob_start();
-
-            $this['events']->applyHook('before.router');
-            $dispatched = false;
-
-            $matchedRouting = $this['router']->getMatchedRoutes($request->getMethod(), $request->getPathInfo(), true);
-
-            foreach ($matchedRouting as $route) {
-                try {
-                    $this['events']->applyHook('before.dispatch');
-
-                    $dispatched = $route->dispatch($this->dispatchContext);
-
-                    $this['events']->applyHook('after.dispatch');
-
-                    if ($dispatched) {
-                        break;
-                    }
-                } catch (NotFoundHttpException $e) {
-                    continue;
-                }
-            }
-
-            if (!$dispatched) {
-                $this->notFound();
-            }
-
-            $this['events']->applyHook('after.router');
-        } catch (\Exception $e) {
-            $this->stop();
-        }
-
-        $response->write(ob_get_clean());
-    }
-
-    /**
-     * Perform a sub-request from within an application route
-     *
-     * This method allows you to prepare and initiate a sub-request, run within
-     * the context of the current request. This WILL NOT issue a remote HTTP
-     * request. Instead, it will route the provided URL, method, headers,
-     * CookieJar, body, and server variables against the set of registered
-     * application Routing. The result response object is returned.
-     *
-     * @param  string $url             The request URL
-     * @param  string $method          The request method
-     * @param  array  $headersArr         Associative array of request headers
-     * @param  string $body            The request body
-     * @param  array  $serverVariables Custom $_SERVER variables
-     *
-     * @return Response
-     */
-    public function subRequest(
-        $url,
-        $method = 'GET',
-        array $headersArr = [],
-        array $cookieArr = [],
-        $body = '',
-        array $serverVariables = []
-    ) {
-        // Build sub-request and sub-response
-        $environment = new EnvironmentDetector(array_merge([
-            'REQUEST_METHOD' => $method,
-            'REQUEST_URI'    => $url,
-            'SCRIPT_NAME'    => '/index.php'
-        ], $serverVariables));
-
-        $headers = new Headers($environment);
-
-        if (isset($headersArr)) {
-            foreach ($headersArr as $key => $value) {
-                $headers->set($key, $value);
-            }
-        }
-
-        $cookieJar = new CookieJar($headers);
-
-        if (isset($cookieArr)) {
-            foreach ($cookieArr as $key => $value) {
-                $cookieJar->set($key, $value);
-            }
-        }
-
-        $subRequest  = new Request($environment, $headers, $cookieJar, $body);
-        $subResponse = new Response(new Headers(), new CookieJar());
-
-        // Cache original request and response
-        $oldRequest  = $this['request'];
-        $oldResponse = $this['response'];
-
-        // Set sub-request and sub-response
-        $this['request']  = $subRequest;
-        $this['response'] = $subResponse;
-
-        // Dispatch sub-request through application router
-        $this->dispatchRequest($subRequest, $subResponse);
-
-        // Restore original request and response
-        $this['request']  = $oldRequest;
-        $this['response'] = $oldResponse;
-
-        return $subResponse;
-    }
-
-    /**
-     * Call
-     *
-     * This method finds and iterates all route objects that match the current request URI.
-     */
-    public function call()
-    {
-        $this->dispatchRequest($this['request'], $this['response']);
-    }
-
-    /**
      * Dynamically access application services.
      *
      * @return mixed
@@ -1168,8 +617,8 @@ class Application extends Container implements ApplicationContract
     /**
      * Dynamically set application services.
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
      *
      * @return void
      */
@@ -1212,13 +661,14 @@ class Application extends Container implements ApplicationContract
     /**
      * Sets a parameter or an object.
      *
-     * @param mixed  $value The value of the parameter or a closure to define an object
+     * @param mixed $value The value of the parameter or a closure to define an object
      *
      * @return Application
      */
     public function offsetSet($key, $value)
     {
         parent::offsetSet(str_replace('_', '.', $key), $value);
+
         return $this;
     }
 
