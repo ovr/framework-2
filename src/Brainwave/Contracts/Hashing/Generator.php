@@ -34,7 +34,7 @@ interface Generator
      * @param string $str    string to hash.
      * @param string $method default method 'bcrypt'.
      *
-     * @return string|boolen returns hashed string, or false on error.
+     * @return string|false returns hashed string, or false on error.
      */
     public function make($str, $method = 'bcrypt');
 

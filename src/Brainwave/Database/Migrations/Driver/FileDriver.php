@@ -18,8 +18,8 @@ namespace Brainwave\Database\Migrations\Driver;
  *
  */
 
-use Brainwave\Filesystem\Filesystem;
 use Brainwave\Database\Migrations\Driver\Interfaces\DriverInterface;
+use Brainwave\Filesystem\Filesystem;
 
 /**
  * FileDriver

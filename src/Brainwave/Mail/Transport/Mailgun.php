@@ -18,11 +18,11 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use Swift_Transport;
 use GuzzleHttp\Client;
-use Swift_Mime_Message;
 use GuzzleHttp\Post\PostFile;
 use Swift_Events_EventListener;
+use Swift_Mime_Message;
+use Swift_Transport;
 
 /**
  * Mailgun

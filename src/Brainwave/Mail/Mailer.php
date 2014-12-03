@@ -18,13 +18,12 @@ namespace Brainwave\Mail;
  *
  */
 
-use Swift_Mailer;
-use Brainwave\Log\Writer;
-use Brainwave\Mail\Message;
-use Psr\Log\LoggerInterface;
-use Brainwave\Contracts\View\Factory;
 use Brainwave\Contracts\Events\Dispatcher;
 use Brainwave\Contracts\Mail\Mailer as MailerContract;
+use Brainwave\Contracts\View\Factory;
+use Brainwave\Mail\Message;
+use Psr\Log\LoggerInterface;
+use Swift_Mailer;
 
 /**
  * Mailer

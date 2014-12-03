@@ -18,8 +18,8 @@ namespace Brainwave\Mail;
  *
  */
 
-use Swift_Image;
 use Swift_Attachment;
+use Swift_Image;
 
 /**
  * Message

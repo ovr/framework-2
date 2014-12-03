@@ -18,11 +18,11 @@ namespace Brainwave\Application\Environment;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Support\Str;
+use Brainwave\Contracts\Application\Environment as EnvironmentContract;
 use Brainwave\Support\Arr;
 use Brainwave\Support\Collection;
-use Brainwave\Contracts\Application\Environment as EnvironmentContract;
+use Brainwave\Support\Str;
+use Pimple\Container;
 
 /**
  * EnvironmentDetector

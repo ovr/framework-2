@@ -18,11 +18,11 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use Swift_Transport;
-use Swift_Mime_Message;
-use Swift_Mime_MimeEntity;
 use Psr\Log\LoggerInterface;
 use Swift_Events_EventListener;
+use Swift_Mime_Message;
+use Swift_Mime_MimeEntity;
+use Swift_Transport;
 
 /**
  * Log

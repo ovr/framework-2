@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use FilesystemIterator;
 use Brainwave\Filesystem\Exception\FileNotFoundException;
+use FilesystemIterator;
 
 /**
  * Filesystem

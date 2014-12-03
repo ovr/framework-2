@@ -18,15 +18,15 @@ namespace Brainwave\Exception;
  *
  */
 
-use Whoops\Run;
+use Brainwave\Exception\Adapter\PlainDisplayer;
+use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
+use Brainwave\Exception\Handler as ExceptionHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
-use Whoops\Handler\JsonResponseHandler;
-use Brainwave\Exception\Adapter\PlainDisplayer;
-use Brainwave\Exception\Handler as ExceptionHandler;
-use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
+use Whoops\Run;
 
 /**
  * ExceptionServiceProvider

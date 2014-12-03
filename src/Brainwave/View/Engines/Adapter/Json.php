@@ -18,8 +18,8 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use Pimple\Container;
 use Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
+use Pimple\Container;
 
 /**
  * Json

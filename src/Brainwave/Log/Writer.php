@@ -18,12 +18,12 @@ namespace Brainwave\Log;
  *
  */
 
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger as MonologLogger;
+use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
+use Brainwave\Contracts\Support\Jsonable as JsonableContract;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
-use Brainwave\Contracts\Support\Jsonable as JsonableContract;
-use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger as MonologLogger;
 
 /**
  * Writer

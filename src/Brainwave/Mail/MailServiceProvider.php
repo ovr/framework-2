@@ -18,18 +18,18 @@ namespace Brainwave\Mail;
  *
  */
 
-use Swift_Mailer;
-use Swift_Message;
-use Pimple\Container;
 use Aws\Ses\SesClient;
-use Swift_SmtpTransport;
-use Swift_MailTransport;
-use Swift_SendmailTransport;
-use Pimple\ServiceProviderInterface;
 use Brainwave\Mail\Transport\Log as LogTransport;
-use Brainwave\Mail\Transport\Ses as SesTransport;
 use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
 use Brainwave\Mail\Transport\Mandrill as MandrillTransport;
+use Brainwave\Mail\Transport\Ses as SesTransport;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Swift_MailTransport;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SendmailTransport;
+use Swift_SmtpTransport;
 
 /**
  * MailServiceProvider

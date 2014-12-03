@@ -18,8 +18,8 @@ namespace Brainwave\Encrypter;
  *
  */
 
-use Pimple\Container;
 use Brainwave\Encrypter\Encrypter;
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
