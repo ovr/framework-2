@@ -18,13 +18,13 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use PDO;
-use Brainwave\Support\Str;
-use Brainwave\Support\Arr;
-use Brainwave\Database\Grammar\Builder;
 use Brainwave\Cache\Manager as CacheManager;
-use Brainwave\Database\Exception\ConnectException;
 use Brainwave\Contracts\Database\Connection as ConnectionContract;
+use Brainwave\Database\Exception\ConnectException;
+use Brainwave\Database\Grammar\Builder;
+use Brainwave\Support\Arr;
+use Brainwave\Support\Str;
+use PDO;
 
 /**
  * Connection

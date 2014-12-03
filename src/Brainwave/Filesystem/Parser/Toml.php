@@ -18,9 +18,9 @@ namespace Brainwave\Filesystem\Parser;
  *
  */
 
+use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 use Brainwave\Filesystem\Filesystem;
 use Yosymfony\Toml\Toml as TomlParser;
-use Brainwave\Contracts\Filesystem\Parser as ParserContract;
 
 /**
  * Toml

@@ -18,10 +18,10 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use Swift_Transport;
 use Aws\Ses\SesClient;
-use Swift_Mime_Message;
 use Swift_Events_EventListener;
+use Swift_Mime_Message;
+use Swift_Transport;
 
 /**
  * Ses

@@ -17,8 +17,8 @@ namespace Brainwave\Exception\Adapter;
  * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
  *
  */
-use Pimple\Container;
 use Brainwave\Contracts\Exception\Adapter as ExceptionAdapter;
+use Pimple\Container;
 
 /**
  * WhoopsDisplayer

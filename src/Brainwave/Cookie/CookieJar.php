@@ -18,10 +18,10 @@ namespace Brainwave\Cookie;
  *
  */
 
-use Brainwave\Support\Collection;
-use Brainwave\Contracts\Http\Headers as HeadersContract;
 use Brainwave\Contracts\Cookie\CookiesJar as CookiesJarContract;
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Http\Headers as HeadersContract;
+use Brainwave\Support\Collection;
 
 /**
  * Cookies

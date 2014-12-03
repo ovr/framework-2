@@ -18,8 +18,8 @@ namespace Brainwave\Events;
  *
  */
 
-use Pimple\Container;
 use Brainwave\Contracts\Events\Dispatcher as EventsContract;
+use Pimple\Container;
 
 /**
  * Manager

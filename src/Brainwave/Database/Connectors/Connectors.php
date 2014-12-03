@@ -18,8 +18,8 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use PDO;
 use Brainwave\Support\Arr;
+use PDO;
 
 /**
  * Connector

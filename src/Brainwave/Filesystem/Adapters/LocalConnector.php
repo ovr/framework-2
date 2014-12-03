@@ -18,8 +18,8 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use League\Flysystem\Adapter\Local;
 use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use League\Flysystem\Adapter\Local;
 
 /**
  * ConnectionFactory

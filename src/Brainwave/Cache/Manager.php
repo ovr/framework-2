@@ -18,21 +18,21 @@ namespace Brainwave\Cache;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Cache\Repository;
 use Brainwave\Cache\Adapter\ApcCache;
-use Brainwave\Cache\Adapter\NullCache;
-use Brainwave\Cache\Adapter\FileCache;
 use Brainwave\Cache\Adapter\ArrayCache;
-use Brainwave\Cache\Adapter\RedisCache;
-use Brainwave\Cache\Adapter\XCacheCache;
-use Brainwave\Cache\Adapter\WinCacheCache;
+use Brainwave\Cache\Adapter\FileCache;
 use Brainwave\Cache\Adapter\MemcacheCache;
 use Brainwave\Cache\Adapter\MemcachedCache;
+use Brainwave\Cache\Adapter\NullCache;
+use Brainwave\Cache\Adapter\RedisCache;
+use Brainwave\Cache\Adapter\WinCacheCache;
+use Brainwave\Cache\Adapter\XCacheCache;
 use Brainwave\Cache\Exception\CacheException;
 use Brainwave\Cache\Exception\InvalidArgumentException;
+use Brainwave\Cache\Repository;
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use Brainwave\Contracts\Cache\Factory as FactoryContract;
+use Pimple\Container;
 
 /**
  * Manager

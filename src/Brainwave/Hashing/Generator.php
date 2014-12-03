@@ -18,9 +18,9 @@ namespace Brainwave\Hashing;
  *
  */
 
+use Brainwave\Contracts\Hashing\Generator as HashContract;
 use Brainwave\Support\Helpers;
 use RandomLib\Factory as RandomLib;
-use Brainwave\Contracts\Hashing\Generator as HashContract;
 
 /**
  * Generator

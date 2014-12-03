@@ -18,9 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
+use Brainwave\Cache\Manager as CacheManager;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Brainwave\Cache\Manager as CacheManager;
 
 /**
  * CacheServiceProvider

@@ -18,8 +18,8 @@ namespace Brainwave\Database\Exception;
  *
  */
 
-use PDOException;
 use Brainwave\Support\Helpers;
+use PDOException;
 
 /**
  * ConnectException

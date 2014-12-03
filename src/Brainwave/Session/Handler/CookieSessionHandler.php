@@ -18,8 +18,8 @@ namespace Brainwave\Session\Handler;
  *
  */
 
-use Brainwave\Contracts\Http\Request as RequestContract;
 use Brainwave\Contracts\Cookie\Factory as CookieContract;
+use Brainwave\Contracts\Http\Request as RequestContract;
 
 /**
  * Session

@@ -18,8 +18,8 @@ namespace Brainwave\Contracts\Cookie;
  *
  */
 
-use Brainwave\Contracts\Support\Collection;
 use Brainwave\Contracts\Http\Headers as HeadersContract;
+use Brainwave\Contracts\Support\Collection;
 
 /**
  * CookiesJar

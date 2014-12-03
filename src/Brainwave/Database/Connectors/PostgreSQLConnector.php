@@ -18,9 +18,9 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use PDO;
 use Brainwave\Database\Connectors\Connectors;
 use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
+use PDO;
 
 /**
  * PostgreSQLConnector

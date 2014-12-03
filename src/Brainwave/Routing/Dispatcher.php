@@ -18,15 +18,15 @@ namespace Brainwave\Routing;
  *
  */
 
-use Pimple\Conatiner;
-use Brainwave\Http\Response;
+use Beainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Brainwave\Contracts\Http\Response as ResponseContract;
+use Brainwave\Http\Exception as HttpException;
 use Brainwave\Http\JsonResponse;
+use Brainwave\Http\Response;
 use Brainwave\Routing\RouteStrategyTrait;
 use FastRoute\Dispatcher as FastDispatcher;
-use Brainwave\Http\Exception as HttpException;
-use Brainwave\Contracts\Http\Response as ResponseContract;
 use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
-use Beainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
+use Pimple\Conatiner;
 
 /**
  * Dispatcher

@@ -18,11 +18,11 @@ namespace Brainwave\Support;
  *
  */
 
-use Brainwave\Support\Arr;
-use Brainwave\Contracts\Support\Jsonable as JsonableContract;
-use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 use Brainwave\Contracts\Support\Collection as CollectionContract;
+use Brainwave\Contracts\Support\Jsonable as JsonableContract;
+use Brainwave\Support\Arr;
 
 /**
  * Collection

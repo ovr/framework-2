@@ -18,9 +18,9 @@ namespace Brainwave\Encrypter;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Support\Arr;
 use Brainwave\Contracts\Encrypter as EncrypterContract;
+use Brainwave\Support\Arr;
+use Pimple\Container;
 
 /**
  * Encrypter

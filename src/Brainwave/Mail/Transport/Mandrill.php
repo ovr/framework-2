@@ -18,9 +18,9 @@ namespace Brainwave\Mail\Transport;
  *
  */
 
-use Swift_Transport;
 use GuzzleHttp\Client;
 use Swift_Events_EventListener;
+use Swift_Transport;
 
 /**
  * Mandrill

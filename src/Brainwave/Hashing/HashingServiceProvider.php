@@ -18,11 +18,11 @@ namespace Brainwave\Encrypter;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Hashing\Password;
-use RandomLib\Factory as RandomLib;
-use Pimple\ServiceProviderInterface;
 use Brainwave\Hashing\Generator as HashGenerator;
+use Brainwave\Hashing\Password;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use RandomLib\Factory as RandomLib;
 
 /**
  * HashingServiceProvider

@@ -18,9 +18,9 @@ namespace Brainwave\Config;
  *
  */
 
-use Brainwave\Filesystem\FileLoader;
 use Brainwave\Contracts\Config\Manager as ManagerContract;
 use Brainwave\Contracts\Config\Repository as RepositoryContract;
+use Brainwave\Filesystem\FileLoader;
 
 /**
  * Manager

@@ -18,11 +18,11 @@ namespace Brainwave\Database;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Database\Query;
-use Pimple\ServiceProviderInterface;
-use Brainwave\Database\DatabaseManager;
 use Brainwave\Database\Connection\ConnectionFactory;
+use Brainwave\Database\DatabaseManager;
+use Brainwave\Database\Query;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 /**
  * Database ServiceProvider

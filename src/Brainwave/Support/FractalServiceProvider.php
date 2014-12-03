@@ -18,12 +18,12 @@ namespace Brainwave\Support;
  *
  */
 
-use Pimple\Container;
 use League\Fractal\Manager;
-use Pimple\ServiceProviderInterface;
 use League\Fractal\Serializer\ArraySerializer;
-use League\Fractal\Serializer\JsonApiSerializer;
 use League\Fractal\Serializer\DataArraySerializer;
+use League\Fractal\Serializer\JsonApiSerializer;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 /**
  * FractalServiceProvider

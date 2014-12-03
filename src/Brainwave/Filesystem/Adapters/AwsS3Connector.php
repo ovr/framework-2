@@ -19,8 +19,8 @@ namespace Brainwave\Filesystem\Adapters;
  */
 
 use Aws\S3\S3Client;
-use League\Flysystem\Adapter\AwsS3;
 use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use League\Flysystem\Adapter\AwsS3;
 
 /**
  * AwsS3Connector

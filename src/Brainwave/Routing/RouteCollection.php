@@ -18,11 +18,11 @@ namespace Brainwave\Routing;
  *
  */
 
-use Pimple\Conatiner;
-use FastRoute\RouteParser;
+use Brainwave\Routing\RouteStrategyTrait;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
-use Brainwave\Routing\RouteStrategyTrait;
+use FastRoute\RouteParser;
+use Pimple\Conatiner;
 
 /**
  * RouteCollection

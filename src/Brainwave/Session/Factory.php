@@ -18,8 +18,8 @@ namespace Brainwave\Session;
  *
  */
 
-use Brainwave\Session\Manager as Session;
 use Brainwave\Contracts\Session\Factory as FactoryContract;
+use Brainwave\Session\Manager as Session;
 
 /**
  * Factory
