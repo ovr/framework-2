@@ -74,7 +74,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param  string $method
      * @param  string $uri
      *
-     * @return \Brainwave\Contracts\Http\Response|Brainwave\Http\JsonResponse
+     * @return ResponseContract
      */
     public function dispatch($method, $uri)
     {
