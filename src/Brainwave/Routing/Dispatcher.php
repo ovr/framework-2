@@ -74,7 +74,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param  string $method
      * @param  string $uri
      *
-     * @return \Brainwave\Constructs\Http\Response|Brainwave\Http\JsonResponse
+     * @return \Brainwave\Contracts\Http\Response|Brainwave\Http\JsonResponse
      */
     public function dispatch($method, $uri)
     {
@@ -104,7 +104,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param  integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
      * @param  array                                               $vars
      *
-     * @return \Brainwave\Constructs\Http\Response
+     * @return \Brainwave\Contracts\Http\Response
      *
      * @throws RuntimeException
      */
@@ -114,6 +114,28 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
             $this->setStrategy($strategy);
         }
 
+        $controller = $this->isController($handler);
+
+        // handle getting of response based on strategy
+        if (is_integer($strategy)) {
+            return $this->getResponseOnStrategy($strategy);
+        }
+
+        // we must be using a custom strategy
+        return $strategy->dispatch($controller, $vars);
+    }
+
+    /**
+     * Check if handler is a controller
+     *
+     * @param  string|\Closure $handler
+     *
+     * @return \Brainwave\Contracts\Http\Response
+     *
+     * @throws \RuntimeException
+     */
+    public function isController($handler)
+    {
         $controller = null;
 
         // figure out what the controller is
@@ -126,17 +148,11 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         // if controller method wasn't specified, throw exception.
-        if (! $controller){
+        if (!$controller){
             throw new \RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
-        // handle getting of response based on strategy
-        if (is_integer($strategy)) {
-            return $this->getResponseOnStrategy($strategy);
-        }
-
-        // we must be using a custom strategy
-        return $strategy->dispatch($controller, $vars);
+        return $controller;
     }
 
     /**
