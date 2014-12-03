@@ -19,7 +19,6 @@ namespace Brainwave\Http;
  */
 
 use Pimple\Container;
-use Brainwave\Http\Response;
 use Pimple\ServiceProviderInterface;
 
 /**

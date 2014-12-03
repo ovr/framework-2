@@ -18,8 +18,8 @@ namespace Brainwave\Exception\Displayer;
  *
  */
 
-use Pimple\Container;
 use Brainwave\Exception\Interfaces\ExceptionDisplayerInterface;
+use Pimple\Container;
 
 /**
  * PlainDisplayer

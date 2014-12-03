@@ -18,11 +18,11 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use Pimple\Container;
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\Filesystem as Flysystem;
-use Brainwave\Filesystem\Adapters\ConnectionFactory;
 use Brainwave\Contracts\FilesystemManager as Manager;
+use Brainwave\Filesystem\Adapters\ConnectionFactory;
+use League\Flysystem\Filesystem as Flysystem;
+use League\Flysystem\FilesystemInterface;
+use Pimple\Container;
 
 /**
  * FilesystemManager

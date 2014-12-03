@@ -18,12 +18,12 @@ namespace Brainwave\View\Engines\Adapter;
  *
  */
 
-use Pimple\Container;
-use League\Plates\Engine;
-use League\Plates\Extension\URI;
-use League\Plates\Extension\Asset;
-use League\Plates\Template\Template;
 use Brainwave\View\Engines\Interfaces\EngineInterface as EnginesContract;
+use League\Plates\Engine;
+use League\Plates\Extension\Asset;
+use League\Plates\Extension\URI;
+use League\Plates\Template\Template;
+use Pimple\Container;
 
 /**
  * Plates

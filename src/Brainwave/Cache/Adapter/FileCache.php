@@ -18,9 +18,9 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use Brainwave\Support\Arr;
-use Brainwave\Filesystem\Interfaces\FilesystemInterface;
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Brainwave\Filesystem\Interfaces\FilesystemInterface;
+use Brainwave\Support\Arr;
 
 /**
  * FileCache

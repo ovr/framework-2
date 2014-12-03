@@ -18,9 +18,9 @@ namespace Brainwave\Http;
  *
  */
 
-use Symfony\Component\HttpFoundation;
-use Brainwave\Http\ResponseParameterTrait;
 use Brainwave\Contracts\Http\Response as ResponseContract;
+use Brainwave\Http\ResponseParameterTrait;
+use Symfony\Component\HttpFoundation;
 
 /**
  * Response

@@ -18,9 +18,9 @@ namespace Brainwave\Cookie;
  *
  */
 
-use Pimple\Container;
 use Brainwave\Contracts\Cookie\Factory as FactoryContract;
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
+use Pimple\Container;
 
 /**
  * Cookie

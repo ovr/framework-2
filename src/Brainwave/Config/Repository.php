@@ -18,8 +18,8 @@ namespace Brainwave\Config;
  *
  */
 
-use Brainwave\Support\Arr;
 use Brainwave\Contracts\Config\Repository as RepositoryContract;
+use Brainwave\Support\Arr;
 
 /**
  * Repository

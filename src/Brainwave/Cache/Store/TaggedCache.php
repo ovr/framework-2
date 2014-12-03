@@ -18,10 +18,10 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use Carbon\Carbon;
+use Brainwave\Cache\Store\Interfaces\StoreInterface;
 use Brainwave\Cache\Store\TagSet;
 use Brainwave\Contracts\Cache\Adapter;
-use Brainwave\Cache\Store\Interfaces\StoreInterface;
+use Carbon\Carbon;
 
 /**
  * TaggedCache

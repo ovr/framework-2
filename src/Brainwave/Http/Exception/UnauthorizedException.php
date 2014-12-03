@@ -34,8 +34,8 @@ class UnauthorizedException extends HttpException
      * Constructor
      *
      * @param string     $message
-     * @param string     $previous
-     * @param \Exception $code
+     * @param \Exception     $previous
+     * @param integer $code
      */
     public function __construct($message = 'Unauthorized', \Exception $previous = null, $code = 0)
     {

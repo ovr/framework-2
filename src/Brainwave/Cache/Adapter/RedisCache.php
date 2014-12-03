@@ -18,10 +18,10 @@ namespace Brainwave\Cache\Adapter;
  *
  */
 
-use Predis\Client as Client;
 use Brainwave\Cache\Store\TaggableStore;
-use Predis\Connection\ConnectionException;
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
+use Predis\Client as Client;
+use Predis\Connection\ConnectionException;
 
 /**
  * RedisCache

@@ -18,18 +18,18 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Support\Arr;
 use Brainwave\Database\Connection\Connection;
+use Brainwave\Database\Connectors\GoogleCloudConnector;
 use Brainwave\Database\Connectors\MSSQLConnector;
+use Brainwave\Database\Connectors\MariaDBConnector;
 use Brainwave\Database\Connectors\MySqlConnector;
 use Brainwave\Database\Connectors\OracleConnector;
-use Brainwave\Database\Connectors\SQLiteConnector;
-use Brainwave\Database\Connectors\SybaseConnector;
-use Brainwave\Database\Connectors\MariaDBConnector;
-use Brainwave\Database\Connectors\SqlServerConnector;
 use Brainwave\Database\Connectors\PostgreSQLConnector;
-use Brainwave\Database\Connectors\GoogleCloudConnector;
+use Brainwave\Database\Connectors\SQLiteConnector;
+use Brainwave\Database\Connectors\SqlServerConnector;
+use Brainwave\Database\Connectors\SybaseConnector;
+use Brainwave\Support\Arr;
+use Pimple\Container;
 
 /**
  * ConnectionFactory

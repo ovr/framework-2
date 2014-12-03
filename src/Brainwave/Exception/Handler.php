@@ -18,10 +18,10 @@ namespace Brainwave\Exception;
  *
  */
 
-use Pimple\Container;
-use Psr\Log\LoggerInterface;
 use Brainwave\Contracts\Exception\FatalErrorException as FatalError;
 use Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
+use Pimple\Container;
+use Psr\Log\LoggerInterface;
 
 /**
  * ExceptionHandler

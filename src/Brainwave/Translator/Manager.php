@@ -18,8 +18,8 @@ namespace Brainwave\Translator;
  *
  */
 
-use Brainwave\Filesystem\FileLoader;
 use Brainwave\Contracts\Translator\Translator as TranslatorContract;
+use Brainwave\Filesystem\FileLoader;
 
 /**
  * TranslatorManager

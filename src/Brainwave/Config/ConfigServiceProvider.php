@@ -18,11 +18,11 @@ namespace Brainwave\Config;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Config\Repository;
-use Pimple\ServiceProviderInterface;
-use Brainwave\Filesystem\FileLoader;
 use Brainwave\Config\Manager as ConfigManager;
+use Brainwave\Config\Repository;
+use Brainwave\Filesystem\FileLoader;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 /**
  * ConfigServiceProvider

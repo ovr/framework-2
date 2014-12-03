@@ -18,10 +18,10 @@ namespace Brainwave\Filesystem\Adapters;
  *
  */
 
-use OpenCloud\OpenStack;
+use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
 use League\Flysystem\Adapter\Rackspace;
 use OpenCloud\ObjectStore\Resource\Container;
-use Brainwave\Contracts\Filesystem\Connector as ConnectorContract;
+use OpenCloud\OpenStack;
 
 /**
  * ConnectionFactory

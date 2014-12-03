@@ -18,13 +18,13 @@ namespace Brainwave\View;
  *
  */
 
-use Pimple\Container;
-use Brainwave\Support\Str;
-use Brainwave\Support\Arr;
-use Brainwave\Support\Collection;
-use Brainwave\View\Engines\EngineResolver;
 use Brainwave\Contracts\Events\Dispatcher;
 use Brainwave\Contracts\View\Factory as FactoryContract;
+use Brainwave\Support\Arr;
+use Brainwave\Support\Collection;
+use Brainwave\Support\Str;
+use Brainwave\View\Engines\EngineResolver;
+use Pimple\Container;
 
 /**
  * Factory

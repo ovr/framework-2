@@ -18,9 +18,9 @@ namespace Brainwave\Cache;
  *
  */
 
-use Carbon\Carbon;
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use Brainwave\Contracts\Cache\Repository as CacheContract;
+use Carbon\Carbon;
 
 /**
  * Repository
