@@ -27,6 +27,7 @@
         "league/fractal": "~0.10.0",
         "vlucas/phpdotenv": "~1.0.9",
         "monolog/monolog": "~1.11.0",
+        "propel/propel": "2.0.0-alpha4",
         "league/flysystem": "0.6.*@dev",
         "doctrine/annotations": "~1.2.1",
         "swiftmailer/swiftmailer": "~5.2",
