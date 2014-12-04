@@ -1,5 +1,5 @@
 {
-    "name": "narrowspark/contracts",
+    "name": "narrowspark/console",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
     "keywords": ["framework", "narrowspark", "cli", "command", "cerebro"],
@@ -18,7 +18,8 @@
         "pimple/pimple"            : "~3.0",
         "symfony/process"          : "~2.6.1",
         "symfony/console"          : "~2.6.1",
-        "symfony/event-dispatcher" : "~2.6.1"
+        "symfony/event-dispatcher" : "~2.6.1",
+        "narrowspark/config"       : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -26,7 +27,6 @@
         }
     },
     "suggest": {
-        "symfony/yaml":      "~2.4",
         "symfony/validator": ">=1.0.0"
     },
     "extra": {
