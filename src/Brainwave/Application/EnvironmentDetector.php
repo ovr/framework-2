@@ -20,9 +20,7 @@ namespace Brainwave\Application\Environment;
 
 use Brainwave\Contracts\Application\Environment as EnvironmentContract;
 use Brainwave\Support\Arr;
-use Brainwave\Support\Collection;
 use Brainwave\Support\Str;
-use Pimple\Container;
 
 /**
  * EnvironmentDetector
@@ -32,87 +30,8 @@ use Pimple\Container;
  * @since   0.8.0-dev
  *
  */
-class EnvironmentDetector extends Collection implements EnvironmentContract
+class EnvironmentDetector implements EnvironmentContract
 {
-    /**
-     * The application instance.
-     *
-     * @var \Pimple\Container
-     */
-    protected $container;
-
-    /**
-     * Mock data for an Environment
-     *
-     * @var array
-     */
-    public $mocked = [
-        'SERVER_PROTOCOL'      => 'HTTP/1.1',
-        'REQUEST_METHOD'       => 'GET',
-        'SCRIPT_NAME'          => '',
-        'REQUEST_URI'          => '',
-        'QUERY_STRING'         => '',
-        'CONTEXT_PREFIX'       => '',
-        'SERVER_NAME'          => 'localhost',
-        'SERVER_PORT'          => 80,
-        'HTTP_HOST'            => 'localhost',
-        'HTTP_ACCEPT'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8',
-        'HTTP_ACCEPT_CHARSET'  => 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
-        'HTTP_USER_AGENT'      => 'Brainwave',
-        'REMOTE_ADDR'          => '127.0.0.1',
-        'REQUEST_TIME'         => '',
-    ];
-
-    /**
-     * Constructor, will parse an array for environment information if present
-     *
-     * @param Container $container
-     * @param array     $environment
-     */
-    public function __construct(Container $container, $environment = null)
-    {
-        $this->container = $container;
-
-        if (!is_null($environment)) {
-            $this->parse($environment);
-        }
-    }
-
-    /**
-     * Parse environment array
-     *
-     * This method will parse an environment array and add the data to
-     * this collection
-     *
-     * @param array $environment
-     *
-     * @return void
-     */
-    public function parse(array $environment)
-    {
-        foreach ($environment as $key => $value) {
-            $this->set($key, $value);
-        }
-    }
-
-    /**
-     * Mock environment
-     *
-     * This method will parse a mock environment array and add the data to
-     * this collection
-     *
-     * @param array $settings
-     *
-     * @return void
-     */
-    public function mock(array $settings = [])
-    {
-        $this->mocked['REQUEST_TIME'] = time();
-
-        $this->parse(array_merge($this->mocked, $settings));
-    }
-
     /**
      * Detect the application's current environment.
      *

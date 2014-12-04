@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Console\Facades;
+namespace Brainwave\Console\Interfaces;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,17 @@ namespace Brainwave\Console\Facades;
  *
  */
 
-use Brainwave\Application\StaticalProxyManager;
+use Pimple\Container;
 
 /**
- * Console
+ * CommandProviderInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-class Console extends StaticalProxyManager
+interface CommandProviderInterface
 {
-    protected static function getFacadeAccessor()
-    {
-        return 'console';
-    }
+    public function addCommands(Container $container);
 }

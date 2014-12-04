@@ -48,7 +48,7 @@ class Application extends Container implements ApplicationContract
      *
      * @var string
      */
-    const BRAINWAVE_VERSION = '0.9.4-dev';
+    const VERSION = '0.9.4-dev';
 
     /**
      * All registered providers
@@ -399,7 +399,7 @@ class Application extends Container implements ApplicationContract
      */
     public function getVersion()
     {
-        return self::BRAINWAVE_VERSION;
+        return self::VERSION;
     }
 
     /**

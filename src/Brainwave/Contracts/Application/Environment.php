@@ -18,8 +18,6 @@ namespace Brainwave\Contracts\Application;
  *
  */
 
-use Brainwave\Contracts\Support\Collection;
-
 /**
  * Environment
  *
@@ -28,25 +26,50 @@ use Brainwave\Contracts\Support\Collection;
  * @since   0.9.4-dev
  *
  */
-interface Environment extends Collection
+interface Environment
 {
-    /**
-     * @return void
-     */
-    public function parse(array $environment);
-
-    /**
-     * @return void
-     */
-    public function mock(array $settings = []);
-
     /**
      * Detect the application's current environment.
      *
      * @param array|string $environments
      * @param array|null   $consoleArgs
      *
-     * @return bool
+     * @return string
      */
     public function detect($environments, $consoleArgs = null);
+     /**
+     * Returns true when the runtime used is HHVM or
+     * the runtime used is PHP + Xdebug.
+     *
+     * @return boolean
+     */
+    public function canCollectCodeCoverage();
+
+    /**
+     * Returns the running php/HHVM version
+     *
+     * @return string
+     */
+    public function getVersion();
+
+    /**
+     * Returns true when the runtime used is PHP and Xdebug is loaded.
+     *
+     * @return boolean
+     */
+    public function hasXdebug();
+
+    /**
+     * Returns true when the runtime used is HHVM.
+     *
+     * @return boolean
+     */
+    public function isHHVM();
+
+    /**
+     * Returns true when the runtime used is PHP.
+     *
+     * @return boolean
+     */
+    public function isPHP();
 }

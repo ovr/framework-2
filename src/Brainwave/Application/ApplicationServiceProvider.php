@@ -43,8 +43,8 @@ class ApplicationServiceProvider implements ServiceProviderInterface
      */
     protected function registerEntvironment(Container $container)
     {
-        $container['environment'] = function ($container) {
-            return new EnvironmentDetector($container, $_SERVER);
+        $container['environment'] = function () {
+            return new EnvironmentDetector();
         };
     }
 

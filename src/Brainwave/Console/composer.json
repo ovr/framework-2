@@ -1,10 +1,10 @@
 {
-    "name": "brainwave/config",
+    "name": "narrowspark/contracts",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "config", "configuration"],
+    "keywords": ["framework", "narrowspark", "cli", "command", "cerebro"],
     "license": "MIT",
-    "homepage": "http://github.com/n-brainwave/config",
+    "homepage": "http://github.com/narrowspark/framework",
     "authors": [
         {
           "name": "Daniel Bannert",
@@ -15,22 +15,24 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "brainwave/support": "self.version",
-        "brainwave/filesystem": "self.version"
+        "pimple/pimple"            : "~3.0",
+        "symfony/process"          : "~2.6.1",
+        "symfony/console"          : "~2.6.1",
+        "symfony/event-dispatcher" : "~2.6.1"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Config\\": ""
+            "Brainwave\\Console\\": ""
         }
+    },
+    "suggest": {
+        "symfony/yaml":      "~2.4",
+        "symfony/validator": ">=1.0.0"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "0.9.4-dev"
         }
-    },
-    "suggest": {
-        "yosymfony/toml": "Narrowspark has support for TOML config",
-        "symfony/yaml": "Narrowspark has support for YML config"
     },
     "minimum-stability": "dev"
 }

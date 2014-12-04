@@ -28,7 +28,7 @@
         "vlucas/phpdotenv": "~1.0.9",
         "monolog/monolog": "~1.11.0",
         "propel/propel": "2.0.0-alpha4",
-        "league/flysystem": "0.6.*@dev",
+        "league/flysystem": "~1.0",
         "doctrine/annotations": "~1.2.1",
         "swiftmailer/swiftmailer": "~5.2",
         "symfony/http-foundation": "~2.6.0",
