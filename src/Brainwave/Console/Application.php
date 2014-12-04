@@ -165,9 +165,25 @@ class Application extends Container
      *
      * @return void
      */
-    public function command(Command $command)
+    public function add(Command $command)
     {
         $this['console']->add($command);
+    }
+
+    /**
+     * @param string   $name
+     * @param callable $callable
+     *
+     * @return Command
+     */
+    public function command($name, $callable)
+    {
+        $command = new Command($name);
+        $command->setCode($callable);
+
+        $this->add($command);
+
+        return $command;
     }
 
     /**
