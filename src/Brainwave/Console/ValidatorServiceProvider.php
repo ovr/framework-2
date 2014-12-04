@@ -12,11 +12,11 @@ namespace Cerebro\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Symfony\Component\Validator\Validator;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
-use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\DefaultTranslator;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
+use Symfony\Component\Validator\Validator;
 
 /**
  * Symfony Validator component Provider.

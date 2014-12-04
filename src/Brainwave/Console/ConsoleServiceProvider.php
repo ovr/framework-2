@@ -18,9 +18,9 @@ namespace Brainwave\Console;
  *
  */
 
+use Brainwave\Application\Application;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Brainwave\Application\Application;
 
 /**
  * ApplicationServiceProvider
