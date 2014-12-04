@@ -14,12 +14,14 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "pimple/pimple"            : "~3.0",
-        "symfony/process"          : "~2.6.1",
-        "symfony/console"          : "~2.6.1",
-        "symfony/event-dispatcher" : "~2.6.1",
-        "narrowspark/config"       : "self.version"
+        "php"                               : ">=5.4.0",
+        "pimple/pimple"                     : "~3.0",
+        "symfony/process"                   : "~2.6.1",
+        "symfony/console"                   : "~2.6.1",
+        "symfony/event-dispatcher"          : "~2.6.1",
+        "stecman/symfony-console-completion": "0.4.4",
+        "brainwave/log"                     : "self.version",
+        "narrowspark/config"                : "self.version"
     },
     "autoload": {
         "psr-4": {

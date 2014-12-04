@@ -14,9 +14,9 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "brainwave/support": "self.version",
-        "brainwave/filesystem": "self.version"
+        "php"                  : ">=5.4.0",
+        "brainwave/support"    : "self.version",
+        "brainwave/filesystem" : "self.version"
     },
     "autoload": {
         "psr-4": {
@@ -29,8 +29,8 @@
         }
     },
     "suggest": {
-        "yosymfony/toml": "Narrowspark has support for TOML config",
-        "symfony/yaml": "Narrowspark has support for YML config"
+        "yosymfony/toml" : "Narrowspark has support for TOML config",
+        "symfony/yaml"   : "Narrowspark has support for YML config"
     },
     "minimum-stability": "dev"
 }

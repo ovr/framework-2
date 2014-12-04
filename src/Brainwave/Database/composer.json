@@ -14,13 +14,13 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "pimple/pimple": "~3.0",
-        "propel/propel": "2.0.0-alpha4",
-        "brainwave/cache": "self.version",
-        "brainwave/config": "self.version",
+        "php"              : ">=5.4.0",
+        "pimple/pimple"    : "~3.0",
+        "propel/propel"    : "2.0.0-alpha4",
+        "brainwave/cache"  : "self.version",
+        "brainwave/config" : "self.version",
         "brainwave/support": "self.version",
-        "ext-pdo": "*"
+        "ext-pdo"          : "*"
     },
     "autoload": {
         "psr-4": {
@@ -33,11 +33,11 @@
         }
     },
     "suggest": {
-        "ext-pdo-mysql": "For MySQL or MariaDB databases",
-        "ext-pdo_sqlsrv": "For MSSQL databases on Windows platform",
-        "ext-pdo_dblib": "For MSSQL databases on Liunx/UNIX platform",
-        "ext-pdo-pqsql": "For PostgreSQL databases",
-        "ext-pdo-sqlite": "For SQLite databases"
+        "ext-pdo-mysql"  : "For MySQL or MariaDB databases",
+        "ext-pdo_sqlsrv" : "For MSSQL databases on Windows platform",
+        "ext-pdo_dblib"  : "For MSSQL databases on Liunx/UNIX platform",
+        "ext-pdo-pqsql"  : "For PostgreSQL databases",
+        "ext-pdo-sqlite" : "For SQLite databases"
     },
     "minimum-stability": "dev"
 }

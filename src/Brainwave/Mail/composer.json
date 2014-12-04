@@ -14,11 +14,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "brainwave/log": "self.version",
-        "brainwave/view": "self.version",
-        "brainwave/config": "self.version",
-        "swiftmailer/swiftmailer": "~5.1"
+        "php"                     : ">=5.4.0",
+        "brainwave/log"           : "self.version",
+        "brainwave/view"          : "self.version",
+        "brainwave/config"        : "self.version",
+        "swiftmailer/swiftmailer" : "~5.1"
     },
     "autoload": {
         "psr-4": {

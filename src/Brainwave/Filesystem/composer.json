@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "league/flysystem": "~1.0"
+        "php"                     : ">=5.4.0",
+        "league/flysystem"        : "~1.0"
     },
     "require-dev": {
-        "aws/aws-sdk-php": "~2.6",
-        "rackspace/php-opencloud": "~1.8"
+        "aws/aws-sdk-php"         : "~2.6",
+        "rackspace/php-opencloud" : "~1.8"
     },
     "autoload": {
         "psr-4": {
