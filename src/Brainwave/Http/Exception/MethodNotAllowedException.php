@@ -18,7 +18,6 @@ namespace Brainwave\Http\Exception;
  *
  */
 
-
 /**
  * MethodNotAllowedException
  *

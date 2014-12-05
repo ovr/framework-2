@@ -47,7 +47,7 @@ class CommandResolver
     /**
      * Constructor
      *
-     * @param Pimple\Container $container
+     * @param Container $container
      */
     public function __construct(Container $container)
     {
