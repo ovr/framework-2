@@ -18,7 +18,6 @@ namespace Brainwave\Database\Grammar;
  *
  */
 
-use Brainwave\Database\Grammar\Builder;
 
 /**
  * WhereClause

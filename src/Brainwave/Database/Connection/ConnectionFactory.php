@@ -18,7 +18,6 @@ namespace Brainwave\Database\Connection;
  *
  */
 
-use Brainwave\Database\Connection\Connection;
 use Brainwave\Database\Connectors\GoogleCloudConnector;
 use Brainwave\Database\Connectors\MSSQLConnector;
 use Brainwave\Database\Connectors\MariaDBConnector;

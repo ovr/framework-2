@@ -18,7 +18,6 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-use Brainwave\Database\Connectors\Connectors;
 use Brainwave\Database\Connectors\Interfaces\ConnectorInterface;
 
 /**

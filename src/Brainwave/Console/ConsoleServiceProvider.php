@@ -18,6 +18,7 @@ namespace Brainwave\Console;
  *
  */
 
+use Brainwave\Console\Command\CommandResolver;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
@@ -52,6 +53,10 @@ class ConsoleServiceProvider implements ServiceProviderInterface
             $instance->add(new CompletionCommand());
 
             return $instance;
+        };
+
+        $app['command.resolver'] = function ($app) {
+            return new CommandResolver($app);
         };
     }
 }

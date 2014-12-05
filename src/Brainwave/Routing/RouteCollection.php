@@ -18,7 +18,6 @@ namespace Brainwave\Routing;
  *
  */
 
-use Brainwave\Routing\RouteStrategyTrait;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser;
@@ -57,15 +56,11 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
      * @param \FastRoute\DataGenerator $generator
      */
     public function __construct(
-        ContainerInterface $container = null,
-        RouteParser $parser = null,
-        DataGenerator $generator = null
+        Conatiner $container,
+        RouteParser $parser,
+        DataGenerator $generator
     ) {
         $this->container = $container;
-
-        // build parent route collector
-        $parser    = $parser;
-        $generator = $generator;
 
         parent::__construct($parser, $generator);
     }

@@ -64,15 +64,18 @@ class Application extends Container
         parent::__construct($values);
 
         $this['settings']->set(
-            'console::name', isset($name) ? $name : 'cerebro'
+            'console::name',
+            isset($name) ? $name : 'cerebro'
         );
 
         $this['settings']->set(
-            'console::class', 'Brainwave\Console\ContainerAwareApplication'
+            'console::class',
+            'Brainwave\Console\ContainerAwareApplication'
         );
 
         $this['settings']->set(
-            'console::version', ($version !== null) ? $version : BrainwaveApplication::BRAINWAVE_VERSION
+            'console::version',
+            ($version !== null) ? $version : BrainwaveApplication::BRAINWAVE_VERSION
         );
 
         $this->register(new ConsoleServiceProvider());

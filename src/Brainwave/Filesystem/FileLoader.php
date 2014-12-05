@@ -18,7 +18,6 @@ namespace Brainwave\Filesystem;
  *
  */
 
-use Brainwave\Filesystem\Filesystem;
 use Brainwave\Filesystem\Interfaces\LoaderInterface;
 
 /**

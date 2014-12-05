@@ -19,7 +19,6 @@ namespace Brainwave\Http;
  */
 
 use Brainwave\Contracts\Http\Request as RequestContract;
-use Brainwave\Http\RequestParameterTrait;
 use Symfony\Component\HttpFoundation;
 
 /**

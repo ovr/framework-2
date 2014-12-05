@@ -18,7 +18,6 @@ namespace Brainwave\Support\Autoloader;
  *
  */
 
-use Brainwave\Support\Autoloader\Autoloader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

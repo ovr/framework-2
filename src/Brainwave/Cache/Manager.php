@@ -29,7 +29,6 @@ use Brainwave\Cache\Adapter\WinCacheCache;
 use Brainwave\Cache\Adapter\XCacheCache;
 use Brainwave\Cache\Exception\CacheException;
 use Brainwave\Cache\Exception\InvalidArgumentException;
-use Brainwave\Cache\Repository;
 use Brainwave\Contracts\Cache\Adapter as AdapterContract;
 use Brainwave\Contracts\Cache\Factory as FactoryContract;
 use Pimple\Container;

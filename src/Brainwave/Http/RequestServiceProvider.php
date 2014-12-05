@@ -39,6 +39,7 @@ class RequestServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['request'] = function ($container) {
+            return new Request();
         };
     }
 }

@@ -18,7 +18,6 @@ namespace Brainwave\Cookie;
  *
  */
 
-use Brainwave\Cookie\CookieJar;
 
 /**
  * FileCookieJar

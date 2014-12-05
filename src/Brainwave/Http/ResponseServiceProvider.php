@@ -39,6 +39,7 @@ class ResponseServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['response'] = function ($container) {
+            return new Response();
         };
     }
 }

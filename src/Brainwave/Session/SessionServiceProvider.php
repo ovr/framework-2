@@ -18,8 +18,6 @@ namespace Brainwave\Session;
  *
  */
 
-use Brainwave\Session\CsrfTokenFactory;
-use Brainwave\Session\SessionManager;
 use Brainwave\Support\Str;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;

@@ -19,7 +19,6 @@ namespace Brainwave\Session;
  */
 
 use Brainwave\Session\CsrfToken\CsrfTokenFactory;
-use Brainwave\Session\Factory;
 
 /**
  * Manger

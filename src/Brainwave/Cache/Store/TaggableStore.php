@@ -18,8 +18,6 @@ namespace Brainwave\Cache\Store;
  *
  */
 
-use Brainwave\Cache\Store\TagSet;
-use Brainwave\Cache\Store\TaggedCache;
 
 /**
  * TaggableStore
