@@ -28,6 +28,7 @@ use Brainwave\Contracts\Cache\InvalidArgumentException as ExceptionContract;
  * @since   0.9.4-dev
  *
  */
-class InvalidArgumentException   extends \InvalidArgumentException implements ExceptionContract
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionContract
 {
+
 }
