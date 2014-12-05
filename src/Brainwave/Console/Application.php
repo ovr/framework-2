@@ -72,7 +72,7 @@ class Application extends Container
         );
 
         $this['settings']->set(
-            'console::version', ($version !== null) ? $version : BrainwaveApplication::BRAINWAVE_VERSION;
+            'console::version', ($version !== null) ? $version : BrainwaveApplication::BRAINWAVE_VERSION
         );
 
         $this->register(new ConsoleServiceProvider());
