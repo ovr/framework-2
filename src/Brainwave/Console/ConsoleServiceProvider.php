@@ -55,8 +55,8 @@ class ConsoleServiceProvider implements ServiceProviderInterface
             return $instance;
         };
 
-        $app['command.resolver'] = function ($app) {
-            return new CommandResolver($app);
+        $container['command.resolver'] = function ($container) {
+            return new CommandResolver($container);
         };
     }
 }

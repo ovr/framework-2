@@ -33,7 +33,7 @@ class CommandResolver
     /**
      * Container instance
      *
-     * @var Pimple\Container
+     * @var \Pimple\Container
      */
     protected $container;
 

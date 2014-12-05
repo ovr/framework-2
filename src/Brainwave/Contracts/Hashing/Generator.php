@@ -34,7 +34,7 @@ interface Generator
      * @param string $str    string to hash.
      * @param string $method default method 'bcrypt'.
      *
-     * @return string
+     * @return string|false
      */
     public function make($str, $method = 'bcrypt');
 

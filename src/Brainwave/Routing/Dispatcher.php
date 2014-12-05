@@ -107,7 +107,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
      * @param array                                               $vars
      *
-     * @return array
+     * @return ResponseContract|array
      *
      * @throws RuntimeException
      */
@@ -237,7 +237,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param string|\Closure $controller
      * @param array           $vars
      *
-     * @return ResponseContract
+     * @return array
      */
     protected function handleRestfulStrategy($controller, array $vars = [])
     {
@@ -292,7 +292,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handle a not found route
      *
-     * @return array
+     * @return ResponseContract|array
      */
     protected function handleNotFound()
     {
