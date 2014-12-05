@@ -18,7 +18,7 @@ namespace Brainwave\Console;
  *
  */
 
-use Brainwave\Application\Application;
+use Brainwave\Application\Application as BrainwaveApplication;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -37,8 +37,8 @@ class ConsoleServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $version = (Application::BRAINWAVE_VERSION !== null) ?
-                    Application::BRAINWAVE_VERSION :
+        $version = (BrainwaveApplication::BRAINWAVE_VERSION !== null) ?
+                    BrainwaveApplication::BRAINWAVE_VERSION :
                     '0.9.4-dev';
 
         $container['settings']->get(

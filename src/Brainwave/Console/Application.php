@@ -122,7 +122,7 @@ class Application extends Container
         $this->booted = true;
 
         foreach ($this->providers as $provider) {
-            if ($provider instanceof CommandProviderInterface) {
+            if ($provider instanceof Interfaces\CommandProviderInterface) {
                 $provider->addCommands($this);
             }
         }
@@ -146,7 +146,7 @@ class Application extends Container
             return;
         }
 
-        $this->extend('dispatcher', function ($dispatcher, $app) use ($callback, $priority, $eventName) {
+        $this->extend('dispatcher', function ($dispatcher) use ($callback, $priority, $eventName) {
             /** @var EventDispatcher $dispatcher */
             $dispatcher->addListener($eventName, $callback, $priority);
 

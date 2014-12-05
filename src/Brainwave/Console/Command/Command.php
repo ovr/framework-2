@@ -33,7 +33,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the application container.
      *
-     * @return \Brainwave\Console\Application
+     * @return \Brainwave\Console\ContainerAwareApplication
      */
     public function getContainer()
     {

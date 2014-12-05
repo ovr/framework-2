@@ -1,14 +1,22 @@
 <?php
-/*
- * This file is part of the Cerebro framework.
+namespace Brainwave\Console;
+
+/**
+ * Narrowspark - a PHP 5 framework
  *
- * (c) Mike van Riel <me@mikevanriel.com>
+ * @author      Daniel Bannert <info@anolilab.de>
+ * @copyright   2014 Daniel Bannert
+ * @link        http://www.narrowspark.de
+ * @license     http://www.narrowspark.com/license
+ * @version     0.9.4-dev
+ * @package     Narrowspark/framework
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
+ *
  */
-
-namespace Cerebro\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -19,19 +27,19 @@ use Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader;
 use Symfony\Component\Validator\Validator;
 
 /**
- * Symfony Validator component Provider.
+ * ValidatorServiceProvider
  *
- * This class is an adaptation of the Silex MonologServiceProvider written by
- * Fabien Potencier.
+ * @package Narrowspark/framework
+ * @author  Daniel Bannert
+ * @since   0.9.4-dev
  *
- * @author Fabien Potencier <fabien@symfony.com>
  */
 class ValidatorServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $app)
     {
         $app['validator'] = function () use ($app) {
-            return new Validator(
+            return new Validator\RecursiveValidator(
                 $app['validator.mapping.class_metadata_factory'],
                 $app['validator.validator_factory'],
                 $app['validator.default_translator']
@@ -39,7 +47,7 @@ class ValidatorServiceProvider implements ServiceProviderInterface
         };
 
         $app['validator.mapping.class_metadata_factory'] = function () use ($app) {
-            return new ClassMetadataFactory(new StaticMethodLoader());
+            return new LazyLoadingMetadataFactory(new StaticMethodLoader());
         };
 
         $app['validator.validator_factory'] = function () {
