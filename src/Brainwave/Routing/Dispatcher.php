@@ -208,7 +208,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to Request -> Response Strategy based routes
      *
-     * @param string|\Closure $controller
+     * @param ResponseContract $controller
      * @param array           $vars
      *
      * @return ResponseContract
@@ -234,7 +234,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to Restful Strategy based routes
      *
-     * @param string|\Closure $controller
+     * @param ResponseContract $controller
      * @param array           $vars
      *
      * @return ResponseContract
@@ -267,7 +267,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handles response to URI Strategy based routes
      *
-     * @param string|\Closure $controller
+     * @param ResponseContract $controller
      * @param array           $vars
      *
      * @return ResponseContract
@@ -292,7 +292,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Handle a not found route
      *
-     * @return array
+     * @return JsonResponse
      */
     protected function handleNotFound()
     {
@@ -310,7 +310,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      *
      * @param array $allowed
      *
-     * @return array
+     * @return JsonResponse
      */
     protected function handleNotAllowed(array $allowed)
     {

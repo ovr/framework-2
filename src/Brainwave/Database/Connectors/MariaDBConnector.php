@@ -18,7 +18,6 @@ namespace Brainwave\Database\Connectors;
  *
  */
 
-
 /**
  * MariaDBConnector
  *
