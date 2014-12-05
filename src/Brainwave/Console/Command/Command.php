@@ -18,7 +18,7 @@ namespace Brainwave\Console\Command;
  *
  */
 
-use Brainwave\Console\Application;
+use Brainwave\Console\ContainerAwareApplication;
 use Symfony\Component\Console\Command\Command as BaseCommand;
 
 /**
@@ -34,7 +34,7 @@ abstract class Command extends BaseCommand
     /**
      * Returns the application container.
      *
-     * @return \Brainwave\Console\Application
+     * @return \Brainwave\Console\ContainerAwareApplication
      *
      * @throws \LogicException
      */
@@ -42,12 +42,12 @@ abstract class Command extends BaseCommand
     {
         $app = $this->getApplication();
 
-        if ($app instanceof Application) {
+        if ($app instanceof ContainerAwareApplication) {
             return $app->getContainer();
         }
 
         throw new \LogicException(
-            '{$app} must be an instance of Brainwave\Console\Application, '
+            '{$app} must be an instance of Brainwave\Console\ContainerAwareApplication, '
            .'other instances are not supported.'
         );
     }
@@ -74,12 +74,12 @@ abstract class Command extends BaseCommand
     {
         $app = $this->getApplication();
 
-        if ($app instanceof Application) {
+        if ($app instanceof ContainerAwareApplication) {
             return $app->getService($name);
         }
 
         throw new \LogicException(
-            '{$app} must be an instance of Brainwave\Console\Application, '
+            '{$app} must be an instance of Brainwave\Console\ContainerAwareApplication, '
            .'other instances are not supported.'
         );
     }

@@ -114,7 +114,7 @@ class Application extends Container
         $this->booted = true;
 
         foreach ($this->providers as $provider) {
-            if ($provider instanceof CommandProviderInterface) {
+            if ($provider instanceof Interfaces\CommandProviderInterface) {
                 $provider->addCommands($this);
             }
         }
