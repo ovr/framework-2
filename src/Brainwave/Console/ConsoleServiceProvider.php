@@ -18,7 +18,6 @@ namespace Brainwave\Console;
  *
  */
 
-use Brainwave\Application\Application as BrainwaveApplication;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
