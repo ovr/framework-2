@@ -20,7 +20,7 @@ namespace Brainwave\Console;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Brainwave\Application\Application;
+use Stecman\Component\Symfony\Console\BashCompletion\CompletionCommand;
 
 /**
  * ApplicationServiceProvider
@@ -37,29 +37,19 @@ class ConsoleServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        $version = (Application::BRAINWAVE_VERSION !== null) ?
-                    Application::BRAINWAVE_VERSION :
-                    '0.9.4-dev';
-
-        $container['settings']->get(
-            'console',
-            [
-                'console.name'    => 'Cerebro Application',
-                'console.class'   => 'Brainwave\Console\ContainerAwareApplication',
-                'console.version' => $version,
-            ]
-        );
-
         $container['console'] = function () use ($container) {
-            $class    = $container['settings']['console.class'];
+            $class    = $container['settings']['console::class'];
             $instance = new $class(
-                $container['settings']['console.name'],
-                $container['settings']['console.version']
+                $container['settings']['console::name'],
+                $container['settings']['console::version']
             );
 
             if ($instance instanceof ContainerAwareApplication) {
                 $instance->setContainer($container);
             }
+
+            // Add auto-complete for Symfony Console application
+            $instance->add(new CompletionCommand());
 
             return $instance;
         };

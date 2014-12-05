@@ -18,11 +18,11 @@ namespace Brainwave\Console;
  *
  */
 
+use Brainwave\Application\Application;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Application
@@ -37,7 +37,7 @@ class Application extends Container
     /**
      * Version number for Cerebro
      */
-    const VERSION = '2.0.0-DEV';
+    const VERSION = '0.9.4-dev';
 
     /**
      * ServiceProviderInterface
@@ -58,32 +58,24 @@ class Application extends Container
      *
      * @param string      $name    Name for this application.
      * @param string|null $version Version number for this application.
-     * @param string[]    $values  Options for this application and its services.
      */
-    public function __construct($name, $version = null, array $values = [])
+    public function __construct($name, $version = null)
     {
         parent::__construct($values);
 
-        $app = $this;
+        $this['settings']->set(
+            'console::name', isset($name) ? $name : 'cerebro'
+        );
 
-        $this['dispatcher_class'] = 'Symfony\\Component\\EventDispatcher\\EventDispatcher';
-        $this['dispatcher'] = function () use ($app) {
-            $dispatcher = new $app['dispatcher_class']();
+        $this['settings']->set(
+            'console::class', 'Brainwave\Console\ContainerAwareApplication'
+        );
 
-            return $dispatcher;
-        };
+        $this['settings']->set(
+            'console::version', ($version !== null) ? $version : Application::BRAINWAVE_VERSION;
+        );
 
-        $consoleConfig = array('console.name' => $name);
-
-        if (null !== $version) {
-            $consoleConfig['console.version'] = $version;
-        }
-
-        $this->register(new ConsoleServiceProvider(), $consoleConfig);
-
-        foreach ($values as $key => $value) {
-            $this[$key] = $value;
-        }
+        $this->register(new ConsoleServiceProvider());
     }
 
     /**
@@ -126,32 +118,6 @@ class Application extends Container
                 $provider->addCommands($this);
             }
         }
-    }
-
-    /**
-     * Adds an event listener that listens on the specified events.
-     *
-     * @param string   $eventName The event to listen on
-     * @param callable $callback  The listener
-     * @param int      $priority  The higher this value, the earlier an event listener will be triggered in the
-     *                            chain (defaults to 0)
-     *
-     * @return void
-     */
-    public function on($eventName, $callback, $priority = 0)
-    {
-        if ($this->booted) {
-            $this['dispatcher']->addListener($eventName, $callback, $priority);
-
-            return;
-        }
-
-        $this->extend('dispatcher', function ($dispatcher, $app) use ($callback, $priority, $eventName) {
-            /** @var EventDispatcher $dispatcher */
-            $dispatcher->addListener($eventName, $callback, $priority);
-
-            return $dispatcher;
-        });
     }
 
     /**

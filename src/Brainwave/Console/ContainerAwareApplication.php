@@ -20,7 +20,7 @@ namespace Brainwave\Console;
  */
 
 use Pimple\Container;
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Application as SymConsole;
 
 /**
  * ContainerAwareApplication
@@ -30,7 +30,7 @@ use Symfony\Component\Console\Application;
  * @since   0.9.4-dev
  *
  */
-class ContainerAwareApplication extends Application
+class ContainerAwareApplication extends SymConsole
 {
     /**
      * Container instance
