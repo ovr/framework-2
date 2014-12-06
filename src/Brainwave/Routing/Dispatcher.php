@@ -188,7 +188,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     /**
      * Invoke a controller action
      *
-     * @param string|\Closure $controller
+     * @param ResponseContract $controller
      * @param array           $vars
      *
      * @return ResponseContract
@@ -237,7 +237,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param ResponseContract $controller
      * @param array            $vars
      *
-     * @return array
+     * @return JsonResponse
      */
     protected function handleRestfulStrategy($controller, array $vars = [])
     {
