@@ -34,7 +34,7 @@ class CookieServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['cookie'] = function ($container) {
-            return new Cookie($container);
+            return new Cookie();
         };
     }
 }

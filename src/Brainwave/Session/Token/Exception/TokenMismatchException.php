@@ -19,7 +19,7 @@ namespace Brainwave\Session\Token\Exception;
  */
 
 /**
- * Session
+ * TokenMismatchException
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -28,4 +28,5 @@ namespace Brainwave\Session\Token\Exception;
  */
 class TokenMismatchException extends \Exception
 {
+
 }

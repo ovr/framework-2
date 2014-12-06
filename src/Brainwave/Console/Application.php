@@ -61,8 +61,6 @@ class Application extends Container
      */
     public function __construct($name, $version = null)
     {
-        parent::__construct($values);
-
         $this['settings']->set(
             'console::name',
             isset($name) ? $name : 'cerebro'

@@ -18,9 +18,6 @@ namespace Brainwave\Contracts\Cookie;
  *
  */
 
-use Brainwave\Contracts\Http\Headers as HeadersContract;
-use Brainwave\Contracts\Support\Collection;
-
 /**
  * CookiesJar
  *
@@ -29,78 +26,45 @@ use Brainwave\Contracts\Support\Collection;
  * @since   0.9.4-dev
  *
  */
-interface CookiesJar extends Collection
+interface CookiesJar
 {
     /**
-     * Serialize this collection of cookies into a raw HTTP header
+     * Create a new cookie instance.
      *
-     * @param  HeadersContract $headers
-     * @return void
+     * @param  string  $name
+     * @param  string  $value
+     * @param  int     $minutes
+     * @param  string  $path
+     * @param  string  $domain
+     * @param  bool    $secure
+     * @param  bool    $httpOnly
+     *
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
-    public function setHeaders(HeadersContract $headers);
+    public function make($name, $value, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true);
 
     /**
-     * Remove cookie
+     * Create a cookie that lasts "forever" (five years).
      *
-     * Unlike \Brainwave\Collection, this will actually *set* a cookie with
-     * an expiration date in the past. This expiration date will force
-     * the client-side cache to remove its cookie with the given name
-     * and settings.
+     * @param  string  $name
+     * @param  string  $value
+     * @param  string  $path
+     * @param  string  $domain
+     * @param  bool    $secure
+     * @param  bool    $httpOnly
      *
-     * @param  string $key      Cookie name
-     * @param  array  $settings Optional cookie settings
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
-    public function remove($key, array $settings = []);
+    public function forever($name, $value, $path = null, $domain = null, $secure = false, $httpOnly = true);
 
     /**
-     * Set HTTP cookie header
+     * Expire the given cookie.
      *
-     * This method will construct and set the HTTP `Set-Cookie` header. Brainwave
-     * uses this method instead of PHP's native `setcookie` method. This allows
-     * more control of the HTTP header irrespective of the native implementation's
-     * dependency on PHP versions.
+     * @param  string  $name
+     * @param  string  $path
+     * @param  string  $domain
      *
-     * This method accepts the \Brainwave\Http\Headers object by reference as its
-     * first argument; this method directly modifies this object instead of
-     * returning a value.
-     *
-     * @param  HeadersContract $headers
-     * @param  string          $name
-     * @param  string|array    $value
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
-    public function setHeader(HeadersContract $headers, $name, $value);
-
-    /**
-     * Delete HTTP cookie header
-     *
-     * This method will construct and set the HTTP `Set-Cookie` header to invalidate
-     * a client-side HTTP cookie. If a cookie with the same name (and, optionally, domain)
-     * is already set in the HTTP response, it will also be removed. Brainwave uses this method
-     * instead of PHP's native `setcookie` method. This allows more control of the HTTP header
-     * irrespective of PHP's native implementation's dependency on PHP versions.
-     *
-     * This method accepts the \Brainwave\Http\Headers object by reference as its
-     * first argument; this method directly modifies this object instead of
-     * returning a value.
-     *
-     * @param  HeadersContract $headers
-     * @param  string          $name
-     * @param  array           $value
-     * @return void
-     */
-    public function deleteHeader(HeadersContract $headers, $name, $value = []);
-
-    /**
-     * Parse cookie header
-     *
-     * This method will parse the HTTP request's `Cookie` header
-     * and extract an associative array of cookie names and values.
-     *
-     * @param string $header
-     *
-     * @return array
-     */
-    public function parseHeader($header);
+    public function forget($name, $path = null, $domain = null);
 }

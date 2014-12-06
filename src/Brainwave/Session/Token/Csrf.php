@@ -18,11 +18,8 @@ namespace Brainwave\Session\Token;
  *
  */
 
-use Brainwave\Contracts\Session\Factory as Session;
-use RandomLib\Factory as RandomLib;
-
 /**
- * CsrfTokenFactory
+ * Csrf
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
@@ -31,82 +28,5 @@ use RandomLib\Factory as RandomLib;
  */
 class Csrf
 {
-    /**
-     * Generator instance.
-     *
-     * @var RandomLib
-     */
-    protected $rand;
 
-    /**
-     * Session segment for values in this class.
-     *
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     * Constructor.
-     *
-     * @param RandomLib $rand
-     * @param Session   $session A session for values in this class.
-     */
-    public function __construct(RandomLib $rand, Session $session)
-    {
-        $this->rand    = $rand;
-        $this->session = $session;
-
-        if (!$this->session->value) {
-            $this->regenerateValue();
-        }
-    }
-
-    /**
-     * Checks whether an incoming CSRF token value is valid.
-     *
-     * @param string $value The incoming token value.
-     *
-     * @return bool
-     */
-    public function isValid($value)
-    {
-        return $value === $this->getValue();
-    }
-
-    /**
-     * Gets the value of the outgoing CSRF token.
-     *
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->session->value;
-    }
-
-    /**
-     * Regenerates the value of the outgoing CSRF token.
-     *
-     * @return void
-     */
-    public function regenerateValue()
-    {
-        $this->session->value = $this->rand->generate(128);
-    }
-
-    /**
-     * Regenerates and replaces the current session id; also regenerates the
-     * CSRF token value if one exists.
-     *
-     * @return bool
-     */
-    public function regenerateId()
-    {
-        $result = $this->call('session_regenerate_id', [true]);
-
-        if ($result) {
-            $this->regenerateValue();
-        }
-
-        return $result;
-    }
 }

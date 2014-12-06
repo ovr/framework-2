@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Http;
+namespace Brainwave\Contracts\Cookie;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -19,33 +19,34 @@ namespace Brainwave\Contracts\Http;
  */
 
 /**
- * HttpExceptionInterface
+ * CookiesJar
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface HttpExceptionInterface
+interface QueueingFactory extends Factory
 {
     /**
-     * Return the status code of the http exceptions
+     * Queue a cookie to send with the next response.
      *
-     * @return integer
+     * @param  mixed
+     * @return void
      */
-    public function getStatusCode();
+    public function queue();
 
     /**
-     * Return an array of headers provided when the exception was thrown
+     * Remove a cookie from the queue.
+     *
+     * @param  string  $name
+     */
+    public function unqueue($name);
+
+    /**
+     * Get the cookies which have been queued for the next request
      *
      * @return array
      */
-    public function getHeaders();
-
-    /**
-     * Returns a response built from the thrown exception
-     *
-     * @return \Orno\Http\Response
-     */
-    public function getJsonResponse();
+    public function getQueuedCookies();
 }

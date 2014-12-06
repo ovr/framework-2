@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Http;
+namespace Brainwave\Session;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,20 +18,15 @@ namespace Brainwave\Contracts\Http;
  *
  */
 
-use Brainwave\Contracts\Support\Collection;
-
 /**
- * Headers
+ * Store
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.9.4-dev
+ * @since   0.8.0-dev
  *
  */
-interface Headers extends Collection
+class Store
 {
-    /**
-     * @return string
-     */
-    public function normalizeKey($key);
+
 }
