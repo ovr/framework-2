@@ -107,7 +107,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
      * @param array                                               $vars
      *
-     * @return ResponseContract|array
+     * @return array
      *
      * @throws RuntimeException
      */
