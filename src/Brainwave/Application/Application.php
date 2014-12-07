@@ -26,6 +26,8 @@ use Brainwave\Exception\FatalErrorException;
 use Brainwave\Filesystem\FilesystemServiceProvider;
 use Brainwave\Http\Exception\HttpException;
 use Brainwave\Http\Exception\NotFoundHttpException;
+use Brainwave\Http\ResponseServiceProvider;
+use Brainwave\Http\RequestServiceProvider;
 use Brainwave\Middleware\Middleware;
 use Brainwave\Support\Arr;
 use Brainwave\Translator\TranslatorServiceProvider;
@@ -145,16 +147,39 @@ class Application extends Container implements ApplicationContract
 
         // App setting
         $this['env'] = null;
-        //
-        $this['error'] = null;
-        // Not Found
-        $this['notFound'] = null;
+
+        // Middleware stack
+        $this['middleware'] = [$this];
+
+        // Application
+        $this['app'] = $this;
+
+        $this->register(new ResponseServiceProvider());
+        $this->register(new RequestServiceProvider());
 
         // Needed App services
         $this->register(new ApplicationServiceProvider());
 
         // Filessystem
         $this->register(new FilesystemServiceProvider);
+
+        $this->registerConfig();
+
+        $this->registerTranslator();
+
+        // Register providers
+        foreach ($this['settings']['services::providers'] as $provider => $arr) {
+            $this->register(new $provider(), $arr);
+        }
+    }
+
+    /**
+     * Register Config
+     *
+     * @return Brainwave\Config\Manager
+     */
+    protected function registerConfig()
+    {
 
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
@@ -164,7 +189,10 @@ class Application extends Container implements ApplicationContract
         }
 
         // Settings
-        $this->register(new ConfigServiceProvider(), ['settings.path' => static::$paths['path.config']]);
+        $this->register(
+            new ConfigServiceProvider(),
+            ['settings.path' => static::$paths['path.config']]
+        );
 
         //Load config files
         foreach ($this->config as $file => $setting) {
@@ -175,7 +203,15 @@ class Application extends Container implements ApplicationContract
                 null
             );
         }
+    }
 
+    /**
+     * Register Translator
+     *
+     * @return \Brainwave\Translator\Manager
+     */
+    protected function registerTranslator()
+    {
         // Translator
         $this->register(new TranslatorServiceProvider(), ['translator.path' => static::$paths['path.config']]);
 
@@ -190,17 +226,6 @@ class Application extends Container implements ApplicationContract
                 );
             }
         }
-
-        // Register providers
-        foreach ($this['settings']['services::providers'] as $provider => $arr) {
-            $this->register(new $provider(), $arr);
-        }
-
-        // Middleware stack
-        $this['middleware'] = [$this];
-
-        // Application
-        $this['app'] = $this;
     }
 
     /**

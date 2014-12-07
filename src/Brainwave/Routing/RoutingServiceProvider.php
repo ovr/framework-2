@@ -18,8 +18,8 @@ namespace Brainwave\Routing;
  *
  */
 
-use FastRoute\DataGenerator;
-use FastRoute\RouteParser;
+use FastRoute\DataGenerator\GroupCountBased;
+use FastRoute\RouteParser\Std;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -35,11 +35,11 @@ class RoutingServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['route'] = function ($container) {
+        $container['route'] = function () use ($container) {
             return new RouteCollection(
                 $container,
-                new RouteParser(),
-                new DataGenerator()
+                new Std(),
+                new GroupCountBased()
             );
         };
     }

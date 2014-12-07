@@ -18,6 +18,7 @@ namespace Brainwave\Routing;
  *
  */
 
+use Brainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser;
@@ -31,7 +32,7 @@ use Pimple\Conatiner;
  * @since   0.9.4-dev
  *
  */
-class RouteCollection extends RouteCollector implements RouteStrategyInterface
+class RouteCollection extends RouteCollector implements RouteStrategyContract
 {
     /**
      * Route strategy functionality

@@ -18,11 +18,13 @@ namespace Brainwave\Exception;
  *
  */
 
+use Brainwave\Application\Application;
 use Brainwave\Exception\Adapter\PlainDisplayer;
 use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
 use Brainwave\Exception\Handler as ExceptionHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
@@ -54,6 +56,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the exception displayers.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     protected function registerDisplayers(Container $container)
@@ -66,12 +70,23 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops error display service.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     protected function registerWhoops(Container $container)
     {
         $this->registerWhoopsHandler($container);
-        $this->registerPrettyWhoopsHandlerInfo($container);
+
+        $request = $container['request'];
+
+        if ($request === null) {
+            // This error occurred too early in the application's life
+            // and the request instance is not yet available.
+            return;
+        }
+
+        $this->registerPrettyWhoopsHandlerInfo($request, $container);
 
         $container['whoops'] = function ($container) {
             // We will instruct Whoops to not exit after it displays the exception as it
@@ -83,7 +98,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             $whoops->writeToOutput(true);
             $whoops->pushHandler($container['whoops.plain.handler']);
             $whoops->pushHandler($container['whoops.handler']);
-            $whoops->pushHandler($container['whoops.handler.info']);
+            //$whoops->pushHandler($container['whoops.handler.info']);
 
             return $whoops;
         };
@@ -91,6 +106,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
 
     /**
      * Register the plain exception displayer.
+     *
+     * @param  \Pimple\Container $container
      *
      * @return void
      */
@@ -115,6 +132,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops exception displayer.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     protected function registerDebugDisplayer(Container $container)
@@ -132,6 +151,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
 
     /**
      * Register the Whoops handler for the request.
+     *
+     * @param  \Pimple\Container $container
      *
      * @return void
      */
@@ -151,6 +172,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops handler for the request.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     protected function registerPlainTextHandler(Container $container)
@@ -163,6 +186,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Determine if the error provider should return JSON.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return bool
      */
     protected function shouldReturnJson(Container $container)
@@ -172,6 +197,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
 
     /**
      * Determine if the request warrants a JSON response.
+     *
+     * @param  \Pimple\Container $container
      *
      * @return bool
      */
@@ -183,6 +210,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the "pretty" Whoops handler.
      *
+     * @param  \Pimple\Container $container
+     *
      * @return void
      */
     protected function registerPrettyWhoopsHandler(Container $container)
@@ -191,7 +220,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             $handler = new PrettyPageHandler();
             $handler->setEditor($container['settings']->get('app::whoops.editor', 'sublime'));
 
-            $handler->addCustomCss(dirname(__DIR__).'/Resources/css/whoops.base.css');
+            //$handler->addCustomCss(dirname(__DIR__).'/Resources/css/whoops.base.css');
 
             return $handler;
         };
@@ -205,38 +234,39 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      * before the error page, retrieving the shared page handler
      * instance, and working with it to add new data tables
      *
+     * @param  \Symfony\Component\HttpFoundation\Request $request
+     * @param  \Pimple\Container                         $container
+     *
      * @return void
      */
-    protected function registerPrettyWhoopsHandlerInfo(Container $container)
+    protected function registerPrettyWhoopsHandlerInfo(Request $request, Container $container)
     {
         $container['whoops.handler.info'] = function ($container) {
 
-            // $request = $container['request'];
+            $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 
-            // $container['whoops.handler']->setPageTitle("We're all going to be fired!");
+            $container['whoops.handler']->addDataTable('Narrowspark Application', [
+                'Version'           => Application::VERSION,
+                'Charset'           => $container['settings']['app::locale'],
+                'Route Class'       => $container['settings']['http::route'],
+                'Application Class' => get_class($container),
+            ]);
 
-            // $container['whoops.handler']->addDataTable('Narrowspark Application', [
-            //     'Charset'           => $request->getContentCharset(),
-            //     'Locale'            => $request->getContentCharset() ?: '<none>',
-            //     'Route Class'       => $container['settings']['http::route.class'],
-            //     'Application Class' => get_class($container)
-            // ]);
+            $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
+                'URI'          => $request->getUri(),
+                'Request URI'  => $request->getRequestUri(),
+                'Path Info'    => $request->getPathInfo(),
+                'Query String' => $request->getQueryString() ?: '<none>',
+                'HTTP Method'  => $request->getMethod(),
+                'Script Name'  => $request->getScriptName(),
+                'Base Path'    => $request->getBasePath(),
+                'Base URL'     => $request->getBaseUrl(),
+                'Scheme'       => $request->getScheme(),
+                'Port'         => $request->getPort(),
+                'Host'         => $request->getHost(),
+            ]);
 
-            // $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
-            //     'Base URL'    => $request->getUrl(),
-            //     'URI'         => $request->getScriptName(),
-            //     'Request URI' => $request->getPathInfo(),
-            //     'Path'        => $request->getPath(),
-            //     'Query String' => $request->params() ?: '<none>',
-            //     'HTTP Method' => $request->getMethod(),
-            //     'Script Name' => $request->getScriptName(),
-            //     'Scheme'      => $request->getScheme(),
-            //     'Port'        => $request->getPort(),
-            //     'Protocol'    => $request->getProtocolVersion(),
-            //     'Host'        => $request->getHost(),
-            // ]);
-
-            // return $container['whoops.handler'];
+            return $container['whoops.handler'];
         };
     }
 }
