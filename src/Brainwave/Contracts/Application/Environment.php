@@ -31,12 +31,13 @@ interface Environment
     /**
      * Detect the application's current environment.
      *
-     * @param array|string $environments
-     * @param array|null   $consoleArgs
+     * @param \Closure   $callback
+     * @param array|null $consoleArgs
      *
      * @return string
      */
-    public function detect($environments, $consoleArgs = null);
+    public function detect(\Closure $callback, $consoleArgs = null);
+
      /**
      * Returns true when the runtime used is HHVM or
      * the runtime used is PHP + Xdebug.
@@ -72,4 +73,11 @@ interface Environment
      * @return boolean
      */
     public function isPHP();
+
+    /**
+     * Returns true when the runtime used is Console.
+     *
+     * @return boolean
+     */
+    public function runningInConsole();
 }

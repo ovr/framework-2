@@ -177,7 +177,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function requestWantsJson(Container $container)
     {
-        return $container['request']->isAjax() || $container['request']->isJson();
+        //return $container['request']->isAjax() || $container['request']->isJson();
     }
 
     /**
@@ -211,32 +211,32 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     {
         $container['whoops.handler.info'] = function ($container) {
 
-            $request = $container['request'];
+            // $request = $container['request'];
 
-            $container['whoops.handler']->setPageTitle("We're all going to be fired!");
+            // $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 
-            $container['whoops.handler']->addDataTable('Narrowspark Application', [
-                'Charset'           => $request->getContentCharset(),
-                'Locale'            => $request->getContentCharset() ?: '<none>',
-                'Route Class'       => $container['settings']['http::route.class'],
-                'Application Class' => get_class($container)
-            ]);
+            // $container['whoops.handler']->addDataTable('Narrowspark Application', [
+            //     'Charset'           => $request->getContentCharset(),
+            //     'Locale'            => $request->getContentCharset() ?: '<none>',
+            //     'Route Class'       => $container['settings']['http::route.class'],
+            //     'Application Class' => get_class($container)
+            // ]);
 
-            $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
-                'Base URL'    => $request->getUrl(),
-                'URI'         => $request->getScriptName(),
-                'Request URI' => $request->getPathInfo(),
-                'Path'        => $request->getPath(),
-                'Query String' => $request->params() ?: '<none>',
-                'HTTP Method' => $request->getMethod(),
-                'Script Name' => $request->getScriptName(),
-                'Scheme'      => $request->getScheme(),
-                'Port'        => $request->getPort(),
-                'Protocol'    => $request->getProtocolVersion(),
-                'Host'        => $request->getHost(),
-            ]);
+            // $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
+            //     'Base URL'    => $request->getUrl(),
+            //     'URI'         => $request->getScriptName(),
+            //     'Request URI' => $request->getPathInfo(),
+            //     'Path'        => $request->getPath(),
+            //     'Query String' => $request->params() ?: '<none>',
+            //     'HTTP Method' => $request->getMethod(),
+            //     'Script Name' => $request->getScriptName(),
+            //     'Scheme'      => $request->getScheme(),
+            //     'Port'        => $request->getPort(),
+            //     'Protocol'    => $request->getProtocolVersion(),
+            //     'Host'        => $request->getHost(),
+            // ]);
 
-            return $container['whoops.handler'];
+            // return $container['whoops.handler'];
         };
     }
 }

@@ -23,10 +23,9 @@ use Brainwave\Contracts\Application\Application as ApplicationContract;
 use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 use Brainwave\Exception\ExceptionServiceProvider;
 use Brainwave\Exception\FatalErrorException;
+use Brainwave\Filesystem\FilesystemServiceProvider;
 use Brainwave\Http\Exception\HttpException;
 use Brainwave\Http\Exception\NotFoundHttpException;
-use Brainwave\Http\RequestServiceProvider;
-use Brainwave\Http\ResponseServiceProvider;
 use Brainwave\Middleware\Middleware;
 use Brainwave\Support\Arr;
 use Brainwave\Translator\TranslatorServiceProvider;
@@ -154,6 +153,9 @@ class Application extends Container implements ApplicationContract
         // Needed App services
         $this->register(new ApplicationServiceProvider());
 
+        // Filessystem
+        $this->register(new FilesystemServiceProvider);
+
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
         // so that they have the consistent naming convention inside the container.
@@ -173,15 +175,6 @@ class Application extends Container implements ApplicationContract
                 null
             );
         }
-
-        // Request
-        $this->register(new RequestServiceProvider());
-
-        // Response
-        $this->register(new ResponseServiceProvider());
-
-        // Exception handler
-        $this->register(new ExceptionServiceProvider());
 
         // Translator
         $this->register(new TranslatorServiceProvider(), ['translator.path' => static::$paths['path.config']]);
@@ -403,28 +396,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Get the absolute path to this Brainwave application's root directory
-     *
-     * This method returns the absolute path to the filesystem directory in which
-     * the Brainwave app is instantiated. The return value WILL NOT have a trailing slash.
-     *
-     * @return string
-     *
-     * @throws \RuntimeException If $_SERVER[SCRIPT_FILENAME] is not available
-     */
-    public function root()
-    {
-        if ($this['environment']->has('SCRIPT_FILENAME') === false) {
-            throw new \RuntimeException(
-                'The "`"SCRIPT_FILENAME" server variable could not be found.
-                 It is required by "Application::root()".'
-            );
-        }
-
-        return dirname($this['environment']->get('SCRIPT_FILENAME'));
-    }
-
-    /**
      * Add middleware
      *
      * This method prepends new middleware to the application middleware stack.
@@ -568,6 +539,8 @@ class Application extends Container implements ApplicationContract
 
         $this->boot();
 
+        $this['route']->getDispatcher();
+
         // Invoke middleware and application stack
         try {
             $this['middleware'][0]->call();
@@ -684,9 +657,9 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Description
+     * Unsets a parameter or an object.
      *
-     * @param  Unsets a parameter or an object.
+     * @param $key
      *
      * @return string $id The unique identifier for the parameter or object
      */

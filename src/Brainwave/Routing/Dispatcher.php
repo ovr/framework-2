@@ -72,7 +72,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param string $method
      * @param string $uri
      *
-     * @return array
+     * @return ResponseContract
      */
     public function dispatch($method, $uri)
     {
@@ -107,9 +107,9 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param integer|\Brainwave\Contracts\Routing\CustomStrategy $strategy
      * @param array                                               $vars
      *
-     * @return array
+     * @return ResponseContract
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     protected function handleFound($handler, $strategy, array $vars = [])
     {
@@ -133,7 +133,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      *
      * @param string|\Closure $handler
      *
-     * @return \Brainwave\Contracts\Http\Response
+     * @return ResponseContract
      *
      * @throws \RuntimeException
      */
@@ -189,7 +189,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * Invoke a controller action
      *
      * @param ResponseContract $controller
-     * @param array           $vars
+     * @param array            $vars
      *
      * @return ResponseContract
      */

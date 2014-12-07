@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Application\Environment;
+namespace Brainwave\Application;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -102,6 +102,21 @@ class EnvironmentDetector implements EnvironmentContract
     public function isPHP()
     {
         return !$this->isHHVM();
+    }
+
+    /**
+     * Returns true when the runtime used is Console.
+     *
+     * @return boolean
+     */
+    public function runningInConsole()
+    {
+        $sapi_type = php_sapi_name();
+        if (substr($sapi_type, 0, 3) === 'cgi') {
+            return true;
+        }
+
+        return false;
     }
 
     /**

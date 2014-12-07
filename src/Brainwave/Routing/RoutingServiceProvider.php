@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cookie;
+namespace Brainwave\Routing;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,23 +18,29 @@ namespace Brainwave\Cookie;
  *
  */
 
+use FastRoute\DataGenerator;
+use FastRoute\RouteParser;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * CookieServiceProvider
+ * RoutingServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class CookieServiceProvider implements ServiceProviderInterface
+class RoutingServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['cookie'] = function () {
-            return new Cookie();
+        $container['route'] = function ($container) {
+            return new RouteCollection(
+                $container,
+                new RouteParser(),
+                new DataGenerator()
+            );
         };
     }
 }
