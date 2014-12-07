@@ -241,7 +241,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPrettyWhoopsHandlerInfo(Request $request, Container $container)
     {
-        $container['whoops.handler.info'] = function ($container) {
+        $container['whoops.handler.info'] = function () use ($request, $container) {
 
             $container['whoops.handler']->setPageTitle("We're all going to be fired!");
 

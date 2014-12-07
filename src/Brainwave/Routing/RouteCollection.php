@@ -22,7 +22,7 @@ use Brainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use FastRoute\DataGenerator;
 use FastRoute\RouteCollector;
 use FastRoute\RouteParser;
-use Pimple\Conatiner;
+use Pimple\Container;
 
 /**
  * RouteCollection
@@ -52,12 +52,12 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract
     /**
      * Constructor
      *
-     * @param \Pimple\Conatiner        $container
+     * @param \Pimple\Container        $container
      * @param \FastRoute\RouteParser   $parser
      * @param \FastRoute\DataGenerator $generator
      */
     public function __construct(
-        Conatiner $container,
+        Container $container,
         RouteParser $parser,
         DataGenerator $generator
     ) {
