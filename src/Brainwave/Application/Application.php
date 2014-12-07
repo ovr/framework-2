@@ -21,7 +21,6 @@ namespace Brainwave\Application;
 use Brainwave\Config\ConfigServiceProvider;
 use Brainwave\Contracts\Application\Application as ApplicationContract;
 use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
-use Brainwave\Exception\ExceptionServiceProvider;
 use Brainwave\Exception\FatalErrorException;
 use Brainwave\Filesystem\FilesystemServiceProvider;
 use Brainwave\Http\Exception\HttpException;
@@ -161,7 +160,7 @@ class Application extends Container implements ApplicationContract
         $this->register(new ApplicationServiceProvider());
 
         // Filessystem
-        $this->register(new FilesystemServiceProvider);
+        $this->register(new FilesystemServiceProvider());
 
         $this->registerConfig();
 
@@ -180,7 +179,6 @@ class Application extends Container implements ApplicationContract
      */
     protected function registerConfig()
     {
-
         // Here we will bind the install paths into the container as strings that can be
         // accessed from any point in the system. Each path key is prefixed with path
         // so that they have the consistent naming convention inside the container.

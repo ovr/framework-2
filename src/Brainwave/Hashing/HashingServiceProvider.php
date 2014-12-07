@@ -19,7 +19,6 @@ namespace Brainwave\Hashing;
  */
 
 use Brainwave\Hashing\Generator as HashGenerator;
-use Brainwave\Hashing\Password;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RandomLib\Factory as RandomLib;

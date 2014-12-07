@@ -56,7 +56,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the exception displayers.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -70,7 +70,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops error display service.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the plain exception displayer.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -132,7 +132,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops exception displayer.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -152,7 +152,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops handler for the request.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -172,7 +172,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the Whoops handler for the request.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -186,7 +186,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Determine if the error provider should return JSON.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return bool
      */
@@ -198,7 +198,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Determine if the request warrants a JSON response.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return bool
      */
@@ -210,7 +210,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the "pretty" Whoops handler.
      *
-     * @param  \Pimple\Container $container
+     * @param \Pimple\Container $container
      *
      * @return void
      */
@@ -234,8 +234,8 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      * before the error page, retrieving the shared page handler
      * instance, and working with it to add new data tables
      *
-     * @param  \Symfony\Component\HttpFoundation\Request $request
-     * @param  \Pimple\Container                         $container
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Pimple\Container                         $container
      *
      * @return void
      */

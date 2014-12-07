@@ -18,7 +18,6 @@ namespace Brainwave\Session;
  *
  */
 
-use Brainwave\Support\Str;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

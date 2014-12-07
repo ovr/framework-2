@@ -28,5 +28,4 @@ namespace Brainwave\Session\Token\Exception;
  */
 class TokenMismatchException extends \Exception
 {
-
 }

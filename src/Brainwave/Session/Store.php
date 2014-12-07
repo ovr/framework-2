@@ -28,5 +28,4 @@ namespace Brainwave\Session;
  */
 class Store
 {
-
 }
