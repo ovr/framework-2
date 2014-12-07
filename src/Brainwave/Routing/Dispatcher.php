@@ -18,8 +18,8 @@ namespace Brainwave\Routing;
  *
  */
 
-use Brainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Brainwave\Contracts\Http\Response as ResponseContract;
+use Brainwave\Contracts\Routing\RouteStrategy as RouteStrategyContract;
 use Brainwave\Http\Exception as HttpException;
 use Brainwave\Http\JsonResponse;
 use Brainwave\Http\Response;
