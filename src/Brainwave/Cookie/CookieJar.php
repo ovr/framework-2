@@ -163,7 +163,7 @@ class CookieJar implements JarContract
      * @param string $path
      * @param string $domain
      *
-     * @return array
+     * @return string[]
      */
     protected function getPathAndDomain($path, $domain)
     {
