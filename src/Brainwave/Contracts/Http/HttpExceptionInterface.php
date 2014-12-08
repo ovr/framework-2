@@ -45,7 +45,7 @@ interface HttpExceptionInterface
     /**
      * Returns a response built from the thrown exception
      *
-     * @return \Orno\Http\Response
+     * @return \Brainwave\Http\JsonResponse
      */
     public function getJsonResponse();
 }

@@ -18,10 +18,10 @@ namespace Brainwave\View\Provider;
  *
  */
 
-use Brainwave\View\Factory;
 use Brainwave\View\Engines\Adapter\Json as JsonEngine;
 use Brainwave\View\Engines\Adapter\Php as PhpEngine;
 use Brainwave\View\Engines\EngineResolver;
+use Brainwave\View\Factory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
