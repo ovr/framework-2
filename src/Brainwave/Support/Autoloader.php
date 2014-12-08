@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Autoloader;
+namespace Brainwave\Support;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -87,7 +87,7 @@ class Autoloader
     {
         if (!self::$registered) {
             self::$registered = spl_autoload_register(
-                array('\Brainwave\Support\Autoloader\Autoloader', 'load')
+                array('\Brainwave\Support\Autoloader', 'load')
             );
         }
     }

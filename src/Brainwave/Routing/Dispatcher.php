@@ -25,7 +25,7 @@ use Brainwave\Http\JsonResponse;
 use Brainwave\Http\Response;
 use FastRoute\Dispatcher as FastDispatcher;
 use FastRoute\Dispatcher\GroupCountBased as GroupCountBasedDispatcher;
-use Pimple\Conatiner;
+use Pimple\Container;
 
 /**
  * Dispatcher
@@ -43,7 +43,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     use RouteStrategyTrait;
 
     /**
-     * @var \Pimple\Conatiner
+     * @var \Pimple\Container
      */
     protected $container;
 
@@ -58,7 +58,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
      * @param array $routes
      * @param array $data
      */
-    public function __construct(Conatiner $container, array $routes, array $data)
+    public function __construct(Container $container, array $routes, array $data)
     {
         $this->container = $container;
         $this->routes    = $routes;

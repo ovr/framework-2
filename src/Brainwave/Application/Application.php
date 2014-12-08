@@ -18,27 +18,31 @@ namespace Brainwave\Application;
  *
  */
 
-use Brainwave\Config\ConfigServiceProvider;
+use Brainwave\Application\Provider\ApplicationServiceProvider;
+use Brainwave\Config\Provider\ConfigServiceProvider;
 use Brainwave\Contracts\Application\Application as ApplicationContract;
 use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 use Brainwave\Exception\FatalErrorException;
-use Brainwave\Filesystem\FilesystemServiceProvider;
+use Brainwave\Filesystem\Provider\FilesystemServiceProvider;
 use Brainwave\Http\Exception\HttpException;
 use Brainwave\Http\Exception\NotFoundHttpException;
-use Brainwave\Http\RequestServiceProvider;
-use Brainwave\Http\ResponseServiceProvider;
+use Brainwave\Http\Provider\RequestServiceProvider;
+use Brainwave\Http\Provider\ResponseServiceProvider;
 use Brainwave\Middleware\Middleware;
 use Brainwave\Support\Arr;
-use Brainwave\Translator\TranslatorServiceProvider;
+use Brainwave\Translator\Provider\TranslatorServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Application
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
 class Application extends Container implements ApplicationContract
@@ -267,6 +271,29 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
+     * Mounts controllers under the given route prefix.
+     *
+     * @param string                                           $prefix      The route prefix
+     * @param ControllerCollection|ControllerProviderInterface $controllers A ControllerCollection or a ControllerProviderInterface instance
+     *
+     * @return Application
+     */
+    public function mount($prefix, $controllers)
+    {
+        if ($controllers instanceof ControllerProviderInterface) {
+            $controllers = $controllers->connect($this);
+        }
+
+        if (!$controllers instanceof ControllerCollection) {
+            throw new \LogicException('The "mount" method takes either a ControllerCollection or a ControllerProviderInterface instance.');
+        }
+
+        //TODO $this['controllers']->mount($prefix, $controllers);
+
+        return $this;
+    }
+
+    /**
      * Determine if the application is currently down for maintenance.
      *
      * @return boolean|null
@@ -362,6 +389,50 @@ class Application extends Container implements ApplicationContract
         $this->error(function (NotFoundHttpException $e) use ($callback) {
             return call_user_func($callback, $e);
         });
+    }
+
+    /**
+     * Creates a streaming response.
+     *
+     * @param mixed   $callback A valid PHP callback
+     * @param integer $status   The response status code
+     * @param array   $headers  An array of response headers
+     *
+     * @return StreamedResponse
+     */
+    public function stream($callback = null, $status = 200, array $headers = array())
+    {
+        return new StreamedResponse($callback, $status, $headers);
+    }
+
+    /**
+     * Convert some data into a JSON response.
+     *
+     * @param mixed   $data    The response data
+     * @param integer $status  The response status code
+     * @param array   $headers An array of response headers
+     *
+     * @return JsonResponse
+     */
+    public function json($data = array(), $status = 200, array $headers = array())
+    {
+        return new JsonResponse($data, $status, $headers);
+    }
+    /**
+     * Sends a file.
+     *
+     * @param \SplFileInfo|string $file               The file to stream
+     * @param integer             $status             The response status code
+     * @param array               $headers            An array of response headers
+     * @param null|string         $contentDisposition The type of Content-Disposition to set automatically with the filename
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws \RuntimeException When the feature is not supported, before http-foundation v2.2
+     */
+    public function sendFile($file, $status = 200, array $headers = array(), $contentDisposition = null)
+    {
+        return new BinaryFileResponse($file, $status, $headers, true, $contentDisposition);
     }
 
     /**
@@ -564,12 +635,13 @@ class Application extends Container implements ApplicationContract
 
         $this['route']->getDispatcher();
 
+        // TODO
         // Invoke middleware and application stack
-        try {
-            $this['middleware'][0]->call();
-        } catch (\Exception $e) {
-            $this['exception']->handleException($e);
-        }
+        // try {
+        //     $this['middleware'][0];
+        // } catch (\Exception $e) {
+        //     $this['exception']->handleException($e);
+        // }
 
         $this['events']->applyHook('after');
     }

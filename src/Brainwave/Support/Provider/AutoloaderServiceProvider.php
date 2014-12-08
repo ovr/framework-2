@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support\Autoloader;
+namespace Brainwave\Support\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

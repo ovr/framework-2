@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\View;
+namespace Brainwave\View\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

@@ -36,7 +36,8 @@ class RoutingServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['route'] = function () use ($container) {
+        $container['route'] = function ($container) {
+
             return new RouteCollection(
                 $container,
                 new Std(),

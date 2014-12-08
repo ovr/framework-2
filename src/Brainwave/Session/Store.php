@@ -368,7 +368,7 @@ class Store implements SessionInterface
      * Push a value onto a session array.
      *
      * @param string $key
-     * @param string  $value
+     * @param string $value
      *
      * @return void
      */
