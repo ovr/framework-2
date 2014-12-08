@@ -18,8 +18,8 @@ namespace Brainwave\Translator\Provider;
  *
  */
 
-use Brainwave\Translator\Manager;
 use Brainwave\Filesystem\FileLoader;
+use Brainwave\Translator\Manager;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
