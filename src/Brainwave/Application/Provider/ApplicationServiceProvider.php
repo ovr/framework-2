@@ -18,6 +18,9 @@ namespace Brainwave\Application\Provider;
  *
  */
 
+use Brainwave\Application\AliasLoader;
+use Brainwave\Application\EnvironmentDetector;
+use Brainwave\Application\StaticalProxyResolver;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

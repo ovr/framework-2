@@ -18,6 +18,7 @@ namespace Brainwave\Http\Provider;
  *
  */
 
+use Brainwave\Http\Request;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

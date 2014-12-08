@@ -18,6 +18,7 @@ namespace Brainwave\Events\Provider;
  *
  */
 
+use Brainwave\Events\Dispatcher;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

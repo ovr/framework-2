@@ -19,6 +19,7 @@ namespace Brainwave\Mail\Provider;
  */
 
 use Aws\Ses\SesClient;
+use Brainwave\Mail\Mailer;
 use Brainwave\Mail\Transport\Log as LogTransport;
 use Brainwave\Mail\Transport\Mailgun as MailgunTransport;
 use Brainwave\Mail\Transport\Mandrill as MandrillTransport;

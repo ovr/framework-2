@@ -19,6 +19,8 @@ namespace Brainwave\Database\Provider;
  */
 
 use Brainwave\Database\Connection\ConnectionFactory;
+use Brainwave\Database\DatabaseManager;
+use Brainwave\Database\Query;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

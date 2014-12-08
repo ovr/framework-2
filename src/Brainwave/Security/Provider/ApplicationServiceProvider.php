@@ -29,7 +29,7 @@ use Pimple\ServiceProviderInterface;
  * @since   0.9.4-dev
  *
  */
-class SecurityServiceProvider implements ServiceProviderInterface
+class ApplicationServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {

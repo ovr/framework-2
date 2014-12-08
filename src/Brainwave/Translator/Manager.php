@@ -246,7 +246,6 @@ class Manager implements TranslatorContract
 
                 return $lang[ $s ];
 
-
             case 'cz': //czech, nplurals=3
                 $s = (($count == 1) ? '0' : ($count >= 2 && $count <= 4) ? 1 : 1);
 

@@ -18,6 +18,7 @@ namespace Brainwave\Console\Provider;
  *
  */
 
+use Brainwave\Console\Interfaces\ContainerAwareApplication;
 use Brainwave\Console\Command\CommandResolver;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;

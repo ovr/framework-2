@@ -18,6 +18,7 @@ namespace Brainwave\Routing\Provider;
  *
  */
 
+use Brainwave\Routing\RouteCollection;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteParser\Std;
 use Pimple\Container;

@@ -18,6 +18,9 @@ namespace Brainwave\Filesystem\Provider;
  *
  */
 
+use Brainwave\Filesystem\FileLoader;
+use Brainwave\Filesystem\Filesystem;
+use Brainwave\Filesystem\FilesystemManager;
 use Brainwave\Filesystem\Adapters\ConnectionFactory as Factory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
