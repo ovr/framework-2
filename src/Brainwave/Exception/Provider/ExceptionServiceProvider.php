@@ -200,7 +200,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      *
      * @param \Pimple\Container $container
      *
-     * @return bool
+     * @return boolean|null
      */
     protected function requestWantsJson(Container $container)
     {
