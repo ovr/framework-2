@@ -220,7 +220,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             $handler = new PrettyPageHandler();
             $handler->setEditor($container['settings']->get('app::whoops.editor', 'sublime'));
 
-            //$handler->addCustomCss(dirname(__DIR__).'/Resources/css/whoops.base.css');
+            $handler->addCustomCss('/../Resources/css/whoops.base.css');
 
             return $handler;
         };

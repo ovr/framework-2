@@ -18,6 +18,8 @@ namespace Brainwave\Routing\Provider;
  *
  */
 
+use Brainwave\Application\Application;
+use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 use Brainwave\Routing\RouteCollection;
 use FastRoute\DataGenerator\GroupCountBased;
 use FastRoute\RouteParser\Std;
@@ -29,10 +31,10 @@ use Pimple\ServiceProviderInterface;
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class RoutingServiceProvider implements ServiceProviderInterface
+class RoutingServiceProvider implements ServiceProviderInterface, BootableProviderContract
 {
     public function register(Container $container)
     {
@@ -44,5 +46,18 @@ class RoutingServiceProvider implements ServiceProviderInterface
                 new GroupCountBased()
             );
         };
+    }
+
+    /**
+     * Load The Application Routes
+     *
+     * The Application routes are kept separate from the application starting
+     * just to keep the file a little cleaner. We'll go ahead and load in
+     * all of the routes now and return the application to the callers.
+     *
+    */
+    public function boot(Application $app)
+    {
+        $app['files']->getRequire($app::$paths['path'].'/Http/routes.php');
     }
 }

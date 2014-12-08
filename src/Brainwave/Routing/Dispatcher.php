@@ -43,14 +43,32 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     use RouteStrategyTrait;
 
     /**
+     * Container instance
+     *
      * @var \Pimple\Container
      */
     protected $container;
 
     /**
+     * All routes
+     *
      * @var array
      */
-    protected $routes;
+    protected $routes = [];
+
+    /**
+     * Cache folder path for cached routes
+     *
+     * @var string
+     */
+    protected $cachePath;
+
+    /**
+     * Cached routes
+     *
+     * @var array
+     */
+    protected $cahcedRoutes = [];
 
     /**
      * Constructor
@@ -226,7 +244,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
         }
 
         throw new \RuntimeException(
-            'When using the Request -> Response Strategy your controller'
+            'When using the Request -> Response Strategy your controller '
             .'must return an instance of [Brainwave\Contracts\Http\Response]'
         );
     }

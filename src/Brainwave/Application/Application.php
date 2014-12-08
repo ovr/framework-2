@@ -418,6 +418,7 @@ class Application extends Container implements ApplicationContract
     {
         return new JsonResponse($data, $status, $headers);
     }
+
     /**
      * Sends a file.
      *
@@ -633,7 +634,11 @@ class Application extends Container implements ApplicationContract
 
         $this->boot();
 
-        $this['route']->getDispatcher();
+        $dispatcher = $this['route']->getDispatcher();
+
+        $response = $dispatcher->dispatch('GET', '/');
+
+        $response->send();
 
         // TODO
         // Invoke middleware and application stack
@@ -665,10 +670,6 @@ class Application extends Container implements ApplicationContract
      */
     public function shutdown()
     {
-        if ($this['env'] !== 'console') {
-            ob_end_flush();
-        }
-
         $this['exception']->unregister();
     }
 

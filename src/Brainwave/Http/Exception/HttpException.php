@@ -18,6 +18,7 @@ namespace Brainwave\Http\Exception;
  *
  */
 
+use Brainwave\Contracts\Http\HttpExceptionInterface;
 use Brainwave\Http\JsonResponse;
 
 /**
@@ -28,7 +29,7 @@ use Brainwave\Http\JsonResponse;
  * @since   0.9.4-dev
  *
  */
-class HttpException extends \Exception implements Exception\HttpExceptionInterface
+class HttpException extends \Exception implements HttpExceptionInterface
 {
     /**
      * @var integer
