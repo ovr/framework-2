@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support;
+namespace Brainwave\Support\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -45,7 +45,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerHelpers(Container $container)
     {
-        $container['helpers'] = function ($container) {
+        $container['helpers'] = function () {
             return new Helpers();
         };
     }
@@ -57,7 +57,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerArr(Container $container)
     {
-        $container['arr'] = function ($container) {
+        $container['arr'] = function () {
             return new Arr();
         };
     }
@@ -69,7 +69,7 @@ class SupportServiceProvider implements ServiceProviderInterface
      */
     protected function registerStr(Container $container)
     {
-        $container['str'] = function ($container) {
+        $container['str'] = function () {
             return new Str();
         };
     }

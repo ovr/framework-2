@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Mail;
+namespace Brainwave\Mail\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

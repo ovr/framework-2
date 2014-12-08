@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Encrypter;
+namespace Brainwave\Config\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,31 +18,35 @@ namespace Brainwave\Encrypter;
  *
  */
 
+use Brainwave\Config\Manager as ConfigManager;
+use Brainwave\Filesystem\FileLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * EncrypterServiceProvider
+ * ConfigServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.8.5-dev
  *
  */
-class EncrypterServiceProvider implements ServiceProviderInterface
+class ConfigServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['encrypter'] = function ($container) {
-            return new Encrypter(
-                $container['rand.generator'],
-                $container['settings']->get(
-                    'app::crypt.key',
-                    '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
-                ),
-                $container['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
-                $container['settings']->get('app::crypt.mode', 'cbc')
+        $container['settings.path'] = '';
+
+        $container['settings'] = function ($container) {
+            $config = new ConfigManager(
+                new Repository(),
+                new FileLoader(
+                    $container['files'],
+                    $container['settings.path']
+                )
             );
+
+            return $config;
         };
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Config;
+namespace Brainwave\Events\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,35 +18,23 @@ namespace Brainwave\Config;
  *
  */
 
-use Brainwave\Config\Manager as ConfigManager;
-use Brainwave\Filesystem\FileLoader;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * ConfigServiceProvider
+ * EventsServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.5-dev
+ * @since   0.8.0-dev
  *
  */
-class ConfigServiceProvider implements ServiceProviderInterface
+class EventsServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container)
     {
-        $container['settings.path'] = '';
-
-        $container['settings'] = function ($container) {
-            $config = new ConfigManager(
-                new Repository(),
-                new FileLoader(
-                    $container['files'],
-                    $container['settings.path']
-                )
-            );
-
-            return $config;
+        $container['events'] = function ($container) {
+            return new Dispatcher($container);
         };
     }
 }

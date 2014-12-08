@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Session;
+namespace Brainwave\Http\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -22,36 +22,24 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * SessionServiceProvider
+ * RequestServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class SessionServiceProvider implements ServiceProviderInterface
+class RequestServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register(Container $container)
     {
-        $container['session'] = function ($container) {
-
-        };
-
-        $this->registerCsrf($container);
-        $this->registerFlash($container);
-    }
-
-    protected function registerFlash(Container $container)
-    {
-        $container['flash'] = function ($container) {
-
-        };
-    }
-
-    public function registerCsrf(Container $container)
-    {
-        $container['csrf'] = function ($container) {
-
+        $container['request'] = function ($container) {
+            return new Request();
         };
     }
 }

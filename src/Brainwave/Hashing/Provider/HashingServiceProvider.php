@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Hashing;
+namespace Brainwave\Hashing\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

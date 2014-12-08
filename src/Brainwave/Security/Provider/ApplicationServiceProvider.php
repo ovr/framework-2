@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http;
+namespace Brainwave\Security\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -22,24 +22,16 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * ResponseServiceProvider
+ * SecurityServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
- * @since   0.8.0-dev
+ * @since   0.9.4-dev
  *
  */
-class ResponseServiceProvider implements ServiceProviderInterface
+class SecurityServiceProvider implements ServiceProviderInterface
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register(Container $container)
     {
-        $container['response'] = function ($container) {
-            return new Response();
-        };
     }
 }

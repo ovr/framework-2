@@ -1,10 +1,10 @@
 {
-    "name": "brainwave/crypt",
+    "name": "brainwave/encrypter",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "crypt"],
+    "keywords": ["narrowspark", "brainwave", "encrypter"],
     "license": "MIT",
-    "homepage": "http://github.com/n-brainwave/crypt",
+    "homepage": "http://github.com/n-brainwave/encrypter",
     "authors": [
         {
           "name": "Daniel Bannert",

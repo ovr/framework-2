@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Http;
+namespace Brainwave\Encrypter\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -22,24 +22,27 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * RequestServiceProvider
+ * EncrypterServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class RequestServiceProvider implements ServiceProviderInterface
+class EncrypterServiceProvider implements ServiceProviderInterface
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register(Container $container)
     {
-        $container['request'] = function ($container) {
-            return new Request();
+        $container['encrypter'] = function ($container) {
+            return new Encrypter(
+                $container['rand.generator'],
+                $container['settings']->get(
+                    'app::crypt.key',
+                    '3L43~[[i(98$_[j;3i86[ri.64M2[2[+<)4->yB>6Vv>Rfv0[K$.w={MrDHu@d;'
+                ),
+                $container['settings']->get('app::crypt.cipher', MCRYPT_RIJNDAEL_256),
+                $container['settings']->get('app::crypt.mode', 'cbc')
+            );
         };
     }
 }

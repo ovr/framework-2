@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Log;
+namespace Brainwave\Routing\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -18,31 +18,28 @@ namespace Brainwave\Log;
  *
  */
 
-use Brainwave\Log\Writer as MonologWriter;
-use Monolog\Logger;
+use FastRoute\DataGenerator\GroupCountBased;
+use FastRoute\RouteParser\Std;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * LoggerServiceProvider
+ * RoutingServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class LoggerServiceProvider implements ServiceProviderInterface
+class RoutingServiceProvider implements ServiceProviderInterface
 {
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
     public function register(Container $container)
     {
-        $container['logger'] = function ($container) {
-            return new MonologWriter(
-                new Logger($container['env'])
+        $container['route'] = function () use ($container) {
+            return new RouteCollection(
+                $container,
+                new Std(),
+                new GroupCountBased()
             );
         };
     }

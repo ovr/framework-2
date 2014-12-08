@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Filesystem;
+namespace Brainwave\Filesystem\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

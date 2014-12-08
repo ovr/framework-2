@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Support;
+namespace Brainwave\Support\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -45,7 +45,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerFractal(Container $container)
     {
-        $container['fractal'] = function ($container) {
+        $container['fractal'] = function () {
             $manager = new Manager();
 
             return $manager;
@@ -54,7 +54,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerJsonApiFractal(Container $container)
     {
-        $container['fractal.json'] = function ($container) {
+        $container['fractal.json'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
 
@@ -64,7 +64,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerArrayFractal(Container $container)
     {
-        $container['fractal.array'] = function ($container) {
+        $container['fractal.array'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
 
@@ -74,7 +74,7 @@ class FractalServiceProvider implements ServiceProviderInterface
 
     protected function registerDataArrayFractal(Container $container)
     {
-        $container['fractal.data.array'] = function ($container) {
+        $container['fractal.data.array'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
 

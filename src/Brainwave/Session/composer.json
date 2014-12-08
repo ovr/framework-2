@@ -2,7 +2,7 @@
     "name": "brainwave/session",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "session", "slim"],
+    "keywords": ["narrowspark", "brainwave", "session"],
     "license": "MIT",
     "homepage": "http://github.com/n-brainwave/session",
     "authors": [
@@ -15,8 +15,11 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "brainwave/crypt": "self.version",
-        "brainwave/support": "self.version"
+        "brainwave/support"       : "self.version",
+        "brainwave/encrypter"     : "self.version",
+        "brainwave/support"       : "self.version",
+        "nesbot/carbon"           : "~1.0",
+        "symfony/http-foundation" : "~2.6.1"
     },
     "autoload": {
         "psr-4": {

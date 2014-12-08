@@ -240,18 +240,18 @@ class Manager implements TranslatorContract
                 $s = (($count == 1) ? 0 :  2);
 
                 return $lang[ $s ];
-                break;
+
             case 'ar': //arabic, nplurals=6
                 $s = (($count == 0) ? 0 : (($count == 1) ? 1 : (($count == 2) ? 2 : ((($count % 100 >= 3) && ($count % 100 <= 10)) ? 3 : ((($count % 100 >= 11) && ($count % 100 <= 99)) ? 4 : 5)))));
 
                 return $lang[ $s ];
-                break;
+
 
             case 'cz': //czech, nplurals=3
                 $s = (($count == 1) ? '0' : ($count >= 2 && $count <= 4) ? 1 : 1);
 
                 return $lang[ $s ];
-                break;
+
             case 'de': //german
             case 'bg': //bulgarian
             case 'gr': //greek
@@ -268,22 +268,22 @@ class Manager implements TranslatorContract
                 $s = (($count != 1) ? '0' : 1);
 
                 return $lang[$s];
-                break;
+
             case 'pl': //polskiy, nplurals=3
                 $s = (($count == 1) ? 0 : ((($count%10 >= 2) && ($count%10 <= 4) && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
 
                 return $lang[$s];
-                break;
+
             case 'ru': //russian, nplurals=3
                 $s = ((($count%10 == 1) && ($count%100 != 11)) ? '0' : ((($count%10 >= 2) && ($count%10 <= 4) && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
 
                 return $lang[$s];
-                break;
+
             case 'sk': //slovak, nplurals=3
                 $s = (($count == 1) ? 1 : (($count >= 2 && $count <= 4) ? 1 : '0'));
 
                 return $lang[$s];
-                break;
+
             case 'fa': //farsi
             case 'ja': //japan
             case 'tr': //turkish
@@ -295,49 +295,49 @@ class Manager implements TranslatorContract
                 $s = '0';
 
                 return $lang[$s];
-                break;
+
             case 'ua': //ukrainian, nplurals=3
                 $s = (($count%10 == 1 && $count%100 != 11) ? '0' : ($count%10 >= 2 && $count%10 <= 4 && ($count%100<10 || $count%100 >= 20)) ? 1 : 1);
 
                 return $lang[$s];
-                break;
+
             case 'lt': //lithuanian, nplurals=3
                 $s = (($count%10 == 1 && $count%100 != 11) ? '0' : ($count%10 >= 2 && ($count%100<10 || $count%100 >= 20)) ? 1 : 1);
 
                 return $lang[$s];
-                break;
+
             case 'fr': //french, nplurals=2
                 $s = ($count > 1 ? '0' : 1);
 
                 return $lang[$key.$s];
-                break;
+
             case 'ie': //irish, nplurals=5;
                 $s = (($count == 1) ? 0 : (($count == 2) ? 1 : (($count<7) ? 2 : (($count<11) ? 3 : 4))));
 
                 return $lang[$s];
-                break;
+
             case 'is' : //icelandic, nplurals=2;
             case 'hr': //croatian, nplurals=3;
                 $s = ($count%10 != 1 || $count%100 == 11) ? 0 : 1;
 
                 return $lang[$s];
-                break;
+
             case 'lv': //latvian
                 $s = (($count%10 == 1 && $count%100 != 11) ? 0 : (($count != 0) ? 1 : 2));
 
                 return $lang[$s];
-                break;
+
             case 'cy': //welsh, nplurals=4
                 $s =  (($count == 1) ? 0 : (($count == 2) ? 1 : (($count != 8 && $count != 11) ? 2 : 3)));
 
                 return $lang[$s];
-                break;
+
             case 'be': //belarusian, nplurals=3
             case 'bs': //bosnian, nplurals=3
                 $s =  (($count%10 == 1 && $count%100 != 11) ? 0 : (($count%10 >= 2 && $count%10 <= 4 && ($count%100<10 || $count%100 >= 20)) ? 1 : 2));
 
                 return $lang[$s];
-                break;
+
         }
     }
 

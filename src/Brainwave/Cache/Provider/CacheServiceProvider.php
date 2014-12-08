@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cache;
+namespace Brainwave\Cache\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Exception;
+namespace Brainwave\Exception\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework

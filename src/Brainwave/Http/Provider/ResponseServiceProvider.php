@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Cookie;
+namespace Brainwave\Http\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -22,19 +22,24 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
 /**
- * CookieServiceProvider
+ * ResponseServiceProvider
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.8.0-dev
  *
  */
-class CookieServiceProvider implements ServiceProviderInterface
+class ResponseServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
     public function register(Container $container)
     {
-        $container['cookie'] = function () {
-            return new Cookie();
+        $container['response'] = function ($container) {
+            return new Response();
         };
     }
 }

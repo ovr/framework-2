@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Console;
+namespace Brainwave\Console\Provider;
 
 /**
  * Narrowspark - a PHP 5 framework
