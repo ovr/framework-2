@@ -35,4 +35,31 @@ class Response extends HttpFoundation\Response implements ResponseContract
      * Parameter encapsulation
      */
     use ResponseParameterTrait;
+
+    /**
+     * Morph the given content into JSON.
+     *
+     * @param  mixed  $content
+     * @return string
+     */
+    protected function morphToJson($content)
+    {
+        if ($content instanceof JsonableInterface) {
+            return $content->toJson();
+        }
+
+        return json_encode($content);
+    }
+    /**
+     * Determine if the given content should be turned into JSON.
+     *
+     * @param  mixed $content
+     * @return bool
+     */
+    protected function shouldBeJson($content)
+    {
+        return $content instanceof JsonableInterface ||
+               $content instanceof ArrayObject ||
+               is_array($content);
+    }
 }

@@ -20,7 +20,8 @@
         "symfony/console"                    : "~2.6.1",
         "stecman/symfony-console-completion" : "~0.4.4",
         "brainwave/log"                      : "self.version",
-        "narrowspark/config"                 : "self.version"
+        "narrowspark/config"                 : "self.version",
+        "psy/psysh"                          : "0.2.1"
     },
     "autoload": {
         "psr-4": {

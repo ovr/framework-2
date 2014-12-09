@@ -18,10 +18,11 @@ namespace Brainwave\Exception;
  *
  */
 
-use Brainwave\Contracts\Exception\FatalErrorException as FatalError;
-use Brainwave\Contracts\Http\HttpException as HttpExceptionContract;
+use Brainwave\Contracts\Http\HttpExceptionInterface;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Debug\Exception\FatalErrorException as FatalError;
 
 /**
  * ExceptionHandler
@@ -60,6 +61,13 @@ class Handler
      * @var bool
      */
     protected $debug;
+
+    /**
+     * All of the handled error messages.
+     *
+     * @var array
+     */
+    protected $handled = [];
 
     /**
      * Create a new exception handler instance.
@@ -205,10 +213,10 @@ class Handler
             //  we can have more granularity on the error handling for the developer.
             if (!$this->handlesException($handler, $exception)) {
                 continue;
-            } elseif ($exception instanceof HttpExceptionContract) {
+            } elseif ($exception instanceof HttpExceptionInterface) {
                 $code = $exception->getStatusCode();
             } else {
-                $code = '500';
+                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
             }
 
             // We will wrap this handler in a try / catch and avoid white screens of death

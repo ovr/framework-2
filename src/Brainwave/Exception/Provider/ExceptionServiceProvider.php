@@ -19,8 +19,9 @@ namespace Brainwave\Exception\Provider;
  */
 
 use Brainwave\Application\Application;
-use Brainwave\Exception\Adapter\PlainDisplayer;
+use Brainwave\Exception\Adapter\Plain as PlainDisplayer;
 use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
+use Brainwave\Exception\Adapter\Symfony as SymfonyDisplayer;
 use Brainwave\Exception\Handler as ExceptionHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -29,6 +30,7 @@ use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
+use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 /**
  * ExceptionServiceProvider
@@ -40,15 +42,24 @@ use Whoops\Run;
  */
 class ExceptionServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
+    /**
+     * Register the exception handler instance.
+     *
+     * @return void
+     */
     public function register(Container $container)
     {
-        $this->registerDisplayers($container);
+        $this->container = $container;
 
-        $container['exception'] = function ($container) {
+        $this->registerDisplayers();
+
+        $this->container['exception'] = function ($container) {
             return new ExceptionHandler(
                 $container,
-                $container['logger']->getMonolog(),
-                $container['settings']->get('app::debug', true)
+                $this->container['logger']->getMonolog(),
+                $this->container['settings']['app::debug']
             );
         };
     }
@@ -56,29 +67,81 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Register the exception displayers.
      *
-     * @param \Pimple\Container $container
+     * @return void
+     */
+    protected function registerDisplayers()
+    {
+        $this->registerPlainDisplayer();
+
+        if ($this->container['settings']['app::exception.handler'] === 'whoops') {
+            $this->registerWhoopsDebugDisplayer();
+        } else {
+            $this->registerSymfonyDebugDisplayer();
+        }
+    }
+
+    /**
+     * Register the plain exception displayer.
      *
      * @return void
      */
-    protected function registerDisplayers(Container $container)
+    protected function registerPlainDisplayer()
     {
-        $this->registerPlainDisplayer($container);
+        $this->container['exception.plain'] = function () {
+            // If the application is running in a console environment, we will just always
+            // use the debug handler as there is no point in the console ever returning
+            // out HTML. This debug handler always returns JSON from the console env.
+            if ($this->container['environment']->runningInConsole()) {
+                return $this->container['exception.debug'];
+            }
 
-        $this->registerDebugDisplayer($container);
+            return new PlainDisplayer();
+        };
+    }
+
+    /**
+     * Register the Whoops exception displayer.
+     *
+     * @return void
+     */
+    protected function registerWhoopsDebugDisplayer()
+    {
+        $this->registerWhoops();
+
+        $this->container['exception.debug'] = function () {
+            return new WhoopsDisplayer(
+                $this->container['whoops'],
+                $this->container['environment']->runningInConsole()
+            );
+        };
+    }
+
+    /**
+     * Register the Symfony exception displayer.
+     *
+     * @return void
+     */
+    protected function registerSymfonyDebugDisplayer()
+    {
+        $this->container['exception.debug'] = function () {
+            return new SymfonyDisplayer(
+                new SymfonyExceptionHandler(),
+                $this->shouldReturnJson()
+            );
+        };
     }
 
     /**
      * Register the Whoops error display service.
      *
-     * @param \Pimple\Container $container
      *
      * @return void
      */
-    protected function registerWhoops(Container $container)
+    protected function registerWhoops()
     {
-        $this->registerWhoopsHandler($container);
+        $this->registerWhoopsHandler();
 
-        $request = $container['request'];
+        $request = $this->container['request'];
 
         if ($request === null) {
             // This error occurred too early in the application's life
@@ -86,9 +149,9 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             return;
         }
 
-        $this->registerPrettyWhoopsHandlerInfo($request, $container);
+        $this->registerPrettyWhoopsHandlerInfo($request);
 
-        $container['whoops'] = function ($container) {
+        $this->container['whoops'] = function () {
             // We will instruct Whoops to not exit after it displays the exception as it
             // will otherwise run out before we can do anything else. We just want to
             // let the framework go ahead and finish a request on this end instead.
@@ -96,134 +159,109 @@ class ExceptionServiceProvider implements ServiceProviderInterface
             $whoops->allowQuit(false);
 
             $whoops->writeToOutput(true);
-            $whoops->pushHandler($container['whoops.plain.handler']);
-            $whoops->pushHandler($container['whoops.handler']);
-            //$whoops->pushHandler($container['whoops.handler.info']);
+            $whoops->pushHandler($this->container['whoops.handler']);
+
+            if (!$this->shouldReturnJson()) {
+                $whoops->pushHandler($this->container['whoops.plain.handler']);
+                $whoops->pushHandler($this->container['whoops.handler.info']);
+            }
 
             return $whoops;
         };
     }
 
     /**
-     * Register the plain exception displayer.
-     *
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    protected function registerPlainDisplayer(Container $container)
-    {
-        $container['exception.plain'] = function ($container) {
-            // If the application is running in a console environment, we will just always
-            // use the debug handler as there is no point in the console ever returning
-            // out HTML. This debug handler always returns JSON from the console env.
-            if ($container['environment']->runningInConsole()) {
-                return $container['exception.debug'];
-            }
-
-            return new PlainDisplayer(
-                $container,
-                strtolower($container['settings']->get('app::charset', 'en')),
-                $container['environment']->runningInConsole()
-            );
-        };
-    }
-
-    /**
-     * Register the Whoops exception displayer.
-     *
-     * @param \Pimple\Container $container
-     *
-     * @return void
-     */
-    protected function registerDebugDisplayer(Container $container)
-    {
-        $this->registerWhoops($container);
-
-        $container['exception.debug'] = function ($container) {
-            return new WhoopsDisplayer(
-                $container,
-                strtolower($container['settings']->get('app::charset', 'en')),
-                $container['environment']->runningInConsole()
-            );
-        };
-    }
-
-    /**
      * Register the Whoops handler for the request.
      *
-     * @param \Pimple\Container $container
-     *
      * @return void
      */
-    protected function registerWhoopsHandler(Container $container)
+    protected function registerWhoopsHandler()
     {
-        if ($this->shouldReturnJson($container)) {
-            $container['whoops.handler'] = function () {
+        if ($this->shouldReturnJson()) {
+            $this->container['whoops.handler'] = function () {
                 return new JsonResponseHandler();
             };
         } else {
-            $this->registerPlainTextHandler($container);
+            $this->registerPlainTextHandler();
 
-            $this->registerPrettyWhoopsHandler($container);
+            $this->registerPrettyWhoopsHandler();
         }
     }
 
     /**
      * Register the Whoops handler for the request.
      *
-     * @param \Pimple\Container $container
-     *
      * @return void
      */
-    protected function registerPlainTextHandler(Container $container)
+    protected function registerPlainTextHandler()
     {
-        $container['whoops.plain.handler'] = function ($container) {
-            return new PlainTextHandler($container['logger']->getMonolog());
+        $this->container['whoops.plain.handler'] = function () {
+            return new PlainTextHandler($this->container['logger']->getMonolog());
         };
     }
 
     /**
      * Determine if the error provider should return JSON.
      *
-     * @param \Pimple\Container $container
-     *
      * @return bool
      */
-    protected function shouldReturnJson(Container $container)
+    protected function shouldReturnJson()
     {
-        return $container['environment']->runningInConsole() || $this->requestWantsJson($container);
+        return $this->container['environment']->runningInConsole() || $this->requestWantsJson();
     }
 
     /**
      * Determine if the request warrants a JSON response.
      *
-     * @param \Pimple\Container $container
-     *
      * @return boolean|null
      */
-    protected function requestWantsJson(Container $container)
+    protected function requestWantsJson()
     {
-        //return $container['request']->isAjax() || $container['request']->isJson();
+        return $this->container['request']->ajax() || $this->container['request']->wantsJson();
     }
 
     /**
      * Register the "pretty" Whoops handler.
      *
-     * @param \Pimple\Container $container
-     *
      * @return void
      */
-    protected function registerPrettyWhoopsHandler(Container $container)
+    protected function registerPrettyWhoopsHandler()
     {
-        $container['whoops.handler'] = function ($container) {
+        $this->container['whoops.handler'] = function ($container) {
             $handler = new PrettyPageHandler();
-            $handler->setEditor($container['settings']->get('app::whoops.editor', 'sublime'));
+            $handler->setEditor($this->container['settings']->get('app::whoops.editor', 'sublime'));
 
-            $handler->addCustomCss('/../Resources/css/whoops.base.css');
+            if ($this->resourcePath() !== null) {
+                $handler->addResourcePath($this->resourcePath());
+            }
 
             return $handler;
         };
+    }
+
+    /**
+     * Get the resource path for Whoops.
+     *
+     * @return string
+     */
+    public function resourcePath()
+    {
+        if (is_dir($path = $this->getResourcePath())) {
+            return $path;
+        }
+    }
+
+    /**
+     * Get the Whoops custom resource path.
+     *
+     * @return string
+     */
+    protected function getResourcePath()
+    {
+        $app  = $this->container['app'];
+        $base = $app::$paths['path.base'];
+
+        return $base.'/vendor/narrowspark/framework/src/Brainwave/Exception/resources';
     }
 
     /**
@@ -235,24 +273,23 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      * instance, and working with it to add new data tables
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Pimple\Container                         $container
      *
      * @return void
      */
-    protected function registerPrettyWhoopsHandlerInfo(Request $request, Container $container)
+    protected function registerPrettyWhoopsHandlerInfo(Request $request)
     {
-        $container['whoops.handler.info'] = function () use ($request, $container) {
+        $this->container['whoops.handler.info'] = function () use ($request) {
 
-            $container['whoops.handler']->setPageTitle("We're all going to be fired!");
+            $this->container['whoops.handler']->setPageTitle("We're all going to be fired!");
 
-            $container['whoops.handler']->addDataTable('Narrowspark Application', [
+            $this->container['whoops.handler']->addDataTable('Narrowspark Application', [
                 'Version'           => Application::VERSION,
-                'Charset'           => $container['settings']['app::locale'],
-                'Route Class'       => $container['settings']['http::route'],
-                'Application Class' => get_class($container),
+                'Charset'           => $this->container['settings']['app::locale'],
+                'Route Class'       => $this->container['settings']['http::route'],
+                'Application Class' => get_class($this->container),
             ]);
 
-            $container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
+            $this->container['whoops.handler']->addDataTable('Narrowspark Application (Request)', [
                 'URI'          => $request->getUri(),
                 'Request URI'  => $request->getRequestUri(),
                 'Path Info'    => $request->getPathInfo(),
@@ -266,7 +303,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
                 'Host'         => $request->getHost(),
             ]);
 
-            return $container['whoops.handler'];
+            return $this->container['whoops.handler'];
         };
     }
 }

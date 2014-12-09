@@ -19,51 +19,54 @@ namespace Brainwave\Exception\Adapter;
  */
 
 use Brainwave\Contracts\Exception\Adapter;
-use Brainwave\Contracts\Http\HttpExceptionInterface;
-use Whoops\Run;
+use Symfony\Component\Debug\ExceptionHandler;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * WhoopsDisplayer
+ * PlainDisplayer
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-class Whoops implements Adapter
+class Symfony implements Adapter
 {
     /**
-     * The Whoops run instance.
+     * The Symfony exception handler.
      *
-     * @var \Whoops\Run
+     * @var \Symfony\Component\Debug\ExceptionHandler
      */
-    protected $whoops;
+    protected $symfony;
 
     /**
-     * Indicates if the application is in a console environment.
+     * Indicates if JSON should be returned.
      *
      * @var bool
      */
-    protected $runningInConsole;
+    protected $returnJson;
 
     /**
-     * Create a new Whoops exception displayer.
+     * Create a new Symfony exception displayer.
      *
-     * @param  \Whoops\Run $whoops
-     * @param  bool        $runningInConsole
+     * @param \Symfony\Component\Debug\ExceptionHandler $symfony
+     * @param bool                                      $returnJson
+     *
      * @return void
      */
-    public function __construct(Run $whoops, $runningInConsole)
+    public function __construct(ExceptionHandler $symfony, $returnJson = false)
     {
-        $this->whoops = $whoops;
-        $this->runningInConsole = $runningInConsole;
+        $this->symfony    = $symfony;
+        $this->returnJson = $returnJson;
     }
 
     /**
      * Display the given exception to the user.
      *
      * @param \Exception $exception
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function display(\Exception $exception)
     {
@@ -71,8 +74,14 @@ class Whoops implements Adapter
                 $exception->getStatusCode() :
                 Response::HTTP_INTERNAL_SERVER_ERROR;
 
-        $headers = $exception instanceof HttpExceptionInterface ? $exception->getHeaders() : [];
+        if ($this->returnJson) {
+            return new JsonResponse(array(
+                'error' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+            ), $status);
+        }
 
-        return new Response($this->whoops->handleException($exception), $status, $headers);
+        return $this->symfony->sendPhpResponse($exception);
     }
 }

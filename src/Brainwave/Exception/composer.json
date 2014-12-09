@@ -31,5 +31,8 @@
             "dev-master": "0.9.4-dev"
         }
     },
+    "suggest": {
+        "symfony/debug" : "You can use symfony debug if you dont like whoops"
+    },
     "minimum-stability": "dev"
 }

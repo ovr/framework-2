@@ -31,8 +31,9 @@ interface Adapter
     /**
      * Display the given exception to the user.
      *
-     * @param  \Exception|\ErrorException $exception
+     * @param \Exception $exception
+     *
      * @return void
      */
-    public function display($exception);
+    public function display(\Exception $exception);
 }

@@ -46,4 +46,26 @@ class Request extends HttpFoundation\Request implements RequestContract
 
         return (isset($segments[$index - 1])) ? $segments[$index - 1] : $default;
     }
+
+    /**
+     * Determine if the request is the result of an AJAX call.
+     *
+     * @return bool
+     */
+    public function ajax()
+    {
+        return $this->isXmlHttpRequest();
+    }
+
+    /**
+     * Determine if the current request is asking for JSON in return.
+     *
+     * @return bool
+     */
+    public function wantsJson()
+    {
+        $acceptable = $this->getAcceptableContentTypes();
+
+        return isset($acceptable[0]) && $acceptable[0] == 'application/json';
+    }
 }
