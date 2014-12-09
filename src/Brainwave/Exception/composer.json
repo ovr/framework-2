@@ -1,10 +1,10 @@
 {
-    "name": "brainwave/encrypter",
+    "name": "brainwave/exception",
     "type": "library",
     "description": "Narrowspark Framework for Creative People.",
-    "keywords": ["narrowspark", "brainwave", "encrypter"],
+    "keywords": ["narrowspark", "brainwave", "exception", "debug", "Symfony"],
     "license": "MIT",
-    "homepage": "http://github.com/n-brainwave/encrypter",
+    "homepage": "http://github.com/n-brainwave/session",
     "authors": [
         {
           "name": "Daniel Bannert",
@@ -14,15 +14,16 @@
         }
     ],
     "require": {
-        "php"                       : ">=5.4.0",
-        "ext-openssl"               : "*",
-        "ext-mcrypt"                : "*",
-        "ircmaxell/random-lib"      : "1.0.0",
-        "ircmaxell/password-compat" : "1.0.4"
+        "php": ">=5.4.0",
+        "brainwave/conifg"        : "self.version",
+        "brainwave/log"           : "self.version",
+        "pimple/pimple"           : "~3.0",
+        "filp/whoops"             : "~1.1.3",
+        "symfony/http-foundation" : "~2.6.1"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Crypt\\": ""
+            "Brainwave\\Exception\\": ""
         }
     },
     "extra": {

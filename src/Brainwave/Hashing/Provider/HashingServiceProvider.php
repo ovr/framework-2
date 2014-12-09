@@ -71,7 +71,7 @@ class HashingServiceProvider implements ServiceProviderInterface
         $container['rand.generator'] = function ($container) {
             $generatorStrength = ucfirst(
                 $container['settings']->get(
-                    'app::crypt.generator.strength',
+                    'app::hash.generator.strength',
                     'Medium'
                 )
             );

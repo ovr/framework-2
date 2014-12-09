@@ -1,3 +1,3 @@
-# Brainwave Crypt
+# Brainwave Encrypter
 
 //TODO finish docu

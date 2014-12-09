@@ -21,7 +21,7 @@ namespace Brainwave\Crypter\Facades;
 use Brainwave\Application\StaticalProxyManager;
 
 /**
- * Crypt
+ * Hash
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
