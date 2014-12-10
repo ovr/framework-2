@@ -33,16 +33,19 @@ use Brainwave\Http\Exception\ServiceUnavailableHttpException;
 use Brainwave\Http\Exception\TooManyRequestsHttpException;
 use Brainwave\Http\Exception\UnauthorizedHttpException;
 use Brainwave\Http\Exception\UnsupportedMediaTypeHttpException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * HttpErrorHandlingTrait
+ * HttpHandlingTrait
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-trait HttpErrorHandlingTrait
+trait HttpHandlingTrait
 {
     /**
      * Register an application error handler.
@@ -157,5 +160,51 @@ trait HttpErrorHandlingTrait
         $this->error(function (NotFoundHttpException $e) use ($callback) {
             return call_user_func($callback, $e);
         });
+    }
+
+    /**
+     * Creates a streaming response.
+     *
+     * @param mixed   $callback A valid PHP callback
+     * @param integer $status   The response status code
+     * @param array   $headers  An array of response headers
+     *
+     * @return StreamedResponse
+     */
+    public function stream($callback = null, $status = 200, array $headers = array())
+    {
+        return new StreamedResponse($callback, $status, $headers);
+    }
+
+    /**
+     * Convert some data into a JSON response.
+     *
+     * @param mixed   $data    The response data
+     * @param integer $status  The response status code
+     * @param array   $headers An array of response headers
+     *
+     * @return JsonResponse
+     */
+    public function json($data = array(), $status = 200, array $headers = array())
+    {
+        return new JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * Sends a file.
+     *
+     * @param \SplFileInfo|string $file               The file to stream
+     * @param integer             $status             The response status code
+     * @param array               $headers            An array of response headers
+     * @param null|string         $contentDisposition The type of Content-Disposition to set
+     *                                                automatically with the filename
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws \RuntimeException When the feature is not supported, before http-foundation v2.2
+     */
+    public function sendFile($file, $status = 200, array $headers = array(), $contentDisposition = null)
+    {
+        return new BinaryFileResponse($file, $status, $headers, true, $contentDisposition);
     }
 }

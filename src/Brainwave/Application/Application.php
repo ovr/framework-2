@@ -19,21 +19,18 @@ namespace Brainwave\Application;
  */
 
 use Brainwave\Application\Provider\ApplicationServiceProvider;
+use Brainwave\Application\Traits\BootableTrait;
+use Brainwave\Application\Traits\HttpHandlingTrait;
 use Brainwave\Config\Provider\ConfigServiceProvider;
 use Brainwave\Contracts\Application\Application as ApplicationContract;
-use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 use Brainwave\Filesystem\Provider\FilesystemServiceProvider;
 use Brainwave\Http\Provider\RequestServiceProvider;
 use Brainwave\Http\Provider\ResponseServiceProvider;
 use Brainwave\Middleware\Middleware;
 use Brainwave\Support\Arr;
-use Brainwave\Traits\HttpErrorHandlingTrait;
 use Brainwave\Translator\Provider\TranslatorServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Application
@@ -58,27 +55,6 @@ class Application extends Container implements ApplicationContract
      * @var array
      */
     protected $providers = [];
-
-    /**
-     * Boots all providers.
-     *
-     * @var boolean
-     */
-    protected $booted = false;
-
-    /**
-     * The array of booting callbacks.
-     *
-     * @var array
-     */
-    protected $bootingCallbacks = [];
-
-    /**
-     * The array of booted callbacks.
-     *
-     * @var array
-     */
-    protected $bootedCallbacks = [];
 
     /**
      * Narrowspark config files
@@ -316,7 +292,8 @@ class Application extends Container implements ApplicationContract
         //TODO
     }
 
-    use HttpErrorHandlingTrait;
+    use HttpHandlingTrait;
+    use BootableTrait;
 
     /**
      * Register a maintenance mode event listener.
@@ -328,51 +305,6 @@ class Application extends Container implements ApplicationContract
     public function down(\Closure $callback)
     {
         $this['events']->hook('brainwave.app.down', $callback);
-    }
-
-    /**
-     * Creates a streaming response.
-     *
-     * @param mixed   $callback A valid PHP callback
-     * @param integer $status   The response status code
-     * @param array   $headers  An array of response headers
-     *
-     * @return StreamedResponse
-     */
-    public function stream($callback = null, $status = 200, array $headers = array())
-    {
-        return new StreamedResponse($callback, $status, $headers);
-    }
-
-    /**
-     * Convert some data into a JSON response.
-     *
-     * @param mixed   $data    The response data
-     * @param integer $status  The response status code
-     * @param array   $headers An array of response headers
-     *
-     * @return JsonResponse
-     */
-    public function json($data = array(), $status = 200, array $headers = array())
-    {
-        return new JsonResponse($data, $status, $headers);
-    }
-
-    /**
-     * Sends a file.
-     *
-     * @param \SplFileInfo|string $file               The file to stream
-     * @param integer             $status             The response status code
-     * @param array               $headers            An array of response headers
-     * @param null|string         $contentDisposition The type of Content-Disposition to set automatically with the filename
-     *
-     * @return BinaryFileResponse
-     *
-     * @throws \RuntimeException When the feature is not supported, before http-foundation v2.2
-     */
-    public function sendFile($file, $status = 200, array $headers = array(), $contentDisposition = null)
-    {
-        return new BinaryFileResponse($file, $status, $headers, true, $contentDisposition);
     }
 
     /**
@@ -458,94 +390,6 @@ class Application extends Container implements ApplicationContract
     }
 
     /**
-     * Boots all service providers.
-     *
-     * This method is automatically called by finalize(), but you can use it
-     * to boot all service providers when not handling a request.
-     */
-    public function boot()
-    {
-        if (!$this->booted) {
-            $this->booted = true;
-
-            foreach ($this->providers as $provider) {
-                if ($provider instanceof BootableProviderContract) {
-                    $provider->boot($this);
-                }
-            }
-        }
-
-        $this->bootApplication();
-    }
-
-    /**
-     * Boot the application and fire app callbacks.
-     *
-     * @return void
-     */
-    protected function bootApplication()
-    {
-        // Once the application has booted we will also fire some "booted" callbacks
-        // for any listeners that need to do work after this initial booting gets
-        // finished. This is useful when ordering the boot-up processes we run.
-        $this->fireAppCallbacks($this->bootingCallbacks);
-
-        $this->booted = true;
-
-        $this->fireAppCallbacks($this->bootedCallbacks);
-    }
-
-    /**
-     * Determine if the application has booted.
-     *
-     * @return bool
-     */
-    public function isBooted()
-    {
-        return $this->booted;
-    }
-
-    /**
-     * Register a new boot listener.
-     *
-     * @param mixed $callback
-     *
-     * @return void
-     */
-    public function booting($callback)
-    {
-        $this->bootingCallbacks[] = $callback;
-    }
-
-    /**
-     * Register a new "booted" listener.
-     *
-     * @param  mixed $callback
-     * @return void
-     */
-    public function booted($callback)
-    {
-        $this->bootedCallbacks[] = $callback;
-
-        if ($this->isBooted()) {
-            $this->fireAppCallbacks([$callback]);
-        }
-    }
-
-    /**
-     * Call the booting callbacks for the application.
-     *
-     * @param  array $callbacks
-     * @return void
-     */
-    protected function fireAppCallbacks(array $callbacks)
-    {
-        foreach ($callbacks as $callback) {
-            call_user_func($callback, $this);
-        }
-    }
-
-    /**
      * Set the application request for the console environment.
      *
      * @return string
@@ -571,13 +415,7 @@ class Application extends Container implements ApplicationContract
             ob_start('mb_output_handler');
         }
 
-        $this->boot();
-
-        $dispatcher = $this['route']->getDispatcher();
-
-        $response = $dispatcher->dispatch('GET', '/');
-
-        $response->send();
+        $this->finalize();
 
         // TODO
         // Invoke middleware and application stack
@@ -592,14 +430,19 @@ class Application extends Container implements ApplicationContract
 
     /**
      * Finalize send response
-     *
      * This method sends the response object
+     *
+     * @return void
      */
     protected function finalize()
     {
         if (!$this->booted) {
             $this->boot();
         }
+
+        $dispatcher = $this['route']->getDispatcher();
+
+        $dispatcher->dispatch('GET', '/')->send();
     }
 
     /**

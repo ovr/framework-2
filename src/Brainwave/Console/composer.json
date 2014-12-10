@@ -20,18 +20,17 @@
         "symfony/console"                    : "~2.6.1",
         "stecman/symfony-console-completion" : "~0.4.4",
         "brainwave/log"                      : "self.version",
-        "narrowspark/config"                 : "self.version",
-        "psy/psysh"                          : "dev-master"
+        "narrowspark/config"                 : "self.version"
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\Console\\": ""
+            "Brainwave\\Console\\"           : ""
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.4-dev"
+            "dev-master"                     : "0.9.4-dev"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability"                      : "dev"
 }

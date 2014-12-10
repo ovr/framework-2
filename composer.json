@@ -34,7 +34,7 @@
         "league/flysystem"                   : "~1.0",
         "doctrine/annotations"               : "~1.2.1",
         "swiftmailer/swiftmailer"            : "~5.2",
-        "symfony/http-foundation"            : "~2.6.0",
+        "symfony/http-foundation"            : "~2.6.1",
         "jeremeamia/superclosure"            : "~1.0.1",
         "classpreloader/classpreloader"      : "~1.0.2"
     },
@@ -75,7 +75,6 @@
     "suggest": {
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml"  : "Narrowspark has support for YML files",
-        "psy/psysh"     : "dev-master",
         "symfony/debug" : "You can use symfony debug if you dont like whoops"
     },
     "minimum-stability" : "dev"
