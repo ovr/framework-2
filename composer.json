@@ -29,7 +29,6 @@
         "league/fractal"                     : "~0.10.0",
         "vlucas/phpdotenv"                   : "~1.0.9",
         "monolog/monolog"                    : "~1.11.0",
-        "psy/psysh"                          : "dev-master",
         "stecman/symfony-console-completion" : "~0.4.4",
         "propel/propel"                      : "2.0.0-alpha4",
         "league/flysystem"                   : "~1.0",
@@ -76,7 +75,8 @@
     "suggest": {
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml"  : "Narrowspark has support for YML files",
+        "psy/psysh"     : "dev-master",
         "symfony/debug" : "You can use symfony debug if you dont like whoops"
     },
-    "minimum-stability": "dev"
+    "minimum-stability" : "dev"
 }
