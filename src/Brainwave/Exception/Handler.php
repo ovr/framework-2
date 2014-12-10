@@ -21,8 +21,8 @@ namespace Brainwave\Exception;
 use Brainwave\Contracts\Http\HttpExceptionInterface;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Debug\Exception\FatalErrorException as FatalError;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * ExceptionHandler
