@@ -20,8 +20,8 @@ namespace Brainwave\Exception\Adapter;
 
 use Brainwave\Contracts\Exception\Adapter;
 use Brainwave\Contracts\Http\HttpExceptionInterface;
-use Whoops\Run;
 use Symfony\Component\HttpFoundation\Response;
+use Whoops\Run;
 
 /**
  * WhoopsDisplayer

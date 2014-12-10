@@ -20,17 +20,17 @@ namespace Brainwave\Exception\Provider;
 
 use Brainwave\Application\Application;
 use Brainwave\Exception\Adapter\Plain as PlainDisplayer;
-use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
 use Brainwave\Exception\Adapter\Symfony as SymfonyDisplayer;
+use Brainwave\Exception\Adapter\Whoops as WhoopsDisplayer;
 use Brainwave\Exception\Handler as ExceptionHandler;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
-use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 /**
  * ExceptionServiceProvider
@@ -213,7 +213,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
     /**
      * Determine if the request warrants a JSON response.
      *
-     * @return boolean|null
+     * @return boolean
      */
     protected function requestWantsJson()
     {
