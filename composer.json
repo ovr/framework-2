@@ -36,8 +36,7 @@
         "swiftmailer/swiftmailer"            : "~5.2",
         "symfony/http-foundation"            : "~2.6.0",
         "jeremeamia/superclosure"            : "~1.0.1",
-        "classpreloader/classpreloader"      : "~1.0.2",
-        "psy/psysh"                          : "0.2.1"
+        "classpreloader/classpreloader"      : "~1.0.2"
     },
     "replace": {
         "brainwave/cache"                    : "self.version",
@@ -60,23 +59,24 @@
     },
     "autoload": {
         "psr-4": {
-            "Brainwave\\": "src/Brainwave/"
+            "Brainwave\\"                    : "src/Brainwave/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brainwave\\Tests\\": "tests/"
+            "Brainwave\\Tests\\"             : "tests/"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.9.4-dev"
+            "dev-master"                     : "0.9.4-dev"
         }
     },
     "suggest": {
         "jamesmoss/toml": "Narrowspark has support for TOML files",
         "symfony/yaml"  : "Narrowspark has support for YML files",
-        "symfony/debug" : "You can use symfony debug if you dont like whoops"
+        "symfony/debug" : "You can use symfony debug if you dont like whoops",
+        "psy/psysh"     : "waiting for console 2.6.1 support"
     },
     "minimum-stability": "dev"
 }
