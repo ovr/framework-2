@@ -21,7 +21,7 @@
         "stecman/symfony-console-completion" : "~0.4.4",
         "brainwave/log"                      : "self.version",
         "narrowspark/config"                 : "self.version",
-        "psy/psysh"                          : "0.2.1"
+        "psy/psysh"                          : "dev-master"
     },
     "autoload": {
         "psr-4": {
