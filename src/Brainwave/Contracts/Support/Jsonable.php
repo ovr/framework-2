@@ -17,14 +17,14 @@ namespace Brainwave\Contracts\Support;
  */
 
 /**
- * JsonableInterface
+ * Jsonable
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface JsonableInterface
+interface Jsonable
 {
     /**
      * Convert the object to its JSON representation.

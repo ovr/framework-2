@@ -125,7 +125,7 @@ class Plates implements EnginesContract
         // Get all extensions
         if (!is_null($this->container['settings']->get('view::plates.extensions', null))) {
             foreach ($this->availableExtensions as $ext) {
-                $this->engine->loadedExtensions($ext);
+                $this->engine->loadExtensions($ext);
             }
         }
 

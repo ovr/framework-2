@@ -1,5 +1,5 @@
 <?php
-namespace Brainwave\Contracts\Http;
+namespace Brainwave\Contracts\Support;
 
 /**
  * Narrowspark - a PHP 5 framework
@@ -17,28 +17,20 @@ namespace Brainwave\Contracts\Http;
  */
 
 /**
- * Response
+ * Renderable
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert
  * @since   0.9.4-dev
  *
  */
-interface Response
+
+interface Renderable
 {
     /**
-     * Send HTTP headers and body
+     * Get the evaluated contents of the object.
      *
-     * @return \Brainwave\Contracts\Http\Response
+     * @return string
      */
-    public function send();
-
-    /**
-     * Set the content on the response.
-     *
-     * @param  mixed $content
-     *
-     * @return $this
-     */
-    public function setContent($content);
+    public function render();
 }

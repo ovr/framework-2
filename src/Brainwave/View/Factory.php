@@ -78,7 +78,6 @@ class Factory extends Collection implements FactoryContract
         'php'   => 'php',
         'phtml' => 'php',
         'html'  => 'html',
-        'json'  => 'json',
     ];
 
     /**

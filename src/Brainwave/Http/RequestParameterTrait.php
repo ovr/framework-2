@@ -97,7 +97,7 @@ trait RequestParameterTrait
      *
      * @return mixed
      */
-    public function cookie($key = null, $default = null)
+    public function getCookie($key = null, $default = null)
     {
         if (is_null($key)) {
             return $this->cookies;

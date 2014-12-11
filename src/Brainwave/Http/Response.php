@@ -17,7 +17,8 @@ namespace Brainwave\Http;
  */
 
 use Brainwave\Contracts\Http\Response as ResponseContract;
-use Brainwave\Contracts\Support\JsonableInterface;
+use Brainwave\Contracts\Support\Jsonable;
+use Brainwave\Contracts\Support\Renderable;
 use Symfony\Component\HttpFoundation;
 
 /**
@@ -36,9 +37,17 @@ class Response extends HttpFoundation\Response implements ResponseContract
     use ResponseParameterTrait;
 
     /**
+     * The original content of the response.
+     *
+     * @var mixed
+     */
+    public $original;
+
+    /**
      * Set the content on the response.
      *
      * @param  mixed $content
+     *
      * @return $this
      */
     public function setContent($content)
@@ -50,11 +59,10 @@ class Response extends HttpFoundation\Response implements ResponseContract
         if ($this->shouldBeJson($content)) {
             $this->headers->set('Content-Type', 'application/json');
             $content = $this->morphToJson($content);
-        }
-        // If this content implements the "Renderable" interface then we will call the
-        // render method on the object so we will avoid any "__toString" exceptions
-        // that might be thrown and have their errors obscured by PHP's handling.
-        elseif ($content instanceof Renderable) {
+        } elseif ($content instanceof Renderable) {
+            // If this content implements the "Renderable" interface then we will call the
+            // render method on the object so we will avoid any "__toString" exceptions
+            // that might be thrown and have their errors obscured by PHP's handling.
             $content = $content->render();
         }
 
@@ -69,7 +77,7 @@ class Response extends HttpFoundation\Response implements ResponseContract
      */
     protected function morphToJson($content)
     {
-        if ($content instanceof JsonableInterface) {
+        if ($content instanceof Jsonable) {
             return $content->toJson();
         }
 
@@ -83,7 +91,7 @@ class Response extends HttpFoundation\Response implements ResponseContract
      */
     protected function shouldBeJson($content)
     {
-        return $content instanceof JsonableInterface ||
+        return $content instanceof Jsonable ||
                $content instanceof \ArrayObject ||
                is_array($content);
     }

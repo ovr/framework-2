@@ -16,8 +16,8 @@ namespace Brainwave\Log;
  *
  */
 
-use Brainwave\Contracts\Support\ArrayableInterface;
-use Brainwave\Contracts\Support\JsonableInterface;
+use Brainwave\Contracts\Support\Arrayable;
+use Brainwave\Contracts\Support\Jsonable;
 use Monolog\Handler\ErrorLogHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
@@ -425,9 +425,9 @@ class Writer
         if (isset($parameters[0])) {
             if (is_array($parameters[0])) {
                 $parameters[0] = var_export($parameters[0], true);
-            } elseif ($parameters[0] instanceof JsonableInterface) {
+            } elseif ($parameters[0] instanceof Jsonable) {
                 $parameters[0] = $parameters[0]->toJson();
-            } elseif ($parameters[0] instanceof ArrayableInterface) {
+            } elseif ($parameters[0] instanceof Arrayable) {
                 $parameters[0] = var_export($parameters[0]->to[], true);
             }
         }

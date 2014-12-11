@@ -64,7 +64,7 @@ interface Request
      * @param  string $key
      * @return mixed
      */
-    public function cookie($key = null, $default = null);
+    public function getCookie($key = null, $default = null);
 
     /**
      * Return array or single key from headers taken from $_SERVER
@@ -81,4 +81,26 @@ interface Request
      * @return string
      */
     public function uriSegment($index, $default = null);
+
+    /**
+     * Determine if the request is the result of an AJAX call.
+     *
+     * @return bool
+     */
+    public function ajax();
+
+    /**
+     * Determine if the current request is asking for JSON in return.
+     *
+     * @return bool
+     */
+    public function wantsJson();
+
+    /**
+     * Determine if a cookie is set on the request.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function hasCookie($key);
 }
