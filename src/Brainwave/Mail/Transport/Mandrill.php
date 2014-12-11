@@ -131,7 +131,7 @@ class Mandrill implements Swift_Transport
     /**
      * Get a new HTTP client instance.
      *
-     * @return \GuzzleHttp\Client
+     * @return \Swift_Mime_Message
      */
     protected function getHttpClient()
     {
