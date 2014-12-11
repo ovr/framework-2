@@ -16,7 +16,7 @@ namespace Brainwave\View;
  *
  */
 
-use Brainwave\Contracts\Support\Arrayable as ArrayableContracts;
+use Brainwave\Contracts\Support\ArrayableInterfaces;
 use Brainwave\Contracts\View\View as ViewContract;
 use Brainwave\Support\Collection;
 use Brainwave\Support\Str;
@@ -52,7 +52,7 @@ class View extends Collection implements ViewContract
         $this->data    = $data;
 
         //Initialize set with these items
-        parent::__construct($data instanceof ArrayableContracts ? $data->toArray() : $data);
+        parent::__construct($data instanceof ArrayableInterfaces ? $data->toArray() : $data);
     }
 
     /**

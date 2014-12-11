@@ -16,11 +16,11 @@ namespace Brainwave\Exception;
  *
  */
 
+use Brainwave\Http\Response;
 use Brainwave\Contracts\Http\HttpExceptionInterface;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Debug\Exception\FatalErrorException as FatalError;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 
 /**
  * ExceptionHandler
@@ -204,7 +204,7 @@ class Handler
      * Handle the given exception.
      *
      * @param \Exception $exception
-     * @param  bool      $fromConsole
+     * @param bool       $fromConsole
      *
      * @return string
      */
@@ -264,14 +264,18 @@ class Handler
     /**
      * Create a new fatal exception instance from an error array.
      *
-     * @param  array  $error
+     * @param array $error
      *
-     * @return \FatalError
+     * @return \FatalErrorException
      */
     protected function fatalExceptionFromError(array $error)
     {
-        return new FatalError(
-            $error['message'], $error['type'], 0, $error['file'], $error['line']
+        return new FatalErrorException(
+            $error['message'],
+            $error['type'],
+            0,
+            $error['file'],
+            $error['line']
         );
     }
 
@@ -370,13 +374,19 @@ class Handler
     /**
      * Render an exception as an HTTP response and send it.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
      *
      * @return void
      */
     protected function renderHttpResponse($e)
     {
-        //TODO $this->render($this->app['request'], $e)->send();
+        $response = new Response(
+            $e,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            array('content-type' => 'text/html')
+        );
+
+        $response->send();
     }
 
     /**

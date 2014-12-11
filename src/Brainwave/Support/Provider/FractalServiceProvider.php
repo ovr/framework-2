@@ -33,26 +33,30 @@ use Pimple\ServiceProviderInterface;
  */
 class FractalServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
     public function register(Container $container)
     {
-        $this->registerFractal($container);
-        $this->registerJsonApiFractal($container);
-        $this->registerArrayFractal($container);
-        $this->registerDataArrayFractal($container);
+        $this->container = $container;
+
+        $this->registerFractal();
+        $this->registerJsonApiFractal();
+        $this->registerArrayFractal();
+        $this->registerDataArrayFractal();
     }
 
-    protected function registerFractal(Container $container)
+    protected function registerFractal()
     {
-        $container['fractal'] = function () {
+        $this->container['fractal'] = function () {
             $manager = new Manager();
 
             return $manager;
         };
     }
 
-    protected function registerJsonApiFractal(Container $container)
+    protected function registerJsonApiFractal()
     {
-        $container['fractal.json'] = function () {
+        $this->container['fractal.json'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new JsonApiSerializer());
 
@@ -60,9 +64,9 @@ class FractalServiceProvider implements ServiceProviderInterface
         };
     }
 
-    protected function registerArrayFractal(Container $container)
+    protected function registerArrayFractal()
     {
-        $container['fractal.array'] = function () {
+        $this->container['fractal.array'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new ArraySerializer());
 
@@ -70,9 +74,9 @@ class FractalServiceProvider implements ServiceProviderInterface
         };
     }
 
-    protected function registerDataArrayFractal(Container $container)
+    protected function registerDataArrayFractal()
     {
-        $container['fractal.data.array'] = function () {
+        $this->container['fractal.data.array'] = function () {
             $manager = new Manager();
             $manager->setSerializer(new DataArraySerializer());
 

@@ -33,14 +33,18 @@ use Pimple\ServiceProviderInterface;
  */
 class FilesystemServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
     public function register(Container $container)
     {
-        $container['files'] = function () {
+        $this->container = $container;
+
+        $this->container['files'] = function () {
             return new Filesystem();
         };
 
-        $this->registerFlysystem($container);
-        $this->registerFileLoader($container);
+        $this->registerFlysystem();
+        $this->registerFileLoader();
     }
 
     /**
@@ -48,17 +52,17 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFlysystem(Container $container)
+    protected function registerFlysystem()
     {
-        $this->registerFactory($container);
+        $this->registerFactory();
 
-        $this->registerManager($container);
+        $this->registerManager();
 
-        $container['filesystem.disk'] = function ($container) {
+        $this->container['filesystem.disk'] = function ($container) {
             return $container['filesystem']->disk($container['settings']['filesystems::default']);
         };
 
-        $container['filesystem.cloud'] = function ($container) {
+        $this->container['filesystem.cloud'] = function ($container) {
             return $container['filesystem']->disk($container['settings']['filesystems::cloud']);
         };
     }
@@ -68,9 +72,9 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerFactory(Container $container)
+    protected function registerFactory()
     {
-        $container['filesystem.factory'] = function () {
+        $this->container['filesystem.factory'] = function () {
             return new Factory();
         };
     }
@@ -80,16 +84,16 @@ class FilesystemServiceProvider implements ServiceProviderInterface
      *
      * @return void
      */
-    protected function registerManager(Container $container)
+    protected function registerManager()
     {
-        $container['filesystem'] = function ($container) {
+        $this->container['filesystem'] = function ($container) {
             return new FilesystemManager($container, $container['filesystem.factory']);
         };
     }
 
-    protected function registerFileLoader(Container $container)
+    protected function registerFileLoader()
     {
-        $container['file.loader'] = function ($container) {
+        $this->container['file.loader'] = function ($container) {
             $container['path'] = '';
 
             return new FileLoader($container['files'], $container['path']);

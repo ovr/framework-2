@@ -33,12 +33,14 @@ class TranslatorServiceProvider implements ServiceProviderInterface
 {
     /**
      * Register translator
+     *
+     * return \Brainwave\Translator\Manager
      */
     public function register(Container $container)
     {
-        $container['translator.path'] = '';
-
         $container['translator'] = function ($container) {
+            $container['translator.path'] = '';
+
             $translator = new Manager();
             $translator->setLocale($container['settings']->get('app::locale', 'en'));
             $translator->setLoader(

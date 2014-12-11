@@ -65,15 +65,16 @@ class SqlServerConnector extends Connectors implements ConnectorInterface
         // First we will create the basic DSN setup as well as the port if it is in
         // in the configuration options. This will give us the basic DSN we will
         // need to establish the PDO connections and return them back for use.
-        $port = isset($config['port']) ? ','.$port : '';
-
         if (in_array('dblib', $this->getAvailableDrivers())) {
-            return "dblib:host={$server}{$port};dbname={$dbname}";
-        } else {
-            $dbName = $dbname != '' ? ";Database={$dbname}" : '';
+            $port = isset($config['port']) ? ':'.$port : '';
 
-            return "sqlsrv:Server={$server}{$port}{$dbName}";
+            return "dblib:host={$server}{$port};dbname={$dbname}";
         }
+
+        $port = isset($config['port']) ? ','.$port : '';
+        $dbName = $dbname != '' ? ";Database={$dbname}" : '';
+
+        return "sqlsrv:Server={$server}{$port}{$dbName}";
     }
 
     /**

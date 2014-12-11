@@ -44,7 +44,11 @@ class CacheServiceProvider implements ServiceProviderInterface
     protected function registerCacheFactory()
     {
         $this->container['cache.factory'] = function ($container) {
-            $cacheFactory = new CacheManager($container, $container['settings']['cache::supported.drivers']);
+            $cacheFactory = new CacheManager(
+                $container,
+                $container['settings']['cache::supported.drivers']
+            );
+
             $cacheFactory->setPrefix($container['settings']['cache::prefix']);
 
             return $cacheFactory;
@@ -54,7 +58,6 @@ class CacheServiceProvider implements ServiceProviderInterface
     protected function registerDefaultCache()
     {
         $this->container['cache'] = function ($container) {
-
             //The default driver
             $container['cache.factory']->setDefaultDriver($container['settings']['cache::driver']);
 

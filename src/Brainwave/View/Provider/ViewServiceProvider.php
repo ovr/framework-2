@@ -46,19 +46,18 @@ class ViewServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $this->container = $container;
-        $this->registerEngineResolver($container);
-        $this->registerViewFinder($container);
-        $this->registerFactory($container);
+
+        $this->registerEngineResolver();
+        $this->registerViewFinder();
+        $this->registerFactory();
     }
 
     /**
      * Register the engine engines instance.
      *
-     * @param Container $container
-     *
      * @return void
      */
-    protected function registerEngineResolver($container)
+    protected function registerEngineResolver()
     {
         $engines = new EngineResolver();
 
@@ -69,8 +68,8 @@ class ViewServiceProvider implements ServiceProviderInterface
             $this->{'register'.ucfirst($engineClass).'Engine'}($engines);
         }
 
-        if ($container['settings']['view::compilers'] !== null) {
-            foreach ($container['settings']['view::compilers'] as $compilerName => $compilerClass) {
+        if ($this->container['settings']['view::compilers'] !== null) {
+            foreach ($this->container['settings']['view::compilers'] as $compilerName => $compilerClass) {
                 if ($compilerName === $compilerClass[0]) {
                     $this->registercustomEngine(
                         $compilerName,
@@ -139,29 +138,29 @@ class ViewServiceProvider implements ServiceProviderInterface
     /**
      * Register the view finder implementation.
      *
-     * @param Container $container
-     *
      * @return void
      */
-    protected function registerViewFinder($container)
+    protected function registerViewFinder()
     {
-        $container['view.finder'] = function ($container) {
-            return new ViewFinder($container['files'], $container['config']['view.paths']);
+        $this->container['view.finder'] = function ($container) {
+            return new ViewFinder($this->container['files'], $this->container['config']['view.paths']);
         };
     }
 
     /**
      * Register the view environment.
      *
-     * @param Container $container
-     *
      * @return void
      */
-    protected function registerFactory($container)
+    protected function registerFactory()
     {
-        $container['view'] = function ($container) {
+        $this->container['view'] = function ($container) {
 
-            $env = new Factory($container['view.engine.resolver'], $container['view.finder'], $container['events']);
+            $env = new Factory(
+                $container['view.engine.resolver'],
+                $container['view.finder'],
+                $container['events']
+            );
 
             // We will also set the container instance on this view environment.
             $env->setContainer($container);

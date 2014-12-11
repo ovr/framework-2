@@ -44,6 +44,13 @@ class CookieSessionHandler implements \SessionHandlerInterface
     protected $request;
 
     /**
+     * The time the cookie expires.
+     *
+     * @var int
+     */
+    protected $minutes;
+
+    /**
      * Create a new cookie driven handler instance.
      *
      * @param CookieContract $cookie

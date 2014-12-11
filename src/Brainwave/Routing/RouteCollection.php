@@ -38,7 +38,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyContract
     use RouteStrategyTrait;
 
     /**
-     * @var \Pimple\Conatiner
+     * @var \Pimple\Container
      */
     protected $container;
 

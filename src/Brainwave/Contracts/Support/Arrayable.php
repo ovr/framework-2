@@ -17,7 +17,7 @@ namespace Brainwave\Contracts\Support;
  */
 
 /**
- * Arrayable
+ * ArrayableInterface
  *
  * @package Narrowspark/framework
  * @author  Daniel Bannert

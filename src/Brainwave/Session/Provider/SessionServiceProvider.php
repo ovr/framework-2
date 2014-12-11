@@ -29,26 +29,30 @@ use Pimple\ServiceProviderInterface;
  */
 class SessionServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
     public function register(Container $container)
     {
-        $container['session'] = function ($container) {
+        $this->container = $container;
+
+        $this->container['session'] = function ($container) {
 
         };
 
-        $this->registerCsrf($container);
-        $this->registerFlash($container);
+        $this->registerCsrf();
+        $this->registerFlash();
     }
 
-    protected function registerFlash(Container $container)
+    protected function registerFlash()
     {
-        $container['flash'] = function ($container) {
+        $this->container['flash'] = function ($container) {
 
         };
     }
 
-    public function registerCsrf(Container $container)
+    public function registerCsrf()
     {
-        $container['csrf'] = function ($container) {
+        $this->container['csrf'] = function ($container) {
 
         };
     }

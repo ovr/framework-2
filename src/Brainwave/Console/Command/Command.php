@@ -225,8 +225,8 @@ abstract class Command extends BaseCommand
         }
 
         throw new \LogicException(
-            '{$app} must be an instance of Brainwave\Console\ContainerAwareApplication, '
-           .'other instances are not supported.'
+            '{$app} must be an instance of Brainwave\Console\ContainerAwareApplication, '.
+            'other instances are not supported.'
         );
     }
 

@@ -32,39 +32,34 @@ use Pimple\ServiceProviderInterface;
  */
 class ApplicationServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
     public function register(Container $container)
     {
-        $this->registerAliasLoader($container);
-        $this->registerEntvironment($container);
-        $this->registerStaticalProxyResolver($container);
+        $this->container = $container;
+
+        $this->registerAliasLoader();
+        $this->registerEntvironment();
+        $this->registerStaticalProxyResolver();
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerEntvironment(Container $container)
+    protected function registerEntvironment()
     {
-        $container['environment'] = function () {
+        $this->container['environment'] = function () {
             return new EnvironmentDetector();
         };
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerAliasLoader(Container $container)
+    protected function registerAliasLoader()
     {
-        $container['alias'] = function () {
+        $this->container['alias'] = function () {
             return new AliasLoader();
         };
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerStaticalProxyResolver(Container $container)
+    protected function registerStaticalProxyResolver()
     {
-        $container['statical.resolver'] = function () {
+        $this->container['statical.resolver'] = function () {
             return new StaticalProxyResolver();
         };
     }

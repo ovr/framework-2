@@ -32,41 +32,36 @@ use RandomLib\Factory as RandomLib;
  */
 class HashingServiceProvider implements ServiceProviderInterface
 {
+    protected $container;
+
     public function register(Container $container)
     {
-        $this->registerRand($container);
-        $this->registerRandGenerator($container);
-        $this->registerHashGenerator($container);
+        $this->container = $container;
 
-        $this->registerPassword($container);
+        $this->registerRand();
+        $this->registerRandGenerator();
+        $this->registerHashGenerator();
+
+        $this->registerPassword();
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerHashGenerator($container)
+    protected function registerHashGenerator()
     {
-        $container['hash'] = function ($container) {
+        $this->container['hash'] = function ($container) {
             return new HashGenerator($container['rand.generator']);
         };
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerRand($container)
+    protected function registerRand()
     {
-        $container['rand'] = function () {
+        $this->container['rand'] = function () {
             return new RandomLib();
         };
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerRandGenerator($container)
+    protected function registerRandGenerator()
     {
-        $container['rand.generator'] = function ($container) {
+        $this->container['rand.generator'] = function ($container) {
             $generatorStrength = ucfirst(
                 $container['settings']->get(
                     'app::hash.generator.strength',
@@ -76,16 +71,13 @@ class HashingServiceProvider implements ServiceProviderInterface
 
             $generator = "get{$generatorStrength}StrengthGenerator";
 
-            return $container['rand']->$generator();
+            return $this->container['rand']->$generator();
         };
     }
 
-    /**
-     * @param Container $container
-     */
-    protected function registerPassword($container)
+    protected function registerPassword()
     {
-        $container['password'] = function () {
+        $this->container['password'] = function () {
             return new Password();
         };
     }

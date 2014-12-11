@@ -19,6 +19,7 @@
         "symfony/process"                    : "~2.6.1",
         "symfony/console"                    : "~2.6.1",
         "stecman/symfony-console-completion" : "~0.4.4",
+        "nesbot/carbon"                      : "~1.13.0",
         "brainwave/log"                      : "self.version",
         "narrowspark/config"                 : "self.version"
     },

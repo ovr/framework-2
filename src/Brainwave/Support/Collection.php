@@ -19,7 +19,7 @@ namespace Brainwave\Support;
 use Brainwave\Contracts\Encrypter\Encrypter as EncrypterContract;
 use Brainwave\Contracts\Support\Arrayable as ArrayableContract;
 use Brainwave\Contracts\Support\Collection as CollectionContract;
-use Brainwave\Contracts\Support\Jsonable as JsonableContract;
+use Brainwave\Contracts\Support\JsonableInterface;
 
 /**
  * Collection
@@ -34,7 +34,7 @@ class Collection implements
     ArrayableContract,
     \Countable,
     \IteratorAggregate,
-    JsonableContract,
+    JsonableInterface,
     \JsonSerializable,
     CollectionContract
 {
@@ -156,7 +156,7 @@ class Collection implements
             return ! is_null($this->first($key));
         }
 
-        return in_array($key, $this->items);
+        return in_array($key, $this->data);
     }
 
     /**
@@ -659,8 +659,7 @@ class Collection implements
         }
 
         return $this->reduce(function ($result, $item) use ($callback) {
-            return $result  = $callback($item);
-
+            return $result += $callback($item);
         }, 0);
     }
 

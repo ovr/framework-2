@@ -17,9 +17,10 @@
         "php": ">=5.4.0",
         "brainwave/conifg"        : "self.version",
         "brainwave/log"           : "self.version",
-        "pimple/pimple"           : "~3.0",
         "filp/whoops"             : "~1.1.3",
-        "symfony/http-foundation" : "~2.6.1"
+        "pimple/pimple"           : "~3.0",
+        "symfony/http-foundation" : "~2.6.1",
+        "symfony/debug"           : "~2.6.1"
     },
     "autoload": {
         "psr-4": {
@@ -30,9 +31,6 @@
         "branch-alias": {
             "dev-master": "0.9.4-dev"
         }
-    },
-    "suggest": {
-        "symfony/debug" : "You can use symfony debug if you dont like whoops"
     },
     "minimum-stability": "dev"
 }

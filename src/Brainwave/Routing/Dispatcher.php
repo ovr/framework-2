@@ -213,7 +213,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyContr
     {
         if (is_array($controller)) {
             $controller = [
-                $this->container->get($controller[0]),
+                $this->container[$controller[0]],
                 $controller[1],
             ];
         }

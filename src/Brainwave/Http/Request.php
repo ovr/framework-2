@@ -66,4 +66,15 @@ class Request extends HttpFoundation\Request implements RequestContract
 
         return isset($acceptable[0]) && $acceptable[0] == 'application/json';
     }
+
+    /**
+     * Determine if a cookie is set on the request.
+     *
+     * @param  string $key
+     * @return bool
+     */
+    public function hasCookie($key)
+    {
+        return ! is_null($this->cookie($key));
+    }
 }
