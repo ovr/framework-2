@@ -16,8 +16,8 @@ namespace Brainwave\Exception;
  *
  */
 
-use Brainwave\Http\Response;
 use Brainwave\Contracts\Http\HttpExceptionInterface;
+use Brainwave\Http\Response;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -266,7 +266,7 @@ class Handler
      *
      * @param array $error
      *
-     * @return \FatalErrorException
+     * @return FatalErrorException
      */
     protected function fatalExceptionFromError(array $error)
     {

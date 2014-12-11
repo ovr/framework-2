@@ -65,7 +65,7 @@ class Symfony implements Adapter
      *
      * @param \Exception $exception
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|null
      */
     public function display(\Exception $exception)
     {
