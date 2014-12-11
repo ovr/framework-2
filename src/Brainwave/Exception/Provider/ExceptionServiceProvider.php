@@ -225,7 +225,7 @@ class ExceptionServiceProvider implements ServiceProviderInterface
      */
     protected function registerPrettyWhoopsHandler()
     {
-        $this->container['whoops.handler'] = function ($container) {
+        $this->container['whoops.handler'] = function () {
             $handler = new PrettyPageHandler();
             $handler->setEditor($this->container['settings']->get('app::whoops.editor', 'sublime'));
 

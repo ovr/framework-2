@@ -102,12 +102,16 @@ class Handler
      */
     public function register($env)
     {
+        error_reporting(-1);
+
         $this->registerErrorHandler();
 
         $this->registerExceptionHandler();
 
         if ($env !== 'testing') {
             $this->registerShutdownHandler();
+
+            ini_set('display_errors', 'Off');
         }
     }
 
@@ -165,7 +169,7 @@ class Handler
      *
      * @throws ErrorException
      */
-    public function handleError($level, $message, $file = '', $line = 0, $context = array())
+    public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
         if ($level & error_reporting()) {
             throw new \ErrorException($message, 0, $level, $file, $line);
@@ -200,10 +204,11 @@ class Handler
      * Handle the given exception.
      *
      * @param \Exception $exception
+     * @param  bool      $fromConsole
      *
      * @return string
      */
-    protected function callCustomHandlers($exception)
+    protected function callCustomHandlers($exception, $fromConsole = false)
     {
         foreach ($this->handlers as $handler) {
             // If this exception handler does not handle the given exception, we will just
@@ -242,20 +247,32 @@ class Handler
      */
     public function handleShutdown()
     {
-        $error = error_get_last();
-
         // If an error has occurred that has not been displayed, we will create a fatal
         // error exception instance and pass it into the regular exception handling
         // code so it can be displayed back out to the developer for information.
-        if (!is_null($error)) {
+        if (!is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             extract($error);
 
             if (!$this->isFatal($type)) {
                 return;
             }
 
-            $this->handleException(new FatalError($message, $type, 0, $file, $line));
+            $this->handleException($this->fatalExceptionFromError($error));
         }
+    }
+
+    /**
+     * Create a new fatal exception instance from an error array.
+     *
+     * @param  array  $error
+     *
+     * @return \FatalError
+     */
+    protected function fatalExceptionFromError(array $error)
+    {
+        return new FatalError(
+            $error['message'], $error['type'], 0, $error['file'], $error['line']
+        );
     }
 
     /**
@@ -315,7 +332,7 @@ class Handler
         // response back to the client after preparing it. This allows a specific
         // type of exceptions to handled by a Closure giving great flexibility.
         if (!is_null($response)) {
-            return $this->prepareResponse($response);
+            return $this->renderHttpResponse($response);
         }
 
         // If no response was sent by this custom exception handler, we will call the
@@ -333,58 +350,9 @@ class Handler
      */
     protected function displayException($exception)
     {
-        $settings = $this->container['settings'];
+        $displayer = $this->debug ? $this->container['exception.debug'] : $this->container['exception.plain'];
 
-        if ($settings->get('app::mode', 'production') === 'development' ||
-            $settings->get('app::mode', 'production') === 'testing'
-        ) {
-            $displayer = $this->debug ? $this->container['exception.debug'] : $this->container['exception.plain'];
-
-            return $displayer->display($exception);
-        }
-
-        return $this->noException($exception);
-    }
-
-    /**
-     * Logs Exception if debug is false
-     *
-     * @param \Exception $exception
-     *
-     * @return void
-     */
-    protected function noException(\Exception $exception)
-    {
-        //Log error
-        $this->report($exception);
-        $this->container['response']->setStatus(503);
-
-        $content = <<<EOF
-<div>
-    <i class="fa fa-circle-o"></i>
-    <span>
-        A website error has occurred.
-    </span>
-</div>
-<div>
-    <i class="fa fa-circle-o"></i>
-    <span>
-        We may be working on fixing this already, but if it keeps happening let us know.
-    </span>
-</div>
-EOF;
-
-        $templateSettings = $this->getTemplate();
-        $this->container['view']->make(
-            $templateSettings['503.engine'],
-            $templateSettings['503.template'],
-            [
-                'title'   => '404 Error',
-                'header'  => 'Egad!',
-                'content' => $content,
-                'footer'  => 'Copyright &copy;'.date('Y').' narrowspark'
-            ]
-        );
+        return $displayer->display($exception);
     }
 
     /**
@@ -397,6 +365,18 @@ EOF;
     protected function isFatal($type)
     {
         return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
+    }
+
+    /**
+     * Render an exception as an HTTP response and send it.
+     *
+     * @param  \Exception $e
+     *
+     * @return void
+     */
+    protected function renderHttpResponse($e)
+    {
+        //TODO $this->render($this->app['request'], $e)->send();
     }
 
     /**
