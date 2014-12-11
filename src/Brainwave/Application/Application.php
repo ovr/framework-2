@@ -14,8 +14,6 @@ namespace Brainwave\Application;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Narrowspark is an open source PHP 5 framework, based on the Slim framework.
- *
  */
 
 use Brainwave\Application\Provider\ApplicationServiceProvider;
@@ -23,6 +21,7 @@ use Brainwave\Application\Traits\BootableTrait;
 use Brainwave\Application\Traits\HttpHandlingTrait;
 use Brainwave\Config\Provider\ConfigServiceProvider;
 use Brainwave\Contracts\Application\Application as ApplicationContract;
+use Brainwave\Contracts\Application\BootableProvider as BootableProviderContract;
 use Brainwave\Filesystem\Provider\FilesystemServiceProvider;
 use Brainwave\Http\Provider\RequestServiceProvider;
 use Brainwave\Http\Provider\ResponseServiceProvider;
