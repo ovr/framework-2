@@ -25,7 +25,7 @@ To ensure a consistent code base, you should make sure the code follows
 the [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
 which we borrowed from Symfony.
 
-If you would like to help take a look at the [list of issues](http://github.com/composer/composer/issues).
+If you would like to help take a look at the [list of issues](http://github.com/narrowspark/framework/issues).
 
 ## Requirements
 

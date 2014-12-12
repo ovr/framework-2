@@ -5,6 +5,7 @@ $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->notName('composer.*')
     ->notName('phpunit.xml')
     ->exclude('build')
+    ->exclude('vendor')
     ->in(__DIR__)
 ;
 
