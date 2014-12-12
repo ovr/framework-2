@@ -13,6 +13,7 @@ if (file_exists(__DIR__.'/local.php_cs')) {
 }
 
 return Symfony\CS\Config\Config::create()
+    // use default SYMFONY_LEVEL and extra fixers:
     ->fixers(
         [
             'encoding',

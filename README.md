@@ -9,15 +9,31 @@
 
 > **Note:** This repository contains the core code of the Narrowspark framework. If you want to build an application using Narrowspark 1, visit the main [Narrowspark repository](https://github.com/narrowspark/narrowspark).
 
-### Based on Slim
-
-**[codeguy/Slim](http://github.com/codeguy/Slim)
-
 ## Official Documentation
 
 Documentation for the entire framework can be found on the [Narrowspark website](http://narrowspark.de).
 
 ## Contributing
+
+All code contributions - including those of people having commit access -
+must go through a pull request and approved by a core developer before being
+merged. This is to ensure proper review of all the code.
+
+Fork the project, create a feature branch, and send us a pull request.
+
+To ensure a consistent code base, you should make sure the code follows
+the [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
+which we borrowed from Symfony.
+
+If you would like to help take a look at the [list of issues](http://github.com/composer/composer/issues).
+
+## Requirements
+
+PHP 5.3.2 or above
+
+## Authors
+
+Daniel Bannert - <d.bannert@anolilab.de> - <http://www.anolilab.de><br />
 
 ### License
 
